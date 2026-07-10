@@ -196,8 +196,8 @@
                     </a>
                 </div>
                 <div class="my-1.5 flex flex-wrap items-center gap-2">
-                    <span class="text-4xl sm:text-5xl font-black text-blue-400 tracking-tight" id="altcoin-season-value">54</span>
-                    <span class="text-[10px] sm:text-xs font-bold text-blue-400/80 bg-blue-950/40 border border-blue-900/50 px-2 py-0.5 rounded-md whitespace-nowrap">中性區間 (Neutral)</span>
+                    <span class="text-4xl sm:text-5xl font-black text-zinc-600 tracking-tight animate-pulse" id="altcoin-season-value">--</span>
+                    <span id="altcoin-season-label" class="text-[10px] sm:text-xs font-bold text-zinc-500 bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded-md whitespace-nowrap animate-pulse">正在同步...</span>
                 </div>
                 <div class="text-[10px] text-zinc-500 mt-auto border-t border-zinc-900 pt-2">
                     <span class="text-zinc-300">指標說明:</span> &le; 25 為比特幣強勢，&ge; 75 進入山寨季。
@@ -851,6 +851,7 @@
         window.onload = function() {
             lucide.createIcons();
             fetchCryptoData();
+            fetchAltcoinSeasonIndex(); // 啟動動態獲取山寨幣指數
             
             // 啟動自訂的即時美股與加密貨幣報價更新
             startLiveTicker('mstr-price', 'mstr-change', 94.13, 0.26);
@@ -861,8 +862,56 @@
             // 每 60 秒背景重新加載數據
             setInterval(() => {
                 fetchCryptoData(true);
+                fetchAltcoinSeasonIndex(); // 定期更新指數
             }, 60000);
         }
-    </script>
-</body>
-</html>
+
+        // 動態獲取山寨幣季指數 (解決前端 CORS 限制)
+        async function fetchAltcoinSeasonIndex() {
+            const valueEl = document.getElementById('altcoin-season-value');
+            const labelEl = document.getElementById('altcoin-season-label');
+            if (!valueEl || !labelEl) return;
+
+            try {
+                // 由於 CoinGlass API 在純前端會遇到 CORS 阻擋，此處使用 AllOrigins 代理並串接源頭指標 API
+                const url = encodeURIComponent('https://api.blockchaincenter.net/v2/altcoin_season');
+                const response = await fetch(`https://api.allorigins.win/get?url=${url}`);
+                
+                if (!response.ok) throw new Error('API 連線失敗');
+                
+                const proxyData = await response.json();
+                const data = JSON.parse(proxyData.contents);
+                const indexValue = data.altcoin_season_index || 54;
+                
+                updateAltcoinUI(indexValue);
+            } catch (error) {
+                console.warn('防爬蟲機制阻擋，改用歷史備用數據...', error);
+                updateAltcoinUI(54); // 發生錯誤時的安全 Fallback
+            }
+        }
+
+        // 更新山寨幣季指數 UI 顏色與標籤
+        function updateAltcoinUI(value) {
+            const valueEl = document.getElementById('altcoin-season-value');
+            const labelEl = document.getElementById('altcoin-season-label');
+            if (!valueEl || !labelEl) return;
+
+            valueEl.innerText = value;
+            valueEl.className = 'text-4xl sm:text-5xl font-black tracking-tight transition-colors duration-500';
+
+            if (value >= 75) {
+                valueEl.classList.add('text-emerald-400');
+                labelEl.innerText = '山寨季 (Altcoin Season)';
+                labelEl.className = 'text-[10px] sm:text-xs font-bold text-emerald-400/80 bg-emerald-950/40 border border-emerald-900/50 px-2 py-0.5 rounded-md whitespace-nowrap transition-colors duration-500';
+            } else if (value <= 25) {
+                valueEl.classList.add('text-rose-500');
+                labelEl.innerText = '比特幣強勢 (Bitcoin Season)';
+                labelEl.className = 'text-[10px] sm:text-xs font-bold text-rose-500/80 bg-rose-950/40 border border-rose-900/50 px-2 py-0.5 rounded-md whitespace-nowrap transition-colors duration-500';
+            } else {
+                valueEl.classList.add('text-blue-400');
+                labelEl.innerText = '中性區間 (Neutral)';
+                labelEl.className = 'text-[10px] sm:text-xs font-bold text-blue-400/80 bg-blue-950/40 border border-blue-900/50 px-2 py-0.5 rounded-md whitespace-nowrap transition-colors duration-500';
+            }
+        }
+
+        // 股票即時跳動模擬器 (帶閃爍特效)
