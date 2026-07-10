@@ -118,8 +118,8 @@
     <!-- 主體內容區 (Main Workspace Layout) -->
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
         
-        <!-- 三足鼎立核心指標卡 (Top Core Dashboard Cards) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 核心指標卡 (Top Core Dashboard Cards) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
             <!-- 卡片 1: CoinGlass 恐懼與貪婪指數 (已移除下方橫條) -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
@@ -180,6 +180,74 @@
                     </div>
                     <div class="text-right text-zinc-500">
                         Par 面值折價: <strong class="text-rose-400 font-mono">-14.10%</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 4: CoinGlass 山寨幣季指數 (Altcoin Season Index) -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Altcoin Season</span>
+                        <h3 class="text-xs sm:text-sm font-bold text-zinc-400 mt-0.5">山寨幣季指數</h3>
+                    </div>
+                    <a href="https://www.coinglass.com/zh-TW/pro/i/alt-coin-season" target="_blank" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan transition-colors">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+                <div class="my-1.5 flex flex-wrap items-center gap-2">
+                    <span class="text-4xl sm:text-5xl font-black text-blue-400 tracking-tight" id="altcoin-season-value">54</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-blue-400/80 bg-blue-950/40 border border-blue-900/50 px-2 py-0.5 rounded-md whitespace-nowrap">中性區間 (Neutral)</span>
+                </div>
+                <div class="text-[10px] text-zinc-500 mt-auto border-t border-zinc-900 pt-2">
+                    <span class="text-zinc-300">指標說明:</span> &le; 25 為比特幣強勢，&ge; 75 進入山寨季。
+                </div>
+            </div>
+
+            <!-- 卡片 5: BTC 實時報價 -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$63,950.50</div>
+                        <div id="btc-change" class="text-sm font-bold font-mono text-emerald-400">+2.45%</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
+                        24H 高點: <strong class="text-zinc-300 font-mono">$64,210.00</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong class="text-zinc-300 font-mono">$62,100.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 6: ETH 實時報價 -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/eth@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="ETH">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:ETHUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="eth-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$3,450.20</div>
+                        <div id="eth-change" class="text-sm font-bold font-mono text-emerald-400">+1.20%</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        24H 高點: <strong class="text-zinc-300 font-mono">$3,520.00</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong class="text-zinc-300 font-mono">$3,380.00</strong>
                     </div>
                 </div>
             </div>
@@ -509,7 +577,7 @@
                 const changeClass = baseChange >= 0 ? 'text-emerald-400' : 'text-rose-500';
                 const sign = baseChange >= 0 ? '+' : '';
 
-                priceEl.innerText = '$' + currentPrice.toFixed(2);
+                priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 changeEl.innerText = sign + baseChange.toFixed(2) + '%';
                 changeEl.className = `text-sm font-bold font-mono ${changeClass}`;
 
@@ -784,9 +852,11 @@
             lucide.createIcons();
             fetchCryptoData();
             
-            // 啟動自訂的即時美股報價更新 (已更新為真實股價)
+            // 啟動自訂的即時美股與加密貨幣報價更新
             startLiveTicker('mstr-price', 'mstr-change', 94.13, 0.26);
             startLiveTicker('strc-price', 'strc-change', 86.28, 0.67);
+            startLiveTicker('btc-price', 'btc-change', 63950.50, 2.45);
+            startLiveTicker('eth-price', 'eth-change', 3450.20, 1.20);
 
             // 每 60 秒背景重新加載數據
             setInterval(() => {
