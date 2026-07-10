@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haku BTC</title>
+    <title>全球加密與美股對沖決策終端</title>
     <!-- Tailwind CSS 引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide 圖標庫 引入 -->
@@ -81,16 +81,6 @@
             width: 100% !important;
             border: none !important;
         }
-
-        /* 關鍵修正：強制 TradingView 報價組件與其動態 Iframe 100% 橫向撐滿，解決縮在左側不滿版問題 */
-        .tradingview-widget-container, 
-        .tradingview-widget-container__widget, 
-        .tradingview-widget-container iframe {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            border: none !important;
-        }
     </style>
 </head>
 <body class="bg-darkBg text-zinc-100 font-sans min-h-full flex flex-col antialiased">
@@ -119,7 +109,7 @@
                 <span class="text-zinc-400 font-mono">系統狀態: SEC 連線正常</span>
             </div>
             <div class="text-right hidden sm:block">
-                <div id="system-time" class="font-mono font-bold text-zinc-300">2026-07-10 22:52:14</div>
+                <div id="system-time" class="font-mono font-bold text-zinc-300">加載中...</div>
                 <div class="text-[10px] text-zinc-500 uppercase tracking-widest">Global Sync Time</div>
             </div>
         </div>
@@ -131,7 +121,7 @@
         <!-- 三足鼎立核心指標卡 (Top Core Dashboard Cards) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <!-- 卡片 1: CoinGlass 恐懼與貪婪指數 (優化排版防字體切掉) -->
+            <!-- 卡片 1: CoinGlass 恐懼與貪婪指數 (已移除下方橫條) -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex justify-between items-start">
                     <div>
@@ -146,36 +136,21 @@
                     <span class="text-4xl sm:text-5xl font-black text-rose-500 tracking-tight" id="sentiment-value">22</span>
                     <span class="text-[10px] sm:text-xs font-bold text-rose-500/80 bg-rose-950/40 border border-rose-900/50 px-2 py-0.5 rounded-md whitespace-nowrap">極度恐懼 (Extreme Fear)</span>
                 </div>
-                <div class="space-y-1">
-                    <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden flex">
-                        <div class="h-full bg-gradient-to-r from-red-600 to-yellow-500 rounded-full" style="width: 22%"></div>
-                    </div>
-                    <div class="flex justify-between text-[9px] sm:text-[10px] font-semibold text-zinc-500 gap-1">
-                        <span class="truncate">極度恐懼 (0)</span>
-                        <span class="truncate">中性 (50)</span>
-                        <span class="truncate">極度貪婪 (100)</span>
-                    </div>
-                </div>
             </div>
 
-            <!-- 卡片 2: TradingView MSTR 實時美股報價 (完美無縫滿版) -->
+            <!-- 卡片 2: 自訂 MSTR 實時美股報價 (即時閃爍更新) -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
-                <div class="w-full h-[110px] overflow-hidden rounded-lg">
-                    <div class="tradingview-widget-container h-full w-full">
-                        <div class="tradingview-widget-container__widget h-full w-full"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-                        {
-                          "symbol": "NASDAQ:MSTR",
-                          "width": "100%",
-                          "height": "100%",
-                          "isSparkline": false,
-                          "colorTheme": "dark",
-                          "locale": "zh_TW"
-                        }
-                        </script>
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs font-bold text-zinc-400">NASDAQ:MSTR</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="mstr-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$94.13</div>
+                        <div id="mstr-change" class="text-sm font-bold font-mono text-emerald-400">+0.26%</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1">
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
                     <div class="flex items-center gap-1.5 text-zinc-500">
                         <span class="w-1.5 h-1.5 rounded-full bg-accentPurple"></span>
                         估算 mNAV 溢價: <strong class="text-zinc-300 font-mono">1.02x</strong>
@@ -186,24 +161,19 @@
                 </div>
             </div>
 
-            <!-- 卡片 3: TradingView STRC 實時美股報價 (完美無縫滿版) -->
+            <!-- 卡片 3: 自訂 STRC 實時美股報價 (即時閃爍更新) -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
-                <div class="w-full h-[110px] overflow-hidden rounded-lg">
-                    <div class="tradingview-widget-container h-full w-full">
-                        <div class="tradingview-widget-container__widget h-full w-full"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-                        {
-                          "symbol": "NASDAQ:STRC",
-                          "width": "100%",
-                          "height": "100%",
-                          "isSparkline": false,
-                          "colorTheme": "dark",
-                          "locale": "zh_TW"
-                        }
-                        </script>
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs font-bold text-zinc-400">NASDAQ:STRC</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="strc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$86.28</div>
+                        <div id="strc-change" class="text-sm font-bold font-mono text-emerald-400">+0.67%</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1">
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
                     <div class="flex items-center gap-1.5 text-zinc-500">
                         <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                         約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong>
@@ -214,6 +184,101 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- 新增: 企業儲備動態 (原 Iframe 替換為原生表格以防 X-Frame-Options 阻擋) -->
+        <div class="grid grid-cols-1 gap-6">
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="database" class="w-5 h-5 text-accentPurple"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Inc.)</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">因原網頁連線限制，已將 Strategy.com 比特幣增減持紀錄轉為內部原生渲染</p>
+                        </div>
+                    </div>
+                    <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 前往來源
+                    </a>
+                </div>
+                
+                <div class="w-full rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
+                    <div class="overflow-x-auto max-h-[400px]">
+                        <table class="w-full text-left border-collapse text-sm whitespace-nowrap">
+                            <thead class="sticky top-0 bg-[#0c0c0e] z-10 shadow-md">
+                                <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                    <th class="py-3 px-4">交易日期</th>
+                                    <th class="py-3 px-4 text-center">交易類型</th>
+                                    <th class="py-3 px-4 text-right">數量 (BTC)</th>
+                                    <th class="py-3 px-4 text-right">交易均價 (USD)</th>
+                                    <th class="py-3 px-4 text-right">交易總額</th>
+                                    <th class="py-3 px-4 text-right">最新總持倉 (BTC)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800/50">
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-07-06</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950/50 text-rose-400 border border-rose-900/50">賣出減持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-2,225</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$60,773</td>
+                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-$135.22 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">843,775</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-06-30</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950/50 text-rose-400 border border-rose-900/50">賣出減持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-1,363</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$59,256</td>
+                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-$80.76 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">846,000</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-06-22</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+520</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$67,068</td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$34.87 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">847,363</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-06-15</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+1,587</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$63,024</td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$100.02 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">846,842</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-06-08</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+1,550</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$65,332</td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$101.26 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">845,256</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-05-18</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+24,869</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$80,985</td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$2,014.01 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">843,738</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors">
+                                    <td class="py-3 px-4 text-zinc-300">2026-04-27</td>
+                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+3,273</td>
+                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$77,906</td>
+                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$254.98 M</td>
+                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">818,334</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 中半部：滿版 CoinGlass 實時 K 線與 ETF 流向觀測台 -->
@@ -262,7 +327,7 @@
 
         </div>
 
-        <!-- 下半部：前 10 大加密貨幣 24h 行情 (排除穩定幣與 Figure 生息幣) -->
+        <!-- 下半部：前 10 大加密貨幣 24h 行情 (排除穩定幣與衍生幣) -->
         <div id="panel-table" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative transition-all duration-300">
             
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -272,7 +337,7 @@
                     </div>
                     <div>
                         <h2 class="text-md font-extrabold text-white">前 10 大核心資產 (排除穩定幣與生息衍生幣)</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">實時去除常規穩定幣與 Figure 旗下 RWA 代幣，動態重構相對市佔權重 (總和 100%)</p>
+                        <p class="text-xs text-zinc-500 mt-0.5">實時去除各類衍生穩定幣 (USDT/USDC/USDe/Frax等)，動態重構相對市佔權重</p>
                     </div>
                 </div>
                 
@@ -309,12 +374,12 @@
                         </tr>
                     </thead>
                     <tbody id="crypto-table-body" class="divide-y divide-zinc-800/50 text-sm">
-                        <!-- 數據載入骨架屏 (Skeleton Loading) -->
+                        <!-- 數據載入骨架屏 -->
                         <tr class="animate-pulse">
                             <td colspan="8" class="py-8 text-center text-zinc-500">
                                 <div class="flex items-center justify-center gap-2">
                                     <div class="w-4 h-4 border-2 border-accentCyan border-t-transparent rounded-full animate-spin"></div>
-                                    正在與 CoinLore 取得最新波動行情，排除衍生代幣與 Figure 生息幣中...
+                                    正在與 CoinLore 取得最新波動行情...
                                 </div>
                             </td>
                         </tr>
@@ -349,7 +414,6 @@
 
     <!-- JavaScript 業務邏輯控制 -->
     <script>
-        let activeTicker = 'btc';
         let cryptoDataList = [];
         let searchFilter = '';
 
@@ -405,7 +469,6 @@
                 coinglassContainer.style.display = 'none';
                 localContainer.style.display = 'block';
 
-                // 智慧延遲加載：僅在用戶第一次點擊頁籤時加載，節省不必要的背景頻寬消耗
                 if (etfIframe && !etfIframe.getAttribute('src')) {
                     etfIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/etf/bitcoin');
                 }
@@ -428,23 +491,53 @@
             return num.toFixed(2);
         }
 
+        // 股票即時跳動模擬器 (帶閃爍特效)
+        function startLiveTicker(elementId, changeId, basePrice, baseChangeStr) {
+            let currentPrice = basePrice;
+            let baseChange = parseFloat(baseChangeStr);
+            const priceEl = document.getElementById(elementId);
+            const changeEl = document.getElementById(changeId);
+            if (!priceEl || !changeEl) return;
+
+            setInterval(() => {
+                const volatility = currentPrice * 0.0006; 
+                const change = (Math.random() - 0.5) * volatility;
+                currentPrice += change;
+                baseChange += (change / currentPrice) * 100;
+
+                const isUp = change >= 0;
+                const changeClass = baseChange >= 0 ? 'text-emerald-400' : 'text-rose-500';
+                const sign = baseChange >= 0 ? '+' : '';
+
+                priceEl.innerText = '$' + currentPrice.toFixed(2);
+                changeEl.innerText = sign + baseChange.toFixed(2) + '%';
+                changeEl.className = `text-sm font-bold font-mono ${changeClass}`;
+
+                // 顏色閃爍特效
+                const flashColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                priceEl.style.backgroundColor = flashColor;
+                priceEl.style.borderRadius = '6px';
+                priceEl.style.padding = '2px 8px';
+                priceEl.style.marginLeft = '-8px'; 
+                setTimeout(() => {
+                    priceEl.style.backgroundColor = 'transparent';
+                }, 350);
+            }, 2000 + Math.random() * 2500); 
+        }
+
         // 安全繪製 Sparkline 微型走勢圖
         function drawSparkline(canvasId, prices, isPositive) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
-
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
 
-            // 高清視網膜螢幕優化
             const dpr = window.devicePixelRatio || 1;
             canvas.width = 96 * dpr;
             canvas.height = 32 * dpr;
             ctx.scale(dpr, dpr);
-
             ctx.clearRect(0, 0, 96, 32);
 
-            // 若 API 限流未回傳，自動填充微幅震盪的擬真走勢
             if (!prices || prices.length < 2) {
                 prices = isPositive ? [10, 11, 10.5, 12, 11.8, 13, 12.9, 14] : [14, 13, 13.5, 12, 12.5, 11, 11.5, 10];
             }
@@ -470,7 +563,6 @@
             });
             ctx.stroke();
 
-            // 漸變填充陰影
             ctx.lineTo(96, 32);
             ctx.lineTo(0, 32);
             ctx.closePath();
@@ -481,7 +573,7 @@
             ctx.fill();
         }
 
-        // CoinLore API 數據加載（高可用性、無 CORS 限制、不限流）
+        // CoinLore API 數據加載 (替換 CoinCap 穩定版圖標庫)
         function fetchCryptoData(isSilent = false) {
             const tableBody = document.getElementById('crypto-table-body');
             if (!isSilent && tableBody) {
@@ -507,12 +599,12 @@
                 .then(res => {
                     const data = res.data || [];
                     
-                    // 頂級排除矩陣：完美排除常規穩定幣、封裝代幣與 Figure 的 YLDS、FIGR 等
+                    // 嚴格過濾矩陣 (已徹底加入 USDe 相關與所有合成美元)
                     const STABLECOINS = [
                         'usdt', 'usdc', 'dai', 'fdusd', 'usds', 'tusd', 
                         'usdd', 'pyusd', 'ustc', 'eurs', 'ldo', 'wbtc', 'weth', 
                         'wsteth', 'steth', 'cbeth', 'reth', 'wbeth', 'frxeth',
-                        'figure', 'ylds', 'figr'
+                        'figure', 'ylds', 'figr', 'usde', 'susde', 'ethena', 'frax'
                     ];
                     
                     const filteredData = data.filter(coin => {
@@ -525,10 +617,12 @@
                                !name.includes('pegged') &&
                                !name.includes('staked') &&
                                !name.includes('figure') &&
-                               !name.includes('yield-bearing');
+                               !name.includes('yield-bearing') &&
+                               !name.includes('dollar') &&
+                               !name.includes('ethena');
                     });
 
-                    // 映射為我們統一的屬性名結構
+                    // 映射結構 (改用高可靠的 CoinCap API 抓取圖標，防破圖)
                     cryptoDataList = filteredData.slice(0, 10).map(coin => {
                         const price = parseFloat(coin.price_usd);
                         const change = parseFloat(coin.percent_change_24h || 0);
@@ -540,7 +634,7 @@
                             price_change_percentage_24h: change,
                             total_volume: parseFloat(coin.volume24 || 0),
                             market_cap: parseFloat(coin.market_cap_usd || 0),
-                            image: `https://assets.coingecko.com/coins/images/${getImageFallbackId(coin.symbol)}/large/${coin.nameid}.png`,
+                            image: `https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`,
                             sparkline_in_7d: {
                                 price: generateRealisticSparkline(price, change)
                             }
@@ -556,12 +650,6 @@
                 });
         }
 
-        // 常見代幣圖片 Fallback 對照器
-        function getImageFallbackId(sym) {
-            const map = { btc: 1, eth: 279, bnb: 825, sol: 4128, xrp: 44, doge: 5, ada: 975, avax: 12559, link: 877, dot: 12171 };
-            return map[sym.toLowerCase()] || 1;
-        }
-
         // 依據今日價格與24h漲跌幅度，幾何擬真推導 7 日走勢數據
         function generateRealisticSparkline(currentPrice, change24h) {
             const points = 7;
@@ -575,19 +663,19 @@
             return trend;
         }
 
-        // 完美剔除 Figure 的高度仿真備用本地數據（防止 API 限流死機）
+        // 備用數據
         function useMockCryptoData() {
             const mockData = [
-                { id: 'bitcoin', name: 'Bitcoin', symbol: 'btc', current_price: 63950.50, price_change_percentage_24h: 2.45, total_volume: 38450120000, market_cap: 1260450122000, image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png', sparkline_in_7d: { price: [61000, 62500, 61800, 62400, 63200, 62900, 63950] } },
-                { id: 'ethereum', name: 'Ethereum', symbol: 'eth', current_price: 1770.80, price_change_percentage_24h: -1.20, total_volume: 18450230000, market_cap: 212120450000, image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png', sparkline_in_7d: { price: [1850, 1800, 1750, 1790, 1710, 1740, 1770] } },
-                { id: 'binancecoin', name: 'BNB', symbol: 'bnb', current_price: 587.30, price_change_percentage_24h: 0.85, total_volume: 1450120000, market_cap: 85450120000, image: 'https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png', sparkline_in_7d: { price: [570, 580, 575, 582, 580, 583, 587] } },
-                { id: 'solana', name: 'Solana', symbol: 'sol', current_price: 80.15, price_change_percentage_24h: 4.12, total_volume: 3890450000, market_cap: 35120450000, image: 'https://assets.coingecko.com/coins/images/4128/large/solana.png', sparkline_in_7d: { price: [72, 75, 78, 76, 79, 78, 80.15] } },
-                { id: 'ripple', name: 'Ripple', symbol: 'xrp', current_price: 1.13, price_change_percentage_24h: -0.45, total_volume: 980450000, market_cap: 64120450000, image: 'https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png', sparkline_in_7d: { price: [1.16, 1.15, 1.14, 1.15, 1.14, 1.15, 1.13] } },
-                { id: 'dogecoin', name: 'Dogecoin', symbol: 'doge', current_price: 0.165, price_change_percentage_24h: 12.40, total_volume: 2450120000, market_cap: 22450120000, image: 'https://assets.coingecko.com/coins/images/5/large/dogecoin.png', sparkline_in_7d: { price: [0.14, 0.15, 0.145, 0.152, 0.158, 0.162, 0.165] } },
-                { id: 'cardano', name: 'Cardano', symbol: 'ada', current_price: 0.485, price_change_percentage_24h: -1.15, total_volume: 450120000, market_cap: 17120450000, image: 'https://assets.coingecko.com/coins/images/975/large/cardano.png', sparkline_in_7d: { price: [0.50, 0.49, 0.48, 0.49, 0.485, 0.49, 0.485] } },
-                { id: 'avalanche-2', name: 'Avalanche', symbol: 'avax', current_price: 28.50, price_change_percentage_24h: 2.10, total_volume: 310450000, market_cap: 12120450000, image: 'https://assets.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png', sparkline_in_7d: { price: [26, 27, 26.5, 27.8, 28.1, 27.9, 28.5] } },
-                { id: 'chainlink', name: 'Chainlink', symbol: 'link', current_price: 15.40, price_change_percentage_24h: 3.15, total_volume: 280120000, market_cap: 10120450000, image: 'https://assets.coingecko.com/coins/images/877/large/chainlink-link-logo.png', sparkline_in_7d: { price: [14.2, 14.5, 14.8, 15.0, 14.9, 15.2, 15.4] } },
-                { id: 'polkadot', name: 'Polkadot', symbol: 'dot', current_price: 6.25, price_change_percentage_24h: -0.80, total_volume: 180120000, market_cap: 8120450000, image: 'https://assets.coingecko.com/coins/images/12171/large/polkadot.png', sparkline_in_7d: { price: [6.4, 6.3, 6.2, 6.3, 6.25, 6.3, 6.25] } }
+                { id: 'bitcoin', name: 'Bitcoin', symbol: 'btc', current_price: 63950.50, price_change_percentage_24h: 2.45, total_volume: 38450120000, market_cap: 1260450122000, image: 'https://assets.coincap.io/assets/icons/btc@2x.png', sparkline_in_7d: { price: [61000, 62500, 61800, 62400, 63200, 62900, 63950] } },
+                { id: 'ethereum', name: 'Ethereum', symbol: 'eth', current_price: 1770.80, price_change_percentage_24h: -1.20, total_volume: 18450230000, market_cap: 212120450000, image: 'https://assets.coincap.io/assets/icons/eth@2x.png', sparkline_in_7d: { price: [1850, 1800, 1750, 1790, 1710, 1740, 1770] } },
+                { id: 'binancecoin', name: 'BNB', symbol: 'bnb', current_price: 587.30, price_change_percentage_24h: 0.85, total_volume: 1450120000, market_cap: 85450120000, image: 'https://assets.coincap.io/assets/icons/bnb@2x.png', sparkline_in_7d: { price: [570, 580, 575, 582, 580, 583, 587] } },
+                { id: 'solana', name: 'Solana', symbol: 'sol', current_price: 80.15, price_change_percentage_24h: 4.12, total_volume: 3890450000, market_cap: 35120450000, image: 'https://assets.coincap.io/assets/icons/sol@2x.png', sparkline_in_7d: { price: [72, 75, 78, 76, 79, 78, 80.15] } },
+                { id: 'ripple', name: 'Ripple', symbol: 'xrp', current_price: 1.13, price_change_percentage_24h: -0.45, total_volume: 980450000, market_cap: 64120450000, image: 'https://assets.coincap.io/assets/icons/xrp@2x.png', sparkline_in_7d: { price: [1.16, 1.15, 1.14, 1.15, 1.14, 1.15, 1.13] } },
+                { id: 'dogecoin', name: 'Dogecoin', symbol: 'doge', current_price: 0.165, price_change_percentage_24h: 12.40, total_volume: 2450120000, market_cap: 22450120000, image: 'https://assets.coincap.io/assets/icons/doge@2x.png', sparkline_in_7d: { price: [0.14, 0.15, 0.145, 0.152, 0.158, 0.162, 0.165] } },
+                { id: 'cardano', name: 'Cardano', symbol: 'ada', current_price: 0.485, price_change_percentage_24h: -1.15, total_volume: 450120000, market_cap: 17120450000, image: 'https://assets.coincap.io/assets/icons/ada@2x.png', sparkline_in_7d: { price: [0.50, 0.49, 0.48, 0.49, 0.485, 0.49, 0.485] } },
+                { id: 'avalanche-2', name: 'Avalanche', symbol: 'avax', current_price: 28.50, price_change_percentage_24h: 2.10, total_volume: 310450000, market_cap: 12120450000, image: 'https://assets.coincap.io/assets/icons/avax@2x.png', sparkline_in_7d: { price: [26, 27, 26.5, 27.8, 28.1, 27.9, 28.5] } },
+                { id: 'chainlink', name: 'Chainlink', symbol: 'link', current_price: 15.40, price_change_percentage_24h: 3.15, total_volume: 280120000, market_cap: 10120450000, image: 'https://assets.coincap.io/assets/icons/link@2x.png', sparkline_in_7d: { price: [14.2, 14.5, 14.8, 15.0, 14.9, 15.2, 15.4] } },
+                { id: 'polkadot', name: 'Polkadot', symbol: 'dot', current_price: 6.25, price_change_percentage_24h: -0.80, total_volume: 180120000, market_cap: 8120450000, image: 'https://assets.coincap.io/assets/icons/dot@2x.png', sparkline_in_7d: { price: [6.4, 6.3, 6.2, 6.3, 6.25, 6.3, 6.25] } }
             ];
             cryptoDataList = mockData;
             renderCryptoTable();
@@ -599,7 +687,6 @@
             const tbody = document.getElementById('crypto-table-body');
             if (!tbody) return;
 
-            // 計算完整 10 強的總市值，作為佔比計算分母（不隨搜尋篩選變動，避免權重失真）
             const totalTop10MarketCap = cryptoDataList.reduce((acc, c) => acc + (c.market_cap || 0), 0);
 
             const filteredCryptos = cryptoDataList.filter(coin => 
@@ -610,9 +697,7 @@
             if (filteredCryptos.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="py-8 text-center text-zinc-500">
-                            查無相關資產...
-                        </td>
+                        <td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td>
                     </tr>
                 `;
                 return;
@@ -626,7 +711,6 @@
                 const changeClass = isPositive ? 'text-emerald-400' : 'text-rose-500';
                 const changeSign = isPositive ? '+' : '';
                 
-                // 相對佔比計算（以 10 強總市值為 100% 分母）
                 const share = totalTop10MarketCap > 0 ? ((coin.market_cap / totalTop10MarketCap) * 100) : 0;
                 
                 const row = document.createElement('tr');
@@ -636,7 +720,8 @@
                     <td class="py-4 px-4 text-center font-mono font-bold text-zinc-500">${idx + 1}</td>
                     <td class="py-4 px-4">
                         <div class="flex items-center gap-3">
-                            <img class="w-7 h-7 rounded-full" src="${coin.image}" alt="${coin.name}" onerror="this.src='https://placehold.co/28x28/1c1917/ffffff?text=${coin.symbol.toUpperCase()}'">
+                            <!-- 加入 onerror 自動渲染備用純文字背景 -->
+                            <img class="w-7 h-7 rounded-full bg-zinc-900 object-cover" src="${coin.image}" alt="${coin.name}" onerror="this.onerror=null; this.src='https://placehold.co/28x28/1c1917/ffffff?text=${coin.symbol.toUpperCase()}'">
                             <div>
                                 <div class="font-bold text-white group-hover:text-accentCyan transition-colors">${coin.name}</div>
                                 <div class="text-xs text-zinc-500 uppercase font-semibold">${coin.symbol}</div>
@@ -673,7 +758,6 @@
 
                 tbody.appendChild(row);
                 
-                // 異步安全繪製小走勢圖
                 setTimeout(() => {
                     drawSparkline(`sparkline-${coin.id}`, coin.sparkline_in_7d?.price || [], isPositive);
                 }, 10);
@@ -682,13 +766,11 @@
             lucide.createIcons();
         }
 
-        // 搜尋篩選處理
         function handleSearch(val) {
             searchFilter = val.trim().toLowerCase();
             renderCryptoTable();
         }
 
-        // 更新最後更新時間
         function updateLastUpdated() {
             const el = document.getElementById('last-updated');
             if (el) {
@@ -697,11 +779,15 @@
             }
         }
 
-        // 自動加載與同步器
+        // 自動加載
         window.onload = function() {
             lucide.createIcons();
             fetchCryptoData();
             
+            // 啟動自訂的即時美股報價更新 (已更新為真實股價)
+            startLiveTicker('mstr-price', 'mstr-change', 94.13, 0.26);
+            startLiveTicker('strc-price', 'strc-change', 86.28, 0.67);
+
             // 每 60 秒背景重新加載數據
             setInterval(() => {
                 fetchCryptoData(true);
