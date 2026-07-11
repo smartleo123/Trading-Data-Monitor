@@ -121,29 +121,29 @@
         <!-- 核心指標卡 (Top Core Dashboard Cards) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            <!-- 卡片 1: CoinGlass 恐懼與貪婪指數 (已移除下方橫條) -->
+            <!-- 卡片 1: 真實 恐懼與貪婪指數 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex justify-between items-start">
                     <div>
                         <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Sentiment Index</span>
-                        <h3 class="text-xs sm:text-sm font-bold text-zinc-400 mt-0.5">CoinGlass 恐懼與貪婪指數</h3>
+                        <h3 class="text-xs sm:text-sm font-bold text-zinc-400 mt-0.5">全球市場恐懼與貪婪指數</h3>
                     </div>
                     <a href="https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex" target="_blank" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan transition-colors">
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
                 </div>
                 <div class="my-1.5 flex flex-wrap items-center gap-2">
-                    <span class="text-4xl sm:text-5xl font-black text-rose-500 tracking-tight" id="sentiment-value">22</span>
-                    <span class="text-[10px] sm:text-xs font-bold text-rose-500/80 bg-rose-950/40 border border-rose-900/50 px-2 py-0.5 rounded-md whitespace-nowrap">極度恐懼 (Extreme Fear)</span>
+                    <span class="text-4xl sm:text-5xl font-black tracking-tight" id="sentiment-value">--</span>
+                    <span id="sentiment-text" class="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap bg-zinc-900 text-zinc-500">載入中...</span>
                 </div>
             </div>
 
-            <!-- 卡片 2: 自訂 MSTR 實時美股報價 (即時閃爍更新) -->
+            <!-- 卡片 2: 自訂 MSTR 實時美股報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xs font-bold text-zinc-400">NASDAQ:MSTR</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                        <span id="mstr-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
                         <div id="mstr-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$94.13</div>
@@ -161,12 +161,12 @@
                 </div>
             </div>
 
-            <!-- 卡片 3: 自訂 STRC 實時美股報價 (即時閃爍更新) -->
+            <!-- 卡片 3: 自訂 STRC 實時美股報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xs font-bold text-zinc-400">NASDAQ:STRC</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                        <span id="strc-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
                         <div id="strc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$86.28</div>
@@ -184,27 +184,7 @@
                 </div>
             </div>
 
-            <!-- 卡片 4: CoinGlass 山寨幣季指數 (Altcoin Season Index) -->
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Altcoin Season</span>
-                        <h3 class="text-xs sm:text-sm font-bold text-zinc-400 mt-0.5">山寨幣季指數</h3>
-                    </div>
-                    <a href="https://www.coinglass.com/zh-TW/pro/i/alt-coin-season" target="_blank" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan transition-colors">
-                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
-                <div class="my-1.5 flex flex-wrap items-center gap-2">
-                    <span class="text-4xl sm:text-5xl font-black text-blue-400 tracking-tight" id="altcoin-season-value">54</span>
-                    <span class="text-[10px] sm:text-xs font-bold text-blue-400/80 bg-blue-950/40 border border-blue-900/50 px-2 py-0.5 rounded-md whitespace-nowrap">中性區間 (Neutral)</span>
-                </div>
-                <div class="text-[10px] text-zinc-500 mt-auto border-t border-zinc-900 pt-2">
-                    <span class="text-zinc-300">指標說明:</span> &le; 25 為比特幣強勢，&ge; 75 進入山寨季。
-                </div>
-            </div>
-
-            <!-- 卡片 5: BTC 實時報價 -->
+            <!-- 卡片 4: BTC Binance 實時合約報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
@@ -213,22 +193,22 @@
                         <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
-                        <div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$63,950.50</div>
-                        <div id="btc-change" class="text-sm font-bold font-mono text-emerald-400">+2.45%</div>
+                        <div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="btc-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
                     <div class="flex items-center gap-1.5 text-zinc-500">
                         <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
-                        24H 高點: <strong class="text-zinc-300 font-mono">$64,210.00</strong>
+                        24H 高點: <strong id="btc-high" class="text-zinc-300 font-mono">--</strong>
                     </div>
                     <div class="text-right text-zinc-500">
-                        24H 低點: <strong class="text-zinc-300 font-mono">$62,100.00</strong>
+                        24H 低點: <strong id="btc-low" class="text-zinc-300 font-mono">--</strong>
                     </div>
                 </div>
             </div>
 
-            <!-- 卡片 6: ETH 實時報價 -->
+            <!-- 卡片 5: ETH Binance 實時合約報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
@@ -237,24 +217,120 @@
                         <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
-                        <div id="eth-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$3,450.20</div>
-                        <div id="eth-change" class="text-sm font-bold font-mono text-emerald-400">+1.20%</div>
+                        <div id="eth-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="eth-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
                     <div class="flex items-center gap-1.5 text-zinc-500">
                         <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                        24H 高點: <strong class="text-zinc-300 font-mono">$3,520.00</strong>
+                        24H 高點: <strong id="eth-high" class="text-zinc-300 font-mono">--</strong>
                     </div>
                     <div class="text-right text-zinc-500">
-                        24H 低點: <strong class="text-zinc-300 font-mono">$3,380.00</strong>
+                        24H 低點: <strong id="eth-low" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 6: BNB Binance 實時合約報價 -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/bnb@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BNB">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:BNBUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="bnb-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="bnb-change" class="text-sm font-bold font-mono">--</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                        24H 高點: <strong id="bnb-high" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong id="bnb-low" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 7: SOL Binance 實時合約報價 -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/sol@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="SOL">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:SOLUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="sol-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="sol-change" class="text-sm font-bold font-mono">--</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                        24H 高點: <strong id="sol-high" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong id="sol-low" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 8: XRP Binance 實時合約報價 -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/xrp@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="XRP">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:XRPUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="xrp-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="xrp-change" class="text-sm font-bold font-mono">--</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        24H 高點: <strong id="xrp-high" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong id="xrp-low" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 9: HYPE Binance 實時合約報價 (Hyperliquid) -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <img src="https://assets.coincap.io/assets/icons/hype@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="HYPE" onerror="this.src='https://placehold.co/16x16/27272a/ffffff?text=H'">
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:HYPEUSDT</span>
+                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <div id="hype-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="hype-change" class="text-sm font-bold font-mono">--</div>
+                    </div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                    <div class="flex items-center gap-1.5 text-zinc-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                        24H 高點: <strong id="hype-high" class="text-zinc-300 font-mono">--</strong>
+                    </div>
+                    <div class="text-right text-zinc-500">
+                        24H 低點: <strong id="hype-low" class="text-zinc-300 font-mono">--</strong>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- 新增: 企業儲備動態 (原 Iframe 替換為原生表格以防 X-Frame-Options 阻擋) -->
+        <!-- 企業儲備動態 (原 Iframe 替換為原生表格) -->
         <div class="grid grid-cols-1 gap-6">
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -264,12 +340,17 @@
                         </div>
                         <div>
                             <h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Inc.)</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">因原網頁連線限制，已將 Strategy.com 比特幣增減持紀錄轉為內部原生渲染</p>
+                            <p class="text-xs text-zinc-500 mt-0.5">Strategy 比特幣增減持紀錄。</p>
                         </div>
                     </div>
-                    <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 前往來源
-                    </a>
+                    <div class="flex items-center gap-2">
+                        <button onclick="renderStrategyTable()" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 更新動態
+                        </button>
+                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 前往來源
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="w-full rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
@@ -285,63 +366,8 @@
                                     <th class="py-3 px-4 text-right">最新總持倉 (BTC)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-zinc-800/50">
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-07-06</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950/50 text-rose-400 border border-rose-900/50">賣出減持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-2,225</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$60,773</td>
-                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-$135.22 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">843,775</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-06-30</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950/50 text-rose-400 border border-rose-900/50">賣出減持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-1,363</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$59,256</td>
-                                    <td class="py-3 px-4 text-right font-mono text-rose-400">-$80.76 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">846,000</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-06-22</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+520</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$67,068</td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$34.87 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">847,363</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-06-15</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+1,587</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$63,024</td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$100.02 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">846,842</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-06-08</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+1,550</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$65,332</td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$101.26 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">845,256</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-05-18</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+24,869</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$80,985</td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$2,014.01 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">843,738</td>
-                                </tr>
-                                <tr class="hover:bg-zinc-800/30 transition-colors">
-                                    <td class="py-3 px-4 text-zinc-300">2026-04-27</td>
-                                    <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/50 text-emerald-400 border border-emerald-900/50">買入增持</span></td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+3,273</td>
-                                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$77,906</td>
-                                    <td class="py-3 px-4 text-right font-mono text-emerald-400">+$254.98 M</td>
-                                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">818,334</td>
-                                </tr>
+                            <tbody id="strategy-tbody" class="divide-y divide-zinc-800/50">
+                                <!-- 由 renderStrategyTable() 動態渲染，詳見下方 JS -->
                             </tbody>
                         </table>
                     </div>
@@ -351,7 +377,6 @@
 
         <!-- 中半部：滿版 CoinGlass 實時 K 線與 ETF 流向觀測台 -->
         <div class="grid grid-cols-1 gap-6">
-            
             <div id="panel-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
                 
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -361,7 +386,7 @@
                         </div>
                         <div>
                             <h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDC 合約價格與華爾街 ETF 每日持倉流向</p>
+                            <p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線與華爾街 ETF 每日持倉流向（CoinGlass 嵌入）</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
@@ -381,18 +406,14 @@
                     </div>
                 </div>
 
-                <!-- 1. CoinGlass 直連 Iframe K線 -->
                 <div id="coinglass-iframe-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
-                    <iframe src="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDC" class="w-full h-full border-none"></iframe>
+                    <iframe src="https://www.coinglass.com/tv/Binance_BTCUSDT" class="w-full h-full border-none" allowfullscreen></iframe>
                 </div>
 
-                <!-- 2. ETF 淨流向 Direct CoinGlass Page (預設隱藏，按需動態加載) -->
                 <div id="local-chart-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
                     <iframe id="etf-flow-iframe" class="w-full h-full border-none"></iframe>
                 </div>
-
             </div>
-
         </div>
 
         <!-- 下半部：前 10 大加密貨幣 24h 行情 (排除穩定幣與衍生幣) -->
@@ -455,7 +476,6 @@
                 </table>
             </div>
 
-            <!-- 數據源備註與最後更新時間 -->
             <div class="flex flex-col sm:flex-row justify-between items-center mt-6 pt-6 border-t border-zinc-900 text-xs text-zinc-500 gap-2">
                 <div>* 數據每日即時動態精簡，前十強權重 = 當前資產市值 / 排除所有穩定幣與封裝代幣後之前10大核心資產市值總和。</div>
                 <div id="last-updated">最後更新: 正在更新數據中...</div>
@@ -485,7 +505,6 @@
         let cryptoDataList = [];
         let searchFilter = '';
 
-        // 更新系統時鐘
         function updateClock() {
             const el = document.getElementById('system-time');
             if (el) {
@@ -497,7 +516,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 卡片全螢幕控制
         function toggleMaximize(id) {
             const el = document.getElementById(id);
             const icon = document.getElementById(`${id}-zoom-icon`);
@@ -518,7 +536,6 @@
             }
         }
 
-        // 切換 K 線與 ETF 淨流向頁籤
         function toggleChartSource(type) {
             const btnCoinglass = document.getElementById('btn-src-coinglass');
             const btnLocal = document.getElementById('btn-src-local');
@@ -543,31 +560,63 @@
             }
         }
 
-        // 數值單位格式化（支援 兆 T、十億 B、百萬 M）
         function formatNumber(num) {
             if (num === null || num === undefined) return 'N/A';
             const absNum = Math.abs(num);
-            if (absNum >= 1.0e12) {
-                return (num / 1.0e12).toFixed(2) + ' T';
-            } else if (absNum >= 1.0e9) {
-                return (num / 1.0e9).toFixed(2) + ' B';
-            } else if (absNum >= 1.0e6) {
-                return (num / 1.0e6).toFixed(2) + ' M';
-            } else if (absNum >= 1000) {
-                return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
+            if (absNum >= 1.0e12) return (num / 1.0e12).toFixed(2) + ' T';
+            if (absNum >= 1.0e9) return (num / 1.0e9).toFixed(2) + ' B';
+            if (absNum >= 1.0e6) return (num / 1.0e6).toFixed(2) + ' M';
+            if (absNum >= 1000) return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             return num.toFixed(2);
         }
 
-        // 股票即時跳動模擬器 (帶閃爍特效)
-        function startLiveTicker(elementId, changeId, basePrice, baseChangeStr) {
+        // 判斷美國紐約時間是否在開盤期間 (週一到週五 09:30 - 16:00)
+        function isUSMarketOpen() {
+            try {
+                const nyTimeStr = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+                const nyTime = new Date(nyTimeStr);
+                const day = nyTime.getDay();
+                const hour = nyTime.getHours();
+                const minute = nyTime.getMinutes();
+
+                if (day === 0 || day === 6) return false;
+
+                const timeInMinutes = hour * 60 + minute;
+                const openTime = 9 * 60 + 30; // 09:30
+                const closeTime = 16 * 60;    // 16:00
+
+                return timeInMinutes >= openTime && timeInMinutes <= closeTime;
+            } catch (e) {
+                return false; // 發生解析錯誤時預設為關閉
+            }
+        }
+
+        // 股票即時跳動模擬器 (含週末收盤自動防呆)
+        function startLiveTicker(elementId, changeId, statusId, basePrice, baseChangeStr) {
             let currentPrice = basePrice;
             let baseChange = parseFloat(baseChangeStr);
             const priceEl = document.getElementById(elementId);
             const changeEl = document.getElementById(changeId);
-            if (!priceEl || !changeEl) return;
+            const statusEl = document.getElementById(statusId);
+            
+            if (!priceEl || !changeEl || !statusEl) return;
+
+            const checkAndSetClosed = () => {
+                if (!isUSMarketOpen()) {
+                    statusEl.innerText = "CLOSED";
+                    statusEl.className = "text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded";
+                    return true;
+                }
+                return false;
+            };
+
+            // 如果一開始就收盤，直接不啟動
+            if (checkAndSetClosed()) return;
 
             setInterval(() => {
+                // 跳動時再次檢查，如果跨入收盤時間則凍結
+                if (checkAndSetClosed()) return;
+
                 const volatility = currentPrice * 0.0006; 
                 const change = (Math.random() - 0.5) * volatility;
                 currentPrice += change;
@@ -581,7 +630,6 @@
                 changeEl.innerText = sign + baseChange.toFixed(2) + '%';
                 changeEl.className = `text-sm font-bold font-mono ${changeClass}`;
 
-                // 顏色閃爍特效
                 const flashColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
                 priceEl.style.backgroundColor = flashColor;
                 priceEl.style.borderRadius = '6px';
@@ -593,7 +641,260 @@
             }, 2000 + Math.random() * 2500); 
         }
 
-        // 安全繪製 Sparkline 微型走勢圖
+        // 直接戳幣安官方 API 取得真正的極速最新報價
+        function updateMainCryptoCards() {
+            // 更新 BTC
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('btc-price');
+                    const changeEl = document.getElementById('btc-change');
+                    const highEl = document.getElementById('btc-high');
+                    const lowEl = document.getElementById('btc-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        // 如果價格與上一秒不同，觸發閃爍光環特效
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (BTC) 連線失敗:', err));
+
+            // 更新 ETH
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=ETHUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('eth-price');
+                    const changeEl = document.getElementById('eth-change');
+                    const highEl = document.getElementById('eth-high');
+                    const lowEl = document.getElementById('eth-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-blue-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(59, 130, 246, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (ETH) 連線失敗:', err));
+
+            // 更新 BNB
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=BNBUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('bnb-price');
+                    const changeEl = document.getElementById('bnb-change');
+                    const highEl = document.getElementById('bnb-high');
+                    const lowEl = document.getElementById('bnb-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-yellow-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(234, 179, 8, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (BNB) 連線失敗:', err));
+
+            // 更新 SOL
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=SOLUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('sol-price');
+                    const changeEl = document.getElementById('sol-change');
+                    const highEl = document.getElementById('sol-high');
+                    const lowEl = document.getElementById('sol-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-purple-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(168, 85, 247, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (SOL) 連線失敗:', err));
+
+            // 更新 XRP
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=XRPUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('xrp-price');
+                    const changeEl = document.getElementById('xrp-change');
+                    const highEl = document.getElementById('xrp-high');
+                    const lowEl = document.getElementById('xrp-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-blue-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(59, 130, 246, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (XRP) 連線失敗:', err));
+
+            // 更新 HYPE (Hyperliquid)
+            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=HYPEUSDT')
+                .then(res => res.json())
+                .then(data => {
+                    const priceEl = document.getElementById('hype-price');
+                    const changeEl = document.getElementById('hype-change');
+                    const highEl = document.getElementById('hype-high');
+                    const lowEl = document.getElementById('hype-low');
+
+                    if (priceEl && data.lastPrice) {
+                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
+                        const currentPrice = parseFloat(data.lastPrice);
+                        const changePercent = parseFloat(data.priceChangePercent);
+                        
+                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-pink-400' : 'text-rose-500'}`;
+                        
+                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+                        if (prevPrice > 0 && currentPrice !== prevPrice) {
+                            const isUp = currentPrice >= prevPrice;
+                            priceEl.style.backgroundColor = isUp ? 'rgba(236, 72, 153, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.borderRadius = '6px';
+                            priceEl.style.padding = '2px 8px';
+                            priceEl.style.marginLeft = '-8px';
+                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
+                        }
+                    }
+                })
+                .catch(err => console.warn('幣安 API (HYPE) 連線失敗:', err));
+        }
+
+        function updateFngUI(value) {
+            let text = '中立 (Neutral)';
+            let colorClass = 'text-amber-500';
+            let bgClass = 'bg-amber-950/40 border-amber-900/50';
+
+            if (value <= 25) { text = '極度恐懼 (Extreme Fear)'; colorClass = 'text-rose-600'; bgClass = 'bg-rose-950/40 border-rose-900/50'; }
+            else if (value <= 45) { text = '恐懼 (Fear)'; colorClass = 'text-rose-400'; bgClass = 'bg-rose-950/40 border-rose-900/50'; }
+            else if (value >= 75) { text = '極度貪婪 (Extreme Greed)'; colorClass = 'text-emerald-500'; bgClass = 'bg-emerald-950/40 border-emerald-900/50'; }
+            else if (value >= 55) { text = '貪婪 (Greed)'; colorClass = 'text-emerald-400'; bgClass = 'bg-emerald-950/40 border-emerald-900/50'; }
+
+            const fngEl = document.getElementById('sentiment-value');
+            const fngTextEl = document.getElementById('sentiment-text');
+            
+            if (fngEl) {
+                fngEl.innerText = value;
+                fngEl.className = `text-4xl sm:text-5xl font-black tracking-tight transition-colors ${colorClass}`;
+            }
+            if (fngTextEl) {
+                fngTextEl.innerText = text;
+                fngTextEl.className = `text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap transition-colors ${colorClass}/80 ${bgClass}`;
+            }
+        }
+
+        // 取得即時市場恐懼與貪婪指數
+        function fetchFearAndGreedIndex() {
+            const cmcUrl = 'https://api.coinmarketcap.com/data-api/v3/fear-greed';
+            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(cmcUrl)}`)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Proxy failed');
+                })
+                .then(data => {
+                    const parsed = JSON.parse(data.contents);
+                    if (parsed && parsed.data && parsed.data.score) {
+                        updateFngUI(Math.round(parsed.data.score));
+                    } else {
+                        throw new Error('Format Error');
+                    }
+                })
+                .catch(() => {
+                    fetch('https://api.alternative.me/fng/')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.data && data.data.length > 0) {
+                                updateFngUI(parseInt(data.data[0].value));
+                            }
+                        })
+                        .catch(err => console.warn("F&G Error:", err));
+                });
+        }
+
+        // 運算真實山寨幣季指數
         function drawSparkline(canvasId, prices, isPositive) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -641,7 +942,6 @@
             ctx.fill();
         }
 
-        // CoinLore API 數據加載 (替換 CoinCap 穩定版圖標庫)
         function fetchCryptoData(isSilent = false) {
             const tableBody = document.getElementById('crypto-table-body');
             if (!isSilent && tableBody) {
@@ -667,7 +967,6 @@
                 .then(res => {
                     const data = res.data || [];
                     
-                    // 嚴格過濾矩陣 (已徹底加入 USDe 相關與所有合成美元)
                     const STABLECOINS = [
                         'usdt', 'usdc', 'dai', 'fdusd', 'usds', 'tusd', 
                         'usdd', 'pyusd', 'ustc', 'eurs', 'ldo', 'wbtc', 'weth', 
@@ -690,7 +989,6 @@
                                !name.includes('ethena');
                     });
 
-                    // 映射結構 (改用高可靠的 CoinCap API 抓取圖標，防破圖)
                     cryptoDataList = filteredData.slice(0, 10).map(coin => {
                         const price = parseFloat(coin.price_usd);
                         const change = parseFloat(coin.percent_change_24h || 0);
@@ -713,12 +1011,11 @@
                     updateLastUpdated();
                 })
                 .catch(err => {
-                    console.warn("API 限制，加載備用安全波動代幣數據...", err);
+                    console.warn("API 限制，加載備用數據...", err);
                     useMockCryptoData();
                 });
         }
 
-        // 依據今日價格與24h漲跌幅度，幾何擬真推導 7 日走勢數據
         function generateRealisticSparkline(currentPrice, change24h) {
             const points = 7;
             const trend = [];
@@ -731,7 +1028,6 @@
             return trend;
         }
 
-        // 備用數據
         function useMockCryptoData() {
             const mockData = [
                 { id: 'bitcoin', name: 'Bitcoin', symbol: 'btc', current_price: 63950.50, price_change_percentage_24h: 2.45, total_volume: 38450120000, market_cap: 1260450122000, image: 'https://assets.coincap.io/assets/icons/btc@2x.png', sparkline_in_7d: { price: [61000, 62500, 61800, 62400, 63200, 62900, 63950] } },
@@ -750,24 +1046,18 @@
             updateLastUpdated();
         }
 
-        // 渲染主代幣表格
         function renderCryptoTable() {
             const tbody = document.getElementById('crypto-table-body');
             if (!tbody) return;
 
             const totalTop10MarketCap = cryptoDataList.reduce((acc, c) => acc + (c.market_cap || 0), 0);
-
             const filteredCryptos = cryptoDataList.filter(coin => 
                 coin.name.toLowerCase().includes(searchFilter) || 
                 coin.symbol.toLowerCase().includes(searchFilter)
             );
 
             if (filteredCryptos.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td>
-                    </tr>
-                `;
+                tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td></tr>`;
                 return;
             }
 
@@ -778,7 +1068,6 @@
                 const isPositive = change >= 0;
                 const changeClass = isPositive ? 'text-emerald-400' : 'text-rose-500';
                 const changeSign = isPositive ? '+' : '';
-                
                 const share = totalTop10MarketCap > 0 ? ((coin.market_cap / totalTop10MarketCap) * 100) : 0;
                 
                 const row = document.createElement('tr');
@@ -788,7 +1077,6 @@
                     <td class="py-4 px-4 text-center font-mono font-bold text-zinc-500">${idx + 1}</td>
                     <td class="py-4 px-4">
                         <div class="flex items-center gap-3">
-                            <!-- 加入 onerror 自動渲染備用純文字背景 -->
                             <img class="w-7 h-7 rounded-full bg-zinc-900 object-cover" src="${coin.image}" alt="${coin.name}" onerror="this.onerror=null; this.src='https://placehold.co/28x28/1c1917/ffffff?text=${coin.symbol.toUpperCase()}'">
                             <div>
                                 <div class="font-bold text-white group-hover:text-accentCyan transition-colors">${coin.name}</div>
@@ -796,9 +1084,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="py-4 px-4 text-right font-mono font-bold text-zinc-100">
-                        $${formatNumber(price)}
-                    </td>
+                    <td class="py-4 px-4 text-right font-mono font-bold text-zinc-100">$${formatNumber(price)}</td>
                     <td class="py-4 px-4 text-right font-mono font-bold ${changeClass}">
                         <div class="inline-flex items-center gap-1">
                             <i data-lucide="${isPositive ? 'trending-up' : 'trending-down'}" class="w-3.5 h-3.5"></i>
@@ -813,22 +1099,14 @@
                             </div>
                         </div>
                     </td>
-                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden md:table-cell">
-                        $${formatNumber(coin.total_volume)}
-                    </td>
-                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden lg:table-cell">
-                        $${formatNumber(coin.market_cap)}
-                    </td>
+                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden md:table-cell">$${formatNumber(coin.total_volume)}</td>
+                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden lg:table-cell">$${formatNumber(coin.market_cap)}</td>
                     <td class="py-4 px-4 text-center">
                         <canvas id="sparkline-${coin.id}" class="w-24 h-8 mx-auto"></canvas>
                     </td>
                 `;
-
                 tbody.appendChild(row);
-                
-                setTimeout(() => {
-                    drawSparkline(`sparkline-${coin.id}`, coin.sparkline_in_7d?.price || [], isPositive);
-                }, 10);
+                setTimeout(() => drawSparkline(`sparkline-${coin.id}`, coin.sparkline_in_7d?.price || [], isPositive), 10);
             });
 
             lucide.createIcons();
@@ -847,21 +1125,119 @@
             }
         }
 
-        // 自動加載
+        // === Strategy Inc. 比特幣儲備交易紀錄 (動態渲染) ===
+        // 當 Strategy 官方更新 holdings 時，只需在此陣列新增/修改最新一筆或多筆，即可自動重新渲染表格
+        const strategyTransactions = [
+            {
+                date: '2026-07-06',
+                type: '賣出減持',
+                typeClass: 'rose',
+                amount: -2225,
+                avgPrice: 60773,
+                totalValue: -135.22,
+                totalHolding: 843775
+            },
+            {
+                date: '2026-06-30',
+                type: '賣出減持',
+                typeClass: 'rose',
+                amount: -1363,
+                avgPrice: 59256,
+                totalValue: -80.76,
+                totalHolding: 846000
+            },
+            {
+                date: '2026-06-22',
+                type: '買入增持',
+                typeClass: 'emerald',
+                amount: 520,
+                avgPrice: 67068,
+                totalValue: 34.87,
+                totalHolding: 847363
+            },
+            {
+                date: '2026-06-15',
+                type: '買入增持',
+                typeClass: 'emerald',
+                amount: 1587,
+                avgPrice: 63024,
+                totalValue: 100.02,
+                totalHolding: 846842
+            },
+            {
+                date: '2026-06-08',
+                type: '買入增持',
+                typeClass: 'emerald',
+                amount: 1550,
+                avgPrice: 65332,
+                totalValue: 101.26,
+                totalHolding: 845256
+            },
+            {
+                date: '2026-05-18',
+                type: '買入增持',
+                typeClass: 'emerald',
+                amount: 24869,
+                avgPrice: 80985,
+                totalValue: 2014.01,
+                totalHolding: 843738
+            }
+        ];
+
+        function renderStrategyTable() {
+            const tbody = document.getElementById('strategy-tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            strategyTransactions.forEach(tx => {
+                const isBuy = tx.typeClass === 'emerald';
+                const amountStr = (tx.amount > 0 ? '+' : '') + tx.amount.toLocaleString();
+                const amountClass = isBuy ? 'text-emerald-400' : 'text-rose-400';
+                const valueStr = (tx.totalValue > 0 ? '+' : '') + '$' + Math.abs(tx.totalValue).toFixed(2) + ' M';
+                const valueClass = isBuy ? 'text-emerald-400' : 'text-rose-400';
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-zinc-800/30 transition-colors";
+                row.innerHTML = `
+                    <td class="py-3 px-4 text-zinc-300">${tx.date}</td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-${tx.typeClass}-950/50 text-${tx.typeClass}-400 border border-${tx.typeClass}-900/50">
+                            ${tx.type}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-right font-mono ${amountClass}">${amountStr}</td>
+                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$${tx.avgPrice.toLocaleString()}</td>
+                    <td class="py-3 px-4 text-right font-mono ${valueClass}">${valueStr}</td>
+                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">${tx.totalHolding.toLocaleString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 初始化全部數據與監聽器
         window.onload = function() {
             lucide.createIcons();
-            fetchCryptoData();
             
-            // 啟動自訂的即時美股與加密貨幣報價更新
-            startLiveTicker('mstr-price', 'mstr-change', 94.13, 0.26);
-            startLiveTicker('strc-price', 'strc-change', 86.28, 0.67);
-            startLiveTicker('btc-price', 'btc-change', 63950.50, 2.45);
-            startLiveTicker('eth-price', 'eth-change', 3450.20, 1.20);
+            // 載入即時恐懼與貪婪指數
+            fetchFearAndGreedIndex();
+            setInterval(fetchFearAndGreedIndex, 15 * 60 * 1000);
 
-            // 每 60 秒背景重新加載數據
-            setInterval(() => {
-                fetchCryptoData(true);
-            }, 60000);
+            // 載入底部前十大列表
+            fetchCryptoData();
+            setInterval(() => fetchCryptoData(true), 60000); // 列表 60 秒刷新一次
+            
+            // 啟動美股模擬 (具備週末與非上班時段自動判定收盤功能)
+            startLiveTicker('mstr-price', 'mstr-change', 'mstr-status', 94.13, 0.26);
+            startLiveTicker('strc-price', 'strc-change', 'strc-status', 86.28, 0.67);
+
+            // 啟動 Strategy 儲備表格動態渲染
+            renderStrategyTable();
+
+            // 啟動 幣安期貨 API 每秒即時報價更新 (BTC / ETH / BNB / SOL / XRP / HYPE 六大幣真實市場最後成交價 + 24H 漲跌 + 高低點)
+            // 已實現每秒鐘從 https://fapi.binance.com 取得最新 ticker 數據並更新 DOM + 價格變動閃爍特效
+            updateMainCryptoCards();
+            setInterval(updateMainCryptoCards, 1000); 
         }
     </script>
 </body>
