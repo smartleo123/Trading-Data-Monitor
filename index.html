@@ -487,6 +487,29 @@
                 </div>
             </div>
 
+            <!-- 台股技術分析評級 (自選股票，預設 0050) -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
+                    <div class="flex-1"><h2 id="tw-tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tw-tech-subtitle" class="text-xs text-zinc-500 mt-0.5">0050 台股多空儀表</p></div>
+                    <a id="tw-tech-source-link" href="https://tw.tradingview.com/symbols/TWSE-0050/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                </div>
+                <div class="flex items-center gap-1.5 mb-3">
+                    <div class="relative flex-1 max-w-md">
+                        <input id="tw-tech-symbol-input" type="text" placeholder="輸入台股代號 (例：2330、2454、0050)" onkeydown="if(event.key==='Enter')applyTwTechSymbol()" class="w-full bg-zinc-900 border border-zinc-800 focus:border-accentPurple/50 rounded-lg pl-8 pr-3 py-2 text-sm text-white placeholder-zinc-600 outline-none transition-colors">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+                    </div>
+                    <button onclick="applyTwTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold bg-accentPurple/15 text-accentPurple border border-accentPurple/30 hover:bg-accentPurple/25 transition-colors shrink-0">查詢</button>
+                    <button onclick="resetTwTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-colors shrink-0" title="回到預設 0050">重設</button>
+                </div>
+                <div class="flex items-center gap-1.5 mb-4">
+                    <button onclick="switchTwTechInterval('1D', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30">一天</button>
+                    <button onclick="switchTwTechInterval('1W', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一週</button>
+                    <button onclick="switchTwTechInterval('1M', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一月</button>
+                </div>
+                <div id="tw-technical-container" class="w-full h-[520px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+            </div>
+
         </div>
         <!-- /market-view-tw-stock -->
 
@@ -820,6 +843,36 @@
             const inp=document.getElementById('tech-symbol-input');if(inp)inp.value='';
             updateTechSymbol('AMEX:VT','VT');
         }
+        // ===== 台股技術分析評級 (獨立，預設 0050) =====
+        let twTechCurrentSymbol='TWSE:0050',twTechCurrentInterval='1D';
+        function switchTwTechInterval(interval,btn){
+            twTechCurrentInterval=interval;
+            renderTechnicalGauge('tw-technical-container',twTechCurrentSymbol,interval);
+            document.querySelectorAll('.tw-tech-interval-btn').forEach(b=>b.className='tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all');
+            if(btn)btn.className='tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30';
+        }
+        function updateTwTechSymbol(symbol,displayName){
+            twTechCurrentSymbol=symbol;
+            renderTechnicalGauge('tw-technical-container',symbol,twTechCurrentInterval);
+            const t=document.getElementById('tw-tech-title'),st=document.getElementById('tw-tech-subtitle'),lk=document.getElementById('tw-tech-source-link');
+            const isDefault=symbol==='TWSE:0050';
+            if(t)t.innerText=isDefault?'技術分析評級':`${displayName} 的技術分析`;
+            if(st)st.innerText='台股多空儀表';
+            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/technicals/`);}
+        }
+        function applyTwTechSymbol(){
+            const inp=document.getElementById('tw-tech-symbol-input');if(!inp)return;
+            let raw=(inp.value||'').trim().toUpperCase();if(!raw)return;
+            let symbol,display=raw;
+            if(raw.includes(':')){symbol=raw;display=raw.split(':')[1];}
+            else if(/^\d{4,6}[A-Z]?$/.test(raw)){symbol='TWSE:'+raw;}      // 台股代號自動掛 TWSE
+            else{symbol='TWSE:'+raw;}                                       // 其餘也預設台股
+            updateTwTechSymbol(symbol,display);
+        }
+        function resetTwTechSymbol(){
+            const inp=document.getElementById('tw-tech-symbol-input');if(inp)inp.value='';
+            updateTwTechSymbol('TWSE:0050','0050');
+        }
         function renderEconomicCalendar(cid,cf){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-events.js',{width:'100%',height:'100%',colorTheme:'dark',isTransparent:true,locale:'zh_TW',importanceFilter:'0,1',countryFilter:cf});}
         function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
 
@@ -956,7 +1009,7 @@
             });
         }
         function initTwStockView(){
-            if(!twStockState.extrasLoaded){renderTwSingleQuotes();twStockState.extrasLoaded=true;}
+            if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');twStockState.extrasLoaded=true;}
             if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();}
         }
 
