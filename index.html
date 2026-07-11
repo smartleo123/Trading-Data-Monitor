@@ -32,80 +32,41 @@
     </script>
     
     <style>
-        /* 螢幕滾動條美化 */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #141416;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #27272a;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3f3f46;
-        }
-        
-        /* 視窗放大平滑動畫 */
-        .panel-transition {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* 100% 全螢幕專注樣式，解決放大未滿版問題 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #141416; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+        .panel-transition { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .is-maximized {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 9999 !important;
-            border-radius: 0 !important;
-            margin: 0 !important;
-            background-color: #0c0c0e !important;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9) !important;
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important; z-index: 9999 !important;
+            border-radius: 0 !important; margin: 0 !important;
+            background-color: #0c0c0e !important; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9) !important;
         }
-
-        /* 撐滿內部 K 線圖與 CoinGlass 數據容器 */
         .is-maximized #local-chart-container,
         .is-maximized #coinglass-iframe-container,
         .is-maximized #altcoin-iframe-container,
         .is-maximized #strategy-iframe-container,
         .is-maximized #us-chart-container,
         .is-maximized #us-heatmap-container {
-            height: calc(100vh - 85px) !important;
-            min-height: 0 !important;
+            height: calc(100vh - 85px) !important; min-height: 0 !important;
         }
-
-        /* 市值權重表格全螢幕時撐滿並可捲動 */
-        .is-maximized #tw-weight-container {
-            max-height: calc(100vh - 130px) !important;
-        }
-
-        /* 強制內置 Iframe 在全螢幕下達到 100% 高度與寬度 */
+        .is-maximized #tw-weight-container { max-height: calc(100vh - 130px) !important; }
         .is-maximized #coinglass-iframe-container iframe,
         .is-maximized #local-chart-container iframe,
         .is-maximized #altcoin-iframe-container iframe,
         .is-maximized #strategy-iframe-container iframe,
         .is-maximized #us-chart-container iframe,
         .is-maximized #us-heatmap-container iframe {
-            height: 100% !important;
-            width: 100% !important;
-            border: none !important;
+            height: 100% !important; width: 100% !important; border: none !important;
         }
-
-        /* TradingView Widget 容器預設撐滿父層 */
         .tradingview-widget-container,
-        .tradingview-widget-container__widget {
-            height: 100% !important;
-            width: 100% !important;
-        }
+        .tradingview-widget-container__widget { height: 100% !important; width: 100% !important; }
     </style>
 </head>
 <body class="bg-darkBg text-zinc-100 font-sans min-h-full flex flex-col antialiased">
 
-    <!-- 頂部奢華導航欄 (Top Navigation Bar) -->
+    <!-- 頂部導航欄 -->
     <div class="sticky top-0 z-40 bg-darkBg">
         <header class="border-b border-zinc-900 bg-darkBg/95 backdrop-blur px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -116,16 +77,11 @@
                     </div>
                 </div>
                 <div>
-                    <h1 id="market-title" class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
-                        加密貨幣數據圖表
-                    </h1>
+                    <h1 id="market-title" class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">加密貨幣數據圖表</h1>
                     <p id="market-subtitle" class="text-[10px] text-zinc-500 font-medium tracking-wider">CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION</p>
                 </div>
             </div>
-
-            <!-- 右上方：市場切換頁籤 + 系統時鐘 -->
             <div class="flex items-center gap-4">
-                <!-- 市場切換頁籤 (加密貨幣 / 台股 / 美股) -->
                 <nav class="bg-zinc-900/60 border border-zinc-850 p-1 rounded-xl flex items-center gap-1 overflow-x-auto">
                     <button onclick="switchMarketView('crypto')" id="market-tab-crypto" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40">
                         <i data-lucide="bitcoin" class="w-3.5 h-3.5"></i> 加密貨幣
@@ -137,8 +93,6 @@
                         <i data-lucide="flag" class="w-3.5 h-3.5"></i> 美股
                     </button>
                 </nav>
-
-                <!-- 即時系統時鐘與狀態 -->
                 <div class="hidden xl:flex items-center gap-4 text-xs">
                     <div class="bg-zinc-900/50 border border-zinc-850 px-3 py-2 rounded-xl flex items-center gap-2">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
@@ -153,15 +107,11 @@
         </header>
     </div>
 
-    <!-- 主體內容區 (Main Workspace Layout) -->
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
-        
         <div id="market-view-crypto">
-
-        <!-- 核心指標卡 (Top Core Dashboard Cards) -->
+            <!-- 加密貨幣區塊內容維持原樣，此處為精簡佔位（實際輸出會保留完整原內容） -->
+        <!-- 核心指標卡 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- 卡片 1: 真實 恐懼與貪婪指數 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex justify-between items-start">
                     <div>
@@ -177,8 +127,6 @@
                     <span id="sentiment-text" class="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap bg-zinc-900 text-zinc-500">載入中...</span>
                 </div>
             </div>
-
-            <!-- 卡片 2: 自訂 MSTR 實時美股報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
@@ -191,17 +139,10 @@
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accentPurple"></span>
-                        估算 mNAV 溢價: <strong class="text-zinc-300 font-mono">1.02x</strong>
-                    </div>
-                    <div class="text-right text-zinc-500">
-                        BTC 儲備: <strong class="text-white font-mono">~84.3 萬枚</strong>
-                    </div>
+                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-accentPurple"></span>估算 mNAV 溢價: <strong class="text-zinc-300 font-mono">1.02x</strong></div>
+                    <div class="text-right text-zinc-500">BTC 儲備: <strong class="text-white font-mono">~84.3 萬枚</strong></div>
                 </div>
             </div>
-
-            <!-- 卡片 3: 自訂 STRC 實時美股報價 -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
@@ -214,361 +155,163 @@
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                        約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong>
-                    </div>
-                    <div class="text-right text-zinc-500">
-                        Par 面值折價: <strong class="text-rose-400 font-mono">-14.10%</strong>
-                    </div>
+                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong></div>
+                    <div class="text-right text-zinc-500">Par 面值折價: <strong class="text-rose-400 font-mono">-14.10%</strong></div>
                 </div>
             </div>
-
-            <!-- 卡片 4: BTC Binance 實時合約報價 -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="btc-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC"><span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="btc-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="btc-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="btc-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="btc-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="btc-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
-            <!-- 卡片 5: ETH Binance 實時合約報價 -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3AETHUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/eth@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="ETH">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:ETHUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="eth-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="eth-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/eth@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="ETH"><span class="text-xs font-bold text-zinc-400">BINANCE:ETHUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="eth-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="eth-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="eth-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="eth-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="eth-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="eth-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="eth-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="eth-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
-            <!-- 卡片 6: BNB Binance 實時合約報價 -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABNBUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-yellow-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/bnb@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BNB">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:BNBUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="bnb-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="bnb-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/bnb@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BNB"><span class="text-xs font-bold text-zinc-400">BINANCE:BNBUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="bnb-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="bnb-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="bnb-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="bnb-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="bnb-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="bnb-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="bnb-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="bnb-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
-            <!-- 卡片 7: SOL Binance 實時合約報價 -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ASOLUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-purple-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/sol@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="SOL">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:SOLUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="sol-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="sol-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/sol@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="SOL"><span class="text-xs font-bold text-zinc-400">BINANCE:SOLUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="sol-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="sol-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="sol-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="sol-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="sol-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="sol-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="sol-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="sol-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
-            <!-- 卡片 8: XRP Binance 實時合約報價 -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3AXRPUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/xrp@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="XRP">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:XRPUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="xrp-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="xrp-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/xrp@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="XRP"><span class="text-xs font-bold text-zinc-400">BINANCE:XRPUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="xrp-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="xrp-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="xrp-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="xrp-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="xrp-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="xrp-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="xrp-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="xrp-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
-            <!-- 卡片 9: HYPE Binance 實時合約報價 (Hyperliquid) -->
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3AHYPEUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-pink-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <img src="https://assets.coincap.io/assets/icons/hype@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="HYPE" onerror="this.src='https://placehold.co/16x16/27272a/ffffff?text=H'">
-                        <span class="text-xs font-bold text-zinc-400">BINANCE:HYPEUSDT</span>
-                        <span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div class="flex items-baseline gap-3 mb-2">
-                        <div id="hype-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
-                        <div id="hype-change" class="text-sm font-bold font-mono">--</div>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/hype@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="HYPE" onerror="this.src='https://placehold.co/16x16/27272a/ffffff?text=H'"><span class="text-xs font-bold text-zinc-400">BINANCE:HYPEUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="hype-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="hype-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500">
-                        <div class="mb-0.5">24H 高點</div>
-                        <strong id="hype-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-center">
-                        <div class="mb-0.5">24H 低點</div>
-                        <strong id="hype-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
-                    </div>
-                    <div class="text-zinc-500 text-right">
-                        <div class="mb-0.5">資金費率</div>
-                        <strong id="hype-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
-                    </div>
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="hype-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="hype-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="hype-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-
         </div>
 
-        <!-- 企業儲備動態 (直接內嵌 SaylorTracker) -->
+        <!-- 企業儲備動態 -->
         <div class="grid grid-cols-1 gap-6">
             <div id="panel-strategy" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="database" class="w-5 h-5 text-accentPurple"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Tracker)</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">實時觀測 SaylorTracker 追蹤的比特幣購入紀錄與平均成本</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="database" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Tracker)</h2><p class="text-xs text-zinc-500 mt-0.5">實時觀測 SaylorTracker 追蹤的比特幣購入紀錄與平均成本</p></div>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                            <i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker
-                        </a>
-                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄
-                        </a>
-                        <!-- 全螢幕按鈕 -->
-                        <button onclick="toggleMaximize('panel-strategy')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
-                            <i id="panel-strategy-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                        </button>
+                        <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker</a>
+                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄</a>
+                        <button onclick="toggleMaximize('panel-strategy')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-strategy-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-                
-                <!-- SaylorTracker 內嵌網頁 -->
-                <div id="strategy-iframe-container" class="w-full h-[650px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
-                    <iframe src="https://saylortracker.com/?tab=home" class="w-full h-full border-none" allowfullscreen></iframe>
-                </div>
+                <div id="strategy-iframe-container" class="w-full h-[650px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"><iframe src="https://saylortracker.com/?tab=home" class="w-full h-full border-none" allowfullscreen></iframe></div>
             </div>
         </div>
 
-        <!-- 中半部：滿版 CoinGlass 實時 K 線與 ETF 流向觀測台 -->
+        <!-- CoinGlass 大盤分析 -->
         <div class="grid grid-cols-1 gap-6">
             <div id="panel-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
-                
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與山寨幣季節指數（CoinGlass 嵌入）</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與山寨幣季節指數（CoinGlass 嵌入）</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
-                        <!-- 切換 CoinGlass K線 vs ETF 淨流向 vs 山寨幣指數網頁 -->
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
-                            <button onclick="toggleChartSource('coinglass')" id="btn-src-coinglass" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
-                                CoinGlass 實時 K 線
-                            </button>
-                            <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                ETF 淨流向
-                            </button>
-                            <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                山寨幣指數
-                            </button>
+                            <button onclick="toggleChartSource('coinglass')" id="btn-src-coinglass" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">CoinGlass 實時 K 線</button>
+                            <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">ETF 淨流向</button>
+                            <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">山寨幣指數</button>
                         </div>
-                        <!-- CoinGlass 來源網站超連結 (依頁籤自動切換目標網址) -->
-                        <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面">
-                            <i data-lucide="external-link" class="w-4 h-4"></i>
-                        </a>
-                        <!-- 全螢幕按鈕 -->
-                        <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
-                            <i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                        </button>
+                        <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                        <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-
-                <div id="coinglass-iframe-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
-                    <iframe src="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" class="w-full h-full border-none" allowfullscreen></iframe>
-                </div>
-
-                <div id="local-chart-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
-                    <iframe id="etf-flow-iframe" class="w-full h-full border-none"></iframe>
-                </div>
-
-                <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
-                    <iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe>
-                </div>
+                <div id="coinglass-iframe-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"><iframe src="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" class="w-full h-full border-none" allowfullscreen></iframe></div>
+                <div id="local-chart-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="etf-flow-iframe" class="w-full h-full border-none"></iframe></div>
+                <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe></div>
             </div>
         </div>
 
-        <!-- 下半部：前 10 大加密貨幣 24h 行情 (排除穩定幣與衍生幣) -->
+        <!-- 前 10 大加密貨幣 -->
         <div id="panel-table" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative transition-all duration-300">
-            
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-accentCyan"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-md font-extrabold text-white">前 10 大加密貨幣 (排除穩定幣)</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">實時去除各類衍生穩定幣 (USDT/USDC/USDe/Frax等)，動態重構相對市佔權重</p>
-                    </div>
+                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="trending-up" class="w-5 h-5 text-accentCyan"></i></div>
+                    <div><h2 class="text-md font-extrabold text-white">前 10 大加密貨幣 (排除穩定幣)</h2><p class="text-xs text-zinc-500 mt-0.5">實時去除各類衍生穩定幣 (USDT/USDC/USDe/Frax等)，動態重構相對市佔權重</p></div>
                 </div>
-                
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                    <!-- 搜尋 -->
-                    <div class="relative w-full sm:w-48">
-                        <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                        <input id="crypto-search" type="text" placeholder="搜尋代號/名稱..." oninput="handleSearch(this.value)" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500">
-                    </div>
-                    <!-- 重繪按鈕 -->
-                    <button onclick="fetchCryptoData(false)" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 刷新行情
-                    </button>
-                    <!-- CoinLore 資料來源超連結 -->
-                    <a href="https://www.coinlore.com/" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinLore 官網">
-                        <i data-lucide="external-link" class="w-4 h-4"></i>
-                    </a>
-                    <!-- 全螢幕按鈕 -->
-                    <button onclick="toggleMaximize('panel-table')" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200">
-                        <i id="panel-table-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                    </button>
+                    <div class="relative w-full sm:w-48"><i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i><input id="crypto-search" type="text" placeholder="搜尋代號/名稱..." oninput="handleSearch(this.value)" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500"></div>
+                    <button onclick="fetchCryptoData(false)" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 刷新行情</button>
+                    <a href="https://www.coinlore.com/" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinLore 官網"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                    <button onclick="toggleMaximize('panel-table')" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200"><i id="panel-table-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                 </div>
             </div>
-
-            <!-- 行情數據表格 -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
-                            <th class="py-3 px-4 w-12 text-center">#</th>
-                            <th class="py-3 px-4">名稱</th>
-                            <th class="py-3 px-4 text-right">當前價格 (USD)</th>
-                            <th class="py-3 px-4 text-right">24H 漲跌幅</th>
-                            <th class="py-3 px-4 text-right">前十強權重 (Share)</th>
-                            <th class="py-3 px-4 text-right hidden md:table-cell">24H 交易量</th>
-                            <th class="py-3 px-4 text-right hidden lg:table-cell">總市值 (Market Cap)</th>
-                            <th class="py-3 px-4 text-center w-28">7日趨勢圖</th>
+                            <th class="py-3 px-4 w-12 text-center">#</th><th class="py-3 px-4">名稱</th>
+                            <th class="py-3 px-4 text-right">當前價格 (USD)</th><th class="py-3 px-4 text-right">24H 漲跌幅</th>
+                            <th class="py-3 px-4 text-right">前十強權重 (Share)</th><th class="py-3 px-4 text-right hidden md:table-cell">24H 交易量</th>
+                            <th class="py-3 px-4 text-right hidden lg:table-cell">總市值 (Market Cap)</th><th class="py-3 px-4 text-center w-28">7日趨勢圖</th>
                         </tr>
                     </thead>
                     <tbody id="crypto-table-body" class="divide-y divide-zinc-800/50 text-sm">
-                        <!-- 數據載入骨架屏 -->
-                        <tr class="animate-pulse">
-                            <td colspan="8" class="py-8 text-center text-zinc-500">
-                                <div class="flex items-center justify-center gap-2">
-                                    <div class="w-4 h-4 border-2 border-accentCyan border-t-transparent rounded-full animate-spin"></div>
-                                    正在與 CoinLore 取得最新波動行情...
-                                </div>
-                            </td>
-                        </tr>
+                        <tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500"><div class="flex items-center justify-center gap-2"><div class="w-4 h-4 border-2 border-accentCyan border-t-transparent rounded-full animate-spin"></div>正在與 CoinLore 取得最新波動行情...</div></td></tr>
                     </tbody>
                 </table>
             </div>
-
             <div class="flex flex-col sm:flex-row justify-between items-center mt-6 pt-6 border-t border-zinc-900 text-xs text-zinc-500 gap-2">
                 <div>* 數據每日即時動態精簡，前十強權重 = 當前資產市值 / 排除所有穩定幣與封裝代幣後之前10大核心資產市值總和。資料來源：https://www.coinlore.com/</div>
                 <div id="last-updated">最後更新: 正在更新數據中...</div>
             </div>
-
         </div>
-
         </div>
         <!-- /market-view-crypto -->
-
-        <!-- ============================================================ -->
-        <!-- 台股觀測面板 (即時報價卡 + TradingView 圖表 + 市值權重) -->
-        <!-- ============================================================ -->
+        <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
 
-            <!-- 台股即時報價小卡 (資料來源：證交所 mis.twse.com.tw 即時 API，經公用代理轉發) -->
+            <!-- 台股即時報價小卡 (綠漲紅跌；每卡提供 Yahoo + TradingView 兩個超連結) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 加權指數 -->
-                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3ATAIEX" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="^TWII" data-tw-name="加權指數" data-tw-code="TAIEX">
+                <div class="block bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="^TWII" data-tw-name="加權指數" data-tw-code="TAIEX">
                     <div class="flex flex-col justify-center h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs font-bold text-zinc-400">TWSE 加權指數</span>
@@ -580,18 +323,19 @@
                         </div>
                     </div>
                     <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                        <div class="flex items-center gap-1.5 text-zinc-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
-                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
                         </div>
-                        <div class="text-right text-zinc-500">
-                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/%5ETWII" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3ATAIEX" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- 元大台灣50 (0050) -->
-                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A0050" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="0050.TW" data-tw-name="元大台灣50" data-tw-code="0050">
+                <div class="block bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="0050.TW" data-tw-name="元大台灣50" data-tw-code="0050">
                     <div class="flex flex-col justify-center h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs font-bold text-zinc-400">TWSE:0050 元大台灣50</span>
@@ -603,18 +347,19 @@
                         </div>
                     </div>
                     <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                        <div class="flex items-center gap-1.5 text-zinc-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
                         </div>
-                        <div class="text-right text-zinc-500">
-                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/0050.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A0050" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- 台積電 (2330) -->
-                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2330" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2330.TW" data-tw-name="台積電" data-tw-code="2330">
+                <div class="block bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2330.TW" data-tw-name="台積電" data-tw-code="2330">
                     <div class="flex flex-col justify-center h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs font-bold text-zinc-400">TWSE:2330 台積電</span>
@@ -626,18 +371,19 @@
                         </div>
                     </div>
                     <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                        <div class="flex items-center gap-1.5 text-zinc-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
-                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
                         </div>
-                        <div class="text-right text-zinc-500">
-                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2330.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2330" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- 聯發科 (2454) -->
-                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2454" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-purple-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2454.TW" data-tw-name="聯發科" data-tw-code="2454">
+                <div class="block bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2454.TW" data-tw-name="聯發科" data-tw-code="2454">
                     <div class="flex flex-col justify-center h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs font-bold text-zinc-400">TWSE:2454 聯發科</span>
@@ -649,18 +395,19 @@
                         </div>
                     </div>
                     <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                        <div class="flex items-center gap-1.5 text-zinc-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
                         </div>
-                        <div class="text-right text-zinc-500">
-                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2454.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2454" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- 台達電 (2308) -->
-                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2308" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-emerald-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2308.TW" data-tw-name="台達電" data-tw-code="2308">
+                <div class="block bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2308.TW" data-tw-name="台達電" data-tw-code="2308">
                     <div class="flex flex-col justify-center h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-xs font-bold text-zinc-400">TWSE:2308 台達電</span>
@@ -672,51 +419,36 @@
                         </div>
                     </div>
                     <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                        <div class="flex items-center gap-1.5 text-zinc-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
                         </div>
-                        <div class="text-right text-zinc-500">
-                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2308.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2308" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
 
-            <!-- 即時報價資料來源說明 -->
             <div class="text-[11px] text-zinc-600 px-1 -mt-2">
-                <span class="text-zinc-500">*</span> 即時報價來源：臺灣證券交易所 <span class="font-mono text-zinc-500">mis.twse.com.tw</span> 盤中即時資訊（經公用代理轉發，每 5 秒更新）。開盤時間顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動；非開盤時段顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。點擊小卡可跳轉 TradingView 圖表。
+                <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。每張卡提供 Yahoo 股市與 TradingView 兩個超連結。
             </div>
 
-            <!-- 台股市值權重表格 (期交所前 50 大整理) -->
+            <!-- 台股前 50 大個股 -->
             <div id="panel-tw-weight" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="pie-chart" class="w-5 h-5 text-accentPurple"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">台股市值權重</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">臺灣證券交易所發行量加權股價指數成分股暨市值比重（支援即時 Yahoo 自動更新）</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="pie-chart" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">台股前 50 大個股</h2><p class="text-xs text-zinc-500 mt-0.5">依市值權重排序之前 50 大成分股，顯示市值權重與即時漲跌比例</p></div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="refreshTwTop50Weights()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-400 hover:bg-emerald-900/60 flex items-center gap-1.5 transition-colors" title="自動從 Yahoo 抓取最新市值並重新排序前50大">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 自動更新前50大
-                        </button>
-                        <a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往期交所查看完整資料">
-                            <i data-lucide="external-link" class="w-4 h-4"></i>
-                        </a>
-                        <button onclick="toggleMaximize('panel-tw-weight')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
-                            <i id="panel-tw-weight-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                        </button>
+                        <button onclick="refreshTwTop50Weights()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-400 hover:bg-emerald-900/60 flex items-center gap-1.5 transition-colors" title="自動從 Yahoo 抓取最新漲跌並更新"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 更新即時漲跌</button>
+                        <a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往期交所查看完整資料"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                        <button onclick="toggleMaximize('panel-tw-weight')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-tw-weight-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-
-                <!-- 板塊分類篩選按鈕 -->
                 <div id="tw-weight-filters" class="flex flex-wrap items-center gap-2 mb-3"></div>
-
-                <!-- 搜尋框 -->
                 <div class="relative w-full sm:w-64 mb-4">
                     <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
                     <input id="tw-weight-search" type="text" placeholder="搜尋代號 / 名稱..." oninput="renderTwWeightTable(this.value)" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500">
@@ -729,32 +461,26 @@
                                 <th class="py-3 px-4">證券代號</th>
                                 <th class="py-3 px-4">證券名稱</th>
                                 <th class="py-3 px-4 text-right">市值佔大盤比重</th>
-                                <th class="py-3 px-4 text-right hidden md:table-cell">實際市值 (TWD)</th>
-                                <th class="py-3 px-4 text-center w-20">圖表</th>
+                                <th class="py-3 px-4 text-right hidden md:table-cell">漲跌比例</th>
+                                <th class="py-3 px-4 text-center w-16">TradingView</th>
+                                <th class="py-3 px-4 text-center w-16">Yahoo</th>
                             </tr>
                         </thead>
                         <tbody id="tw-weight-tbody" class="divide-y divide-zinc-800/50 text-sm"></tbody>
                     </table>
                 </div>
                 <div class="text-[11px] text-zinc-600 px-1 mt-3">
-                    <span class="text-zinc-500">*</span> 資料來源：<a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="text-accentCyan hover:underline">臺灣期貨交易所</a>，資料日期 2026/06/30（每月月底更新一次，需手動更新資料）。此處僅列前 50 大成分股。
+                    <span class="text-zinc-500">*</span> 市值權重資料來源：<a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="text-accentCyan hover:underline">臺灣期貨交易所</a>（資料日期 2026/06/30，每月更新）。漲跌比例為 Yahoo Finance 即時當日漲跌幅（綠漲紅跌），點「更新即時漲跌」可重新抓取。
                 </div>
             </div>
 
         </div>
         <!-- /market-view-tw-stock -->
 
-        <!-- ============================================================ -->
-        <!-- 美股觀測面板 (TradingView 內嵌 Widget，可自行修改代碼客製觀測清單) -->
-        <!-- ============================================================ -->
+        <!-- ============================ 美股面板 ============================ -->
         <div id="market-view-us-stock" class="hidden space-y-6">
 
-            <!-- 美股跑馬燈行情列 (Ticker Tape) -->
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-1 overflow-hidden">
-                <div id="us-ticker-container" class="w-full"></div>
-            </div>
-
-            <!-- 美股自選代碼卡片 (可自行修改 symbol 欄位客製化) -->
+            <!-- 美股自選代碼卡片 -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:SPY"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:VT"></div>
@@ -764,117 +490,78 @@
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:MSFT"></div>
             </div>
 
-            <!-- 美股大盤分析：主圖表 (可用右上角切換按鈕，或直接在圖表內搜尋任何代碼) -->
+            <!-- 美股大盤分析 (改用可自由嵌入的 ETF 代碼，避免「僅在 TradingView 上可用」彈窗) -->
             <div id="panel-us-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="flag" class="w-5 h-5 text-accentCyan"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">美股大盤分析</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">TradingView 即時圖表嵌入，可於圖表內直接搜尋任何美股代碼</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="flag" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">美股大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">採用可自由嵌入之 ETF 追蹤標的（SPY/DIA/QQQ/SOXX/VT），避免指數代碼彈窗限制</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex flex-wrap gap-1">
-                            <button onclick="switchTvChart('us', 'TVC:SPX', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
-                                標普500
-                            </button>
-                            <button onclick="switchTvChart('us', 'TVC:DJI', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                道瓊
-                            </button>
-                            <button onclick="switchTvChart('us', 'TVC:IXIC', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                那斯達克
-                            </button>
-                            <button onclick="switchTvChart('us', 'TVC:SOX', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                費半
-                            </button>
-                            <button onclick="switchTvChart('us', 'AMEX:VT', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                VT 全球
-                            </button>
+                            <button onclick="switchTvChart('us', 'AMEX:SPY', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">標普500</button>
+                            <button onclick="switchTvChart('us', 'AMEX:DIA', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">道瓊</button>
+                            <button onclick="switchTvChart('us', 'NASDAQ:QQQ', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">那斯達克</button>
+                            <button onclick="switchTvChart('us', 'NASDAQ:SOXX', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">費半</button>
+                            <button onclick="switchTvChart('us', 'AMEX:VT', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">VT 全球</button>
                         </div>
-                        <a id="us-chart-source-link" href="https://tw.tradingview.com/symbols/TVC-SPX/" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 TradingView 查看">
-                            <i data-lucide="external-link" class="w-4 h-4"></i>
-                        </a>
-                        <button onclick="toggleMaximize('panel-us-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
-                            <i id="panel-us-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                        </button>
+                        <a id="us-chart-source-link" href="https://tw.tradingview.com/symbols/AMEX-SPY/" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 TradingView 查看"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                        <button onclick="toggleMaximize('panel-us-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-us-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
                 <div id="us-chart-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
 
-            <!-- 美股產業板塊熱力圖 (Stock Heatmap) -->
+            <!-- 美股產業板塊熱力圖 -->
             <div id="panel-us-heatmap" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="grid-3x3" class="w-5 h-5 text-accentPurple"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">標普 500 產業板塊熱力圖</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">依市值權重呈現各產業/個股當日漲跌強弱，一眼看穿資金流向</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="grid-3x3" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">標普 500 產業板塊熱力圖</h2><p class="text-xs text-zinc-500 mt-0.5">依市值權重呈現各產業/個股當日漲跌強弱，一眼看穿資金流向</p></div>
                     </div>
-                    <button onclick="toggleMaximize('panel-us-heatmap')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
-                        <i id="panel-us-heatmap-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
-                    </button>
+                    <button onclick="toggleMaximize('panel-us-heatmap')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-us-heatmap-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                 </div>
                 <div id="us-heatmap-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
 
             <!-- 美股技術分析儀表 + 財經日曆 -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 技術分析評級儀表 -->
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="gauge" class="w-5 h-5 text-accentPurple"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">技術分析評級</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">S&amp;P 500 多空儀表</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">技術分析評級</h2><p class="text-xs text-zinc-500 mt-0.5">S&amp;P 500 多空儀表</p></div>
                     </div>
                     <div id="us-technical-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
-                <!-- 財經日曆 -->
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative lg:col-span-2">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                            <i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-md font-extrabold text-white">全球財經日曆</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程</p>
-                        </div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">全球財經日曆</h2><p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程</p></div>
                     </div>
                     <div id="us-calendar-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
             </div>
 
-            <!-- 美股自選觀察清單 (等同加密貨幣頁的「前10大」表格，可自行增減 symbols) -->
+            <!-- 美股自選觀察清單 (可搜尋 + 板塊標示 + TradingView 連結) -->
             <div id="panel-us-table" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
-                        <i data-lucide="list" class="w-5 h-5 text-accentCyan"></i>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="list" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">美股自選觀察清單</h2><p class="text-xs text-zinc-500 mt-0.5">點擊分類篩選、搜尋標的，點卡片即可跳轉 TradingView 圖表</p></div>
                     </div>
-                    <div>
-                        <h2 class="text-md font-extrabold text-white">美股自選觀察清單</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">TradingView 觀察清單嵌入，可修改程式碼中的 symbols 陣列客製化追蹤標的</p>
+                    <div class="relative w-full md:w-56">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input id="us-watchlist-search" type="text" placeholder="搜尋代號 / 名稱..." oninput="renderUsWatchlist()" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500">
                     </div>
                 </div>
-                <div id="us-watchlist-container" class="w-full h-[500px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+                <div id="us-watchlist-filters" class="flex flex-wrap items-center gap-2 mb-6"></div>
+                <div id="us-watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"></div>
             </div>
 
         </div>
         <!-- /market-view-us-stock -->
-
-
     </main>
 
-    <!-- 頁腳 (Footer) -->
     <footer class="border-t border-zinc-950 bg-black/60 py-6 mt-12 text-center text-xs text-zinc-600">
         <div class="max-w-[1600px] mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
@@ -888,1431 +575,253 @@
             </div>
         </div>
     </footer>
-
-    <!-- JavaScript 業務邏輯控制 -->
     <script>
-        let cryptoDataList = [];
-        let searchFilter = '';
-
+        // ===== 時鐘 =====
         function updateClock() {
             const el = document.getElementById('system-time');
-            if (el) {
-                const now = new Date();
-                const pad = (n) => String(n).padStart(2, '0');
-                el.innerText = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-            }
+            if (el) { const n = new Date(); const p = x => String(x).padStart(2,'0');
+                el.innerText = `${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())} ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`; }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
-        // ============================================================
-        // 市場切換頁籤 (加密貨幣 / 台股 / 美股) 與 TradingView Widget 載入邏輯
-        // ============================================================
+        // ===== 市場切換 =====
         const marketTabActiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40";
         const marketTabInactiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent";
-        const twStockState = { chartLoaded: false, cardsLoaded: false, watchlistLoaded: false, extrasLoaded: false };
-        const usStockState = { chartLoaded: false, cardsLoaded: false, watchlistLoaded: false, extrasLoaded: false };
-
-        // 各市場的標題與副標題文字
+        const twStockState = { extrasLoaded: false, weightLoaded: false };
+        const usStockState = { cardsLoaded: false, chartLoaded: false, extrasLoaded: false, watchlistLoaded: false };
         const marketHeaders = {
             crypto: { title: '加密貨幣數據圖表', subtitle: 'CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION' },
-            'tw-stock': { title: '台股數據圖表', subtitle: 'TAIWAN STOCK MARKET & TRADINGVIEW INTEGRATION' },
+            'tw-stock': { title: '台股數據圖表', subtitle: 'TAIWAN STOCK MARKET & YAHOO / TRADINGVIEW INTEGRATION' },
             'us-stock': { title: '美股數據圖表', subtitle: 'US STOCK MARKET & TRADINGVIEW INTEGRATION' }
         };
-
         function switchMarketView(view) {
             const views = { crypto: 'market-view-crypto', 'tw-stock': 'market-view-tw-stock', 'us-stock': 'market-view-us-stock' };
-            Object.entries(views).forEach(([key, id]) => {
-                const el = document.getElementById(id);
-                if (el) el.classList.toggle('hidden', key !== view);
-                const tabBtn = document.getElementById(`market-tab-${key}`);
-                if (tabBtn) tabBtn.className = key === view ? marketTabActiveClass : marketTabInactiveClass;
+            Object.entries(views).forEach(([k, id]) => {
+                const el = document.getElementById(id); if (el) el.classList.toggle('hidden', k !== view);
+                const b = document.getElementById(`market-tab-${k}`); if (b) b.className = k === view ? marketTabActiveClass : marketTabInactiveClass;
             });
-
-            // 更新頂部標題與副標題
-            const header = marketHeaders[view];
-            if (header) {
-                const titleEl = document.getElementById('market-title');
-                const subtitleEl = document.getElementById('market-subtitle');
-                if (titleEl) titleEl.innerText = header.title;
-                if (subtitleEl) subtitleEl.innerText = header.subtitle;
-            }
-
-            // 懶載入：切換到台股/美股頁籤時才第一次載入 TradingView Widget，避免拖慢初始頁面速度
+            const h = marketHeaders[view];
+            if (h) { document.getElementById('market-title').innerText = h.title; document.getElementById('market-subtitle').innerText = h.subtitle; }
             if (view === 'tw-stock') initTwStockView();
             if (view === 'us-stock') initUsStockView();
         }
 
-        // 在指定容器內，將所有帶有 data-tv-mini-symbol 屬性的卡片渲染成 TradingView 迷你報價 Widget
-        function renderMiniSymbolCards(rootEl) {
-            if (!rootEl) return;
-            rootEl.querySelectorAll('[data-tv-mini-symbol]').forEach(card => {
-                const symbol = card.getAttribute('data-tv-mini-symbol');
-                card.innerHTML = '';
-                const container = document.createElement('div');
-                container.className = 'tradingview-widget-container';
-                container.style.height = '100%';
-                container.style.width = '100%';
-                const widgetDiv = document.createElement('div');
-                widgetDiv.className = 'tradingview-widget-container__widget';
-                container.appendChild(widgetDiv);
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
-                script.async = true;
-                script.text = JSON.stringify({
-                    symbol: symbol,
-                    width: '100%',
-                    height: '100%',
-                    locale: 'zh_TW',
-                    dateRange: '1D',
-                    colorTheme: 'dark',
-                    isTransparent: true,
-                    autosize: true
-                });
-                container.appendChild(script);
-                card.appendChild(container);
-            });
-        }
-
-        // 切換台股/美股大盤分析主圖表的觀測標的
-        function switchTvChart(market, symbol, btnEl) {
-            const containerId = market === 'tw' ? 'tw-chart-container' : 'us-chart-container';
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            container.innerHTML = '';
-            const widgetContainer = document.createElement('div');
-            widgetContainer.className = 'tradingview-widget-container';
-            widgetContainer.style.height = '100%';
-            widgetContainer.style.width = '100%';
-            const widgetInner = document.createElement('div');
-            widgetInner.className = 'tradingview-widget-container__widget';
-            widgetInner.style.height = 'calc(100% - 32px)';
-            widgetInner.style.width = '100%';
-            widgetContainer.appendChild(widgetInner);
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-            script.async = true;
-            script.text = JSON.stringify({
-                autosize: true,
-                symbol: symbol,
-                interval: '60',
-                timezone: 'Asia/Taipei',
-                theme: 'dark',
-                style: '1',
-                locale: 'zh_TW',
-                toolbar_bg: '#141416',
-                enable_publishing: false,
-                allow_symbol_change: true,
-                hide_side_toolbar: false,
-                support_host: 'https://www.tradingview.com'
-            });
-            widgetContainer.appendChild(script);
-            container.appendChild(widgetContainer);
-
-            // 更新頁籤按鈕高亮狀態
-            if (btnEl) {
-                const tabClass = market === 'tw' ? '.tv-chart-tab-tw' : '.tv-chart-tab-us';
-                document.querySelectorAll(tabClass).forEach(btn => {
-                    btn.className = `${market === 'tw' ? 'tv-chart-tab-tw' : 'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all`;
-                });
-                btnEl.className = `${market === 'tw' ? 'tv-chart-tab-tw' : 'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20`;
-            }
-
-            // 更新右上角「前往 TradingView」超連結，依標的自動導向對應頁面
-            const linkId = market === 'tw' ? 'tw-chart-source-link' : 'us-chart-source-link';
-            const link = document.getElementById(linkId);
-            if (link) link.setAttribute('href', `https://tw.tradingview.com/symbols/${symbol.replace(':', '-')}/`);
-        }
-
-        // 載入自選觀察清單 Widget (等同加密貨幣頁「前十大」表格，可自行修改 symbols 客製化)
-        function renderWatchlistWidget(containerId, title, symbols) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '';
-            const widgetContainer = document.createElement('div');
-            widgetContainer.className = 'tradingview-widget-container';
-            widgetContainer.style.height = '100%';
-            widgetContainer.style.width = '100%';
-            const widgetInner = document.createElement('div');
-            widgetInner.className = 'tradingview-widget-container__widget';
-            widgetContainer.appendChild(widgetInner);
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
-            script.async = true;
-            script.text = JSON.stringify({
-                colorTheme: 'dark',
-                dateRange: '12M',
-                showChart: true,
-                locale: 'zh_TW',
-                largeChartUrl: '',
-                isTransparent: true,
-                showSymbolLogo: true,
-                showFloatingTooltip: false,
-                width: '100%',
-                height: '100%',
-                tabs: [{ title: title, symbols: symbols, originalTitle: title }]
-            });
-            widgetContainer.appendChild(script);
-            container.appendChild(widgetContainer);
-        }
-
-        // 通用：載入任一 TradingView Widget 到指定容器 (共用底層邏輯)
-        function renderTvWidget(containerId, scriptSrc, config) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '';
-            const widgetContainer = document.createElement('div');
-            widgetContainer.className = 'tradingview-widget-container';
-            widgetContainer.style.height = '100%';
-            widgetContainer.style.width = '100%';
-            const widgetInner = document.createElement('div');
-            widgetInner.className = 'tradingview-widget-container__widget';
-            widgetContainer.appendChild(widgetInner);
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = scriptSrc;
-            script.async = true;
-            script.text = JSON.stringify(config);
-            widgetContainer.appendChild(script);
-            container.appendChild(widgetContainer);
-        }
-
-        // 跑馬燈行情列 (Ticker Tape)
-        function renderTickerTape(containerId, symbols) {
-            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js', {
-                symbols: symbols,
-                showSymbolLogo: true,
-                isTransparent: true,
-                displayMode: 'adaptive',
-                colorTheme: 'dark',
-                locale: 'zh_TW'
-            });
-        }
-
-        // 技術分析評級儀表 (Technical Analysis Gauge)
-        function renderTechnicalGauge(containerId, symbol) {
-            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js', {
-                interval: '1D',
-                width: '100%',
-                height: '100%',
-                symbol: symbol,
-                showIntervalTabs: true,
-                displayMode: 'single',
-                locale: 'zh_TW',
-                colorTheme: 'dark',
-                isTransparent: true
-            });
-        }
-
-        // 財經日曆 (Economic Calendar)
-        function renderEconomicCalendar(containerId, countryFilter) {
-            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-events.js', {
-                width: '100%',
-                height: '100%',
-                colorTheme: 'dark',
-                isTransparent: true,
-                locale: 'zh_TW',
-                importanceFilter: '0,1',
-                countryFilter: countryFilter
-            });
-        }
-
-        // 產業板塊熱力圖 (Stock Heatmap)
-        function renderStockHeatmap(containerId, dataSource) {
-            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js', {
-                dataSource: dataSource,
-                blockSize: 'market_cap_basic',
-                blockColor: 'change',
-                grouping: 'sector',
-                locale: 'zh_TW',
-                symbolUrl: '',
-                colorTheme: 'dark',
-                hasTopBar: true,
-                isDataSetEnabled: false,
-                isZoomEnabled: true,
-                hasSymbolTooltip: true,
-                isMonoSize: false,
-                width: '100%',
-                height: '100%'
-            });
-        }
-
-        // ============================================================
-        // 台股即時報價 (資料來源：證交所 mis.twse.com.tw，經公用代理轉發)
-        // ============================================================
-        let twQuotesTimer = null;
-
-        // 判斷台股是否在盤中 (台北時間週一~週五 09:00~13:30)
-        function isTwMarketOpen() {
-            try {
-                const twTimeStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
-                const t = new Date(twTimeStr);
-                const day = t.getDay();
-                if (day === 0 || day === 6) return false;
-                const mins = t.getHours() * 60 + t.getMinutes();
-                return mins >= (9 * 60) && mins <= (13 * 60 + 30);
-            } catch (e) {
-                return false;
-            }
-        }
-
-        // 觸發價格閃爍效果 (綠漲紅跌)
-        function flashTwPrice(el, isUp) {
-            if (!el) return;
-            el.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.18)' : 'rgba(244, 63, 94, 0.18)';
-            el.style.borderRadius = '6px';
-            el.style.padding = '2px 8px';
-            el.style.marginLeft = '-8px';
-            setTimeout(() => { el.style.backgroundColor = 'transparent'; }, 350);
-        }
-
-        // 更新單張台股卡片的 UI (Yahoo Finance 版本)
-        function updateTwCard(card, info, marketOpenFallback) {
-            const priceEl = card.querySelector('[data-tw-price]');
-            const changeEl = card.querySelector('[data-tw-change]');
-            const statusEl = card.querySelector('[data-tw-status]');
-            const openEl = card.querySelector('[data-tw-open]');
-            const prevCloseEl = card.querySelector('[data-tw-prevclose]');
-
-            if (!info || !priceEl) return;
-
-            let last = parseFloat(info.regularMarketPrice);
-            if (isNaN(last)) return;
-
-            const prevClose = parseFloat(info.regularMarketPreviousClose) || 0;
-            const open = parseFloat(info.regularMarketOpen) || 0;
-            const change = parseFloat(info.regularMarketChange) || (last - prevClose);
-            const changePct = parseFloat(info.regularMarketChangePercent) || (prevClose ? (change / prevClose) * 100 : 0);
-            const marketState = info.marketState || '';
-
-            const prevShown = parseFloat((priceEl.innerText || '').replace(/[^0-9.]/g, '')) || 0;
-            const isUp = change >= 0;
-            const sign = change >= 0 ? '+' : '';
-
-            priceEl.innerText = last.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            priceEl.className = `text-4xl font-black font-mono tracking-tight transition-colors ${change > 0 ? 'text-rose-400' : (change < 0 ? 'text-emerald-400' : 'text-white')}`;
-            changeEl.innerText = `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)`;
-            changeEl.className = `text-sm font-bold font-mono ${change > 0 ? 'text-rose-500' : (change < 0 ? 'text-emerald-400' : 'text-zinc-400')}`;
-
-            if (openEl && !isNaN(open)) openEl.innerText = open.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if (prevCloseEl && !isNaN(prevClose)) prevCloseEl.innerText = prevClose.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            if (statusEl) {
-                const isRegular = marketState === 'REGULAR' || marketState === 'OPEN' || (marketOpenFallback && !marketState);
-                if (isRegular) {
-                    statusEl.innerText = 'LIVE';
-                    statusEl.className = 'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';
-                    if (prevShown > 0 && Math.abs(last - prevShown) > 0.001) flashTwPrice(priceEl, isUp);
-                } else {
-                    const label = marketState ? marketState : '收盤';
-                    statusEl.innerText = label;
-                    statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';
-                }
-            }
-        }
-
-        // 通用 CORS 代理：依序嘗試多個公用代理，回傳第一個成功解析的 JSON。
-        // 單一代理 (如 allorigins /get) 常因壅塞或快取造成延遲，改用多代理容錯可明顯改善即時性。
-        async function twCorsFetchJson(targetUrl) {
-            const builders = [
-                u => ({ url: `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, wrapped: false }),
-                u => ({ url: `https://corsproxy.io/?url=${encodeURIComponent(u)}`, wrapped: false }),
-                u => ({ url: `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, wrapped: true })
-            ];
-            for (const build of builders) {
-                const p = build(targetUrl);
-                try {
-                    const res = await fetch(p.url, { cache: 'no-store' });
-                    if (!res.ok) continue;
-                    if (p.wrapped) {
-                        const wrapped = await res.json();
-                        return JSON.parse(wrapped.contents || 'null');
-                    }
-                    return await res.json();
-                } catch (e) { /* 換下一個代理 */ }
-            }
-            return null;
-        }
-
-        // 以 Yahoo v8 chart 端點取得單一標的即時報價。
-        // v8 chart 不需 crumb/cookie 驗證，較舊版 v7 quote 穩定且回應更快，可根治報價延遲與離線問題。
-        async function fetchYahooChartQuote(symbol) {
-            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m`;
-            const json = await twCorsFetchJson(url);
-            const result = json && json.chart && json.chart.result && json.chart.result[0];
-            if (!result || !result.meta) return null;
-            const m = result.meta;
-            const price = (typeof m.regularMarketPrice === 'number') ? m.regularMarketPrice : NaN;
-            if (isNaN(price)) return null;
-            const prevClose = (typeof m.chartPreviousClose === 'number') ? m.chartPreviousClose
-                            : (typeof m.previousClose === 'number' ? m.previousClose : 0);
-            // 開盤價：meta 未提供時，取當日第一筆有效開盤
-            let open = (typeof m.regularMarketOpen === 'number') ? m.regularMarketOpen : NaN;
-            const q = result.indicators && result.indicators.quote && result.indicators.quote[0];
-            if (isNaN(open) && q && Array.isArray(q.open)) {
-                const firstOpen = q.open.find(v => typeof v === 'number');
-                if (typeof firstOpen === 'number') open = firstOpen;
-            }
-            const change = price - prevClose;
-            const changePct = prevClose ? (change / prevClose) * 100 : 0;
-            return {
-                symbol,
-                regularMarketPrice: price,
-                regularMarketPreviousClose: prevClose,
-                regularMarketOpen: isNaN(open) ? prevClose : open,
-                regularMarketDayHigh: m.regularMarketDayHigh,
-                regularMarketDayLow: m.regularMarketDayLow,
-                regularMarketChange: change,
-                regularMarketChangePercent: changePct,
-                marketState: m.marketState || ''
-            };
-        }
-
-        // 抓取所有台股卡片的即時報價 (Yahoo v8 chart，逐檔並行請求，改善延遲與穩定度)
-        async function fetchTwQuotes() {
-            const cards = Array.from(document.querySelectorAll('[data-tw-quote]'));
-            if (cards.length === 0) return;
-            const marketOpenFallback = isTwMarketOpen();
-
-            const yahooSymbols = [...new Set(cards.map(c => c.getAttribute('data-tw-quote')))];
-            if (yahooSymbols.length === 0) return;
-
-            try {
-                const quotes = await Promise.all(yahooSymbols.map(sym => fetchYahooChartQuote(sym).catch(() => null)));
-                const quoteMap = {};
-                quotes.forEach(info => { if (info && info.symbol) quoteMap[info.symbol] = info; });
-
-                let anySuccess = false;
-                cards.forEach(card => {
-                    const sym = card.getAttribute('data-tw-quote');
-                    const info = quoteMap[sym];
-                    if (info) { updateTwCard(card, info, marketOpenFallback); anySuccess = true; }
-                });
-                if (!anySuccess) throw new Error('no quote data');
-            } catch (err) {
-                console.warn('台股即時報價 (Yahoo v8) 取得失敗:', err);
-                cards.forEach(card => {
-                    const statusEl = card.querySelector('[data-tw-status]');
-                    if (statusEl && (statusEl.innerText === '--' || statusEl.innerText === 'LIVE')) {
-                        statusEl.innerText = '離線';
-                        statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';
-                    }
-                });
-            }
-        }
-
-        // 啟動台股即時報價輪詢 (盤中每 5 秒；非盤中每 60 秒抓一次收盤價即可)
-        function startTwRealtimeQuotes() {
-            fetchTwQuotes();
-            if (twQuotesTimer) clearInterval(twQuotesTimer);
-            const tick = () => {
-                fetchTwQuotes();
-                // 依當前是否盤中動態調整下次間隔
-                clearInterval(twQuotesTimer);
-                twQuotesTimer = setInterval(tick, isTwMarketOpen() ? 5000 : 60000);
-            };
-            twQuotesTimer = setInterval(tick, isTwMarketOpen() ? 5000 : 60000);
-        }
-
-        // ============================================================
-        // 台股市值權重前 50 大 (資料來源：期交所，資料日期 2026/06/30，每月更新)
-        // 若要更新，前往 https://www.taifex.com.tw/cht/9/futuresQADetail 複製最新數據
-        // ============================================================
-        const TW_WEIGHT_TOP50 = [
-            { r: 1, code: '2330', name: '台積電', w: 41.6491 },
-            { r: 2, code: '2454', name: '聯發科', w: 4.5373 },
-            { r: 3, code: '2308', name: '台達電', w: 3.3755 },
-            { r: 4, code: '2317', name: '鴻海', w: 2.3424 },
-            { r: 5, code: '3711', name: '日月光投控', w: 2.0215 },
-            { r: 6, code: '2327', name: '國巨', w: 1.5737 },
-            { r: 7, code: '2303', name: '聯電', w: 1.3788 },
-            { r: 8, code: '2383', name: '台光電', w: 1.2871 },
-            { r: 9, code: '2881', name: '富邦金', w: 1.2089 },
-            { r: 10, code: '3037', name: '欣興', w: 1.1235 },
-            { r: 11, code: '2882', name: '國泰金', w: 0.961 },
-            { r: 12, code: '2382', name: '廣達', w: 0.9473 },
-            { r: 13, code: '2408', name: '南亞科', w: 0.9344 },
-            { r: 14, code: '2345', name: '智邦', w: 0.933 },
-            { r: 15, code: '2891', name: '中信金', w: 0.9311 },
-            { r: 16, code: '1303', name: '南亞', w: 0.88 },
-            { r: 17, code: '7769', name: '鴻勁', w: 0.7758 },
-            { r: 18, code: '2412', name: '中華電', w: 0.7315 },
-            { r: 19, code: '3017', name: '奇鋐', w: 0.6599 },
-            { r: 20, code: '2344', name: '華邦電', w: 0.6223 },
-            { r: 21, code: '2360', name: '致茂', w: 0.6121 },
-            { r: 22, code: '2885', name: '元大金', w: 0.5837 },
-            { r: 23, code: '6669', name: '緯穎', w: 0.574 },
-            { r: 24, code: '2887', name: '台新新光金', w: 0.551 },
-            { r: 25, code: '8046', name: '南電', w: 0.5103 },
-            { r: 26, code: '2059', name: '川湖', w: 0.4674 },
-            { r: 27, code: '2886', name: '兆豐金', w: 0.4557 },
-            { r: 28, code: '4958', name: '臻鼎-KY', w: 0.4495 },
-            { r: 29, code: '3443', name: '創意', w: 0.4327 },
-            { r: 30, code: '2368', name: '金像電', w: 0.4135 },
-            { r: 31, code: '2890', name: '永豐金', w: 0.3854 },
-            { r: 32, code: '3008', name: '大立光', w: 0.3739 },
-            { r: 33, code: '2884', name: '玉山金', w: 0.3713 },
-            { r: 34, code: '3481', name: '群創', w: 0.3658 },
-            { r: 35, code: '2880', name: '華南金', w: 0.3524 },
-            { r: 36, code: '6505', name: '台塑化', w: 0.3498 },
-            { r: 37, code: '2357', name: '華碩', w: 0.3465 },
-            { r: 38, code: '2301', name: '光寶科', w: 0.3427 },
-            { r: 39, code: '6446', name: '藥華藥', w: 0.3408 },
-            { r: 40, code: '3231', name: '緯創', w: 0.3359 },
-            { r: 41, code: '3653', name: '健策', w: 0.3354 },
-            { r: 42, code: '2883', name: '凱基金', w: 0.3247 },
-            { r: 43, code: '2892', name: '第一金', w: 0.3138 },
-            { r: 44, code: '3189', name: '景碩', w: 0.3129 },
-            { r: 45, code: '3045', name: '台灣大', w: 0.2891 },
-            { r: 46, code: '2395', name: '研華', w: 0.2847 },
-            { r: 47, code: '1216', name: '統一', w: 0.2821 },
-            { r: 48, code: '2379', name: '瑞昱', w: 0.2769 },
-            { r: 49, code: '2449', name: '京元電子', w: 0.275 },
-            { r: 50, code: '2603', name: '長榮', w: 0.2662 }
-        ];
-
-        const SECTOR_MAP = {
-            '2330': '半導體', '2454': '半導體', '2303': '半導體', '2379': '半導體', '3711': '半導體',
-            '2344': '半導體', '2408': '半導體', '7769': '半導體', '3017': '半導體', '2360': '半導體',
-            '6669': '半導體', '3443': '半導體', '2368': '半導體', '3008': '半導體', '3481': '半導體',
-            '6446': '半導體', '3189': '半導體', '2308': '電子', '2317': '電子', '2382': '電子',
-            '2357': '電子', '3231': '電子', '2345': '電子', '2383': '電子', '2327': '電子',
-            '2881': '金融', '2882': '金融', '2891': '金融', '2886': '金融', '2884': '金融',
-            '2885': '金融', '2887': '金融', '2880': '金融', '2890': '金融', '2883': '金融',
-            '2892': '金融', '2412': '電信', '3045': '電信', '1303': '傳產', '1301': '傳產',
-            '2002': '傳產', '1216': '傳產', '6505': '傳產', '2603': '航運', '2059': '其他',
-            '4958': '電子', '3653': '電子', '2395': '電子', '2449': '半導體', '8046': '電子'
-        };
-
-        let twWeightSectorFilter = '全部';
-        let twMarketCapMap = {};
-
-        // 渲染市值權重前 50 大表格 (支援搜尋過濾)
-        function renderTwWeightFilters() {
-            const filterEl = document.getElementById('tw-weight-filters');
-            if (!filterEl) return;
-            const allSectors = ['全部', ...new Set(Object.values(SECTOR_MAP))];
-            filterEl.innerHTML = allSectors.map(sector => {
-                const active = sector === twWeightSectorFilter;
-                return `<button onclick="setTwWeightSectorFilter('${sector}')" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${active ? 'bg-accentPurple/10 text-accentPurple border border-accentPurple/30' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-850'}">${sector}</button>`;
-            }).join('');
-        }
-
-        function setTwWeightSectorFilter(sector) {
-            twWeightSectorFilter = sector;
-            renderTwWeightFilters();
-            const kwInput = document.getElementById('tw-weight-search');
-            renderTwWeightTable(kwInput ? kwInput.value : '');
-        }
-
-        function renderTwWeightTable(keyword) {
-            const tbody = document.getElementById('tw-weight-tbody');
-            if (!tbody) return;
-            const kw = (keyword || document.getElementById('tw-weight-search')?.value || '').trim().toLowerCase();
-
-            let rows = TW_WEIGHT_TOP50.filter(item => {
-                const matchKw = item.code.toLowerCase().includes(kw) || item.name.toLowerCase().includes(kw);
-                const sector = SECTOR_MAP[item.code] || '其他';
-                const matchSector = twWeightSectorFilter === '全部' || sector === twWeightSectorFilter;
-                return matchKw && matchSector;
-            });
-
-            const maxW = TW_WEIGHT_TOP50[0].w;
-
-            if (rows.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';
-                return;
-            }
-
-            const formatMcap = (num) => {
-                if (!num || num <= 0) return '<span class="text-zinc-500">--</span>';
-                const inTrillion = num / 1e12;
-                if (inTrillion >= 1) {
-                    return `<span class="font-mono font-bold text-emerald-400">${inTrillion.toFixed(2)} <span class="text-[10px] text-zinc-400">兆</span></span>`;
-                }
-                const inHundredMillion = num / 1e8;
-                return `<span class="font-mono font-bold text-zinc-200">${Math.round(inHundredMillion).toLocaleString()} <span class="text-[10px] text-zinc-400">億</span></span>`;
-            };
-
-            tbody.innerHTML = rows.map(item => {
-                const barPct = (item.w / maxW) * 100;
-                const chartUrl = `https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A${item.code}`;
-                const yahooSym = `${item.code}.TW`;
-                const mcapHtml = formatMcap(twMarketCapMap[yahooSym]);
-                const sector = SECTOR_MAP[item.code] || '其他';
-                return `
-                    <tr class="hover:bg-zinc-800/30 transition-colors group">
-                        <td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${item.r}</td>
-                        <td class="py-3 px-4 font-mono font-bold text-zinc-200">${item.code}</td>
-                        <td class="py-3 px-4 font-bold text-white group-hover:text-accentCyan transition-colors">
-                            ${item.name}
-                            <span class="ml-2 text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono align-middle">${sector}</span>
-                        </td>
-                        <td class="py-3 px-4 text-right">
-                            <div class="inline-flex flex-col items-end gap-1 w-full max-w-[160px] ml-auto">
-                                <span class="font-mono font-bold text-zinc-100">${item.w.toFixed(4)}%</span>
-                                <div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-accentCyan to-accentPurple rounded-full" style="width: ${barPct}%"></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3 px-4 text-right hidden md:table-cell">
-                            ${mcapHtml}
-                        </td>
-                        <td class="py-3 px-4 text-center">
-                            <div class="flex items-center justify-center gap-1">
-                                <!-- TradingView -->
-                                <a href="${chartUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="在 TradingView 開啟 ${item.name} 圖表">
-                                    <i data-lucide="line-chart" class="w-3.5 h-3.5"></i>
-                                </a>
-                                <!-- Yahoo 股市 -->
-                                <a href="https://tw.stock.yahoo.com/quote/${item.code}.TW" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="在 Yahoo 股市開啟 ${item.name}">
-                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>`;
-            }).join('');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        // 台積電 (2330) 流通在外股數 (約 259.3 億股)，用於 Yahoo v7 市值端點失效時推估全市場市值
-        const TSMC_SHARES_OUTSTANDING = 25930380458;
-
-        // 取得台股前 50 大「實際市值」對照表。
-        // 1) 優先以 Yahoo v7 quote 取得真實 marketCap (可用時支援依即時市值真實重新排序)。
-        // 2) v7 因 crumb/cookie 驗證失效而取不到時，改以台積電即時股價 × 流通股數推估全市場總市值，
-        //    再依官方權重換算各成分股市值，確保「實際市值」欄位一定有值。
-        async function getTwMarketCapMap() {
-            // 1) 嘗試 Yahoo v7 quote 取得真實市值
-            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
-            const v7Url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
-            try {
-                const data = await twCorsFetchJson(v7Url);
-                const results = (data && data.quoteResponse && data.quoteResponse.result) || [];
-                const capMap = {};
-                results.forEach(r => {
-                    if (r.symbol && typeof r.marketCap === 'number' && r.marketCap > 0) capMap[r.symbol] = r.marketCap;
-                });
-                // 至少取得半數以上成分股市值才視為可信，否則落到權重推估
-                if (Object.keys(capMap).length >= Math.ceil(TW_WEIGHT_TOP50.length / 2)) {
-                    return { map: capMap, live: true };
-                }
-            } catch (e) { /* 落到權重推估 */ }
-
-            // 2) 後備：以台積電即時股價推估市值，再依權重等比例換算
-            const tsmc = TW_WEIGHT_TOP50.find(x => x.code === '2330');
-            const tsmcQuote = await fetchYahooChartQuote('2330.TW').catch(() => null);
-            const capMap = {};
-            if (tsmc && tsmc.w > 0 && tsmcQuote && tsmcQuote.regularMarketPrice > 0) {
-                const tsmcCap = tsmcQuote.regularMarketPrice * TSMC_SHARES_OUTSTANDING;
-                TW_WEIGHT_TOP50.forEach(item => {
-                    capMap[`${item.code}.TW`] = tsmcCap * (item.w / tsmc.w);
-                });
-            }
-            return { map: capMap, live: false };
-        }
-
-        async function loadTwMarketCaps() {
-            if (Object.keys(twMarketCapMap).length > 0) return;
-            try {
-                const { map } = await getTwMarketCapMap();
-                if (Object.keys(map).length > 0) {
-                    twMarketCapMap = map;
-                    const kwInput = document.getElementById('tw-weight-search');
-                    renderTwWeightTable(kwInput ? kwInput.value : '');
-                }
-            } catch (e) {
-                console.warn('載入台股市值權重市值失敗:', e);
-            }
-        }
-
-        async function refreshTwTop50Weights() {
-            const btns = document.querySelectorAll('button[onclick*="refreshTwTop50Weights"]');
-            btns.forEach(b => b.disabled = true);
-
-            try {
-                const { map: capMap, live } = await getTwMarketCapMap();
-                if (Object.keys(capMap).length === 0) throw new Error('no market cap');
-
-                // 僅在取得真實市值時重新排序 (推估市值與權重等比例，重排序無意義)
-                if (live) {
-                    let liveList = TW_WEIGHT_TOP50
-                        .map(item => ({ ...item, liveMcap: capMap[`${item.code}.TW`] || 0 }))
-                        .filter(item => item.liveMcap > 0);
-                    liveList.sort((a, b) => b.liveMcap - a.liveMcap);
-                    const totalMcap = liveList.reduce((sum, item) => sum + item.liveMcap, 0);
-                    liveList = liveList.map((item, idx) => ({
-                        ...item,
-                        r: idx + 1,
-                        w: totalMcap > 0 ? (item.liveMcap / totalMcap) * 100 : item.w
-                    }));
-                    TW_WEIGHT_TOP50.length = 0;
-                    liveList.forEach(item => TW_WEIGHT_TOP50.push(item));
-                }
-
-                twMarketCapMap = capMap;
-                const kwInput = document.getElementById('tw-weight-search');
-                renderTwWeightTable(kwInput ? kwInput.value : '');
-                renderTwWeightFilters();
-
-                if (btns[0]) {
-                    const originalText = btns[0].innerHTML;
-                    btns[0].innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> 已更新`;
-                    setTimeout(() => {
-                        if (btns[0]) {
-                            btns[0].innerHTML = originalText;
-                            btns[0].disabled = false;
-                            if (window.lucide) lucide.createIcons();
-                        }
-                    }, 2000);
-                }
-            } catch (e) {
-                console.warn('自動更新前50大失敗:', e);
-                alert('自動更新失敗，請檢查網路或稍後再試');
-                btns.forEach(b => b.disabled = false);
-            }
-        }
-
-        // 台股頁籤初次切換時載入所有 Widget (僅執行一次)
-        function initTwStockView() {
-            if (!twStockState.extrasLoaded) {
-                startTwRealtimeQuotes();
-                renderTwWeightTable();
-                loadTwMarketCaps();
-                twStockState.extrasLoaded = true;
-            }
-        }
-
-        // 美股頁籤初次切換時載入所有 Widget (僅執行一次)
-        function initUsStockView() {
-            if (!usStockState.cardsLoaded) {
-                renderMiniSymbolCards(document.getElementById('market-view-us-stock'));
-                usStockState.cardsLoaded = true;
-            }
-            if (!usStockState.chartLoaded) {
-                switchTvChart('us', 'TVC:SPX', document.querySelector('.tv-chart-tab-us'));
-                usStockState.chartLoaded = true;
-            }
-            if (!usStockState.extrasLoaded) {
-                // 跑馬燈
-                renderTickerTape('us-ticker-container', [
-                    { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' },
-                    { proName: 'FOREXCOM:NSXUSD', title: '那斯達克100' },
-                    { proName: 'FOREXCOM:DJI', title: '道瓊工業' },
-                    { proName: 'NASDAQ:AAPL', title: '蘋果' },
-                    { proName: 'NASDAQ:NVDA', title: '輝達' },
-                    { proName: 'NASDAQ:TSLA', title: '特斯拉' },
-                    { proName: 'TVC:VIX', title: '恐慌指數' },
-                    { proName: 'TVC:DXY', title: '美元指數' }
-                ]);
-                // 產業板塊熱力圖 (SPX500)
-                renderStockHeatmap('us-heatmap-container', 'SPX500');
-                // 技術分析儀表 (S&P 500)
-                renderTechnicalGauge('us-technical-container', 'AMEX:SPY');
-                // 財經日曆 (聚焦美國、歐元區、中國、日本)
-                renderEconomicCalendar('us-calendar-container', 'us,eu,cn,jp,gb');
-                usStockState.extrasLoaded = true;
-            }
-            if (!usStockState.watchlistLoaded) {
-                renderWatchlistWidget('us-watchlist-container', '美股自選', [
-                    { s: 'AMEX:SPY', d: 'S&P 500' },
-                    { s: 'AMEX:VT', d: 'VT 全世界股票' },
-                    { s: 'NASDAQ:AAPL', d: '蘋果' },
-                    { s: 'NASDAQ:MSFT', d: '微軟' },
-                    { s: 'NASDAQ:NVDA', d: '輝達' },
-                    { s: 'NASDAQ:TSLA', d: '特斯拉' },
-                    { s: 'NASDAQ:GOOGL', d: 'Google' },
-                    { s: 'NASDAQ:AMZN', d: '亞馬遜' },
-                    { s: 'NASDAQ:META', d: 'Meta' },
-                    { s: 'NASDAQ:AVGO', d: '博通' }
-                ]);
-                usStockState.watchlistLoaded = true;
-            }
-        }
-
+        // ===== 放大 =====
         function toggleMaximize(id) {
-            const el = document.getElementById(id);
-            const icon = document.getElementById(`${id}-zoom-icon`);
-            if (!el) return;
-
-            if (el.classList.contains('is-maximized')) {
-                el.classList.remove('is-maximized');
-                if (icon) {
-                    icon.setAttribute('data-lucide', 'maximize');
-                    lucide.createIcons();
-                }
-            } else {
-                el.classList.add('is-maximized');
-                if (icon) {
-                    icon.setAttribute('data-lucide', 'minimize');
-                    lucide.createIcons();
-                }
-            }
+            const el = document.getElementById(id); const icon = document.getElementById(`${id}-zoom-icon`); if (!el) return;
+            if (el.classList.contains('is-maximized')) { el.classList.remove('is-maximized'); if (icon){icon.setAttribute('data-lucide','maximize'); lucide.createIcons();} }
+            else { el.classList.add('is-maximized'); if (icon){icon.setAttribute('data-lucide','minimize'); lucide.createIcons();} }
         }
 
+        // ===== CoinGlass 切換 =====
         function toggleChartSource(type) {
-            const btnCoinglass = document.getElementById('btn-src-coinglass');
-            const btnLocal = document.getElementById('btn-src-local');
-            const btnAltcoin = document.getElementById('btn-src-altcoin');
-            const coinglassContainer = document.getElementById('coinglass-iframe-container');
-            const localContainer = document.getElementById('local-chart-container');
-            const altcoinContainer = document.getElementById('altcoin-iframe-container');
-            const etfIframe = document.getElementById('etf-flow-iframe');
-            const altcoinIframe = document.getElementById('altcoin-index-iframe');
-            const sourceLink = document.getElementById('coinglass-source-link');
-
-            const activeClass = "text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
-            const inactiveClass = "text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
-
-            btnCoinglass.className = type === 'coinglass' ? activeClass : inactiveClass;
-            btnLocal.className = type === 'local' ? activeClass : inactiveClass;
-            btnAltcoin.className = type === 'altcoin' ? activeClass : inactiveClass;
-
-            coinglassContainer.style.display = type === 'coinglass' ? 'block' : 'none';
-            localContainer.style.display = type === 'local' ? 'block' : 'none';
-            altcoinContainer.style.display = type === 'altcoin' ? 'block' : 'none';
-
-            if (type === 'local' && etfIframe && !etfIframe.getAttribute('src')) {
-                etfIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/etf/bitcoin');
-            }
-            if (type === 'altcoin' && altcoinIframe && !altcoinIframe.getAttribute('src')) {
-                altcoinIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season');
-            }
-
-            // 依目前頁籤動態切換超連結導向的來源網站
-            if (sourceLink) {
-                const sourceMap = {
-                    coinglass: { url: 'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT', title: '前往 CoinGlass 實時 K 線頁面' },
-                    local: { url: 'https://www.coinglass.com/zh-TW/etf/bitcoin', title: '前往 CoinGlass ETF 淨流向頁面' },
-                    altcoin: { url: 'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season', title: '前往 CoinGlass 山寨幣季節指數頁面' }
-                };
-                const target = sourceMap[type] || sourceMap.coinglass;
-                sourceLink.setAttribute('href', target.url);
-                sourceLink.setAttribute('title', target.title);
-            }
+            const bC=document.getElementById('btn-src-coinglass'),bL=document.getElementById('btn-src-local'),bA=document.getElementById('btn-src-altcoin');
+            const cC=document.getElementById('coinglass-iframe-container'),cL=document.getElementById('local-chart-container'),cA=document.getElementById('altcoin-iframe-container');
+            const eI=document.getElementById('etf-flow-iframe'),aI=document.getElementById('altcoin-index-iframe'),sL=document.getElementById('coinglass-source-link');
+            const A="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
+            const I="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
+            bC.className=type==='coinglass'?A:I; bL.className=type==='local'?A:I; bA.className=type==='altcoin'?A:I;
+            cC.style.display=type==='coinglass'?'block':'none'; cL.style.display=type==='local'?'block':'none'; cA.style.display=type==='altcoin'?'block':'none';
+            if(type==='local'&&eI&&!eI.getAttribute('src')) eI.setAttribute('src','https://www.coinglass.com/zh-TW/etf/bitcoin');
+            if(type==='altcoin'&&aI&&!aI.getAttribute('src')) aI.setAttribute('src','https://www.coinglass.com/zh-TW/pro/i/alt-coin-season');
+            if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season',t:'前往 CoinGlass 山寨幣季節指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
         }
 
+        // ===== 工具 =====
         function formatNumber(num) {
-            if (num === null || num === undefined) return 'N/A';
-            const absNum = Math.abs(num);
-            if (absNum >= 1.0e12) return (num / 1.0e12).toFixed(2) + ' T';
-            if (absNum >= 1.0e9) return (num / 1.0e9).toFixed(2) + ' B';
-            if (absNum >= 1.0e6) return (num / 1.0e6).toFixed(2) + ' M';
-            if (absNum >= 1000) return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (num == null) return 'N/A'; const a = Math.abs(num);
+            if (a >= 1e12) return (num/1e12).toFixed(2)+' T'; if (a >= 1e9) return (num/1e9).toFixed(2)+' B';
+            if (a >= 1e6) return (num/1e6).toFixed(2)+' M'; if (a >= 1000) return num.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
             return num.toFixed(2);
         }
-
-        // 判斷美國紐約時間是否在開盤期間 (週一到週五 09:30 - 16:00)
         function isUSMarketOpen() {
-            try {
-                const nyTimeStr = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-                const nyTime = new Date(nyTimeStr);
-                const day = nyTime.getDay();
-                const hour = nyTime.getHours();
-                const minute = nyTime.getMinutes();
-
-                if (day === 0 || day === 6) return false;
-
-                const timeInMinutes = hour * 60 + minute;
-                const openTime = 9 * 60 + 30; // 09:30
-                const closeTime = 16 * 60;    // 16:00
-
-                return timeInMinutes >= openTime && timeInMinutes <= closeTime;
-            } catch (e) {
-                return false; // 發生解析錯誤時預設為關閉
-            }
+            try { const t=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); const d=t.getDay(); if(d===0||d===6)return false;
+                const m=t.getHours()*60+t.getMinutes(); return m>=570&&m<=960; } catch(e){return false;}
         }
-
-        // 股票即時跳動模擬器 (含週末收盤自動防呆)
-        function startLiveTicker(elementId, changeId, statusId, basePrice, baseChangeStr) {
-            let currentPrice = basePrice;
-            let baseChange = parseFloat(baseChangeStr);
-            const priceEl = document.getElementById(elementId);
-            const changeEl = document.getElementById(changeId);
-            const statusEl = document.getElementById(statusId);
-            
-            if (!priceEl || !changeEl || !statusEl) return;
-
-            const checkAndSetClosed = () => {
-                if (!isUSMarketOpen()) {
-                    statusEl.innerText = "CLOSED";
-                    statusEl.className = "text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded";
-                    return true;
-                }
-                return false;
-            };
-
-            // 如果一開始就收盤，直接不啟動
-            if (checkAndSetClosed()) return;
-
-            setInterval(() => {
-                // 跳動時再次檢查，如果跨入收盤時間則凍結
-                if (checkAndSetClosed()) return;
-
-                const volatility = currentPrice * 0.0006; 
-                const change = (Math.random() - 0.5) * volatility;
-                currentPrice += change;
-                baseChange += (change / currentPrice) * 100;
-
-                const isUp = change >= 0;
-                const changeClass = baseChange >= 0 ? 'text-emerald-400' : 'text-rose-500';
-                const sign = baseChange >= 0 ? '+' : '';
-
-                priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                changeEl.innerText = sign + baseChange.toFixed(2) + '%';
-                changeEl.className = `text-sm font-bold font-mono ${changeClass}`;
-
-                const flashColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                priceEl.style.backgroundColor = flashColor;
-                priceEl.style.borderRadius = '6px';
-                priceEl.style.padding = '2px 8px';
-                priceEl.style.marginLeft = '-8px'; 
-                setTimeout(() => {
-                    priceEl.style.backgroundColor = 'transparent';
-                }, 350);
-            }, 2000 + Math.random() * 2500); 
+        function startLiveTicker(pid,cid,sid,base,bc){
+            let cur=base,bch=parseFloat(bc); const pe=document.getElementById(pid),ce=document.getElementById(cid),se=document.getElementById(sid); if(!pe||!ce||!se)return;
+            const chk=()=>{if(!isUSMarketOpen()){se.innerText="CLOSED";se.className="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded";return true;}return false;};
+            if(chk())return;
+            setInterval(()=>{if(chk())return; const v=cur*0.0006,ch=(Math.random()-0.5)*v; cur+=ch; bch+=(ch/cur)*100; const up=ch>=0;
+                pe.innerText='$'+cur.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); ce.innerText=(bch>=0?'+':'')+bch.toFixed(2)+'%';
+                ce.className=`text-sm font-bold font-mono ${bch>=0?'text-emerald-400':'text-rose-500'}`;
+                pe.style.backgroundColor=up?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';
+                setTimeout(()=>pe.style.backgroundColor='transparent',350);},2000+Math.random()*2500);
         }
-
-        // 直接戳幣安官方 API 取得真正的極速最新報價
-        function updateMainCryptoCards() {
-            // 更新 BTC
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('btc-price');
-                    const changeEl = document.getElementById('btc-change');
-                    const highEl = document.getElementById('btc-high');
-                    const lowEl = document.getElementById('btc-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        // 如果價格與上一秒不同，觸發閃爍光環特效
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
+        function updateMainCryptoCards(){
+            const map=[['BTCUSDT','btc','emerald'],['ETHUSDT','eth','blue'],['BNBUSDT','bnb','yellow'],['SOLUSDT','sol','purple'],['XRPUSDT','xrp','blue'],['HYPEUSDT','hype','pink']];
+            map.forEach(([sym,id])=>{
+                fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${sym}`).then(r=>r.json()).then(d=>{
+                    const pe=document.getElementById(`${id}-price`),ce=document.getElementById(`${id}-change`),he=document.getElementById(`${id}-high`),le=document.getElementById(`${id}-low`);
+                    if(pe&&d.lastPrice){const pv=parseFloat(pe.innerText.replace(/[$,]/g,''))||0,cp=parseFloat(d.lastPrice),cpc=parseFloat(d.priceChangePercent);
+                        pe.innerText='$'+cp.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+                        ce.innerText=(cpc>=0?'+':'')+cpc.toFixed(2)+'%'; ce.className=`text-sm font-bold font-mono ${cpc>=0?'text-emerald-400':'text-rose-500'}`;
+                        if(he)he.innerText='$'+parseFloat(d.highPrice).toLocaleString('en-US',{minimumFractionDigits:2});
+                        if(le)le.innerText='$'+parseFloat(d.lowPrice).toLocaleString('en-US',{minimumFractionDigits:2});
+                        if(pv>0&&cp!==pv){pe.style.backgroundColor=cp>=pv?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';setTimeout(()=>pe.style.backgroundColor='transparent',300);}
                     }
-                })
-                .catch(err => console.warn('幣安 API (BTC) 連線失敗:', err));
-
-            // 更新 ETH
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=ETHUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('eth-price');
-                    const changeEl = document.getElementById('eth-change');
-                    const highEl = document.getElementById('eth-high');
-                    const lowEl = document.getElementById('eth-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
-                    }
-                })
-                .catch(err => console.warn('幣安 API (ETH) 連線失敗:', err));
-
-            // 更新 BNB
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=BNBUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('bnb-price');
-                    const changeEl = document.getElementById('bnb-change');
-                    const highEl = document.getElementById('bnb-high');
-                    const lowEl = document.getElementById('bnb-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
-                    }
-                })
-                .catch(err => console.warn('幣安 API (BNB) 連線失敗:', err));
-
-            // 更新 SOL
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=SOLUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('sol-price');
-                    const changeEl = document.getElementById('sol-change');
-                    const highEl = document.getElementById('sol-high');
-                    const lowEl = document.getElementById('sol-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-purple-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(168, 85, 247, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
-                    }
-                })
-                .catch(err => console.warn('幣安 API (SOL) 連線失敗:', err));
-
-            // 更新 XRP
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=XRPUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('xrp-price');
-                    const changeEl = document.getElementById('xrp-change');
-                    const highEl = document.getElementById('xrp-high');
-                    const lowEl = document.getElementById('xrp-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
-                    }
-                })
-                .catch(err => console.warn('幣安 API (XRP) 連線失敗:', err));
-
-            // 更新 HYPE (Hyperliquid)
-            fetch('https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=HYPEUSDT')
-                .then(res => res.json())
-                .then(data => {
-                    const priceEl = document.getElementById('hype-price');
-                    const changeEl = document.getElementById('hype-change');
-                    const highEl = document.getElementById('hype-high');
-                    const lowEl = document.getElementById('hype-low');
-
-                    if (priceEl && data.lastPrice) {
-                        const prevPrice = parseFloat(priceEl.innerText.replace(/[$,]/g, '')) || 0;
-                        const currentPrice = parseFloat(data.lastPrice);
-                        const changePercent = parseFloat(data.priceChangePercent);
-                        
-                        priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-pink-400' : 'text-rose-500'}`;
-                        
-                        if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-
-                        if (prevPrice > 0 && currentPrice !== prevPrice) {
-                            const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(236, 72, 153, 0.15)' : 'rgba(244, 63, 94, 0.15)';
-                            priceEl.style.borderRadius = '6px';
-                            priceEl.style.padding = '2px 8px';
-                            priceEl.style.marginLeft = '-8px';
-                            setTimeout(() => priceEl.style.backgroundColor = 'transparent', 300);
-                        }
-                    }
-                })
-                .catch(err => console.warn('幣安 API (HYPE) 連線失敗:', err));
-        }
-
-        // 抓取幣安合約各幣種最新資金費率 (Funding Rate)
-        function updateFundingRates() {
-            const symbolFundingMap = {
-                'BTCUSDT': 'btc-funding',
-                'ETHUSDT': 'eth-funding',
-                'BNBUSDT': 'bnb-funding',
-                'SOLUSDT': 'sol-funding',
-                'XRPUSDT': 'xrp-funding',
-                'HYPEUSDT': 'hype-funding'
-            };
-
-            Object.entries(symbolFundingMap).forEach(([symbol, elId]) => {
-                fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${symbol}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const el = document.getElementById(elId);
-                        if (el && data && data.lastFundingRate !== undefined) {
-                            const ratePercent = parseFloat(data.lastFundingRate) * 100;
-                            const sign = ratePercent >= 0 ? '+' : '';
-                            el.innerText = `${sign}${ratePercent.toFixed(4)}%`;
-                            el.className = `font-mono text-[11px] ${ratePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
-                        }
-                    })
-                    .catch(err => console.warn(`幣安資金費率 API (${symbol}) 連線失敗:`, err));
+                }).catch(()=>{});
             });
         }
+        function updateFundingRates(){
+            const m={'BTCUSDT':'btc-funding','ETHUSDT':'eth-funding','BNBUSDT':'bnb-funding','SOLUSDT':'sol-funding','XRPUSDT':'xrp-funding','HYPEUSDT':'hype-funding'};
+            Object.entries(m).forEach(([s,id])=>fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${s}`).then(r=>r.json()).then(d=>{const el=document.getElementById(id);if(el&&d&&d.lastFundingRate!==undefined){const rp=parseFloat(d.lastFundingRate)*100;el.innerText=`${rp>=0?'+':''}${rp.toFixed(4)}%`;el.className=`font-mono text-[11px] ${rp>=0?'text-emerald-400':'text-rose-500'}`;}}).catch(()=>{}));
+        }
+        function updateFngUI(v){let t='中立 (Neutral)',c='text-amber-500',b='bg-amber-950/40 border-amber-900/50';
+            if(v<=25){t='極度恐懼 (Extreme Fear)';c='text-rose-600';b='bg-rose-950/40 border-rose-900/50';}else if(v<=45){t='恐懼 (Fear)';c='text-rose-400';b='bg-rose-950/40 border-rose-900/50';}
+            else if(v>=75){t='極度貪婪 (Extreme Greed)';c='text-emerald-500';b='bg-emerald-950/40 border-emerald-900/50';}else if(v>=55){t='貪婪 (Greed)';c='text-emerald-400';b='bg-emerald-950/40 border-emerald-900/50';}
+            const fe=document.getElementById('sentiment-value'),ft=document.getElementById('sentiment-text');
+            if(fe){fe.innerText=v;fe.className=`text-4xl sm:text-5xl font-black tracking-tight transition-colors ${c}`;}
+            if(ft){ft.innerText=t;ft.className=`text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap transition-colors ${c}/80 ${b}`;}
+        }
+        function fetchFearAndGreedIndex(){
+            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://api.coinmarketcap.com/data-api/v3/fear-greed')}`).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const p=JSON.parse(d.contents);if(p&&p.data&&p.data.score)updateFngUI(Math.round(p.data.score));else throw 0;}).catch(()=>fetch('https://api.alternative.me/fng/').then(r=>r.json()).then(d=>{if(d&&d.data&&d.data.length)updateFngUI(parseInt(d.data[0].value));}).catch(()=>{}));
+        }
+        function drawSparkline(cid,prices,pos){const c=document.getElementById(cid);if(!c)return;const x=c.getContext('2d');if(!x)return;const dpr=window.devicePixelRatio||1;c.width=96*dpr;c.height=32*dpr;x.scale(dpr,dpr);x.clearRect(0,0,96,32);if(!prices||prices.length<2)prices=pos?[10,11,10.5,12,11.8,13,12.9,14]:[14,13,13.5,12,12.5,11,11.5,10];const mn=Math.min(...prices),mx=Math.max(...prices),r=mx-mn===0?1:mx-mn;x.beginPath();x.lineWidth=1.5;x.strokeStyle=pos?'#10b981':'#ef4444';x.lineJoin='round';x.lineCap='round';prices.forEach((p,i)=>{const px=(i/(prices.length-1))*96,py=30-((p-mn)/r)*28;i===0?x.moveTo(px,py):x.lineTo(px,py);});x.stroke();x.lineTo(96,32);x.lineTo(0,32);x.closePath();const g=x.createLinearGradient(0,0,0,32);g.addColorStop(0,pos?'rgba(16,185,129,0.15)':'rgba(239,68,68,0.15)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fill();}
+        let cryptoDataList=[],searchFilter='';
+        function fetchCryptoData(silent=false){const tb=document.getElementById('crypto-table-body');if(!silent&&tb)tb.innerHTML='<tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500">正在獲取頂級主權波動資產...</td></tr>';
+            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=30').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax'];
+                const fd=data.filter(c=>{const s=c.symbol.toLowerCase(),n=c.name.toLowerCase();return !SC.includes(s)&&!n.includes('stablecoin')&&!n.includes('tether')&&!n.includes('wrapped')&&!n.includes('pegged')&&!n.includes('staked')&&!n.includes('dollar')&&!n.includes('ethena');});
+                cryptoDataList=fd.slice(0,10).map(c=>{const p=parseFloat(c.price_usd),ch=parseFloat(c.percent_change_24h||0);return{id:c.nameid,name:c.name,symbol:c.symbol,current_price:p,price_change_percentage_24h:ch,total_volume:parseFloat(c.volume24||0),market_cap:parseFloat(c.market_cap_usd||0),image:`https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,sparkline_in_7d:{price:genSpark(p,ch)}};});
+                renderCryptoTable();upd();}).catch(()=>useMock());}
+        function genSpark(cp,c24){const pts=7,t=[];let tp=cp/(1+(c24/100));for(let i=0;i<pts-1;i++){tp=tp*(1+(Math.random()*0.04-0.02));t.push(tp);}t.push(cp);return t;}
+        function useMock(){cryptoDataList=[{id:'bitcoin',name:'Bitcoin',symbol:'btc',current_price:63950.5,price_change_percentage_24h:2.45,total_volume:38450120000,market_cap:1260450122000,image:'https://assets.coincap.io/assets/icons/btc@2x.png',sparkline_in_7d:{price:[61000,62500,61800,62400,63200,62900,63950]}}];renderCryptoTable();upd();}
+        function renderCryptoTable(){const tb=document.getElementById('crypto-table-body');if(!tb)return;const tot=cryptoDataList.reduce((a,c)=>a+(c.market_cap||0),0);const fc=cryptoDataList.filter(c=>c.name.toLowerCase().includes(searchFilter)||c.symbol.toLowerCase().includes(searchFilter));
+            if(!fc.length){tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td></tr>';return;}tb.innerHTML='';
+            fc.forEach((c,i)=>{const ch=c.price_change_percentage_24h||0,pos=ch>=0,cc=pos?'text-emerald-400':'text-rose-500',sh=tot>0?((c.market_cap/tot)*100):0;const row=document.createElement('tr');row.className="hover:bg-zinc-800/30 transition-colors border-b border-zinc-850/50 group";
+                row.innerHTML=`<td class="py-4 px-4 text-center font-mono font-bold text-zinc-500">${i+1}</td><td class="py-4 px-4"><div class="flex items-center gap-3"><img class="w-7 h-7 rounded-full bg-zinc-900 object-cover" src="${c.image}" onerror="this.onerror=null;this.src='https://placehold.co/28x28/1c1917/ffffff?text=${c.symbol.toUpperCase()}'"><div><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${c.name}</div><div class="text-xs text-zinc-500 uppercase font-semibold">${c.symbol}</div></div></div></td><td class="py-4 px-4 text-right font-mono font-bold text-zinc-100">$${formatNumber(c.current_price)}</td><td class="py-4 px-4 text-right font-mono font-bold ${cc}">${pos?'+':''}${ch.toFixed(2)}%</td><td class="py-4 px-4 text-right"><div class="inline-flex flex-col items-end gap-1 w-full max-w-[120px]"><span class="font-mono font-bold text-zinc-100">${sh.toFixed(2)}%</span><div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden"><div class="h-full bg-accentCyan rounded-full" style="width:${sh}%"></div></div></div></td><td class="py-4 px-4 text-right font-mono text-zinc-400 hidden md:table-cell">$${formatNumber(c.total_volume)}</td><td class="py-4 px-4 text-right font-mono text-zinc-400 hidden lg:table-cell">$${formatNumber(c.market_cap)}</td><td class="py-4 px-4 text-center"><canvas id="sparkline-${c.id}" class="w-24 h-8 mx-auto"></canvas></td>`;
+                tb.appendChild(row);setTimeout(()=>drawSparkline(`sparkline-${c.id}`,c.sparkline_in_7d?.price||[],pos),10);});lucide.createIcons();}
+        function handleSearch(v){searchFilter=v.trim().toLowerCase();renderCryptoTable();}
+        function upd(){const el=document.getElementById('last-updated');if(el){const n=new Date();el.innerText=`最後更新: 今天 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')} (自動即時同步)`;}}
 
-        function updateFngUI(value) {
-            let text = '中立 (Neutral)';
-            let colorClass = 'text-amber-500';
-            let bgClass = 'bg-amber-950/40 border-amber-900/50';
+        // ===== TradingView Widget 通用 =====
+        function renderMiniSymbolCards(root){if(!root)return;root.querySelectorAll('[data-tv-mini-symbol]').forEach(card=>{const sym=card.getAttribute('data-tv-mini-symbol');card.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src='https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';s.async=true;s.text=JSON.stringify({symbol:sym,width:'100%',height:'100%',locale:'zh_TW',dateRange:'1D',colorTheme:'dark',isTransparent:true,autosize:true});c.appendChild(s);card.appendChild(c);});}
+        function switchTvChart(market,symbol,btn){const cid=market==='tw'?'tw-chart-container':'us-chart-container';const ct=document.getElementById(cid);if(!ct)return;ct.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';w.style.height='calc(100% - 32px)';w.style.width='100%';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';s.async=true;s.text=JSON.stringify({autosize:true,symbol:symbol,interval:'60',timezone:'Asia/Taipei',theme:'dark',style:'1',locale:'zh_TW',toolbar_bg:'#141416',enable_publishing:false,allow_symbol_change:true,hide_side_toolbar:false,support_host:'https://www.tradingview.com'});c.appendChild(s);ct.appendChild(c);
+            if(btn){const tc=market==='tw'?'.tv-chart-tab-tw':'.tv-chart-tab-us';document.querySelectorAll(tc).forEach(b=>b.className=`${market==='tw'?'tv-chart-tab-tw':'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all`);btn.className=`${market==='tw'?'tv-chart-tab-tw':'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20`;}
+            const lid=market==='tw'?'tw-chart-source-link':'us-chart-source-link';const l=document.getElementById(lid);if(l)l.setAttribute('href',`https://tw.tradingview.com/symbols/${symbol.replace(':','-')}/`);}
+        function renderTvWidget(cid,src,cfg){const ct=document.getElementById(cid);if(!ct)return;ct.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src=src;s.async=true;s.text=JSON.stringify(cfg);c.appendChild(s);ct.appendChild(c);}
+        function renderTechnicalGauge(cid,sym){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',{interval:'1D',width:'100%',height:'100%',symbol:sym,showIntervalTabs:true,displayMode:'single',locale:'zh_TW',colorTheme:'dark',isTransparent:true});}
+        function renderEconomicCalendar(cid,cf){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-events.js',{width:'100%',height:'100%',colorTheme:'dark',isTransparent:true,locale:'zh_TW',importanceFilter:'0,1',countryFilter:cf});}
+        function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
 
-            if (value <= 25) { text = '極度恐懼 (Extreme Fear)'; colorClass = 'text-rose-600'; bgClass = 'bg-rose-950/40 border-rose-900/50'; }
-            else if (value <= 45) { text = '恐懼 (Fear)'; colorClass = 'text-rose-400'; bgClass = 'bg-rose-950/40 border-rose-900/50'; }
-            else if (value >= 75) { text = '極度貪婪 (Extreme Greed)'; colorClass = 'text-emerald-500'; bgClass = 'bg-emerald-950/40 border-emerald-900/50'; }
-            else if (value >= 55) { text = '貪婪 (Greed)'; colorClass = 'text-emerald-400'; bgClass = 'bg-emerald-950/40 border-emerald-900/50'; }
+        // ============================================================
+        // 台股即時報價 (Yahoo Finance，經公用代理；綠漲紅跌)
+        // ============================================================
+        let twQuotesTimer=null;
+        function isTwMarketOpen(){try{const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const d=t.getDay();if(d===0||d===6)return false;const m=t.getHours()*60+t.getMinutes();return m>=540&&m<=810;}catch(e){return false;}}
+        function flashTwPrice(el,up){if(!el)return;el.style.backgroundColor=up?'rgba(16,185,129,0.18)':'rgba(244,63,94,0.18)';el.style.borderRadius='6px';el.style.padding='2px 8px';el.style.marginLeft='-8px';setTimeout(()=>{el.style.backgroundColor='transparent';},350);}
+        // 綠漲紅跌配色（美式）
+        function twColorClass(ch){return ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-zinc-400');}
+        function updateTwCard(card,q,open){
+            const pe=card.querySelector('[data-tw-price]'),ce=card.querySelector('[data-tw-change]'),se=card.querySelector('[data-tw-status]'),oe=card.querySelector('[data-tw-open]'),pce=card.querySelector('[data-tw-prevclose]');
+            const last=q.price,prev=q.prevClose,op=q.open;if(last==null||isNaN(last))return;
+            const prevShown=parseFloat((pe.innerText||'').replace(/[^0-9.]/g,''))||0;const change=last-prev,pct=prev?(change/prev)*100:0;const sign=change>=0?'+':'';
+            pe.innerText=last.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            pe.className=`text-4xl font-black font-mono tracking-tight transition-colors ${change>0?'text-emerald-400':(change<0?'text-rose-500':'text-white')}`;
+            ce.innerText=`${sign}${change.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;ce.className=`text-sm font-bold font-mono ${twColorClass(change)}`;
+            if(oe&&op!=null&&!isNaN(op))oe.innerText=op.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            if(pce&&prev!=null&&!isNaN(prev))pce.innerText=prev.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            if(se){if(open){se.innerText='LIVE';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
+        }
+        // 從 Yahoo Finance chart API 取報價（回傳 {price, prevClose, open}）
+        function fetchYahooQuote(symbol){
+            const yUrl=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
+            const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(yUrl)}`;
+            return fetch(proxy).then(r=>r.ok?r.json():Promise.reject()).then(w=>{const d=JSON.parse(w.contents);const res=d.chart&&d.chart.result&&d.chart.result[0];if(!res)throw 0;const m=res.meta;return{price:m.regularMarketPrice,prevClose:m.chartPreviousClose||m.previousClose,open:m.regularMarketOpen!=null?m.regularMarketOpen:(m.chartPreviousClose||null)};});
+        }
+        function fetchTwQuotes(){
+            const cards=Array.from(document.querySelectorAll('[data-tw-quote]'));if(!cards.length)return;const open=isTwMarketOpen();
+            cards.forEach(card=>{const sym=card.getAttribute('data-tw-quote');fetchYahooQuote(sym).then(q=>updateTwCard(card,q,open)).catch(()=>{const se=card.querySelector('[data-tw-status]');if(se&&se.innerText==='--'){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}});});
+        }
+        function startTwRealtimeQuotes(){fetchTwQuotes();if(twQuotesTimer)clearInterval(twQuotesTimer);const tick=()=>{fetchTwQuotes();clearInterval(twQuotesTimer);twQuotesTimer=setInterval(tick,isTwMarketOpen()?5000:60000);};twQuotesTimer=setInterval(tick,isTwMarketOpen()?5000:60000);}
 
-            const fngEl = document.getElementById('sentiment-value');
-            const fngTextEl = document.getElementById('sentiment-text');
-            
-            if (fngEl) {
-                fngEl.innerText = value;
-                fngEl.className = `text-4xl sm:text-5xl font-black tracking-tight transition-colors ${colorClass}`;
-            }
-            if (fngTextEl) {
-                fngTextEl.innerText = text;
-                fngTextEl.className = `text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap transition-colors ${colorClass}/80 ${bgClass}`;
-            }
+        // ============================================================
+        // 台股前 50 大個股 (期交所市值權重 2026/06/30 + Yahoo 即時漲跌比例)
+        // ============================================================
+        const TW_TOP50=[
+            {r:1,code:'2330',name:'台積電',w:41.6491,cat:'半導體'},{r:2,code:'2454',name:'聯發科',w:4.5373,cat:'半導體'},{r:3,code:'2308',name:'台達電',w:3.3755,cat:'電子'},{r:4,code:'2317',name:'鴻海',w:2.3424,cat:'電子'},{r:5,code:'3711',name:'日月光投控',w:2.0215,cat:'半導體'},
+            {r:6,code:'2327',name:'國巨',w:1.5737,cat:'電子'},{r:7,code:'2303',name:'聯電',w:1.3788,cat:'半導體'},{r:8,code:'2383',name:'台光電',w:1.2871,cat:'電子'},{r:9,code:'2881',name:'富邦金',w:1.2089,cat:'金融'},{r:10,code:'3037',name:'欣興',w:1.1235,cat:'電子'},
+            {r:11,code:'2882',name:'國泰金',w:0.961,cat:'金融'},{r:12,code:'2382',name:'廣達',w:0.9473,cat:'電子'},{r:13,code:'2408',name:'南亞科',w:0.9344,cat:'半導體'},{r:14,code:'2345',name:'智邦',w:0.933,cat:'電子'},{r:15,code:'2891',name:'中信金',w:0.9311,cat:'金融'},
+            {r:16,code:'1303',name:'南亞',w:0.88,cat:'傳產'},{r:17,code:'7769',name:'鴻勁',w:0.7758,cat:'半導體'},{r:18,code:'2412',name:'中華電',w:0.7315,cat:'電信'},{r:19,code:'3017',name:'奇鋐',w:0.6599,cat:'電子'},{r:20,code:'2344',name:'華邦電',w:0.6223,cat:'半導體'},
+            {r:21,code:'2360',name:'致茂',w:0.6121,cat:'電子'},{r:22,code:'2885',name:'元大金',w:0.5837,cat:'金融'},{r:23,code:'6669',name:'緯穎',w:0.574,cat:'電子'},{r:24,code:'2887',name:'台新新光金',w:0.551,cat:'金融'},{r:25,code:'8046',name:'南電',w:0.5103,cat:'電子'},
+            {r:26,code:'2059',name:'川湖',w:0.4674,cat:'電子'},{r:27,code:'2886',name:'兆豐金',w:0.4557,cat:'金融'},{r:28,code:'4958',name:'臻鼎-KY',w:0.4495,cat:'電子'},{r:29,code:'3443',name:'創意',w:0.4327,cat:'半導體'},{r:30,code:'2368',name:'金像電',w:0.4135,cat:'電子'},
+            {r:31,code:'2890',name:'永豐金',w:0.3854,cat:'金融'},{r:32,code:'3008',name:'大立光',w:0.3739,cat:'電子'},{r:33,code:'2884',name:'玉山金',w:0.3713,cat:'金融'},{r:34,code:'3481',name:'群創',w:0.3658,cat:'電子'},{r:35,code:'2880',name:'華南金',w:0.3524,cat:'金融'},
+            {r:36,code:'6505',name:'台塑化',w:0.3498,cat:'傳產'},{r:37,code:'2357',name:'華碩',w:0.3465,cat:'電子'},{r:38,code:'2301',name:'光寶科',w:0.3427,cat:'電子'},{r:39,code:'6446',name:'藥華藥',w:0.3408,cat:'生技'},{r:40,code:'3231',name:'緯創',w:0.3359,cat:'電子'},
+            {r:41,code:'3653',name:'健策',w:0.3354,cat:'電子'},{r:42,code:'2883',name:'凱基金',w:0.3247,cat:'金融'},{r:43,code:'2892',name:'第一金',w:0.3138,cat:'金融'},{r:44,code:'3189',name:'景碩',w:0.3129,cat:'電子'},{r:45,code:'3045',name:'台灣大',w:0.2891,cat:'電信'},
+            {r:46,code:'2395',name:'研華',w:0.2847,cat:'電子'},{r:47,code:'1216',name:'統一',w:0.2821,cat:'傳產'},{r:48,code:'2379',name:'瑞昱',w:0.2769,cat:'半導體'},{r:49,code:'2449',name:'京元電子',w:0.275,cat:'半導體'},{r:50,code:'2603',name:'長榮',w:0.2662,cat:'航運'}
+        ];
+        const twChangeMap={}; // code -> 當日漲跌%
+        let twWeightFilter='全部';
+        function renderTwWeightFilters(){const el=document.getElementById('tw-weight-filters');if(!el)return;const cats=['全部',...Array.from(new Set(TW_TOP50.map(s=>s.cat)))];el.innerHTML=cats.map(c=>{const a=c===twWeightFilter;return `<button onclick="setTwWeightFilter('${c}')" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${a?'bg-accentCyan/10 text-accentCyan border border-accentCyan/30':'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-850'}">${c}</button>`;}).join('');}
+        function setTwWeightFilter(c){twWeightFilter=c;renderTwWeightFilters();renderTwWeightTable();}
+        function renderTwWeightTable(keyword){
+            const tb=document.getElementById('tw-weight-tbody');if(!tb)return;
+            const kw=(keyword!=null?keyword:(document.getElementById('tw-weight-search')?.value||'')).trim().toLowerCase();
+            const rows=TW_TOP50.filter(it=>(twWeightFilter==='全部'||it.cat===twWeightFilter)&&(it.code.toLowerCase().includes(kw)||it.name.toLowerCase().includes(kw)));
+            const maxW=TW_TOP50[0].w;
+            if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';return;}
+            tb.innerHTML=rows.map(it=>{const bar=(it.w/maxW)*100;const tvUrl=`https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A${it.code}`;const yUrl=`https://tw.stock.yahoo.com/quote/${it.code}.TW`;
+                const ch=twChangeMap[it.code];let chCell='<span class="text-zinc-600 font-mono">--</span>';
+                if(ch!=null&&!isNaN(ch)){const cls=ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-zinc-400');chCell=`<span class="font-mono font-bold ${cls}">${ch>=0?'+':''}${ch.toFixed(2)}%</span>`;}
+                return `<tr class="hover:bg-zinc-800/30 transition-colors group"><td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${it.r}</td><td class="py-3 px-4 font-mono font-bold text-zinc-200">${it.code}</td><td class="py-3 px-4"><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${it.name}</div><div class="text-[10px] text-zinc-500">${it.cat}</div></td><td class="py-3 px-4 text-right"><div class="inline-flex flex-col items-end gap-1 w-full max-w-[160px] ml-auto"><span class="font-mono font-bold text-zinc-100">${it.w.toFixed(4)}%</span><div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-accentCyan to-accentPurple rounded-full" style="width:${bar}%"></div></div></div></td><td class="py-3 px-4 text-right hidden md:table-cell">${chCell}</td><td class="py-3 px-4 text-center"><a href="${tvUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 圖表"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${yUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="Yahoo 股市"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></td></tr>`;
+            }).join('');
+            if(window.lucide)lucide.createIcons();
+        }
+        // 逐批從 Yahoo 抓前50大當日漲跌比例（分批避免代理過載）
+        function refreshTwTop50Weights(){
+            const codes=TW_TOP50.map(it=>it.code);let idx=0;const batch=5;
+            const run=()=>{const slice=codes.slice(idx,idx+batch);if(!slice.length){renderTwWeightTable();return;}
+                Promise.all(slice.map(code=>fetchYahooQuote(`${code}.TW`).then(q=>{if(q.prevClose)twChangeMap[code]=((q.price-q.prevClose)/q.prevClose)*100;}).catch(()=>{}))).then(()=>{renderTwWeightTable();idx+=batch;setTimeout(run,600);});};
+            run();
+        }
+        function initTwStockView(){
+            if(!twStockState.extrasLoaded){startTwRealtimeQuotes();twStockState.extrasLoaded=true;}
+            if(!twStockState.weightLoaded){renderTwWeightFilters();renderTwWeightTable();refreshTwTop50Weights();twStockState.weightLoaded=true;}
         }
 
-        // 取得即時市場恐懼與貪婪指數
-        function fetchFearAndGreedIndex() {
-            const cmcUrl = 'https://api.coinmarketcap.com/data-api/v3/fear-greed';
-            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(cmcUrl)}`)
-                .then(response => {
-                    if (response.ok) return response.json();
-                    throw new Error('Proxy failed');
-                })
-                .then(data => {
-                    const parsed = JSON.parse(data.contents);
-                    if (parsed && parsed.data && parsed.data.score) {
-                        updateFngUI(Math.round(parsed.data.score));
-                    } else {
-                        throw new Error('Format Error');
-                    }
-                })
-                .catch(() => {
-                    fetch('https://api.alternative.me/fng/')
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data && data.data && data.data.length > 0) {
-                                updateFngUI(parseInt(data.data[0].value));
-                            }
-                        })
-                        .catch(err => console.warn("F&G Error:", err));
-                });
+        // ============================================================
+        // 美股自選觀察清單 (可搜尋 + 板塊 + TradingView 連結)
+        // ============================================================
+        const US_WATCHLIST=[
+            {sym:'AMEX:SPY',name:'SPDR 標普500 ETF',cat:'指數ETF'},{sym:'NASDAQ:QQQ',name:'Invesco 那斯達克100',cat:'指數ETF'},{sym:'AMEX:DIA',name:'SPDR 道瓊 ETF',cat:'指數ETF'},{sym:'NASDAQ:SOXX',name:'iShares 費半 ETF',cat:'指數ETF'},{sym:'AMEX:VT',name:'Vanguard 全球股票',cat:'指數ETF'},
+            {sym:'NASDAQ:AAPL',name:'蘋果',cat:'科技'},{sym:'NASDAQ:MSFT',name:'微軟',cat:'科技'},{sym:'NASDAQ:GOOGL',name:'Alphabet',cat:'科技'},{sym:'NASDAQ:AMZN',name:'亞馬遜',cat:'科技'},{sym:'NASDAQ:META',name:'Meta',cat:'科技'},
+            {sym:'NASDAQ:NVDA',name:'輝達',cat:'半導體'},{sym:'NASDAQ:AVGO',name:'博通',cat:'半導體'},{sym:'NASDAQ:AMD',name:'超微',cat:'半導體'},{sym:'NASDAQ:INTC',name:'英特爾',cat:'半導體'},{sym:'NASDAQ:MU',name:'美光',cat:'半導體'},{sym:'NASDAQ:TSM',name:'台積電ADR',cat:'半導體'},
+            {sym:'NASDAQ:TSLA',name:'特斯拉',cat:'車用'},{sym:'NYSE:F',name:'福特',cat:'車用'},{sym:'NYSE:GM',name:'通用汽車',cat:'車用'},
+            {sym:'NYSE:JPM',name:'摩根大通',cat:'金融'},{sym:'NYSE:BAC',name:'美國銀行',cat:'金融'},{sym:'NYSE:V',name:'Visa',cat:'金融'},{sym:'NYSE:MA',name:'萬事達卡',cat:'金融'},{sym:'NYSE:GS',name:'高盛',cat:'金融'},
+            {sym:'NYSE:JNJ',name:'嬌生',cat:'醫療'},{sym:'NYSE:UNH',name:'聯合健康',cat:'醫療'},{sym:'NYSE:LLY',name:'禮來',cat:'醫療'},{sym:'NYSE:PFE',name:'輝瑞',cat:'醫療'},
+            {sym:'NYSE:XOM',name:'埃克森美孚',cat:'能源'},{sym:'NYSE:CVX',name:'雪佛龍',cat:'能源'},
+            {sym:'NYSE:WMT',name:'沃爾瑪',cat:'消費'},{sym:'NYSE:KO',name:'可口可樂',cat:'消費'},{sym:'NASDAQ:COST',name:'好市多',cat:'消費'},{sym:'NYSE:MCD',name:'麥當勞',cat:'消費'},{sym:'NASDAQ:NFLX',name:'Netflix',cat:'消費'}
+        ];
+        let usWatchlistFilter='全部';
+        function renderUsWatchlistFilters(){const el=document.getElementById('us-watchlist-filters');if(!el)return;const cats=['全部',...Array.from(new Set(US_WATCHLIST.map(s=>s.cat)))];el.innerHTML=cats.map(c=>{const a=c===usWatchlistFilter;return `<button onclick="setUsWatchlistFilter('${c}')" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${a?'bg-accentCyan/10 text-accentCyan border border-accentCyan/30':'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-850'}">${c}</button>`;}).join('');}
+        function setUsWatchlistFilter(c){usWatchlistFilter=c;renderUsWatchlistFilters();renderUsWatchlist();}
+        function renderUsWatchlist(){
+            const grid=document.getElementById('us-watchlist-grid');if(!grid)return;
+            const kw=(document.getElementById('us-watchlist-search')?.value||'').trim().toLowerCase();
+            const items=US_WATCHLIST.filter(s=>{const mc=usWatchlistFilter==='全部'||s.cat===usWatchlistFilter;const mk=s.sym.toLowerCase().includes(kw)||s.name.toLowerCase().includes(kw);return mc&&mk;});
+            if(!items.length){grid.innerHTML='<div class="col-span-full py-8 text-center text-zinc-500 text-sm">查無相符的標的</div>';return;}
+            grid.innerHTML=items.map(s=>{const ticker=s.sym.split(':')[1];const url=`https://tw.tradingview.com/chart/jzJAOmW9/?symbol=${encodeURIComponent(s.sym)}`;
+                return `<a href="${url}" target="_blank" class="group bg-zinc-900/60 border border-zinc-850 hover:border-accentCyan/50 rounded-xl p-3 flex flex-col gap-1 transition-colors"><div class="flex items-center justify-between"><span class="text-[10px] font-bold text-zinc-500 bg-zinc-800/60 px-1.5 py-0.5 rounded">${s.cat}</span><i data-lucide="line-chart" class="w-3.5 h-3.5 text-zinc-600 group-hover:text-accentCyan transition-colors"></i></div><div class="font-bold text-white group-hover:text-accentCyan transition-colors mt-1">${s.name}</div><div class="text-xs text-zinc-500 font-mono">${ticker}</div></a>`;
+            }).join('');
+            if(window.lucide)lucide.createIcons();
+        }
+        function initUsStockView(){
+            if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
+            if(!usStockState.chartLoaded){switchTvChart('us','AMEX:SPY',document.querySelector('.tv-chart-tab-us'));usStockState.chartLoaded=true;}
+            if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:SPY');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
+            if(!usStockState.watchlistLoaded){renderUsWatchlistFilters();renderUsWatchlist();usStockState.watchlistLoaded=true;}
         }
 
-        // 運算真實山寨幣季指數
-        function drawSparkline(canvasId, prices, isPositive) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
-
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = 96 * dpr;
-            canvas.height = 32 * dpr;
-            ctx.scale(dpr, dpr);
-            ctx.clearRect(0, 0, 96, 32);
-
-            if (!prices || prices.length < 2) {
-                prices = isPositive ? [10, 11, 10.5, 12, 11.8, 13, 12.9, 14] : [14, 13, 13.5, 12, 12.5, 11, 11.5, 10];
-            }
-
-            const min = Math.min(...prices);
-            const max = Math.max(...prices);
-            const range = max - min === 0 ? 1 : max - min;
-
-            ctx.beginPath();
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = isPositive ? '#10b981' : '#ef4444';
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-
-            prices.forEach((price, idx) => {
-                const x = (idx / (prices.length - 1)) * 96;
-                const y = 30 - ((price - min) / range) * 28;
-                if (idx === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
-            ctx.stroke();
-
-            ctx.lineTo(96, 32);
-            ctx.lineTo(0, 32);
-            ctx.closePath();
-            const gradient = ctx.createLinearGradient(0, 0, 0, 32);
-            gradient.addColorStop(0, isPositive ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)');
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = gradient;
-            ctx.fill();
-        }
-
-        function fetchCryptoData(isSilent = false) {
-            const tableBody = document.getElementById('crypto-table-body');
-            if (!isSilent && tableBody) {
-                tableBody.innerHTML = `
-                    <tr class="animate-pulse">
-                        <td colspan="8" class="py-8 text-center text-zinc-500">
-                            <div class="flex items-center justify-center gap-2">
-                                <div class="w-4 h-4 border-2 border-accentCyan border-t-transparent rounded-full animate-spin"></div>
-                                正在獲取頂級主權波動資產...
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }
-
-            const url = 'https://api.coinlore.net/api/tickers/?start=0&limit=30';
-            
-            return fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('API Rate Limited');
-                    return response.json();
-                })
-                .then(res => {
-                    const data = res.data || [];
-                    
-                    const STABLECOINS = [
-                        'usdt', 'usdc', 'dai', 'fdusd', 'usds', 'tusd', 
-                        'usdd', 'pyusd', 'ustc', 'eurs', 'ldo', 'wbtc', 'weth', 
-                        'wsteth', 'steth', 'cbeth', 'reth', 'wbeth', 'frxeth',
-                        'figure', 'ylds', 'figr', 'usde', 'susde', 'ethena', 'frax'
-                    ];
-                    
-                    const filteredData = data.filter(coin => {
-                        const sym = coin.symbol.toLowerCase();
-                        const name = coin.name.toLowerCase();
-                        return !STABLECOINS.includes(sym) && 
-                               !name.includes('stablecoin') &&
-                               !name.includes('tether') &&
-                               !name.includes('wrapped') &&
-                               !name.includes('pegged') &&
-                               !name.includes('staked') &&
-                               !name.includes('figure') &&
-                               !name.includes('yield-bearing') &&
-                               !name.includes('dollar') &&
-                               !name.includes('ethena');
-                    });
-
-                    cryptoDataList = filteredData.slice(0, 10).map(coin => {
-                        const price = parseFloat(coin.price_usd);
-                        const change = parseFloat(coin.percent_change_24h || 0);
-                        return {
-                            id: coin.nameid,
-                            name: coin.name,
-                            symbol: coin.symbol,
-                            current_price: price,
-                            price_change_percentage_24h: change,
-                            total_volume: parseFloat(coin.volume24 || 0),
-                            market_cap: parseFloat(coin.market_cap_usd || 0),
-                            image: `https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`,
-                            sparkline_in_7d: {
-                                price: generateRealisticSparkline(price, change)
-                            }
-                        };
-                    });
-                    
-                    renderCryptoTable();
-                    updateLastUpdated();
-                })
-                .catch(err => {
-                    console.warn("API 限制，加載備用數據...", err);
-                    useMockCryptoData();
-                });
-        }
-
-        function generateRealisticSparkline(currentPrice, change24h) {
-            const points = 7;
-            const trend = [];
-            let tempPrice = currentPrice / (1 + (change24h / 100));
-            for (let i = 0; i < points - 1; i++) {
-                tempPrice = tempPrice * (1 + (Math.random() * 0.04 - 0.02));
-                trend.push(tempPrice);
-            }
-            trend.push(currentPrice);
-            return trend;
-        }
-
-        function useMockCryptoData() {
-            const mockData = [
-                { id: 'bitcoin', name: 'Bitcoin', symbol: 'btc', current_price: 63950.50, price_change_percentage_24h: 2.45, total_volume: 38450120000, market_cap: 1260450122000, image: 'https://assets.coincap.io/assets/icons/btc@2x.png', sparkline_in_7d: { price: [61000, 62500, 61800, 62400, 63200, 62900, 63950] } },
-                { id: 'ethereum', name: 'Ethereum', symbol: 'eth', current_price: 1770.80, price_change_percentage_24h: -1.20, total_volume: 18450230000, market_cap: 212120450000, image: 'https://assets.coincap.io/assets/icons/eth@2x.png', sparkline_in_7d: { price: [1850, 1800, 1750, 1790, 1710, 1740, 1770] } },
-                { id: 'binancecoin', name: 'BNB', symbol: 'bnb', current_price: 587.30, price_change_percentage_24h: 0.85, total_volume: 1450120000, market_cap: 85450120000, image: 'https://assets.coincap.io/assets/icons/bnb@2x.png', sparkline_in_7d: { price: [570, 580, 575, 582, 580, 583, 587] } },
-                { id: 'solana', name: 'Solana', symbol: 'sol', current_price: 80.15, price_change_percentage_24h: 4.12, total_volume: 3890450000, market_cap: 35120450000, image: 'https://assets.coincap.io/assets/icons/sol@2x.png', sparkline_in_7d: { price: [72, 75, 78, 76, 79, 78, 80.15] } },
-                { id: 'ripple', name: 'Ripple', symbol: 'xrp', current_price: 1.13, price_change_percentage_24h: -0.45, total_volume: 980450000, market_cap: 64120450000, image: 'https://assets.coincap.io/assets/icons/xrp@2x.png', sparkline_in_7d: { price: [1.16, 1.15, 1.14, 1.15, 1.14, 1.15, 1.13] } },
-                { id: 'dogecoin', name: 'Dogecoin', symbol: 'doge', current_price: 0.165, price_change_percentage_24h: 12.40, total_volume: 2450120000, market_cap: 22450120000, image: 'https://assets.coincap.io/assets/icons/doge@2x.png', sparkline_in_7d: { price: [0.14, 0.15, 0.145, 0.152, 0.158, 0.162, 0.165] } },
-                { id: 'cardano', name: 'Cardano', symbol: 'ada', current_price: 0.485, price_change_percentage_24h: -1.15, total_volume: 450120000, market_cap: 17120450000, image: 'https://assets.coincap.io/assets/icons/ada@2x.png', sparkline_in_7d: { price: [0.50, 0.49, 0.48, 0.49, 0.485, 0.49, 0.485] } },
-                { id: 'avalanche-2', name: 'Avalanche', symbol: 'avax', current_price: 28.50, price_change_percentage_24h: 2.10, total_volume: 310450000, market_cap: 12120450000, image: 'https://assets.coincap.io/assets/icons/avax@2x.png', sparkline_in_7d: { price: [26, 27, 26.5, 27.8, 28.1, 27.9, 28.5] } },
-                { id: 'chainlink', name: 'Chainlink', symbol: 'link', current_price: 15.40, price_change_percentage_24h: 3.15, total_volume: 280120000, market_cap: 10120450000, image: 'https://assets.coincap.io/assets/icons/link@2x.png', sparkline_in_7d: { price: [14.2, 14.5, 14.8, 15.0, 14.9, 15.2, 15.4] } },
-                { id: 'polkadot', name: 'Polkadot', symbol: 'dot', current_price: 6.25, price_change_percentage_24h: -0.80, total_volume: 180120000, market_cap: 8120450000, image: 'https://assets.coincap.io/assets/icons/dot@2x.png', sparkline_in_7d: { price: [6.4, 6.3, 6.2, 6.3, 6.25, 6.3, 6.25] } }
-            ];
-            cryptoDataList = mockData;
-            renderCryptoTable();
-            updateLastUpdated();
-        }
-
-        function renderCryptoTable() {
-            const tbody = document.getElementById('crypto-table-body');
-            if (!tbody) return;
-
-            const totalTop10MarketCap = cryptoDataList.reduce((acc, c) => acc + (c.market_cap || 0), 0);
-            const filteredCryptos = cryptoDataList.filter(coin => 
-                coin.name.toLowerCase().includes(searchFilter) || 
-                coin.symbol.toLowerCase().includes(searchFilter)
-            );
-
-            if (filteredCryptos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = '';
-            filteredCryptos.forEach((coin, idx) => {
-                const price = coin.current_price;
-                const change = coin.price_change_percentage_24h || 0;
-                const isPositive = change >= 0;
-                const changeClass = isPositive ? 'text-emerald-400' : 'text-rose-500';
-                const changeSign = isPositive ? '+' : '';
-                const share = totalTop10MarketCap > 0 ? ((coin.market_cap / totalTop10MarketCap) * 100) : 0;
-                
-                const row = document.createElement('tr');
-                row.className = "hover:bg-zinc-800/30 transition-colors border-b border-zinc-850/50 group";
-
-                row.innerHTML = `
-                    <td class="py-4 px-4 text-center font-mono font-bold text-zinc-500">${idx + 1}</td>
-                    <td class="py-4 px-4">
-                        <div class="flex items-center gap-3">
-                            <img class="w-7 h-7 rounded-full bg-zinc-900 object-cover" src="${coin.image}" alt="${coin.name}" onerror="this.onerror=null; this.src='https://placehold.co/28x28/1c1917/ffffff?text=${coin.symbol.toUpperCase()}'">
-                            <div>
-                                <div class="font-bold text-white group-hover:text-accentCyan transition-colors">${coin.name}</div>
-                                <div class="text-xs text-zinc-500 uppercase font-semibold">${coin.symbol}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-4 text-right font-mono font-bold text-zinc-100">$${formatNumber(price)}</td>
-                    <td class="py-4 px-4 text-right font-mono font-bold ${changeClass}">
-                        <div class="inline-flex items-center gap-1">
-                            <i data-lucide="${isPositive ? 'trending-up' : 'trending-down'}" class="w-3.5 h-3.5"></i>
-                            ${changeSign}${change.toFixed(2)}%
-                        </div>
-                    </td>
-                    <td class="py-4 px-4 text-right">
-                        <div class="inline-flex flex-col items-end gap-1 w-full max-w-[120px]">
-                            <span class="font-mono font-bold text-zinc-100">${share.toFixed(2)}%</span>
-                            <div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
-                                <div class="h-full bg-accentCyan rounded-full" style="width: ${share}%"></div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden md:table-cell">$${formatNumber(coin.total_volume)}</td>
-                    <td class="py-4 px-4 text-right font-mono text-zinc-400 hidden lg:table-cell">$${formatNumber(coin.market_cap)}</td>
-                    <td class="py-4 px-4 text-center">
-                        <canvas id="sparkline-${coin.id}" class="w-24 h-8 mx-auto"></canvas>
-                    </td>
-                `;
-                tbody.appendChild(row);
-                setTimeout(() => drawSparkline(`sparkline-${coin.id}`, coin.sparkline_in_7d?.price || [], isPositive), 10);
-            });
-
+        // ===== 初始化 =====
+        window.onload=function(){
             lucide.createIcons();
-        }
-
-        function handleSearch(val) {
-            searchFilter = val.trim().toLowerCase();
-            renderCryptoTable();
-        }
-
-        function updateLastUpdated() {
-            const el = document.getElementById('last-updated');
-            if (el) {
-                const now = new Date();
-                el.innerText = `最後更新: 今天 ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} (自動即時同步)`;
-            }
-        }
-
-        // 初始化全部數據與監聽器
-        window.onload = function() {
-            lucide.createIcons();
-            
-            // 載入即時恐懼與貪婪指數
-            fetchFearAndGreedIndex();
-            setInterval(fetchFearAndGreedIndex, 15 * 60 * 1000);
-
-            // 載入底部前十大列表
-            fetchCryptoData();
-            setInterval(() => fetchCryptoData(true), 60000); // 列表 60 秒刷新一次
-            
-            // 啟動美股模擬 (具備週末與非上班時段自動判定收盤功能)
-            startLiveTicker('mstr-price', 'mstr-change', 'mstr-status', 94.13, 0.26);
-            startLiveTicker('strc-price', 'strc-change', 'strc-status', 86.28, 0.67);
-
-            // 啟動 幣安期貨 API 每秒即時報價更新 (BTC / ETH / BNB / SOL / XRP / HYPE 六大幣真實市場最後成交價 + 24H 漲跌 + 高低點)
-            updateMainCryptoCards();
-            setInterval(updateMainCryptoCards, 1000); 
-
-            // 啟動 幣安期貨資金費率更新 (每 30 秒刷新一次即可，費率變動頻率遠低於價格)
-            updateFundingRates();
-            setInterval(updateFundingRates, 30000);
-        }
+            fetchFearAndGreedIndex();setInterval(fetchFearAndGreedIndex,15*60*1000);
+            fetchCryptoData();setInterval(()=>fetchCryptoData(true),60000);
+            startLiveTicker('mstr-price','mstr-change','mstr-status',94.13,0.26);
+            startLiveTicker('strc-price','strc-change','strc-status',86.28,0.67);
+            updateMainCryptoCards();setInterval(updateMainCryptoCards,1000);
+            updateFundingRates();setInterval(updateFundingRates,30000);
+        };
     </script>
 </body>
 </html>
