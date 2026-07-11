@@ -719,24 +719,40 @@
             if(!prices||prices.length<2){x.beginPath();x.lineWidth=1;x.strokeStyle='#3f3f46';x.setLineDash([3,3]);x.moveTo(4,16);x.lineTo(92,16);x.stroke();x.setLineDash([]);return;}
             const mn=Math.min(...prices),mx=Math.max(...prices),r=mx-mn===0?1:mx-mn;x.beginPath();x.lineWidth=1.5;x.strokeStyle=pos?'#10b981':'#ef4444';x.lineJoin='round';x.lineCap='round';prices.forEach((p,i)=>{const px=(i/(prices.length-1))*96,py=30-((p-mn)/r)*28;i===0?x.moveTo(px,py):x.lineTo(px,py);});x.stroke();x.lineTo(96,32);x.lineTo(0,32);x.closePath();const g=x.createLinearGradient(0,0,0,32);g.addColorStop(0,pos?'rgba(16,185,129,0.15)':'rgba(239,68,68,0.15)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fill();}
         let cryptoDataList=[],searchFilter='';
+        // 嚴格排除：穩定幣、包裝幣、質押衍生幣、代幣化實體資產(如 Figure Heloc 房貸憑證)等
+        // symbol 精準比對排除清單
+        const EXCLUDED_SYMBOLS=new Set([
+            'usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','usde','susde','frax','busd','gusd','usdp','usdl','usd0','crvusd','lusd','gho','mkusd','usdx',
+            'wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','meth','ezeth','weeth','rseth','oeth','ankreth','sfrxeth','wbnb','weth',
+            'ldo','ena','figure','figr','figr_heloc','ylds','buidl','usdy','ondo','usyc','ustb'
+        ]);
+        // name 關鍵字包含即排除
+        const EXCLUDED_NAME_KEYWORDS=['stablecoin','tether','wrapped','pegged','staked','dollar','ethena','heloc','figure','tokenized','treasury','t-bill','money market','yield','usd '];
+        function isExcludedCoin(symbol,name){
+            const s=(symbol||'').toLowerCase().trim();
+            const n=(name||'').toLowerCase();
+            if(EXCLUDED_SYMBOLS.has(s))return true;
+            // symbol 以 usd 開頭或結尾者多為穩定幣 (usdt, usdc, ...usd)
+            if(/^usd/.test(s)||/usd$/.test(s))return true;
+            if(EXCLUDED_NAME_KEYWORDS.some(k=>n.includes(k)))return true;
+            return false;
+        }
         // 主來源：CoinGecko markets API (含真實 7 日 sparkline)；後備：CoinLore
         function fetchCryptoData(silent=false){
             const tb=document.getElementById('crypto-table-body');
             if(!silent&&tb)tb.innerHTML='<tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500">正在獲取頂級主權波動資產...</td></tr>';
-            const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax','busd','gusd','usdp'];
-            const cgUrl='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=24h';
+            const cgUrl='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=24h';
             return fetch(cgUrl,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
                 if(!Array.isArray(data)||!data.length)throw 0;
-                const fd=data.filter(c=>{const s=(c.symbol||'').toLowerCase(),n=(c.name||'').toLowerCase();return !SC.includes(s)&&!n.includes('stablecoin')&&!n.includes('tether')&&!n.includes('wrapped')&&!n.includes('pegged')&&!n.includes('staked')&&!n.includes('dollar')&&!n.includes('ethena');});
+                const fd=data.filter(c=>!isExcludedCoin(c.symbol,c.name));
                 cryptoDataList=fd.slice(0,10).map(c=>({id:c.id,name:c.name,symbol:c.symbol,current_price:c.current_price,price_change_percentage_24h:c.price_change_percentage_24h||0,total_volume:c.total_volume||0,market_cap:c.market_cap||0,image:c.image||`https://assets.coincap.io/assets/icons/${(c.symbol||'').toLowerCase()}@2x.png`,sparkline_in_7d:{price:(c.sparkline_in_7d&&Array.isArray(c.sparkline_in_7d.price))?c.sparkline_in_7d.price:[]}}));
                 renderCryptoTable();upd();
             }).catch(()=>fetchCryptoDataFallback(silent));
         }
         // 後備來源：CoinLore (無歷史 sparkline，趨勢圖依當日漲跌方向示意)
         function fetchCryptoDataFallback(silent){
-            const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax'];
-            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=30').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];
-                const fd=data.filter(c=>{const s=c.symbol.toLowerCase(),n=c.name.toLowerCase();return !SC.includes(s)&&!n.includes('stablecoin')&&!n.includes('tether')&&!n.includes('wrapped')&&!n.includes('pegged')&&!n.includes('staked')&&!n.includes('dollar')&&!n.includes('ethena');});
+            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=50').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];
+                const fd=data.filter(c=>!isExcludedCoin(c.symbol,c.name));
                 cryptoDataList=fd.slice(0,10).map(c=>({id:c.nameid,name:c.name,symbol:c.symbol,current_price:parseFloat(c.price_usd),price_change_percentage_24h:parseFloat(c.percent_change_24h||0),total_volume:parseFloat(c.volume24||0),market_cap:parseFloat(c.market_cap_usd||0),image:`https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,sparkline_in_7d:{price:[]}}));
                 renderCryptoTable();upd();}).catch(()=>{const tb=document.getElementById('crypto-table-body');if(tb)tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">行情暫時無法取得，請稍後重試</td></tr>';});
         }
