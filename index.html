@@ -502,7 +502,12 @@
                     <button onclick="applyTwTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold bg-accentPurple/15 text-accentPurple border border-accentPurple/30 hover:bg-accentPurple/25 transition-colors shrink-0">查詢</button>
                     <button onclick="resetTwTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-colors shrink-0" title="回到預設 0050">重設</button>
                 </div>
-                <div class="flex items-center gap-1.5 mb-4">
+                <div class="flex items-center gap-1.5 mb-3 border-b border-zinc-850 pb-3">
+                    <button id="tw-tech-view-tech" onclick="switchTechView('tw','tech',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentCyan/15 text-accentCyan border border-accentCyan/30">技術分析</button>
+                    <button onclick="switchTechView('tw','news',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">新聞</button>
+                    <button id="tw-tech-view-financials" onclick="switchTechView('tw','financials',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">財務</button>
+                </div>
+                <div id="tw-tech-interval-row" class="flex items-center gap-1.5 mb-4">
                     <button onclick="switchTwTechInterval('1D', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30">一天</button>
                     <button onclick="switchTwTechInterval('1W', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一週</button>
                     <button onclick="switchTwTechInterval('1M', this)" class="tw-tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一月</button>
@@ -579,7 +584,12 @@
                         <button onclick="applyTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold bg-accentPurple/15 text-accentPurple border border-accentPurple/30 hover:bg-accentPurple/25 transition-colors shrink-0">查詢</button>
                         <button onclick="resetTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-colors shrink-0" title="回到預設 VT">重設</button>
                     </div>
-                    <div class="flex items-center gap-1.5 mb-4">
+                    <div class="flex items-center gap-1.5 mb-3 border-b border-zinc-850 pb-3">
+                        <button id="us-tech-view-tech" onclick="switchTechView('us','tech',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentCyan/15 text-accentCyan border border-accentCyan/30">技術分析</button>
+                        <button onclick="switchTechView('us','news',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">新聞</button>
+                        <button id="us-tech-view-financials" onclick="switchTechView('us','financials',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">財務</button>
+                    </div>
+                    <div id="us-tech-interval-row" class="flex items-center gap-1.5 mb-4">
                         <button onclick="switchTechInterval('1D', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30">一天</button>
                         <button onclick="switchTechInterval('1W', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一週</button>
                         <button onclick="switchTechInterval('1M', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一月</button>
@@ -812,23 +822,61 @@
             const lid=market==='tw'?'tw-chart-source-link':'us-chart-source-link';const l=document.getElementById(lid);if(l)l.setAttribute('href',`https://tw.tradingview.com/symbols/${symbol.replace(':','-')}/`);}
         function renderTvWidget(cid,src,cfg){const ct=document.getElementById(cid);if(!ct)return;ct.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src=src;s.async=true;s.text=JSON.stringify(cfg);c.appendChild(s);ct.appendChild(c);}
         function renderTechnicalGauge(cid,sym,interval){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',{interval:interval||'1D',width:'100%',height:'100%',symbol:sym,showIntervalTabs:false,displayMode:'multiple',locale:'zh_TW',colorTheme:'dark',isTransparent:true});}
+        function renderNewsWidget(cid,sym){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js',{feedMode:'symbol',symbol:sym,isTransparent:true,displayMode:'regular',width:'100%',height:'100%',colorTheme:'dark',locale:'zh_TW'});}
+        function renderFinancialsWidget(cid,sym){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',{symbol:sym,colorTheme:'dark',isTransparent:true,largeChartUrl:'',displayMode:'adaptive',width:'100%',height:'100%',locale:'zh_TW'});}
+        // 判斷是否為 ETF / 指數 (無公司財務數據，需隱藏財務頁籤)
+        const ETF_INDEX_SET=new Set(['TWSE:0050','TWSE:006208','TWSE:0056','TWSE:00878','TWSE:00919','TWSE:00929','AMEX:VT','AMEX:SPY','AMEX:VOO','AMEX:DIA','NASDAQ:QQQ','NASDAQ:SOXX','AMEX:VTI','AMEX:IVV']);
+        function isEtfOrIndex(sym){const s=(sym||'').toUpperCase();if(ETF_INDEX_SET.has(s))return true;const code=s.includes(':')?s.split(':')[1]:s;return /^00\d{2,4}[A-Z]?$/.test(code);}
+        // 通用頁籤切換：market='us'|'tw'，view='tech'|'news'|'financials'
+        function switchTechView(market,view,btn){
+            const prefix=market==='tw'?'tw':'us';
+            const sym=market==='tw'?twTechCurrentSymbol:techCurrentSymbol;
+            const cid=prefix+'-technical-container';
+            const interval=market==='tw'?twTechCurrentInterval:techCurrentInterval;
+            // 時間區間列僅技術分析頁顯示
+            const intervalRow=document.getElementById(prefix+'-tech-interval-row');
+            if(intervalRow)intervalRow.style.display=view==='tech'?'flex':'none';
+            if(view==='tech')renderTechnicalGauge(cid,sym,interval);
+            else if(view==='news')renderNewsWidget(cid,sym);
+            else if(view==='financials')renderFinancialsWidget(cid,sym);
+            // 頁籤高亮
+            document.querySelectorAll('.'+prefix+'-tech-view-btn').forEach(b=>b.className=prefix+'-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all');
+            if(btn)btn.className=prefix+'-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentCyan/15 text-accentCyan border border-accentCyan/30';
+            if(market==='tw')twTechCurrentView=view;else techCurrentView=view;
+        }
+        // 依當前 symbol 是否為 ETF/指數，顯示或隱藏財務頁籤；若正在看財務卻切到ETF則退回技術分析
+        function refreshFinancialsTabVisibility(market){
+            const prefix=market==='tw'?'tw':'us';
+            const sym=market==='tw'?twTechCurrentSymbol:techCurrentSymbol;
+            const finBtn=document.getElementById(prefix+'-tech-view-financials');
+            if(!finBtn)return;
+            const hide=isEtfOrIndex(sym);
+            finBtn.style.display=hide?'none':'';
+            const curView=market==='tw'?twTechCurrentView:techCurrentView;
+            if(hide&&curView==='financials'){const techBtn=document.getElementById(prefix+'-tech-view-tech');switchTechView(market,'tech',techBtn);}
+        }
         // 自訂技術分析時間區間切換 (一天/一週/一月)，取代 TradingView 內建含分鐘級的 tab 列
-        let techCurrentSymbol='AMEX:VT',techCurrentInterval='1D';
+        let techCurrentSymbol='AMEX:VT',techCurrentInterval='1D',techCurrentView='tech';
         function switchTechInterval(interval,btn){
             techCurrentInterval=interval;
             renderTechnicalGauge('us-technical-container',techCurrentSymbol,interval);
-            document.querySelectorAll('.tech-interval-btn').forEach(b=>b.className='tech-interval-btn text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all');
-            if(btn)btn.className='tech-interval-btn text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30';
+            document.querySelectorAll('.tech-interval-btn').forEach(b=>b.className='tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all');
+            if(btn)btn.className='tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30';
         }
         // 更新技術分析標的、標題、小標題與資料來源連結
         function updateTechSymbol(symbol,displayName){
             techCurrentSymbol=symbol;
-            renderTechnicalGauge('us-technical-container',symbol,techCurrentInterval);
             const t=document.getElementById('tech-title'),st=document.getElementById('tech-subtitle'),lk=document.getElementById('tech-source-link');
             const isVT=symbol==='AMEX:VT';
             if(t)t.innerText=isVT?'技術分析評級':`${displayName} 的技術分析`;
             if(st)st.innerText='全球股市多空儀表';
-            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/technicals/`);}
+            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;const path=techCurrentView==='news'?'news':(techCurrentView==='financials'?'financials-overview':'technicals');lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            refreshFinancialsTabVisibility('us');
+            // 以當前檢視重新渲染 (若在財務頁但新標的是ETF，refreshFinancialsTabVisibility 已退回技術分析)
+            const v=techCurrentView;
+            if(v==='news')renderNewsWidget('us-technical-container',symbol);
+            else if(v==='financials'&&!isEtfOrIndex(symbol))renderFinancialsWidget('us-technical-container',symbol);
+            else renderTechnicalGauge('us-technical-container',symbol,techCurrentInterval);
         }
         function applyTechSymbol(){
             const inp=document.getElementById('tech-symbol-input');if(!inp)return;
@@ -844,7 +892,7 @@
             updateTechSymbol('AMEX:VT','VT');
         }
         // ===== 台股技術分析評級 (獨立，預設 0050) =====
-        let twTechCurrentSymbol='TWSE:0050',twTechCurrentInterval='1D';
+        let twTechCurrentSymbol='TWSE:0050',twTechCurrentInterval='1D',twTechCurrentView='tech';
         function switchTwTechInterval(interval,btn){
             twTechCurrentInterval=interval;
             renderTechnicalGauge('tw-technical-container',twTechCurrentSymbol,interval);
@@ -853,12 +901,16 @@
         }
         function updateTwTechSymbol(symbol,displayName){
             twTechCurrentSymbol=symbol;
-            renderTechnicalGauge('tw-technical-container',symbol,twTechCurrentInterval);
             const t=document.getElementById('tw-tech-title'),st=document.getElementById('tw-tech-subtitle'),lk=document.getElementById('tw-tech-source-link');
             const isDefault=symbol==='TWSE:0050';
             if(t)t.innerText=isDefault?'技術分析評級':`${displayName} 的技術分析`;
             if(st)st.innerText='台股多空儀表';
-            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/technicals/`);}
+            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;const path=twTechCurrentView==='news'?'news':(twTechCurrentView==='financials'?'financials-overview':'technicals');lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            refreshFinancialsTabVisibility('tw');
+            const v=twTechCurrentView;
+            if(v==='news')renderNewsWidget('tw-technical-container',symbol);
+            else if(v==='financials'&&!isEtfOrIndex(symbol))renderFinancialsWidget('tw-technical-container',symbol);
+            else renderTechnicalGauge('tw-technical-container',symbol,twTechCurrentInterval);
         }
         function applyTwTechSymbol(){
             const inp=document.getElementById('tw-tech-symbol-input');if(!inp)return;
@@ -1009,14 +1061,14 @@
             });
         }
         function initTwStockView(){
-            if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');twStockState.extrasLoaded=true;}
+            if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');refreshFinancialsTabVisibility('tw');twStockState.extrasLoaded=true;}
             if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();}
         }
 
         function initUsStockView(){
             if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
             if(!usStockState.chartLoaded){switchTvChart('us','AMEX:SPY',document.querySelector('.tv-chart-tab-us'));usStockState.chartLoaded=true;}
-            if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:VT');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
+            if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:VT');refreshFinancialsTabVisibility('us');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
         }
 
         // ===== 初始化 =====
