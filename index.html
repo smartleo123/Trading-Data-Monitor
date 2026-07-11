@@ -94,9 +94,28 @@
                     </button>
                 </nav>
                 <div class="hidden xl:flex items-center gap-4 text-xs">
-                    <div class="bg-zinc-900/50 border border-zinc-850 px-3 py-2 rounded-xl flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span class="text-zinc-400 font-mono">連線正常</span>
+                    <div class="relative">
+                        <button onclick="toggleLinksMenu(event)" id="links-menu-btn" class="bg-zinc-900/50 border border-zinc-850 hover:border-accentCyan/40 px-3 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-accentCyan"></i>
+                            <span class="text-zinc-300 font-mono">常用連結</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-zinc-500" id="links-menu-chevron"></i>
+                        </button>
+                        <div id="links-menu-panel" class="hidden absolute right-0 mt-2 w-64 bg-darkCard border border-zinc-800 rounded-xl shadow-2xl shadow-black/60 z-50 overflow-hidden">
+                            <!-- 加密貨幣 -->
+                            <div class="px-3 pt-3 pb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-accentCyan"><i data-lucide="bitcoin" class="w-3 h-3"></i> 加密貨幣</div>
+                            <a href="https://www.youtube.com/@youtubercrypto" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">科幣託</span></a>
+                            <a href="https://www.youtube.com/@tiabtc" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">TiaBTC</span></a>
+                            <a href="https://www.youtube.com/@82TRADE" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">82 TRADE</span></a>
+                            <a href="https://www.youtube.com/@BonnieBlockchain" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">邦妮區塊鏈</span></a>
+                            <!-- 台股 -->
+                            <div class="px-3 pt-2 pb-1 mt-1 border-t border-zinc-850 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-accentPurple"><i data-lucide="landmark" class="w-3 h-3"></i> 台股</div>
+                            <a href="https://www.youtube.com/@yutinghaofinance" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">游庭皓的財經皓角</span></a>
+                            <a href="https://www.youtube.com/@MrWaterDrop" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">清流君</span></a>
+                            <!-- 美股 -->
+                            <div class="px-3 pt-2 pb-1 mt-1 border-t border-zinc-850 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400"><i data-lucide="flag" class="w-3 h-3"></i> 美股</div>
+                            <a href="https://www.youtube.com/@EthanFinanceNote" target="_blank" class="flex items-center gap-2 px-3 py-2 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">Ethan的美股筆記</span></a>
+                            <a href="https://www.youtube.com/@Money_or_Life" target="_blank" class="flex items-center gap-2 px-3 py-2 mb-1 text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors"><i data-lucide="youtube" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i><span class="truncate">Money or Life 美股頻道</span></a>
+                        </div>
                     </div>
                     <div class="text-right hidden 2xl:block">
                         <div id="system-time" class="font-mono font-bold text-zinc-300">加載中...</div>
@@ -547,7 +566,7 @@
         <div class="max-w-[1600px] mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
-                <span>僅供學術與專業研究，不構成投資建議。</span>
+                <span>© 2026 Crypto & ETF Market Pulse Terminal. 僅供學術與專業研究，不構成投資建議。</span>
             </div>
             <div class="flex items-center gap-4">
                 <a href="#" class="hover:text-zinc-400 transition-colors">使用條款</a>
@@ -564,6 +583,27 @@
                 el.innerText = `${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())} ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`; }
         }
         setInterval(updateClock, 1000); updateClock();
+
+        // ===== 常用連結下拉選單 =====
+        function toggleLinksMenu(e){
+            if(e)e.stopPropagation();
+            const panel=document.getElementById('links-menu-panel');
+            const chev=document.getElementById('links-menu-chevron');
+            if(!panel)return;
+            const open=panel.classList.toggle('hidden')===false;
+            if(chev)chev.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+        }
+        // 點擊選單以外區域自動關閉
+        document.addEventListener('click',(e)=>{
+            const panel=document.getElementById('links-menu-panel');
+            const btn=document.getElementById('links-menu-btn');
+            if(!panel||panel.classList.contains('hidden'))return;
+            if(btn&&btn.contains(e.target))return;
+            if(panel.contains(e.target))return;
+            panel.classList.add('hidden');
+            const chev=document.getElementById('links-menu-chevron');
+            if(chev)chev.style.transform='rotate(0deg)';
+        });
 
         // ===== 市場切換 =====
         const marketTabActiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40";
