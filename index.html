@@ -152,8 +152,8 @@
                         <span id="mstr-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
-                        <div id="mstr-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$94.13</div>
-                        <div id="mstr-change" class="text-sm font-bold font-mono text-emerald-400">+0.26%</div>
+                        <div id="mstr-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="mstr-change" class="text-sm font-bold font-mono text-zinc-400">--</div>
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
@@ -168,8 +168,8 @@
                         <span id="strc-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
-                        <div id="strc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">$86.28</div>
-                        <div id="strc-change" class="text-sm font-bold font-mono text-emerald-400">+0.67%</div>
+                        <div id="strc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                        <div id="strc-change" class="text-sm font-bold font-mono text-zinc-400">--</div>
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
@@ -659,15 +659,32 @@
             try { const t=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); const d=t.getDay(); if(d===0||d===6)return false;
                 const m=t.getHours()*60+t.getMinutes(); return m>=570&&m<=960; } catch(e){return false;}
         }
-        function startLiveTicker(pid,cid,sid,base,bc){
-            let cur=base,bch=parseFloat(bc); const pe=document.getElementById(pid),ce=document.getElementById(cid),se=document.getElementById(sid); if(!pe||!ce||!se)return;
-            const chk=()=>{if(!isUSMarketOpen()){se.innerText="CLOSED";se.className="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded";return true;}return false;};
-            if(chk())return;
-            setInterval(()=>{if(chk())return; const v=cur*0.0006,ch=(Math.random()-0.5)*v; cur+=ch; bch+=(ch/cur)*100; const up=ch>=0;
-                pe.innerText='$'+cur.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); ce.innerText=(bch>=0?'+':'')+bch.toFixed(2)+'%';
-                ce.className=`text-sm font-bold font-mono ${bch>=0?'text-emerald-400':'text-rose-500'}`;
-                pe.style.backgroundColor=up?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';
-                setTimeout(()=>pe.style.backgroundColor='transparent',350);},2000+Math.random()*2500);
+        // 以真實 Yahoo 報價更新美股卡 (MSTR/STRC)。price=最新/收盤價，change=相對昨收漲跌%
+        function updateStockCard(pid,cid,sid,symbol){
+            const pe=document.getElementById(pid),ce=document.getElementById(cid),se=document.getElementById(sid);
+            if(!pe||!ce)return;
+            fetchYahooQuote(symbol).then(q=>{
+                const price=q.price,prev=q.prevClose;
+                if(price==null||isNaN(price))return;
+                const prevShown=parseFloat((pe.innerText||'').replace(/[^0-9.]/g,''))||0;
+                const changePct=prev?((price-prev)/prev)*100:0;const up=price>=prevShown;
+                pe.innerText='$'+price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+                ce.innerText=(changePct>=0?'+':'')+changePct.toFixed(2)+'%';
+                ce.className=`text-sm font-bold font-mono ${changePct>=0?'text-emerald-400':'text-rose-500'}`;
+                if(se){const open=isUSMarketOpen();se.innerText=open?'LIVE':'CLOSED';se.className=open?'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse':'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}
+                if(prevShown>0&&Math.abs(price-prevShown)>0.001){pe.style.backgroundColor=up?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';setTimeout(()=>pe.style.backgroundColor='transparent',350);}
+            }).catch(()=>{
+                if(se){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}
+            });
+        }
+        function startUsStockCards(){
+            updateStockCard('mstr-price','mstr-change','mstr-status','MSTR');
+            updateStockCard('strc-price','strc-change','strc-status','STRC');
+            // 盤中每 15 秒更新，非盤中每 5 分鐘更新一次收盤價
+            setInterval(()=>{
+                updateStockCard('mstr-price','mstr-change','mstr-status','MSTR');
+                updateStockCard('strc-price','strc-change','strc-status','STRC');
+            }, isUSMarketOpen()?15000:300000);
         }
         function updateMainCryptoCards(){
             const map=[['BTCUSDT','btc','emerald'],['ETHUSDT','eth','blue'],['BNBUSDT','bnb','yellow'],['SOLUSDT','sol','purple'],['XRPUSDT','xrp','blue'],['HYPEUSDT','hype','pink']];
@@ -873,8 +890,7 @@
             lucide.createIcons();
             fetchFearAndGreedIndex();setInterval(fetchFearAndGreedIndex,15*60*1000);
             fetchCryptoData();setInterval(()=>fetchCryptoData(true),60000);
-            startLiveTicker('mstr-price','mstr-change','mstr-status',94.13,0.26);
-            startLiveTicker('strc-price','strc-change','strc-status',86.28,0.67);
+            startUsStockCards();
             updateMainCryptoCards();setInterval(updateMainCryptoCards,1000);
             updateFundingRates();setInterval(updateFundingRates,30000);
         };
