@@ -308,16 +308,127 @@
         <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
 
-            <!-- 台股報價小卡 (改用 TradingView 官方 single-quote widget，穩定延遲報價) -->
+            <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:0050"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2330"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2454"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2308"></div>
+                <!-- 加權指數 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="^TWII" data-tw-name="加權指數" data-tw-code="TAIEX">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE 加權指數</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/%5ETWII" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3ATAIEX" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 元大台灣50 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="0050.TW" data-tw-name="元大台灣50" data-tw-code="0050">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:0050 元大台灣50</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/0050.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A0050" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 台積電 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2330.TW" data-tw-name="台積電" data-tw-code="2330">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2330 台積電</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2330.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2330" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 聯發科 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2454.TW" data-tw-name="聯發科" data-tw-code="2454">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2454 聯發科</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2454.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2454" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 台達電 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="2308.TW" data-tw-name="台達電" data-tw-code="2308">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2308 台達電</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-3 text-zinc-500">
+                            <span>開盤 <strong data-tw-open class="text-zinc-300 font-mono">--</strong></span>
+                            <span>昨收 <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://tw.stock.yahoo.com/quote/2308.TW" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors text-[10px] font-bold" title="Yahoo 股市">Yahoo</a>
+                            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2308" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors text-[10px] font-bold" title="TradingView 圖表">TV</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="text-[11px] text-zinc-600 px-1 -mt-2">
-                <span class="text-zinc-500">*</span> 報價來源：TradingView 迷你走勢元件（延遲行情）。顯示簡易走勢圖與最新報價，點擊小卡可展開 TradingView 完整資訊。
+                <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。因經第三方代理轉發，偶有延遲或短暫離線屬正常現象。
             </div>
 
             <!-- 台股前 50 大個股 -->
@@ -576,11 +687,49 @@
         function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
 
         // ============================================================
-        // 台股報價小卡 (改用與美股相同的 mini-symbol-overview widget，相容性較佳)
+        // 台股即時報價小卡 (Yahoo Finance 經公用代理自繪；綠漲紅跌)
         // ============================================================
-        function renderTwSingleQuotes(){
-            renderMiniSymbolCards(document.getElementById('market-view-tw-stock'));
+        let twQuotesTimer=null;
+        function isTwMarketOpen(){try{const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const d=t.getDay();if(d===0||d===6)return false;const m=t.getHours()*60+t.getMinutes();return m>=540&&m<=810;}catch(e){return false;}}
+        function flashTwPrice(el,up){if(!el)return;el.style.backgroundColor=up?'rgba(16,185,129,0.18)':'rgba(244,63,94,0.18)';el.style.borderRadius='6px';el.style.padding='2px 8px';el.style.marginLeft='-8px';setTimeout(()=>{el.style.backgroundColor='transparent';},350);}
+        function twColorClass(ch){return ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-zinc-400');}
+        function updateTwCard(card,q,open){
+            const pe=card.querySelector('[data-tw-price]'),ce=card.querySelector('[data-tw-change]'),se=card.querySelector('[data-tw-status]'),oe=card.querySelector('[data-tw-open]'),pce=card.querySelector('[data-tw-prevclose]');
+            const last=q.price,prev=q.prevClose,op=q.open;if(last==null||isNaN(last))return;
+            const prevShown=parseFloat((pe.innerText||'').replace(/[^0-9.]/g,''))||0;const change=last-prev,pct=prev?(change/prev)*100:0;const sign=change>=0?'+':'';
+            pe.innerText=last.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            pe.className=`text-4xl font-black font-mono tracking-tight transition-colors ${change>0?'text-emerald-400':(change<0?'text-rose-500':'text-white')}`;
+            ce.innerText=`${sign}${change.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;ce.className=`text-sm font-bold font-mono ${twColorClass(change)}`;
+            if(oe&&op!=null&&!isNaN(op))oe.innerText=op.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            if(pce&&prev!=null&&!isNaN(prev))pce.innerText=prev.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            if(se){if(open){se.innerText='LIVE';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
         }
+        // 從 Yahoo Finance chart API 取報價，經多個公用代理輪替容錯，回傳 {price, prevClose, open}
+        function fetchYahooQuote(symbol){
+            const yUrl=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
+            const proxies=[
+                u=>({url:`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,wrap:'json'}),
+                u=>({url:`https://corsproxy.io/?url=${encodeURIComponent(u)}`,wrap:'raw'}),
+                u=>({url:`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,wrap:'raw'})
+            ];
+            const parse=(txt)=>{const d=JSON.parse(txt);const res=d.chart&&d.chart.result&&d.chart.result[0];if(!res)throw 0;const m=res.meta;return{price:m.regularMarketPrice,prevClose:m.chartPreviousClose||m.previousClose,open:m.regularMarketOpen!=null?m.regularMarketOpen:(m.chartPreviousClose||null)};};
+            const tryOne=(i)=>{
+                if(i>=proxies.length)return Promise.reject('all proxies failed');
+                const p=proxies[i](yUrl);
+                return fetch(p.url,{cache:'no-store'}).then(r=>r.ok?r.text():Promise.reject()).then(txt=>{
+                    if(p.wrap==='json'){const w=JSON.parse(txt);return parse(w.contents);}
+                    return parse(txt);
+                }).catch(()=>tryOne(i+1));
+            };
+            return tryOne(0);
+        }
+        function fetchTwQuotes(){
+            const cards=Array.from(document.querySelectorAll('[data-tw-quote]'));if(!cards.length)return;const open=isTwMarketOpen();
+            cards.forEach(card=>{const sym=card.getAttribute('data-tw-quote');fetchYahooQuote(sym).then(q=>updateTwCard(card,q,open)).catch(()=>{const se=card.querySelector('[data-tw-status]');if(se&&(se.innerText==='--'||se.innerText==='')){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}});});
+        }
+        function startTwRealtimeQuotes(){fetchTwQuotes();if(twQuotesTimer)clearInterval(twQuotesTimer);const tick=()=>{fetchTwQuotes();clearInterval(twQuotesTimer);twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);};twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);}
+        // 保留原啟動函式名，改為呼叫自繪報價
+        function renderTwSingleQuotes(){startTwRealtimeQuotes();}
 
         // ============================================================
         // 台股前 50 大個股 (清單內嵌打包於本檔；可一鍵抓取 0050 官網最新持股更新)
