@@ -189,7 +189,7 @@
             </div>
 
             <!-- 卡片 4: BTC Binance 實時合約報價 -->
-            <a href="https://www.binance.com/zh-TC/futures/BTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/BTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC">
@@ -201,19 +201,24 @@
                         <div id="btc-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
-                        24H 高點: <strong id="btc-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="btc-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="btc-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="btc-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
 
             <!-- 卡片 5: ETH Binance 實時合約報價 -->
-            <a href="https://www.binance.com/zh-TC/futures/ETHUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/ETHUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/eth@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="ETH">
@@ -225,19 +230,24 @@
                         <div id="eth-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                        24H 高點: <strong id="eth-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="eth-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="eth-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="eth-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="eth-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
 
             <!-- 卡片 6: BNB Binance 實時合約報價 -->
-            <a href="https://www.binance.com/zh-TC/futures/BNBUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-yellow-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/BNBUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-yellow-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/bnb@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BNB">
@@ -249,19 +259,24 @@
                         <div id="bnb-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                        24H 高點: <strong id="bnb-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="bnb-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="bnb-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="bnb-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="bnb-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
 
             <!-- 卡片 7: SOL Binance 實時合約報價 -->
-            <a href="https://www.binance.com/zh-TC/futures/SOLUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-purple-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/SOLUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-purple-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/sol@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="SOL">
@@ -273,19 +288,24 @@
                         <div id="sol-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                        24H 高點: <strong id="sol-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="sol-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="sol-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="sol-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="sol-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
 
             <!-- 卡片 8: XRP Binance 實時合約報價 -->
-            <a href="https://www.binance.com/zh-TC/futures/XRPUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/XRPUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/xrp@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="XRP">
@@ -297,19 +317,24 @@
                         <div id="xrp-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                        24H 高點: <strong id="xrp-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="xrp-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="xrp-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="xrp-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="xrp-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
 
             <!-- 卡片 9: HYPE Binance 實時合約報價 (Hyperliquid) -->
-            <a href="https://www.binance.com/zh-TC/futures/HYPEUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-pink-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://www.binance.com/zh-TC/futures/HYPEUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-pink-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <img src="https://assets.coincap.io/assets/icons/hype@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="HYPE" onerror="this.src='https://placehold.co/16x16/27272a/ffffff?text=H'">
@@ -321,13 +346,18 @@
                         <div id="hype-change" class="text-sm font-bold font-mono">--</div>
                     </div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
-                        24H 高點: <strong id="hype-high" class="text-zinc-300 font-mono">--</strong>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500">
+                        <div class="mb-0.5">24H 高點</div>
+                        <strong id="hype-high" class="text-zinc-300 font-mono text-[11px]">--</strong>
                     </div>
-                    <div class="text-right text-zinc-500">
-                        24H 低點: <strong id="hype-low" class="text-zinc-300 font-mono">--</strong>
+                    <div class="text-zinc-500 text-center">
+                        <div class="mb-0.5">24H 低點</div>
+                        <strong id="hype-low" class="text-zinc-300 font-mono text-[11px]">--</strong>
+                    </div>
+                    <div class="text-zinc-500 text-right">
+                        <div class="mb-0.5">資金費率</div>
+                        <strong id="hype-funding" class="font-mono text-[11px] text-zinc-300">--</strong>
                     </div>
                 </div>
             </a>
@@ -869,6 +899,33 @@
                 .catch(err => console.warn('幣安 API (HYPE) 連線失敗:', err));
         }
 
+        // 抓取幣安合約各幣種最新資金費率 (Funding Rate)
+        function updateFundingRates() {
+            const symbolFundingMap = {
+                'BTCUSDT': 'btc-funding',
+                'ETHUSDT': 'eth-funding',
+                'BNBUSDT': 'bnb-funding',
+                'SOLUSDT': 'sol-funding',
+                'XRPUSDT': 'xrp-funding',
+                'HYPEUSDT': 'hype-funding'
+            };
+
+            Object.entries(symbolFundingMap).forEach(([symbol, elId]) => {
+                fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${symbol}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const el = document.getElementById(elId);
+                        if (el && data && data.lastFundingRate !== undefined) {
+                            const ratePercent = parseFloat(data.lastFundingRate) * 100;
+                            const sign = ratePercent >= 0 ? '+' : '';
+                            el.innerText = `${sign}${ratePercent.toFixed(4)}%`;
+                            el.className = `font-mono text-[11px] ${ratePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
+                        }
+                    })
+                    .catch(err => console.warn(`幣安資金費率 API (${symbol}) 連線失敗:`, err));
+            });
+        }
+
         function updateFngUI(value) {
             let text = '中立 (Neutral)';
             let colorClass = 'text-amber-500';
@@ -1170,6 +1227,10 @@
             // 啟動 幣安期貨 API 每秒即時報價更新 (BTC / ETH / BNB / SOL / XRP / HYPE 六大幣真實市場最後成交價 + 24H 漲跌 + 高低點)
             updateMainCryptoCards();
             setInterval(updateMainCryptoCards, 1000); 
+
+            // 啟動 幣安期貨資金費率更新 (每 30 秒刷新一次即可，費率變動頻率遠低於價格)
+            updateFundingRates();
+            setInterval(updateFundingRates, 30000);
         }
     </script>
 </body>
