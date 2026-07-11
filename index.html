@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HakuBTC</title>
+    <title>HakuTrade</title>
     <!-- Tailwind CSS 引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide 圖標庫 引入 -->
@@ -71,57 +71,93 @@
         .is-maximized #local-chart-container,
         .is-maximized #coinglass-iframe-container,
         .is-maximized #altcoin-iframe-container,
-        .is-maximized #strategy-iframe-container {
+        .is-maximized #strategy-iframe-container,
+        .is-maximized #us-chart-container,
+        .is-maximized #us-heatmap-container {
             height: calc(100vh - 85px) !important;
             min-height: 0 !important;
+        }
+
+        /* 市值權重表格全螢幕時撐滿並可捲動 */
+        .is-maximized #tw-weight-container {
+            max-height: calc(100vh - 130px) !important;
         }
 
         /* 強制內置 Iframe 在全螢幕下達到 100% 高度與寬度 */
         .is-maximized #coinglass-iframe-container iframe,
         .is-maximized #local-chart-container iframe,
         .is-maximized #altcoin-iframe-container iframe,
-        .is-maximized #strategy-iframe-container iframe {
+        .is-maximized #strategy-iframe-container iframe,
+        .is-maximized #us-chart-container iframe,
+        .is-maximized #us-heatmap-container iframe {
             height: 100% !important;
             width: 100% !important;
             border: none !important;
+        }
+
+        /* TradingView Widget 容器預設撐滿父層 */
+        .tradingview-widget-container,
+        .tradingview-widget-container__widget {
+            height: 100% !important;
+            width: 100% !important;
         }
     </style>
 </head>
 <body class="bg-darkBg text-zinc-100 font-sans min-h-full flex flex-col antialiased">
 
     <!-- 頂部奢華導航欄 (Top Navigation Bar) -->
-    <header class="border-b border-zinc-900 bg-darkBg/95 backdrop-blur sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3">
-            <div class="relative">
-                <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-accentCyan to-accentPurple opacity-75 blur-sm animate-pulse"></div>
-                <div class="relative bg-black px-3 py-1.5 rounded-lg border border-zinc-800">
-                    <span class="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-accentCyan to-accentPurple tracking-widest uppercase">HakuBTC</span>
+    <div class="sticky top-0 z-40 bg-darkBg">
+        <header class="border-b border-zinc-900 bg-darkBg/95 backdrop-blur px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-accentCyan to-accentPurple opacity-75 blur-sm animate-pulse"></div>
+                    <div class="relative bg-black px-3 py-1.5 rounded-lg border border-zinc-800">
+                        <span class="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-accentCyan to-accentPurple tracking-widest uppercase">HakuTrade</span>
+                    </div>
+                </div>
+                <div>
+                    <h1 id="market-title" class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
+                        加密貨幣數據圖表
+                    </h1>
+                    <p id="market-subtitle" class="text-[10px] text-zinc-500 font-medium tracking-wider">CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION</p>
                 </div>
             </div>
-            <div>
-                <h1 class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
-                    加密貨幣數據圖表
-                </h1>
-                <p class="text-[10px] text-zinc-500 font-medium tracking-wider">CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION</p>
+
+            <!-- 右上方：市場切換頁籤 + 系統時鐘 -->
+            <div class="flex items-center gap-4">
+                <!-- 市場切換頁籤 (加密貨幣 / 台股 / 美股) -->
+                <nav class="bg-zinc-900/60 border border-zinc-850 p-1 rounded-xl flex items-center gap-1 overflow-x-auto">
+                    <button onclick="switchMarketView('crypto')" id="market-tab-crypto" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40">
+                        <i data-lucide="bitcoin" class="w-3.5 h-3.5"></i> 加密貨幣
+                    </button>
+                    <button onclick="switchMarketView('tw-stock')" id="market-tab-tw-stock" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
+                        <i data-lucide="landmark" class="w-3.5 h-3.5"></i> 台股
+                    </button>
+                    <button onclick="switchMarketView('us-stock')" id="market-tab-us-stock" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
+                        <i data-lucide="flag" class="w-3.5 h-3.5"></i> 美股
+                    </button>
+                </nav>
+
+                <!-- 即時系統時鐘與狀態 -->
+                <div class="hidden xl:flex items-center gap-4 text-xs">
+                    <div class="bg-zinc-900/50 border border-zinc-850 px-3 py-2 rounded-xl flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span class="text-zinc-400 font-mono">連線正常</span>
+                    </div>
+                    <div class="text-right hidden 2xl:block">
+                        <div id="system-time" class="font-mono font-bold text-zinc-300">加載中...</div>
+                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest">Global Sync Time</div>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <!-- 即時系統時鐘與狀態 -->
-        <div class="flex items-center gap-4 text-xs">
-            <div class="bg-zinc-900/50 border border-zinc-850 px-3 py-2 rounded-xl flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                <span class="text-zinc-400 font-mono">系統狀態: 連線正常</span>
-            </div>
-            <div class="text-right hidden sm:block">
-                <div id="system-time" class="font-mono font-bold text-zinc-300">加載中...</div>
-                <div class="text-[10px] text-zinc-500 uppercase tracking-widest">Global Sync Time</div>
-            </div>
-        </div>
-    </header>
+        </header>
+    </div>
 
     <!-- 主體內容區 (Main Workspace Layout) -->
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
         
+        <div id="market-view-crypto">
+
         <!-- 核心指標卡 (Top Core Dashboard Cards) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
@@ -521,6 +557,315 @@
 
         </div>
 
+        </div>
+        <!-- /market-view-crypto -->
+
+        <!-- ============================================================ -->
+        <!-- 台股觀測面板 (即時報價卡 + TradingView 圖表 + 市值權重) -->
+        <!-- ============================================================ -->
+        <div id="market-view-tw-stock" class="hidden space-y-6">
+
+            <!-- 台股即時報價小卡 (資料來源：證交所 mis.twse.com.tw 即時 API，經公用代理轉發) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 加權指數 -->
+                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3ATAIEX" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="^TWII" data-tw-name="加權指數" data-tw-code="TAIEX">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE 加權指數</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-1.5 text-zinc-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
+                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                        <div class="text-right text-zinc-500">
+                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 元大台灣50 (0050) -->
+                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A0050" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="0050.TW" data-tw-name="元大台灣50" data-tw-code="0050">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:0050 元大台灣50</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-1.5 text-zinc-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                        <div class="text-right text-zinc-500">
+                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 台積電 (2330) -->
+                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2330" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2330.TW" data-tw-name="台積電" data-tw-code="2330">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2330 台積電</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-1.5 text-zinc-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-accentCyan"></span>
+                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                        <div class="text-right text-zinc-500">
+                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 聯發科 (2454) -->
+                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2454" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-purple-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2454.TW" data-tw-name="聯發科" data-tw-code="2454">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2454 聯發科</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-1.5 text-zinc-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                        <div class="text-right text-zinc-500">
+                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 台達電 (2308) -->
+                <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A2308" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-emerald-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors" data-tw-quote="2308.TW" data-tw-name="台達電" data-tw-code="2308">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-zinc-400">TWSE:2308 台達電</span>
+                            <span data-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span>
+                        </div>
+                        <div class="flex items-baseline gap-3 mb-2">
+                            <div data-tw-price class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div>
+                            <div data-tw-change class="text-sm font-bold font-mono">--</div>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
+                        <div class="flex items-center gap-1.5 text-zinc-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            開盤: <strong data-tw-open class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                        <div class="text-right text-zinc-500">
+                            昨收: <strong data-tw-prevclose class="text-zinc-300 font-mono">--</strong>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 即時報價資料來源說明 -->
+            <div class="text-[11px] text-zinc-600 px-1 -mt-2">
+                <span class="text-zinc-500">*</span> 即時報價來源：臺灣證券交易所 <span class="font-mono text-zinc-500">mis.twse.com.tw</span> 盤中即時資訊（經公用代理轉發，每 5 秒更新）。開盤時間顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動；非開盤時段顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。點擊小卡可跳轉 TradingView 圖表。
+            </div>
+
+            <!-- 台股市值權重表格 (期交所前 50 大整理) -->
+            <div id="panel-tw-weight" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-accentPurple"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">台股市值權重</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">臺灣證券交易所發行量加權股價指數成分股暨市值比重（支援即時 Yahoo 自動更新）</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="refreshTwTop50Weights()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-400 hover:bg-emerald-900/60 flex items-center gap-1.5 transition-colors" title="自動從 Yahoo 抓取最新市值並重新排序前50大">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 自動更新前50大
+                        </button>
+                        <a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往期交所查看完整資料">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                        <button onclick="toggleMaximize('panel-tw-weight')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
+                            <i id="panel-tw-weight-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 板塊分類篩選按鈕 -->
+                <div id="tw-weight-filters" class="flex flex-wrap items-center gap-2 mb-3"></div>
+
+                <!-- 搜尋框 -->
+                <div class="relative w-full sm:w-64 mb-4">
+                    <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                    <input id="tw-weight-search" type="text" placeholder="搜尋代號 / 名稱..." oninput="renderTwWeightTable(this.value)" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500">
+                </div>
+                <div id="tw-weight-container" class="w-full max-h-[600px] overflow-y-auto rounded-xl border border-zinc-900 bg-black relative">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-darkCard z-10">
+                            <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-4 w-16 text-center">排行</th>
+                                <th class="py-3 px-4">證券代號</th>
+                                <th class="py-3 px-4">證券名稱</th>
+                                <th class="py-3 px-4 text-right">市值佔大盤比重</th>
+                                <th class="py-3 px-4 text-right hidden md:table-cell">實際市值 (TWD)</th>
+                                <th class="py-3 px-4 text-center w-20">圖表</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tw-weight-tbody" class="divide-y divide-zinc-800/50 text-sm"></tbody>
+                    </table>
+                </div>
+                <div class="text-[11px] text-zinc-600 px-1 mt-3">
+                    <span class="text-zinc-500">*</span> 資料來源：<a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="text-accentCyan hover:underline">臺灣期貨交易所</a>，資料日期 2026/06/30（每月月底更新一次，需手動更新資料）。此處僅列前 50 大成分股。
+                </div>
+            </div>
+
+        </div>
+        <!-- /market-view-tw-stock -->
+
+        <!-- ============================================================ -->
+        <!-- 美股觀測面板 (TradingView 內嵌 Widget，可自行修改代碼客製觀測清單) -->
+        <!-- ============================================================ -->
+        <div id="market-view-us-stock" class="hidden space-y-6">
+
+            <!-- 美股跑馬燈行情列 (Ticker Tape) -->
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-1 overflow-hidden">
+                <div id="us-ticker-container" class="w-full"></div>
+            </div>
+
+            <!-- 美股自選代碼卡片 (可自行修改 symbol 欄位客製化) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:SPY"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:QQQ"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:AAPL"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:TSLA"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:NVDA"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:MSFT"></div>
+            </div>
+
+            <!-- 美股大盤分析：主圖表 (可用右上角切換按鈕，或直接在圖表內搜尋任何代碼) -->
+            <div id="panel-us-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="flag" class="w-5 h-5 text-accentCyan"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">美股大盤分析</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">TradingView 即時圖表嵌入，可於圖表內直接搜尋任何美股代碼</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
+                        <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
+                            <button onclick="switchTvChart('us', 'AMEX:SPY', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
+                                S&P 500
+                            </button>
+                            <button onclick="switchTvChart('us', 'AMEX:QQQ', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                那斯達克100
+                            </button>
+                            <button onclick="switchTvChart('us', 'NASDAQ:NVDA', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                輝達
+                            </button>
+                        </div>
+                        <a id="us-chart-source-link" href="https://tw.tradingview.com/symbols/AMEX-SPY/" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 TradingView 查看">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                        <button onclick="toggleMaximize('panel-us-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
+                            <i id="panel-us-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="us-chart-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+            </div>
+
+            <!-- 美股產業板塊熱力圖 (Stock Heatmap) -->
+            <div id="panel-us-heatmap" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="grid-3x3" class="w-5 h-5 text-accentPurple"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">標普 500 產業板塊熱力圖</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">依市值權重呈現各產業/個股當日漲跌強弱，一眼看穿資金流向</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleMaximize('panel-us-heatmap')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
+                        <i id="panel-us-heatmap-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div id="us-heatmap-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+            </div>
+
+            <!-- 美股技術分析儀表 + 財經日曆 -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 技術分析評級儀表 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="gauge" class="w-5 h-5 text-accentPurple"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">技術分析評級</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">S&amp;P 500 多空儀表</p>
+                        </div>
+                    </div>
+                    <div id="us-technical-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+                </div>
+                <!-- 財經日曆 -->
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative lg:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                            <i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">全球財經日曆</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程</p>
+                        </div>
+                    </div>
+                    <div id="us-calendar-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+                </div>
+            </div>
+
+            <!-- 美股自選觀察清單 (等同加密貨幣頁的「前10大」表格，可自行增減 symbols) -->
+            <div id="panel-us-table" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                        <i data-lucide="list" class="w-5 h-5 text-accentCyan"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-extrabold text-white">美股自選觀察清單</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">TradingView 觀察清單嵌入，可修改程式碼中的 symbols 陣列客製化追蹤標的</p>
+                    </div>
+                </div>
+                <div id="us-watchlist-container" class="w-full h-[500px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+            </div>
+
+        </div>
+        <!-- /market-view-us-stock -->
+
+
     </main>
 
     <!-- 頁腳 (Footer) -->
@@ -553,6 +898,671 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // ============================================================
+        // 市場切換頁籤 (加密貨幣 / 台股 / 美股) 與 TradingView Widget 載入邏輯
+        // ============================================================
+        const marketTabActiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40";
+        const marketTabInactiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent";
+        const twStockState = { chartLoaded: false, cardsLoaded: false, watchlistLoaded: false, extrasLoaded: false };
+        const usStockState = { chartLoaded: false, cardsLoaded: false, watchlistLoaded: false, extrasLoaded: false };
+
+        // 各市場的標題與副標題文字
+        const marketHeaders = {
+            crypto: { title: '加密貨幣數據圖表', subtitle: 'CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION' },
+            'tw-stock': { title: '台股數據圖表', subtitle: 'TAIWAN STOCK MARKET & TRADINGVIEW INTEGRATION' },
+            'us-stock': { title: '美股數據圖表', subtitle: 'US STOCK MARKET & TRADINGVIEW INTEGRATION' }
+        };
+
+        function switchMarketView(view) {
+            const views = { crypto: 'market-view-crypto', 'tw-stock': 'market-view-tw-stock', 'us-stock': 'market-view-us-stock' };
+            Object.entries(views).forEach(([key, id]) => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', key !== view);
+                const tabBtn = document.getElementById(`market-tab-${key}`);
+                if (tabBtn) tabBtn.className = key === view ? marketTabActiveClass : marketTabInactiveClass;
+            });
+
+            // 更新頂部標題與副標題
+            const header = marketHeaders[view];
+            if (header) {
+                const titleEl = document.getElementById('market-title');
+                const subtitleEl = document.getElementById('market-subtitle');
+                if (titleEl) titleEl.innerText = header.title;
+                if (subtitleEl) subtitleEl.innerText = header.subtitle;
+            }
+
+            // 懶載入：切換到台股/美股頁籤時才第一次載入 TradingView Widget，避免拖慢初始頁面速度
+            if (view === 'tw-stock') initTwStockView();
+            if (view === 'us-stock') initUsStockView();
+        }
+
+        // 在指定容器內，將所有帶有 data-tv-mini-symbol 屬性的卡片渲染成 TradingView 迷你報價 Widget
+        function renderMiniSymbolCards(rootEl) {
+            if (!rootEl) return;
+            rootEl.querySelectorAll('[data-tv-mini-symbol]').forEach(card => {
+                const symbol = card.getAttribute('data-tv-mini-symbol');
+                card.innerHTML = '';
+                const container = document.createElement('div');
+                container.className = 'tradingview-widget-container';
+                container.style.height = '100%';
+                container.style.width = '100%';
+                const widgetDiv = document.createElement('div');
+                widgetDiv.className = 'tradingview-widget-container__widget';
+                container.appendChild(widgetDiv);
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+                script.async = true;
+                script.text = JSON.stringify({
+                    symbol: symbol,
+                    width: '100%',
+                    height: '100%',
+                    locale: 'zh_TW',
+                    dateRange: '1D',
+                    colorTheme: 'dark',
+                    isTransparent: true,
+                    autosize: true
+                });
+                container.appendChild(script);
+                card.appendChild(container);
+            });
+        }
+
+        // 切換台股/美股大盤分析主圖表的觀測標的
+        function switchTvChart(market, symbol, btnEl) {
+            const containerId = market === 'tw' ? 'tw-chart-container' : 'us-chart-container';
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = '';
+            const widgetContainer = document.createElement('div');
+            widgetContainer.className = 'tradingview-widget-container';
+            widgetContainer.style.height = '100%';
+            widgetContainer.style.width = '100%';
+            const widgetInner = document.createElement('div');
+            widgetInner.className = 'tradingview-widget-container__widget';
+            widgetInner.style.height = 'calc(100% - 32px)';
+            widgetInner.style.width = '100%';
+            widgetContainer.appendChild(widgetInner);
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+            script.async = true;
+            script.text = JSON.stringify({
+                autosize: true,
+                symbol: symbol,
+                interval: '60',
+                timezone: 'Asia/Taipei',
+                theme: 'dark',
+                style: '1',
+                locale: 'zh_TW',
+                toolbar_bg: '#141416',
+                enable_publishing: false,
+                allow_symbol_change: true,
+                hide_side_toolbar: false,
+                support_host: 'https://www.tradingview.com'
+            });
+            widgetContainer.appendChild(script);
+            container.appendChild(widgetContainer);
+
+            // 更新頁籤按鈕高亮狀態
+            if (btnEl) {
+                const tabClass = market === 'tw' ? '.tv-chart-tab-tw' : '.tv-chart-tab-us';
+                document.querySelectorAll(tabClass).forEach(btn => {
+                    btn.className = `${market === 'tw' ? 'tv-chart-tab-tw' : 'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all`;
+                });
+                btnEl.className = `${market === 'tw' ? 'tv-chart-tab-tw' : 'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20`;
+            }
+
+            // 更新右上角「前往 TradingView」超連結，依標的自動導向對應頁面
+            const linkId = market === 'tw' ? 'tw-chart-source-link' : 'us-chart-source-link';
+            const link = document.getElementById(linkId);
+            if (link) link.setAttribute('href', `https://tw.tradingview.com/symbols/${symbol.replace(':', '-')}/`);
+        }
+
+        // 載入自選觀察清單 Widget (等同加密貨幣頁「前十大」表格，可自行修改 symbols 客製化)
+        function renderWatchlistWidget(containerId, title, symbols) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const widgetContainer = document.createElement('div');
+            widgetContainer.className = 'tradingview-widget-container';
+            widgetContainer.style.height = '100%';
+            widgetContainer.style.width = '100%';
+            const widgetInner = document.createElement('div');
+            widgetInner.className = 'tradingview-widget-container__widget';
+            widgetContainer.appendChild(widgetInner);
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
+            script.async = true;
+            script.text = JSON.stringify({
+                colorTheme: 'dark',
+                dateRange: '12M',
+                showChart: true,
+                locale: 'zh_TW',
+                largeChartUrl: '',
+                isTransparent: true,
+                showSymbolLogo: true,
+                showFloatingTooltip: false,
+                width: '100%',
+                height: '100%',
+                tabs: [{ title: title, symbols: symbols, originalTitle: title }]
+            });
+            widgetContainer.appendChild(script);
+            container.appendChild(widgetContainer);
+        }
+
+        // 通用：載入任一 TradingView Widget 到指定容器 (共用底層邏輯)
+        function renderTvWidget(containerId, scriptSrc, config) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const widgetContainer = document.createElement('div');
+            widgetContainer.className = 'tradingview-widget-container';
+            widgetContainer.style.height = '100%';
+            widgetContainer.style.width = '100%';
+            const widgetInner = document.createElement('div');
+            widgetInner.className = 'tradingview-widget-container__widget';
+            widgetContainer.appendChild(widgetInner);
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = scriptSrc;
+            script.async = true;
+            script.text = JSON.stringify(config);
+            widgetContainer.appendChild(script);
+            container.appendChild(widgetContainer);
+        }
+
+        // 跑馬燈行情列 (Ticker Tape)
+        function renderTickerTape(containerId, symbols) {
+            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js', {
+                symbols: symbols,
+                showSymbolLogo: true,
+                isTransparent: true,
+                displayMode: 'adaptive',
+                colorTheme: 'dark',
+                locale: 'zh_TW'
+            });
+        }
+
+        // 技術分析評級儀表 (Technical Analysis Gauge)
+        function renderTechnicalGauge(containerId, symbol) {
+            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js', {
+                interval: '1D',
+                width: '100%',
+                height: '100%',
+                symbol: symbol,
+                showIntervalTabs: true,
+                displayMode: 'single',
+                locale: 'zh_TW',
+                colorTheme: 'dark',
+                isTransparent: true
+            });
+        }
+
+        // 財經日曆 (Economic Calendar)
+        function renderEconomicCalendar(containerId, countryFilter) {
+            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-events.js', {
+                width: '100%',
+                height: '100%',
+                colorTheme: 'dark',
+                isTransparent: true,
+                locale: 'zh_TW',
+                importanceFilter: '0,1',
+                countryFilter: countryFilter
+            });
+        }
+
+        // 產業板塊熱力圖 (Stock Heatmap)
+        function renderStockHeatmap(containerId, dataSource) {
+            renderTvWidget(containerId, 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js', {
+                dataSource: dataSource,
+                blockSize: 'market_cap_basic',
+                blockColor: 'change',
+                grouping: 'sector',
+                locale: 'zh_TW',
+                symbolUrl: '',
+                colorTheme: 'dark',
+                hasTopBar: true,
+                isDataSetEnabled: false,
+                isZoomEnabled: true,
+                hasSymbolTooltip: true,
+                isMonoSize: false,
+                width: '100%',
+                height: '100%'
+            });
+        }
+
+        // ============================================================
+        // 台股即時報價 (資料來源：證交所 mis.twse.com.tw，經公用代理轉發)
+        // ============================================================
+        let twQuotesTimer = null;
+
+        // 判斷台股是否在盤中 (台北時間週一~週五 09:00~13:30)
+        function isTwMarketOpen() {
+            try {
+                const twTimeStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
+                const t = new Date(twTimeStr);
+                const day = t.getDay();
+                if (day === 0 || day === 6) return false;
+                const mins = t.getHours() * 60 + t.getMinutes();
+                return mins >= (9 * 60) && mins <= (13 * 60 + 30);
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // 觸發價格閃爍效果 (綠漲紅跌)
+        function flashTwPrice(el, isUp) {
+            if (!el) return;
+            el.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.18)' : 'rgba(244, 63, 94, 0.18)';
+            el.style.borderRadius = '6px';
+            el.style.padding = '2px 8px';
+            el.style.marginLeft = '-8px';
+            setTimeout(() => { el.style.backgroundColor = 'transparent'; }, 350);
+        }
+
+        // 更新單張台股卡片的 UI (Yahoo Finance 版本)
+        function updateTwCard(card, info, marketOpenFallback) {
+            const priceEl = card.querySelector('[data-tw-price]');
+            const changeEl = card.querySelector('[data-tw-change]');
+            const statusEl = card.querySelector('[data-tw-status]');
+            const openEl = card.querySelector('[data-tw-open]');
+            const prevCloseEl = card.querySelector('[data-tw-prevclose]');
+
+            if (!info || !priceEl) return;
+
+            let last = parseFloat(info.regularMarketPrice);
+            if (isNaN(last)) return;
+
+            const prevClose = parseFloat(info.regularMarketPreviousClose) || 0;
+            const open = parseFloat(info.regularMarketOpen) || 0;
+            const change = parseFloat(info.regularMarketChange) || (last - prevClose);
+            const changePct = parseFloat(info.regularMarketChangePercent) || (prevClose ? (change / prevClose) * 100 : 0);
+            const marketState = info.marketState || '';
+
+            const prevShown = parseFloat((priceEl.innerText || '').replace(/[^0-9.]/g, '')) || 0;
+            const isUp = change >= 0;
+            const sign = change >= 0 ? '+' : '';
+
+            priceEl.innerText = last.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            priceEl.className = `text-4xl font-black font-mono tracking-tight transition-colors ${change > 0 ? 'text-rose-400' : (change < 0 ? 'text-emerald-400' : 'text-white')}`;
+            changeEl.innerText = `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)`;
+            changeEl.className = `text-sm font-bold font-mono ${change > 0 ? 'text-rose-500' : (change < 0 ? 'text-emerald-400' : 'text-zinc-400')}`;
+
+            if (openEl && !isNaN(open)) openEl.innerText = open.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (prevCloseEl && !isNaN(prevClose)) prevCloseEl.innerText = prevClose.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            if (statusEl) {
+                const isRegular = marketState === 'REGULAR' || marketState === 'OPEN' || (marketOpenFallback && !marketState);
+                if (isRegular) {
+                    statusEl.innerText = 'LIVE';
+                    statusEl.className = 'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';
+                    if (prevShown > 0 && Math.abs(last - prevShown) > 0.001) flashTwPrice(priceEl, isUp);
+                } else {
+                    const label = marketState ? marketState : '收盤';
+                    statusEl.innerText = label;
+                    statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';
+                }
+            }
+        }
+
+        // 抓取所有台股卡片的即時報價 (Yahoo Finance v7/finance/quote)
+        function fetchTwQuotes() {
+            const cards = Array.from(document.querySelectorAll('[data-tw-quote]'));
+            if (cards.length === 0) return;
+            const marketOpenFallback = isTwMarketOpen();
+
+            const yahooSymbols = [...new Set(cards.map(c => c.getAttribute('data-tw-quote')))];
+            if (yahooSymbols.length === 0) return;
+
+            const symbolsParam = yahooSymbols.join(',');
+            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbolsParam)}&lang=zh_TW&region=TW`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+
+            fetch(proxyUrl)
+                .then(res => { if (!res.ok) throw new Error('proxy failed'); return res.json(); })
+                .then(wrapped => {
+                    const data = JSON.parse(wrapped.contents || '{}');
+                    const results = (data.quoteResponse && data.quoteResponse.result) || [];
+                    const quoteMap = {};
+                    results.forEach(item => {
+                        if (item.symbol) quoteMap[item.symbol] = item;
+                    });
+                    cards.forEach(card => {
+                        const sym = card.getAttribute('data-tw-quote');
+                        const info = quoteMap[sym];
+                        if (info) updateTwCard(card, info, marketOpenFallback);
+                    });
+                })
+                .catch(err => {
+                    console.warn('台股即時報價 (Yahoo) 取得失敗:', err);
+                    cards.forEach(card => {
+                        const statusEl = card.querySelector('[data-tw-status]');
+                        if (statusEl && (statusEl.innerText === '--' || statusEl.innerText === 'LIVE')) {
+                            statusEl.innerText = '離線';
+                            statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';
+                        }
+                    });
+                });
+        }
+
+        // 啟動台股即時報價輪詢 (盤中每 5 秒；非盤中每 60 秒抓一次收盤價即可)
+        function startTwRealtimeQuotes() {
+            fetchTwQuotes();
+            if (twQuotesTimer) clearInterval(twQuotesTimer);
+            const tick = () => {
+                fetchTwQuotes();
+                // 依當前是否盤中動態調整下次間隔
+                clearInterval(twQuotesTimer);
+                twQuotesTimer = setInterval(tick, isTwMarketOpen() ? 5000 : 60000);
+            };
+            twQuotesTimer = setInterval(tick, isTwMarketOpen() ? 5000 : 60000);
+        }
+
+        // ============================================================
+        // 台股市值權重前 50 大 (資料來源：期交所，資料日期 2026/06/30，每月更新)
+        // 若要更新，前往 https://www.taifex.com.tw/cht/9/futuresQADetail 複製最新數據
+        // ============================================================
+        const TW_WEIGHT_TOP50 = [
+            { r: 1, code: '2330', name: '台積電', w: 41.6491 },
+            { r: 2, code: '2454', name: '聯發科', w: 4.5373 },
+            { r: 3, code: '2308', name: '台達電', w: 3.3755 },
+            { r: 4, code: '2317', name: '鴻海', w: 2.3424 },
+            { r: 5, code: '3711', name: '日月光投控', w: 2.0215 },
+            { r: 6, code: '2327', name: '國巨', w: 1.5737 },
+            { r: 7, code: '2303', name: '聯電', w: 1.3788 },
+            { r: 8, code: '2383', name: '台光電', w: 1.2871 },
+            { r: 9, code: '2881', name: '富邦金', w: 1.2089 },
+            { r: 10, code: '3037', name: '欣興', w: 1.1235 },
+            { r: 11, code: '2882', name: '國泰金', w: 0.961 },
+            { r: 12, code: '2382', name: '廣達', w: 0.9473 },
+            { r: 13, code: '2408', name: '南亞科', w: 0.9344 },
+            { r: 14, code: '2345', name: '智邦', w: 0.933 },
+            { r: 15, code: '2891', name: '中信金', w: 0.9311 },
+            { r: 16, code: '1303', name: '南亞', w: 0.88 },
+            { r: 17, code: '7769', name: '鴻勁', w: 0.7758 },
+            { r: 18, code: '2412', name: '中華電', w: 0.7315 },
+            { r: 19, code: '3017', name: '奇鋐', w: 0.6599 },
+            { r: 20, code: '2344', name: '華邦電', w: 0.6223 },
+            { r: 21, code: '2360', name: '致茂', w: 0.6121 },
+            { r: 22, code: '2885', name: '元大金', w: 0.5837 },
+            { r: 23, code: '6669', name: '緯穎', w: 0.574 },
+            { r: 24, code: '2887', name: '台新新光金', w: 0.551 },
+            { r: 25, code: '8046', name: '南電', w: 0.5103 },
+            { r: 26, code: '2059', name: '川湖', w: 0.4674 },
+            { r: 27, code: '2886', name: '兆豐金', w: 0.4557 },
+            { r: 28, code: '4958', name: '臻鼎-KY', w: 0.4495 },
+            { r: 29, code: '3443', name: '創意', w: 0.4327 },
+            { r: 30, code: '2368', name: '金像電', w: 0.4135 },
+            { r: 31, code: '2890', name: '永豐金', w: 0.3854 },
+            { r: 32, code: '3008', name: '大立光', w: 0.3739 },
+            { r: 33, code: '2884', name: '玉山金', w: 0.3713 },
+            { r: 34, code: '3481', name: '群創', w: 0.3658 },
+            { r: 35, code: '2880', name: '華南金', w: 0.3524 },
+            { r: 36, code: '6505', name: '台塑化', w: 0.3498 },
+            { r: 37, code: '2357', name: '華碩', w: 0.3465 },
+            { r: 38, code: '2301', name: '光寶科', w: 0.3427 },
+            { r: 39, code: '6446', name: '藥華藥', w: 0.3408 },
+            { r: 40, code: '3231', name: '緯創', w: 0.3359 },
+            { r: 41, code: '3653', name: '健策', w: 0.3354 },
+            { r: 42, code: '2883', name: '凱基金', w: 0.3247 },
+            { r: 43, code: '2892', name: '第一金', w: 0.3138 },
+            { r: 44, code: '3189', name: '景碩', w: 0.3129 },
+            { r: 45, code: '3045', name: '台灣大', w: 0.2891 },
+            { r: 46, code: '2395', name: '研華', w: 0.2847 },
+            { r: 47, code: '1216', name: '統一', w: 0.2821 },
+            { r: 48, code: '2379', name: '瑞昱', w: 0.2769 },
+            { r: 49, code: '2449', name: '京元電子', w: 0.275 },
+            { r: 50, code: '2603', name: '長榮', w: 0.2662 }
+        ];
+
+        const SECTOR_MAP = {
+            '2330': '半導體', '2454': '半導體', '2303': '半導體', '2379': '半導體', '3711': '半導體',
+            '2344': '半導體', '2408': '半導體', '7769': '半導體', '3017': '半導體', '2360': '半導體',
+            '6669': '半導體', '3443': '半導體', '2368': '半導體', '3008': '半導體', '3481': '半導體',
+            '6446': '半導體', '3189': '半導體', '2308': '電子', '2317': '電子', '2382': '電子',
+            '2357': '電子', '3231': '電子', '2345': '電子', '2383': '電子', '2327': '電子',
+            '2881': '金融', '2882': '金融', '2891': '金融', '2886': '金融', '2884': '金融',
+            '2885': '金融', '2887': '金融', '2880': '金融', '2890': '金融', '2883': '金融',
+            '2892': '金融', '2412': '電信', '3045': '電信', '1303': '傳產', '1301': '傳產',
+            '2002': '傳產', '1216': '傳產', '6505': '傳產', '2603': '航運', '2059': '其他',
+            '4958': '電子', '3653': '電子', '2395': '電子', '2449': '半導體', '8046': '電子'
+        };
+
+        let twWeightSectorFilter = '全部';
+        let twMarketCapMap = {};
+
+        // 渲染市值權重前 50 大表格 (支援搜尋過濾)
+        function renderTwWeightFilters() {
+            const filterEl = document.getElementById('tw-weight-filters');
+            if (!filterEl) return;
+            const allSectors = ['全部', ...new Set(Object.values(SECTOR_MAP))];
+            filterEl.innerHTML = allSectors.map(sector => {
+                const active = sector === twWeightSectorFilter;
+                return `<button onclick="setTwWeightSectorFilter('${sector}')" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${active ? 'bg-accentPurple/10 text-accentPurple border border-accentPurple/30' : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-850'}">${sector}</button>`;
+            }).join('');
+        }
+
+        function setTwWeightSectorFilter(sector) {
+            twWeightSectorFilter = sector;
+            renderTwWeightFilters();
+            const kwInput = document.getElementById('tw-weight-search');
+            renderTwWeightTable(kwInput ? kwInput.value : '');
+        }
+
+        function renderTwWeightTable(keyword) {
+            const tbody = document.getElementById('tw-weight-tbody');
+            if (!tbody) return;
+            const kw = (keyword || document.getElementById('tw-weight-search')?.value || '').trim().toLowerCase();
+
+            let rows = TW_WEIGHT_TOP50.filter(item => {
+                const matchKw = item.code.toLowerCase().includes(kw) || item.name.toLowerCase().includes(kw);
+                const sector = SECTOR_MAP[item.code] || '其他';
+                const matchSector = twWeightSectorFilter === '全部' || sector === twWeightSectorFilter;
+                return matchKw && matchSector;
+            });
+
+            const maxW = TW_WEIGHT_TOP50[0].w;
+
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';
+                return;
+            }
+
+            const formatMcap = (num) => {
+                if (!num || num <= 0) return '<span class="text-zinc-500">--</span>';
+                const inTrillion = num / 1e12;
+                if (inTrillion >= 1) {
+                    return `<span class="font-mono font-bold text-emerald-400">${inTrillion.toFixed(2)} <span class="text-[10px] text-zinc-400">兆</span></span>`;
+                }
+                const inHundredMillion = num / 1e8;
+                return `<span class="font-mono font-bold text-zinc-200">${Math.round(inHundredMillion).toLocaleString()} <span class="text-[10px] text-zinc-400">億</span></span>`;
+            };
+
+            tbody.innerHTML = rows.map(item => {
+                const barPct = (item.w / maxW) * 100;
+                const chartUrl = `https://tw.tradingview.com/chart/jzJAOmW9/?symbol=TWSE%3A${item.code}`;
+                const yahooSym = `${item.code}.TW`;
+                const mcapHtml = formatMcap(twMarketCapMap[yahooSym]);
+                const sector = SECTOR_MAP[item.code] || '其他';
+                return `
+                    <tr class="hover:bg-zinc-800/30 transition-colors group">
+                        <td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${item.r}</td>
+                        <td class="py-3 px-4 font-mono font-bold text-zinc-200">${item.code}</td>
+                        <td class="py-3 px-4 font-bold text-white group-hover:text-accentCyan transition-colors">
+                            ${item.name}
+                            <span class="ml-2 text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono align-middle">${sector}</span>
+                        </td>
+                        <td class="py-3 px-4 text-right">
+                            <div class="inline-flex flex-col items-end gap-1 w-full max-w-[160px] ml-auto">
+                                <span class="font-mono font-bold text-zinc-100">${item.w.toFixed(4)}%</span>
+                                <div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-accentCyan to-accentPurple rounded-full" style="width: ${barPct}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-right hidden md:table-cell">
+                            ${mcapHtml}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1">
+                                <!-- TradingView -->
+                                <a href="${chartUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="在 TradingView 開啟 ${item.name} 圖表">
+                                    <i data-lucide="line-chart" class="w-3.5 h-3.5"></i>
+                                </a>
+                                <!-- Yahoo 股市 -->
+                                <a href="https://tw.stock.yahoo.com/quote/${item.code}.TW" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="在 Yahoo 股市開啟 ${item.name}">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>`;
+            }).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        async function loadTwMarketCaps() {
+            if (Object.keys(twMarketCapMap).length > 0) return;
+            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
+            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+            try {
+                const res = await fetch(proxyUrl);
+                const wrapped = await res.json();
+                const data = JSON.parse(wrapped.contents || '{}');
+                const results = (data.quoteResponse && data.quoteResponse.result) || [];
+                twMarketCapMap = {};
+                results.forEach(r => {
+                    if (r.symbol && typeof r.marketCap === 'number' && r.marketCap > 0) {
+                        twMarketCapMap[r.symbol] = r.marketCap;
+                    }
+                });
+                const kwInput = document.getElementById('tw-weight-search');
+                renderTwWeightTable(kwInput ? kwInput.value : '');
+            } catch (e) {
+                console.warn('載入台股市值權重市值失敗:', e);
+            }
+        }
+
+        async function refreshTwTop50Weights() {
+            const btns = document.querySelectorAll('button[onclick*="refreshTwTop50Weights"]');
+            btns.forEach(b => b.disabled = true);
+
+            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
+            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+
+            try {
+                const res = await fetch(proxyUrl);
+                const wrapped = await res.json();
+                const data = JSON.parse(wrapped.contents || '{}');
+                const results = (data.quoteResponse && data.quoteResponse.result) || [];
+
+                const capMap = {};
+                results.forEach(r => {
+                    if (r.symbol && r.marketCap) capMap[r.symbol] = r.marketCap;
+                });
+
+                let liveList = TW_WEIGHT_TOP50.map(item => {
+                    const mcap = capMap[`${item.code}.TW`] || 0;
+                    return { ...item, liveMcap: mcap };
+                }).filter(item => item.liveMcap > 0);
+
+                liveList.sort((a, b) => b.liveMcap - a.liveMcap);
+
+                const totalMcap = liveList.reduce((sum, item) => sum + item.liveMcap, 0);
+
+                liveList = liveList.map((item, idx) => ({
+                    ...item,
+                    r: idx + 1,
+                    w: totalMcap > 0 ? (item.liveMcap / totalMcap) * 100 : item.w
+                }));
+
+                TW_WEIGHT_TOP50.length = 0;
+                liveList.forEach(item => TW_WEIGHT_TOP50.push(item));
+
+                twMarketCapMap = capMap;
+                const kwInput = document.getElementById('tw-weight-search');
+                renderTwWeightTable(kwInput ? kwInput.value : '');
+                renderTwWeightFilters();
+
+                if (btns[0]) {
+                    const originalText = btns[0].innerHTML;
+                    btns[0].innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> 已更新`;
+                    setTimeout(() => {
+                        if (btns[0]) {
+                            btns[0].innerHTML = originalText;
+                            btns[0].disabled = false;
+                            if (window.lucide) lucide.createIcons();
+                        }
+                    }, 2000);
+                }
+            } catch (e) {
+                console.warn('自動更新前50大失敗:', e);
+                alert('自動更新失敗，請檢查網路或稍後再試');
+                btns.forEach(b => b.disabled = false);
+            }
+        }
+
+        // 台股頁籤初次切換時載入所有 Widget (僅執行一次)
+        function initTwStockView() {
+            if (!twStockState.extrasLoaded) {
+                startTwRealtimeQuotes();
+                renderTwWeightTable();
+                loadTwMarketCaps();
+                twStockState.extrasLoaded = true;
+            }
+        }
+
+        // 美股頁籤初次切換時載入所有 Widget (僅執行一次)
+        function initUsStockView() {
+            if (!usStockState.cardsLoaded) {
+                renderMiniSymbolCards(document.getElementById('market-view-us-stock'));
+                usStockState.cardsLoaded = true;
+            }
+            if (!usStockState.chartLoaded) {
+                switchTvChart('us', 'AMEX:SPY', document.querySelector('.tv-chart-tab-us'));
+                usStockState.chartLoaded = true;
+            }
+            if (!usStockState.extrasLoaded) {
+                // 跑馬燈
+                renderTickerTape('us-ticker-container', [
+                    { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' },
+                    { proName: 'FOREXCOM:NSXUSD', title: '那斯達克100' },
+                    { proName: 'FOREXCOM:DJI', title: '道瓊工業' },
+                    { proName: 'NASDAQ:AAPL', title: '蘋果' },
+                    { proName: 'NASDAQ:NVDA', title: '輝達' },
+                    { proName: 'NASDAQ:TSLA', title: '特斯拉' },
+                    { proName: 'TVC:VIX', title: '恐慌指數' },
+                    { proName: 'TVC:DXY', title: '美元指數' }
+                ]);
+                // 產業板塊熱力圖 (SPX500)
+                renderStockHeatmap('us-heatmap-container', 'SPX500');
+                // 技術分析儀表 (S&P 500)
+                renderTechnicalGauge('us-technical-container', 'AMEX:SPY');
+                // 財經日曆 (聚焦美國、歐元區、中國、日本)
+                renderEconomicCalendar('us-calendar-container', 'us,eu,cn,jp,gb');
+                usStockState.extrasLoaded = true;
+            }
+            if (!usStockState.watchlistLoaded) {
+                renderWatchlistWidget('us-watchlist-container', '美股自選', [
+                    { s: 'AMEX:SPY', d: 'S&P 500' },
+                    { s: 'AMEX:QQQ', d: '那斯達克100' },
+                    { s: 'NASDAQ:AAPL', d: '蘋果' },
+                    { s: 'NASDAQ:MSFT', d: '微軟' },
+                    { s: 'NASDAQ:NVDA', d: '輝達' },
+                    { s: 'NASDAQ:TSLA', d: '特斯拉' },
+                    { s: 'NASDAQ:GOOGL', d: 'Google' },
+                    { s: 'NASDAQ:AMZN', d: '亞馬遜' },
+                    { s: 'NASDAQ:META', d: 'Meta' },
+                    { s: 'NASDAQ:AVGO', d: '博通' }
+                ]);
+                usStockState.watchlistLoaded = true;
+            }
+        }
 
         function toggleMaximize(id) {
             const el = document.getElementById(id);
@@ -749,14 +1759,14 @@
                         
                         priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-blue-400' : 'text-rose-500'}`;
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
                         
                         if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
                         if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
 
                         if (prevPrice > 0 && currentPrice !== prevPrice) {
                             const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(59, 130, 246, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
                             priceEl.style.borderRadius = '6px';
                             priceEl.style.padding = '2px 8px';
                             priceEl.style.marginLeft = '-8px';
@@ -782,14 +1792,14 @@
                         
                         priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-yellow-400' : 'text-rose-500'}`;
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
                         
                         if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
                         if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
 
                         if (prevPrice > 0 && currentPrice !== prevPrice) {
                             const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(234, 179, 8, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
                             priceEl.style.borderRadius = '6px';
                             priceEl.style.padding = '2px 8px';
                             priceEl.style.marginLeft = '-8px';
@@ -848,14 +1858,14 @@
                         
                         priceEl.innerText = '$' + currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         changeEl.innerText = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
-                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-blue-400' : 'text-rose-500'}`;
+                        changeEl.className = `text-sm font-bold font-mono ${changePercent >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
                         
                         if (highEl) highEl.innerText = '$' + parseFloat(data.highPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
                         if (lowEl) lowEl.innerText = '$' + parseFloat(data.lowPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
 
                         if (prevPrice > 0 && currentPrice !== prevPrice) {
                             const isUp = currentPrice >= prevPrice;
-                            priceEl.style.backgroundColor = isUp ? 'rgba(59, 130, 246, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+                            priceEl.style.backgroundColor = isUp ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
                             priceEl.style.borderRadius = '6px';
                             priceEl.style.padding = '2px 8px';
                             priceEl.style.marginLeft = '-8px';
