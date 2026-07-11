@@ -563,30 +563,30 @@
                 <div id="us-heatmap-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
 
-            <!-- 美股技術分析儀表 + 財經日曆 -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 美股技術分析評級 (滿版，與台股一致) -->
+            <div class="space-y-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-5 h-5 text-accentPurple"></i></div>
-                        <div class="flex-1"><h2 id="tech-title" class="text-md font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">VT 全球股市多空儀表</p></div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
+                        <div class="flex-1"><h2 id="tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">VT 全球股市多空儀表</p></div>
                         <a id="tech-source-link" href="https://tw.tradingview.com/symbols/AMEX-VT/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                     </div>
                     <div class="flex items-center gap-1.5 mb-3">
-                        <div class="relative flex-1">
-                            <input id="tech-symbol-input" type="text" placeholder="輸入股票代號 (例：NVDA、AAPL、2330)" onkeydown="if(event.key==='Enter')applyTechSymbol()" class="w-full bg-zinc-900 border border-zinc-800 focus:border-accentPurple/50 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-600 outline-none transition-colors">
-                            <i data-lucide="search" class="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+                        <div class="relative flex-1 max-w-md">
+                            <input id="tech-symbol-input" type="text" placeholder="輸入股票代號 (例：NVDA、AAPL)" onkeydown="if(event.key==='Enter')applyTechSymbol()" class="w-full bg-zinc-900 border border-zinc-800 focus:border-accentPurple/50 rounded-lg pl-8 pr-3 py-2 text-sm text-white placeholder-zinc-600 outline-none transition-colors">
+                            <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
                         </div>
-                        <button onclick="applyTechSymbol()" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-accentPurple/15 text-accentPurple border border-accentPurple/30 hover:bg-accentPurple/25 transition-colors shrink-0">查詢</button>
-                        <button onclick="resetTechSymbol()" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-colors shrink-0" title="回到預設 VT">重設</button>
+                        <button onclick="applyTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold bg-accentPurple/15 text-accentPurple border border-accentPurple/30 hover:bg-accentPurple/25 transition-colors shrink-0">查詢</button>
+                        <button onclick="resetTechSymbol()" class="text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-colors shrink-0" title="回到預設 VT">重設</button>
                     </div>
-                    <div class="flex items-center gap-1.5 mb-3">
-                        <button onclick="switchTechInterval('1D', this)" class="tech-interval-btn text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30">一天</button>
-                        <button onclick="switchTechInterval('1W', this)" class="tech-interval-btn text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一週</button>
-                        <button onclick="switchTechInterval('1M', this)" class="tech-interval-btn text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一月</button>
+                    <div class="flex items-center gap-1.5 mb-4">
+                        <button onclick="switchTechInterval('1D', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentPurple/15 text-accentPurple border border-accentPurple/30">一天</button>
+                        <button onclick="switchTechInterval('1W', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一週</button>
+                        <button onclick="switchTechInterval('1M', this)" class="tech-interval-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">一月</button>
                     </div>
-                    <div id="us-technical-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
+                    <div id="us-technical-container" class="w-full h-[520px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative lg:col-span-2">
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">全球財經日曆</h2><p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程（欄位由左至右：實際 / 預測 / 前期）</p></div>
@@ -811,7 +811,7 @@
             if(btn){const tc=market==='tw'?'.tv-chart-tab-tw':'.tv-chart-tab-us';document.querySelectorAll(tc).forEach(b=>b.className=`${market==='tw'?'tv-chart-tab-tw':'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all`);btn.className=`${market==='tw'?'tv-chart-tab-tw':'tv-chart-tab-us'} text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20`;}
             const lid=market==='tw'?'tw-chart-source-link':'us-chart-source-link';const l=document.getElementById(lid);if(l)l.setAttribute('href',`https://tw.tradingview.com/symbols/${symbol.replace(':','-')}/`);}
         function renderTvWidget(cid,src,cfg){const ct=document.getElementById(cid);if(!ct)return;ct.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src=src;s.async=true;s.text=JSON.stringify(cfg);c.appendChild(s);ct.appendChild(c);}
-        function renderTechnicalGauge(cid,sym,interval){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',{interval:interval||'1D',width:'100%',height:'100%',symbol:sym,showIntervalTabs:false,displayMode:'single',locale:'zh_TW',colorTheme:'dark',isTransparent:true});}
+        function renderTechnicalGauge(cid,sym,interval){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',{interval:interval||'1D',width:'100%',height:'100%',symbol:sym,showIntervalTabs:false,displayMode:'multiple',locale:'zh_TW',colorTheme:'dark',isTransparent:true});}
         // 自訂技術分析時間區間切換 (一天/一週/一月)，取代 TradingView 內建含分鐘級的 tab 列
         let techCurrentSymbol='AMEX:VT',techCurrentInterval='1D';
         function switchTechInterval(interval,btn){
