@@ -157,8 +157,8 @@
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-accentPurple"></span>估算 mNAV 溢價: <strong class="text-zinc-300 font-mono">1.02x</strong></div>
-                    <div class="text-right text-zinc-500">BTC 儲備: <strong class="text-white font-mono">~84.3 萬枚</strong></div>
+                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-accentPurple"></span>比特幣財務公司</div>
+                    <div class="text-right text-zinc-500">BTC 儲備: <strong class="text-white font-mono">約 84 萬枚</strong></div>
                 </div>
             </a>
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=NASDAQ%3ASTRC" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-amber-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
@@ -173,8 +173,8 @@
                     </div>
                 </div>
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
-                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong></div>
-                    <div class="text-right text-zinc-500">Par 面值折價: <strong class="text-rose-400 font-mono">-14.10%</strong></div>
+                    <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Strategy 永續優先股</div>
+                    <div class="text-right text-zinc-500">約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong></div>
                 </div>
             </a>
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
@@ -715,15 +715,31 @@
         function fetchFearAndGreedIndex(){
             fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://api.coinmarketcap.com/data-api/v3/fear-greed')}`).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const p=JSON.parse(d.contents);if(p&&p.data&&p.data.score)updateFngUI(Math.round(p.data.score));else throw 0;}).catch(()=>fetch('https://api.alternative.me/fng/').then(r=>r.json()).then(d=>{if(d&&d.data&&d.data.length)updateFngUI(parseInt(d.data[0].value));}).catch(()=>{}));
         }
-        function drawSparkline(cid,prices,pos){const c=document.getElementById(cid);if(!c)return;const x=c.getContext('2d');if(!x)return;const dpr=window.devicePixelRatio||1;c.width=96*dpr;c.height=32*dpr;x.scale(dpr,dpr);x.clearRect(0,0,96,32);if(!prices||prices.length<2)prices=pos?[10,11,10.5,12,11.8,13,12.9,14]:[14,13,13.5,12,12.5,11,11.5,10];const mn=Math.min(...prices),mx=Math.max(...prices),r=mx-mn===0?1:mx-mn;x.beginPath();x.lineWidth=1.5;x.strokeStyle=pos?'#10b981':'#ef4444';x.lineJoin='round';x.lineCap='round';prices.forEach((p,i)=>{const px=(i/(prices.length-1))*96,py=30-((p-mn)/r)*28;i===0?x.moveTo(px,py):x.lineTo(px,py);});x.stroke();x.lineTo(96,32);x.lineTo(0,32);x.closePath();const g=x.createLinearGradient(0,0,0,32);g.addColorStop(0,pos?'rgba(16,185,129,0.15)':'rgba(239,68,68,0.15)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fill();}
+        function drawSparkline(cid,prices,pos){const c=document.getElementById(cid);if(!c)return;const x=c.getContext('2d');if(!x)return;const dpr=window.devicePixelRatio||1;c.width=96*dpr;c.height=32*dpr;x.scale(dpr,dpr);x.clearRect(0,0,96,32);
+            if(!prices||prices.length<2){x.beginPath();x.lineWidth=1;x.strokeStyle='#3f3f46';x.setLineDash([3,3]);x.moveTo(4,16);x.lineTo(92,16);x.stroke();x.setLineDash([]);return;}
+            const mn=Math.min(...prices),mx=Math.max(...prices),r=mx-mn===0?1:mx-mn;x.beginPath();x.lineWidth=1.5;x.strokeStyle=pos?'#10b981':'#ef4444';x.lineJoin='round';x.lineCap='round';prices.forEach((p,i)=>{const px=(i/(prices.length-1))*96,py=30-((p-mn)/r)*28;i===0?x.moveTo(px,py):x.lineTo(px,py);});x.stroke();x.lineTo(96,32);x.lineTo(0,32);x.closePath();const g=x.createLinearGradient(0,0,0,32);g.addColorStop(0,pos?'rgba(16,185,129,0.15)':'rgba(239,68,68,0.15)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fill();}
         let cryptoDataList=[],searchFilter='';
-        function fetchCryptoData(silent=false){const tb=document.getElementById('crypto-table-body');if(!silent&&tb)tb.innerHTML='<tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500">正在獲取頂級主權波動資產...</td></tr>';
-            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=30').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax'];
+        // 主來源：CoinGecko markets API (含真實 7 日 sparkline)；後備：CoinLore
+        function fetchCryptoData(silent=false){
+            const tb=document.getElementById('crypto-table-body');
+            if(!silent&&tb)tb.innerHTML='<tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500">正在獲取頂級主權波動資產...</td></tr>';
+            const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax','busd','gusd','usdp'];
+            const cgUrl='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=24h';
+            return fetch(cgUrl,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
+                if(!Array.isArray(data)||!data.length)throw 0;
+                const fd=data.filter(c=>{const s=(c.symbol||'').toLowerCase(),n=(c.name||'').toLowerCase();return !SC.includes(s)&&!n.includes('stablecoin')&&!n.includes('tether')&&!n.includes('wrapped')&&!n.includes('pegged')&&!n.includes('staked')&&!n.includes('dollar')&&!n.includes('ethena');});
+                cryptoDataList=fd.slice(0,10).map(c=>({id:c.id,name:c.name,symbol:c.symbol,current_price:c.current_price,price_change_percentage_24h:c.price_change_percentage_24h||0,total_volume:c.total_volume||0,market_cap:c.market_cap||0,image:c.image||`https://assets.coincap.io/assets/icons/${(c.symbol||'').toLowerCase()}@2x.png`,sparkline_in_7d:{price:(c.sparkline_in_7d&&Array.isArray(c.sparkline_in_7d.price))?c.sparkline_in_7d.price:[]}}));
+                renderCryptoTable();upd();
+            }).catch(()=>fetchCryptoDataFallback(silent));
+        }
+        // 後備來源：CoinLore (無歷史 sparkline，趨勢圖依當日漲跌方向示意)
+        function fetchCryptoDataFallback(silent){
+            const SC=['usdt','usdc','dai','fdusd','usds','tusd','usdd','pyusd','ustc','eurs','ldo','wbtc','weth','wsteth','steth','cbeth','reth','wbeth','frxeth','figure','ylds','figr','usde','susde','ethena','frax'];
+            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=30').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];
                 const fd=data.filter(c=>{const s=c.symbol.toLowerCase(),n=c.name.toLowerCase();return !SC.includes(s)&&!n.includes('stablecoin')&&!n.includes('tether')&&!n.includes('wrapped')&&!n.includes('pegged')&&!n.includes('staked')&&!n.includes('dollar')&&!n.includes('ethena');});
-                cryptoDataList=fd.slice(0,10).map(c=>{const p=parseFloat(c.price_usd),ch=parseFloat(c.percent_change_24h||0);return{id:c.nameid,name:c.name,symbol:c.symbol,current_price:p,price_change_percentage_24h:ch,total_volume:parseFloat(c.volume24||0),market_cap:parseFloat(c.market_cap_usd||0),image:`https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,sparkline_in_7d:{price:genSpark(p,ch)}};});
-                renderCryptoTable();upd();}).catch(()=>useMock());}
-        function genSpark(cp,c24){const pts=7,t=[];let tp=cp/(1+(c24/100));for(let i=0;i<pts-1;i++){tp=tp*(1+(Math.random()*0.04-0.02));t.push(tp);}t.push(cp);return t;}
-        function useMock(){cryptoDataList=[{id:'bitcoin',name:'Bitcoin',symbol:'btc',current_price:63950.5,price_change_percentage_24h:2.45,total_volume:38450120000,market_cap:1260450122000,image:'https://assets.coincap.io/assets/icons/btc@2x.png',sparkline_in_7d:{price:[61000,62500,61800,62400,63200,62900,63950]}}];renderCryptoTable();upd();}
+                cryptoDataList=fd.slice(0,10).map(c=>({id:c.nameid,name:c.name,symbol:c.symbol,current_price:parseFloat(c.price_usd),price_change_percentage_24h:parseFloat(c.percent_change_24h||0),total_volume:parseFloat(c.volume24||0),market_cap:parseFloat(c.market_cap_usd||0),image:`https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,sparkline_in_7d:{price:[]}}));
+                renderCryptoTable();upd();}).catch(()=>{const tb=document.getElementById('crypto-table-body');if(tb)tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">行情暫時無法取得，請稍後重試</td></tr>';});
+        }
         function renderCryptoTable(){const tb=document.getElementById('crypto-table-body');if(!tb)return;const tot=cryptoDataList.reduce((a,c)=>a+(c.market_cap||0),0);const fc=cryptoDataList.filter(c=>c.name.toLowerCase().includes(searchFilter)||c.symbol.toLowerCase().includes(searchFilter));
             if(!fc.length){tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">查無相關資產...</td></tr>';return;}tb.innerHTML='';
             fc.forEach((c,i)=>{const ch=c.price_change_percentage_24h||0,pos=ch>=0,cc=pos?'text-emerald-400':'text-rose-500',sh=tot>0?((c.market_cap/tot)*100):0;const row=document.createElement('tr');row.className="hover:bg-zinc-800/30 transition-colors border-b border-zinc-850/50 group";
