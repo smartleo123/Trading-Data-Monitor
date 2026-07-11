@@ -255,7 +255,7 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
                         <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker</a>
-                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄</a>
+                        <a href="https://www.strategy.com/purchases" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 transition-colors flex items-center gap-1.5 text-xs font-semibold" style="color:#f7931a" onmouseover="this.style.color='#ffa733'" onmouseout="this.style.color='#f7931a'"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄</a>
                         <button onclick="toggleMaximize('panel-strategy')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-strategy-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
@@ -545,7 +545,8 @@
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-5 h-5 text-accentPurple"></i></div>
-                        <div><h2 class="text-md font-extrabold text-white">技術分析評級</h2><p class="text-xs text-zinc-500 mt-0.5">S&amp;P 500 多空儀表</p></div>
+                        <div class="flex-1"><h2 class="text-md font-extrabold text-white">技術分析評級</h2><p class="text-xs text-zinc-500 mt-0.5">VT 全球股市多空儀表</p></div>
+                        <a href="https://tw.tradingview.com/symbols/AMEX-VT/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看 VT 技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                     </div>
                     <div id="us-technical-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
@@ -914,7 +915,7 @@
         function initUsStockView(){
             if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
             if(!usStockState.chartLoaded){switchTvChart('us','AMEX:SPY',document.querySelector('.tv-chart-tab-us'));usStockState.chartLoaded=true;}
-            if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:SPY');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
+            if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:VT');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
         }
 
         // ===== 初始化 =====
