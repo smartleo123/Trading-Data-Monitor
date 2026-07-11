@@ -440,7 +440,8 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="refreshTwTop50FromYuanta()" id="tw-weight-refresh-btn" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-400 hover:bg-emerald-900/60 flex items-center gap-1.5 transition-colors" title="透過公用代理即時抓取元大 0050 官網最新持股權重"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 更新前50大清單</button>
-                        <a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往元大 0050 官網查看持股比重"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+                        <a href="https://www.taifex.com.tw/cht/9/futuresQADetail" target="_blank" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white flex items-center gap-1.5" title="前往臺灣期貨交易所查看台股市值比重"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> 台股市值比重</a>
+                        <a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-amber-400 hover:text-amber-300 flex items-center gap-1.5" title="前往元大 0050 官網查看持股比重"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> 0050 官網</a>
                         <button onclick="toggleMaximize('panel-tw-weight')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-tw-weight-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
@@ -712,7 +713,21 @@
                 u=>({url:`https://corsproxy.io/?url=${encodeURIComponent(u)}`,wrap:'raw'}),
                 u=>({url:`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,wrap:'raw'})
             ];
-            const parse=(txt)=>{const d=JSON.parse(txt);const res=d.chart&&d.chart.result&&d.chart.result[0];if(!res)throw 0;const m=res.meta;return{price:m.regularMarketPrice,prevClose:m.chartPreviousClose||m.previousClose,open:m.regularMarketOpen!=null?m.regularMarketOpen:(m.chartPreviousClose||null)};};
+            const parse=(txt)=>{
+                const d=JSON.parse(txt);const res=d.chart&&d.chart.result&&d.chart.result[0];if(!res)throw 0;
+                const m=res.meta;
+                const price=m.regularMarketPrice;
+                const prevClose=(m.chartPreviousClose!=null?m.chartPreviousClose:m.previousClose);
+                // 開盤價：chart API 的 meta 通常不含 regularMarketOpen，需從當日分時 open 陣列取第一筆有效值
+                let open=null;
+                const q=res.indicators&&res.indicators.quote&&res.indicators.quote[0];
+                if(q&&Array.isArray(q.open)){
+                    for(let k=0;k<q.open.length;k++){ if(typeof q.open[k]==='number'&&!isNaN(q.open[k])){ open=q.open[k]; break; } }
+                }
+                // 極少數情況分時陣列取不到，才退而用 meta 的 regularMarketOpen（若存在）
+                if(open==null&&typeof m.regularMarketOpen==='number')open=m.regularMarketOpen;
+                return {price,prevClose,open};
+            };
             const tryOne=(i)=>{
                 if(i>=proxies.length)return Promise.reject('all proxies failed');
                 const p=proxies[i](yUrl);
