@@ -310,14 +310,14 @@
 
             <!-- 台股報價小卡 (改用 TradingView 官方 single-quote widget，穩定延遲報價) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tw-single="TWSE:0050"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tw-single="TWSE:2330"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tw-single="TWSE:2454"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tw-single="TWSE:2308"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:0050"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2330"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2454"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="TWSE:2308"></div>
             </div>
 
             <div class="text-[11px] text-zinc-600 px-1 -mt-2">
-                <span class="text-zinc-500">*</span> 報價來源：TradingView 官方報價元件（延遲行情，穩定顯示）。點擊小卡可展開 TradingView 完整資訊。
+                <span class="text-zinc-500">*</span> 報價來源：TradingView 迷你走勢元件（延遲行情）。顯示簡易走勢圖與最新報價，點擊小卡可展開 TradingView 完整資訊。
             </div>
 
             <!-- 台股前 50 大個股 -->
@@ -576,17 +576,10 @@
         function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
 
         // ============================================================
-        // 台股報價小卡 (TradingView 官方 single-quote widget，穩定延遲行情)
+        // 台股報價小卡 (改用與美股相同的 mini-symbol-overview widget，相容性較佳)
         // ============================================================
         function renderTwSingleQuotes(){
-            document.querySelectorAll('[data-tw-single]').forEach(card=>{
-                const sym=card.getAttribute('data-tw-single');card.innerHTML='';
-                const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';
-                const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);
-                const s=document.createElement('script');s.type='text/javascript';s.src='https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js';s.async=true;
-                s.text=JSON.stringify({symbol:sym,width:'100%',isTransparent:true,colorTheme:'dark',locale:'zh_TW'});
-                c.appendChild(s);card.appendChild(c);
-            });
+            renderMiniSymbolCards(document.getElementById('market-view-tw-stock'));
         }
 
         // ============================================================
