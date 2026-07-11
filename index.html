@@ -491,7 +491,8 @@
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
-                    <div class="flex-1"><h2 id="tw-tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tw-tech-subtitle" class="text-xs text-zinc-500 mt-0.5">0050 台股多空儀表</p></div>
+                    <div class="flex-1"><h2 id="tw-tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tw-tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
+                    <a id="tw-tech-news-link" href="https://tw.tradingview.com/symbols/TWSE-0050/news/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0 flex items-center gap-1.5 text-sm font-bold" title="前往 TradingView 查看新聞"><i data-lucide="newspaper" class="w-4 h-4"></i> 新聞</a>
                     <a id="tw-tech-source-link" href="https://tw.tradingview.com/symbols/TWSE-0050/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                 </div>
                 <div class="flex items-center gap-1.5 mb-3">
@@ -504,7 +505,6 @@
                 </div>
                 <div class="flex items-center gap-1.5 mb-3 border-b border-zinc-850 pb-3">
                     <button id="tw-tech-view-tech" onclick="switchTechView('tw','tech',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentCyan/15 text-accentCyan border border-accentCyan/30">技術分析</button>
-                    <button onclick="switchTechView('tw','news',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">新聞</button>
                     <button id="tw-tech-view-financials" onclick="switchTechView('tw','financials',this)" class="tw-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">財務</button>
                 </div>
                 <div id="tw-tech-interval-row" class="flex items-center gap-1.5 mb-4">
@@ -573,7 +573,8 @@
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-5">
                         <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
-                        <div class="flex-1"><h2 id="tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">VT 全球股市多空儀表</p></div>
+                        <div class="flex-1"><h2 id="tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
+                        <a id="tech-news-link" href="https://tw.tradingview.com/symbols/AMEX-VT/news/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0 flex items-center gap-1.5 text-sm font-bold" title="前往 TradingView 查看新聞"><i data-lucide="newspaper" class="w-4 h-4"></i> 新聞</a>
                         <a id="tech-source-link" href="https://tw.tradingview.com/symbols/AMEX-VT/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                     </div>
                     <div class="flex items-center gap-1.5 mb-3">
@@ -586,7 +587,6 @@
                     </div>
                     <div class="flex items-center gap-1.5 mb-3 border-b border-zinc-850 pb-3">
                         <button id="us-tech-view-tech" onclick="switchTechView('us','tech',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold transition-all bg-accentCyan/15 text-accentCyan border border-accentCyan/30">技術分析</button>
-                        <button onclick="switchTechView('us','news',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">新聞</button>
                         <button id="us-tech-view-financials" onclick="switchTechView('us','financials',this)" class="us-tech-view-btn text-sm px-4 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">財務</button>
                     </div>
                     <div id="us-tech-interval-row" class="flex items-center gap-1.5 mb-4">
@@ -866,11 +866,13 @@
         // 更新技術分析標的、標題、小標題與資料來源連結
         function updateTechSymbol(symbol,displayName){
             techCurrentSymbol=symbol;
-            const t=document.getElementById('tech-title'),st=document.getElementById('tech-subtitle'),lk=document.getElementById('tech-source-link');
+            const t=document.getElementById('tech-title'),st=document.getElementById('tech-subtitle'),lk=document.getElementById('tech-source-link'),nlk=document.getElementById('tech-news-link');
             const isVT=symbol==='AMEX:VT';
             if(t)t.innerText=isVT?'技術分析評級':`${displayName} 的技術分析`;
-            if(st)st.innerText='全球股市多空儀表';
-            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;const path=techCurrentView==='news'?'news':(techCurrentView==='financials'?'financials-overview':'technicals');lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            if(st)st.innerText='股市多空儀表';
+            const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;
+            if(lk){const path=techCurrentView==='financials'?'financials-overview':'technicals';lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            if(nlk)nlk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/news/`);
             refreshFinancialsTabVisibility('us');
             // 以當前檢視重新渲染 (若在財務頁但新標的是ETF，refreshFinancialsTabVisibility 已退回技術分析)
             const v=techCurrentView;
@@ -901,11 +903,13 @@
         }
         function updateTwTechSymbol(symbol,displayName){
             twTechCurrentSymbol=symbol;
-            const t=document.getElementById('tw-tech-title'),st=document.getElementById('tw-tech-subtitle'),lk=document.getElementById('tw-tech-source-link');
+            const t=document.getElementById('tw-tech-title'),st=document.getElementById('tw-tech-subtitle'),lk=document.getElementById('tw-tech-source-link'),nlk=document.getElementById('tw-tech-news-link');
             const isDefault=symbol==='TWSE:0050';
             if(t)t.innerText=isDefault?'技術分析評級':`${displayName} 的技術分析`;
-            if(st)st.innerText='台股多空儀表';
-            if(lk){const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;const path=twTechCurrentView==='news'?'news':(twTechCurrentView==='financials'?'financials-overview':'technicals');lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            if(st)st.innerText='股市多空儀表';
+            const slug=symbol.includes(':')?symbol.replace(':','-'):symbol;
+            if(lk){const path=twTechCurrentView==='financials'?'financials-overview':'technicals';lk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/${path}/`);}
+            if(nlk)nlk.setAttribute('href',`https://tw.tradingview.com/symbols/${slug}/news/`);
             refreshFinancialsTabVisibility('tw');
             const v=twTechCurrentView;
             if(v==='news')renderNewsWidget('tw-technical-container',symbol);
