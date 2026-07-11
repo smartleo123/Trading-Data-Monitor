@@ -757,7 +757,7 @@
             <!-- 美股自選代碼卡片 (可自行修改 symbol 欄位客製化) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:SPY"></div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:QQQ"></div>
+                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:VT"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:AAPL"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:TSLA"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:NVDA"></div>
@@ -777,18 +777,24 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
-                        <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
-                            <button onclick="switchTvChart('us', 'AMEX:SPY', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
-                                S&P 500
+                        <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex flex-wrap gap-1">
+                            <button onclick="switchTvChart('us', 'TVC:SPX', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
+                                標普500
                             </button>
-                            <button onclick="switchTvChart('us', 'AMEX:QQQ', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                那斯達克100
+                            <button onclick="switchTvChart('us', 'TVC:DJI', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                道瓊
                             </button>
-                            <button onclick="switchTvChart('us', 'NASDAQ:NVDA', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
-                                輝達
+                            <button onclick="switchTvChart('us', 'TVC:IXIC', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                那斯達克
+                            </button>
+                            <button onclick="switchTvChart('us', 'TVC:SOX', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                費半
+                            </button>
+                            <button onclick="switchTvChart('us', 'AMEX:VT', this)" class="tv-chart-tab-us text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                VT 全球
                             </button>
                         </div>
-                        <a id="us-chart-source-link" href="https://tw.tradingview.com/symbols/AMEX-SPY/" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 TradingView 查看">
+                        <a id="us-chart-source-link" href="https://tw.tradingview.com/symbols/TVC-SPX/" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 TradingView 查看">
                             <i data-lucide="external-link" class="w-4 h-4"></i>
                         </a>
                         <button onclick="toggleMaximize('panel-us-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
@@ -1209,8 +1215,65 @@
             }
         }
 
-        // 抓取所有台股卡片的即時報價 (Yahoo Finance v7/finance/quote)
-        function fetchTwQuotes() {
+        // 通用 CORS 代理：依序嘗試多個公用代理，回傳第一個成功解析的 JSON。
+        // 單一代理 (如 allorigins /get) 常因壅塞或快取造成延遲，改用多代理容錯可明顯改善即時性。
+        async function twCorsFetchJson(targetUrl) {
+            const builders = [
+                u => ({ url: `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, wrapped: false }),
+                u => ({ url: `https://corsproxy.io/?url=${encodeURIComponent(u)}`, wrapped: false }),
+                u => ({ url: `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, wrapped: true })
+            ];
+            for (const build of builders) {
+                const p = build(targetUrl);
+                try {
+                    const res = await fetch(p.url, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    if (p.wrapped) {
+                        const wrapped = await res.json();
+                        return JSON.parse(wrapped.contents || 'null');
+                    }
+                    return await res.json();
+                } catch (e) { /* 換下一個代理 */ }
+            }
+            return null;
+        }
+
+        // 以 Yahoo v8 chart 端點取得單一標的即時報價。
+        // v8 chart 不需 crumb/cookie 驗證，較舊版 v7 quote 穩定且回應更快，可根治報價延遲與離線問題。
+        async function fetchYahooChartQuote(symbol) {
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m`;
+            const json = await twCorsFetchJson(url);
+            const result = json && json.chart && json.chart.result && json.chart.result[0];
+            if (!result || !result.meta) return null;
+            const m = result.meta;
+            const price = (typeof m.regularMarketPrice === 'number') ? m.regularMarketPrice : NaN;
+            if (isNaN(price)) return null;
+            const prevClose = (typeof m.chartPreviousClose === 'number') ? m.chartPreviousClose
+                            : (typeof m.previousClose === 'number' ? m.previousClose : 0);
+            // 開盤價：meta 未提供時，取當日第一筆有效開盤
+            let open = (typeof m.regularMarketOpen === 'number') ? m.regularMarketOpen : NaN;
+            const q = result.indicators && result.indicators.quote && result.indicators.quote[0];
+            if (isNaN(open) && q && Array.isArray(q.open)) {
+                const firstOpen = q.open.find(v => typeof v === 'number');
+                if (typeof firstOpen === 'number') open = firstOpen;
+            }
+            const change = price - prevClose;
+            const changePct = prevClose ? (change / prevClose) * 100 : 0;
+            return {
+                symbol,
+                regularMarketPrice: price,
+                regularMarketPreviousClose: prevClose,
+                regularMarketOpen: isNaN(open) ? prevClose : open,
+                regularMarketDayHigh: m.regularMarketDayHigh,
+                regularMarketDayLow: m.regularMarketDayLow,
+                regularMarketChange: change,
+                regularMarketChangePercent: changePct,
+                marketState: m.marketState || ''
+            };
+        }
+
+        // 抓取所有台股卡片的即時報價 (Yahoo v8 chart，逐檔並行請求，改善延遲與穩定度)
+        async function fetchTwQuotes() {
             const cards = Array.from(document.querySelectorAll('[data-tw-quote]'));
             if (cards.length === 0) return;
             const marketOpenFallback = isTwMarketOpen();
@@ -1218,35 +1281,28 @@
             const yahooSymbols = [...new Set(cards.map(c => c.getAttribute('data-tw-quote')))];
             if (yahooSymbols.length === 0) return;
 
-            const symbolsParam = yahooSymbols.join(',');
-            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbolsParam)}&lang=zh_TW&region=TW`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+            try {
+                const quotes = await Promise.all(yahooSymbols.map(sym => fetchYahooChartQuote(sym).catch(() => null)));
+                const quoteMap = {};
+                quotes.forEach(info => { if (info && info.symbol) quoteMap[info.symbol] = info; });
 
-            fetch(proxyUrl)
-                .then(res => { if (!res.ok) throw new Error('proxy failed'); return res.json(); })
-                .then(wrapped => {
-                    const data = JSON.parse(wrapped.contents || '{}');
-                    const results = (data.quoteResponse && data.quoteResponse.result) || [];
-                    const quoteMap = {};
-                    results.forEach(item => {
-                        if (item.symbol) quoteMap[item.symbol] = item;
-                    });
-                    cards.forEach(card => {
-                        const sym = card.getAttribute('data-tw-quote');
-                        const info = quoteMap[sym];
-                        if (info) updateTwCard(card, info, marketOpenFallback);
-                    });
-                })
-                .catch(err => {
-                    console.warn('台股即時報價 (Yahoo) 取得失敗:', err);
-                    cards.forEach(card => {
-                        const statusEl = card.querySelector('[data-tw-status]');
-                        if (statusEl && (statusEl.innerText === '--' || statusEl.innerText === 'LIVE')) {
-                            statusEl.innerText = '離線';
-                            statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';
-                        }
-                    });
+                let anySuccess = false;
+                cards.forEach(card => {
+                    const sym = card.getAttribute('data-tw-quote');
+                    const info = quoteMap[sym];
+                    if (info) { updateTwCard(card, info, marketOpenFallback); anySuccess = true; }
                 });
+                if (!anySuccess) throw new Error('no quote data');
+            } catch (err) {
+                console.warn('台股即時報價 (Yahoo v8) 取得失敗:', err);
+                cards.forEach(card => {
+                    const statusEl = card.querySelector('[data-tw-status]');
+                    if (statusEl && (statusEl.innerText === '--' || statusEl.innerText === 'LIVE')) {
+                        statusEl.innerText = '離線';
+                        statusEl.className = 'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';
+                    }
+                });
+            }
         }
 
         // 啟動台股即時報價輪詢 (盤中每 5 秒；非盤中每 60 秒抓一次收盤價即可)
@@ -1424,24 +1480,52 @@
             if (window.lucide) lucide.createIcons();
         }
 
+        // 台積電 (2330) 流通在外股數 (約 259.3 億股)，用於 Yahoo v7 市值端點失效時推估全市場市值
+        const TSMC_SHARES_OUTSTANDING = 25930380458;
+
+        // 取得台股前 50 大「實際市值」對照表。
+        // 1) 優先以 Yahoo v7 quote 取得真實 marketCap (可用時支援依即時市值真實重新排序)。
+        // 2) v7 因 crumb/cookie 驗證失效而取不到時，改以台積電即時股價 × 流通股數推估全市場總市值，
+        //    再依官方權重換算各成分股市值，確保「實際市值」欄位一定有值。
+        async function getTwMarketCapMap() {
+            // 1) 嘗試 Yahoo v7 quote 取得真實市值
+            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
+            const v7Url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
+            try {
+                const data = await twCorsFetchJson(v7Url);
+                const results = (data && data.quoteResponse && data.quoteResponse.result) || [];
+                const capMap = {};
+                results.forEach(r => {
+                    if (r.symbol && typeof r.marketCap === 'number' && r.marketCap > 0) capMap[r.symbol] = r.marketCap;
+                });
+                // 至少取得半數以上成分股市值才視為可信，否則落到權重推估
+                if (Object.keys(capMap).length >= Math.ceil(TW_WEIGHT_TOP50.length / 2)) {
+                    return { map: capMap, live: true };
+                }
+            } catch (e) { /* 落到權重推估 */ }
+
+            // 2) 後備：以台積電即時股價推估市值，再依權重等比例換算
+            const tsmc = TW_WEIGHT_TOP50.find(x => x.code === '2330');
+            const tsmcQuote = await fetchYahooChartQuote('2330.TW').catch(() => null);
+            const capMap = {};
+            if (tsmc && tsmc.w > 0 && tsmcQuote && tsmcQuote.regularMarketPrice > 0) {
+                const tsmcCap = tsmcQuote.regularMarketPrice * TSMC_SHARES_OUTSTANDING;
+                TW_WEIGHT_TOP50.forEach(item => {
+                    capMap[`${item.code}.TW`] = tsmcCap * (item.w / tsmc.w);
+                });
+            }
+            return { map: capMap, live: false };
+        }
+
         async function loadTwMarketCaps() {
             if (Object.keys(twMarketCapMap).length > 0) return;
-            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
-            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
             try {
-                const res = await fetch(proxyUrl);
-                const wrapped = await res.json();
-                const data = JSON.parse(wrapped.contents || '{}');
-                const results = (data.quoteResponse && data.quoteResponse.result) || [];
-                twMarketCapMap = {};
-                results.forEach(r => {
-                    if (r.symbol && typeof r.marketCap === 'number' && r.marketCap > 0) {
-                        twMarketCapMap[r.symbol] = r.marketCap;
-                    }
-                });
-                const kwInput = document.getElementById('tw-weight-search');
-                renderTwWeightTable(kwInput ? kwInput.value : '');
+                const { map } = await getTwMarketCapMap();
+                if (Object.keys(map).length > 0) {
+                    twMarketCapMap = map;
+                    const kwInput = document.getElementById('tw-weight-search');
+                    renderTwWeightTable(kwInput ? kwInput.value : '');
+                }
             } catch (e) {
                 console.warn('載入台股市值權重市值失敗:', e);
             }
@@ -1451,38 +1535,25 @@
             const btns = document.querySelectorAll('button[onclick*="refreshTwTop50Weights"]');
             btns.forEach(b => b.disabled = true);
 
-            const symbols = TW_WEIGHT_TOP50.map(item => `${item.code}.TW`).join(',');
-            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
-
             try {
-                const res = await fetch(proxyUrl);
-                const wrapped = await res.json();
-                const data = JSON.parse(wrapped.contents || '{}');
-                const results = (data.quoteResponse && data.quoteResponse.result) || [];
+                const { map: capMap, live } = await getTwMarketCapMap();
+                if (Object.keys(capMap).length === 0) throw new Error('no market cap');
 
-                const capMap = {};
-                results.forEach(r => {
-                    if (r.symbol && r.marketCap) capMap[r.symbol] = r.marketCap;
-                });
-
-                let liveList = TW_WEIGHT_TOP50.map(item => {
-                    const mcap = capMap[`${item.code}.TW`] || 0;
-                    return { ...item, liveMcap: mcap };
-                }).filter(item => item.liveMcap > 0);
-
-                liveList.sort((a, b) => b.liveMcap - a.liveMcap);
-
-                const totalMcap = liveList.reduce((sum, item) => sum + item.liveMcap, 0);
-
-                liveList = liveList.map((item, idx) => ({
-                    ...item,
-                    r: idx + 1,
-                    w: totalMcap > 0 ? (item.liveMcap / totalMcap) * 100 : item.w
-                }));
-
-                TW_WEIGHT_TOP50.length = 0;
-                liveList.forEach(item => TW_WEIGHT_TOP50.push(item));
+                // 僅在取得真實市值時重新排序 (推估市值與權重等比例，重排序無意義)
+                if (live) {
+                    let liveList = TW_WEIGHT_TOP50
+                        .map(item => ({ ...item, liveMcap: capMap[`${item.code}.TW`] || 0 }))
+                        .filter(item => item.liveMcap > 0);
+                    liveList.sort((a, b) => b.liveMcap - a.liveMcap);
+                    const totalMcap = liveList.reduce((sum, item) => sum + item.liveMcap, 0);
+                    liveList = liveList.map((item, idx) => ({
+                        ...item,
+                        r: idx + 1,
+                        w: totalMcap > 0 ? (item.liveMcap / totalMcap) * 100 : item.w
+                    }));
+                    TW_WEIGHT_TOP50.length = 0;
+                    liveList.forEach(item => TW_WEIGHT_TOP50.push(item));
+                }
 
                 twMarketCapMap = capMap;
                 const kwInput = document.getElementById('tw-weight-search');
@@ -1524,7 +1595,7 @@
                 usStockState.cardsLoaded = true;
             }
             if (!usStockState.chartLoaded) {
-                switchTvChart('us', 'AMEX:SPY', document.querySelector('.tv-chart-tab-us'));
+                switchTvChart('us', 'TVC:SPX', document.querySelector('.tv-chart-tab-us'));
                 usStockState.chartLoaded = true;
             }
             if (!usStockState.extrasLoaded) {
@@ -1550,7 +1621,7 @@
             if (!usStockState.watchlistLoaded) {
                 renderWatchlistWidget('us-watchlist-container', '美股自選', [
                     { s: 'AMEX:SPY', d: 'S&P 500' },
-                    { s: 'AMEX:QQQ', d: '那斯達克100' },
+                    { s: 'AMEX:VT', d: 'VT 全世界股票' },
                     { s: 'NASDAQ:AAPL', d: '蘋果' },
                     { s: 'NASDAQ:MSFT', d: '微軟' },
                     { s: 'NASDAQ:NVDA', d: '輝達' },
