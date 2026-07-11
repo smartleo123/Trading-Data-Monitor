@@ -70,6 +70,7 @@
         /* 撐滿內部 K 線圖與 CoinGlass 數據容器 */
         .is-maximized #local-chart-container,
         .is-maximized #coinglass-iframe-container,
+        .is-maximized #altcoin-iframe-container,
         .is-maximized #strategy-iframe-container {
             height: calc(100vh - 85px) !important;
             min-height: 0 !important;
@@ -78,6 +79,7 @@
         /* 強制內置 Iframe 在全螢幕下達到 100% 高度與寬度 */
         .is-maximized #coinglass-iframe-container iframe,
         .is-maximized #local-chart-container iframe,
+        .is-maximized #altcoin-iframe-container iframe,
         .is-maximized #strategy-iframe-container iframe {
             height: 100% !important;
             width: 100% !important;
@@ -377,11 +379,11 @@
                         </div>
                         <div>
                             <h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線與華爾街 ETF 每日持倉流向（CoinGlass 嵌入）</p>
+                            <p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與山寨幣季節指數（CoinGlass 嵌入）</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
-                        <!-- 切換 CoinGlass K線 vs ETF 淨流向網頁 -->
+                        <!-- 切換 CoinGlass K線 vs ETF 淨流向 vs 山寨幣指數網頁 -->
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
                             <button onclick="toggleChartSource('coinglass')" id="btn-src-coinglass" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">
                                 CoinGlass 實時 K 線
@@ -389,7 +391,14 @@
                             <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
                                 ETF 淨流向
                             </button>
+                            <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">
+                                山寨幣指數
+                            </button>
                         </div>
+                        <!-- CoinGlass 來源網站超連結 (依頁籤自動切換目標網址) -->
+                        <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
                         <!-- 全螢幕按鈕 -->
                         <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
                             <i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
@@ -403,6 +412,10 @@
 
                 <div id="local-chart-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
                     <iframe id="etf-flow-iframe" class="w-full h-full border-none"></iframe>
+                </div>
+
+                <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
+                    <iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -431,6 +444,10 @@
                     <button onclick="fetchCryptoData(false)" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
                         <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 刷新行情
                     </button>
+                    <!-- CoinLore 資料來源超連結 -->
+                    <a href="https://www.coinlore.com/" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinLore 官網">
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
                     <!-- 全螢幕按鈕 -->
                     <button onclick="toggleMaximize('panel-table')" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200">
                         <i id="panel-table-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
@@ -530,24 +547,42 @@
         function toggleChartSource(type) {
             const btnCoinglass = document.getElementById('btn-src-coinglass');
             const btnLocal = document.getElementById('btn-src-local');
+            const btnAltcoin = document.getElementById('btn-src-altcoin');
             const coinglassContainer = document.getElementById('coinglass-iframe-container');
             const localContainer = document.getElementById('local-chart-container');
+            const altcoinContainer = document.getElementById('altcoin-iframe-container');
             const etfIframe = document.getElementById('etf-flow-iframe');
+            const altcoinIframe = document.getElementById('altcoin-index-iframe');
+            const sourceLink = document.getElementById('coinglass-source-link');
 
-            if (type === 'coinglass') {
-                btnCoinglass.className = "text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
-                btnLocal.className = "text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
-                coinglassContainer.style.display = 'block';
-                localContainer.style.display = 'none';
-            } else {
-                btnLocal.className = "text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
-                btnCoinglass.className = "text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
-                coinglassContainer.style.display = 'none';
-                localContainer.style.display = 'block';
+            const activeClass = "text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
+            const inactiveClass = "text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
 
-                if (etfIframe && !etfIframe.getAttribute('src')) {
-                    etfIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/etf/bitcoin');
-                }
+            btnCoinglass.className = type === 'coinglass' ? activeClass : inactiveClass;
+            btnLocal.className = type === 'local' ? activeClass : inactiveClass;
+            btnAltcoin.className = type === 'altcoin' ? activeClass : inactiveClass;
+
+            coinglassContainer.style.display = type === 'coinglass' ? 'block' : 'none';
+            localContainer.style.display = type === 'local' ? 'block' : 'none';
+            altcoinContainer.style.display = type === 'altcoin' ? 'block' : 'none';
+
+            if (type === 'local' && etfIframe && !etfIframe.getAttribute('src')) {
+                etfIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/etf/bitcoin');
+            }
+            if (type === 'altcoin' && altcoinIframe && !altcoinIframe.getAttribute('src')) {
+                altcoinIframe.setAttribute('src', 'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season');
+            }
+
+            // 依目前頁籤動態切換超連結導向的來源網站
+            if (sourceLink) {
+                const sourceMap = {
+                    coinglass: { url: 'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT', title: '前往 CoinGlass 實時 K 線頁面' },
+                    local: { url: 'https://www.coinglass.com/zh-TW/etf/bitcoin', title: '前往 CoinGlass ETF 淨流向頁面' },
+                    altcoin: { url: 'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season', title: '前往 CoinGlass 山寨幣季節指數頁面' }
+                };
+                const target = sourceMap[type] || sourceMap.coinglass;
+                sourceLink.setAttribute('href', target.url);
+                sourceLink.setAttribute('title', target.title);
             }
         }
 
