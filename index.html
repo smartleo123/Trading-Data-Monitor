@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HakuBTC</title>
+    <title>HakuBTC Institutional</title>
     <!-- Tailwind CSS 引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide 圖標庫 引入 -->
@@ -69,14 +69,16 @@
 
         /* 撐滿內部 K 線圖與 CoinGlass 數據容器 */
         .is-maximized #local-chart-container,
-        .is-maximized #coinglass-iframe-container {
+        .is-maximized #coinglass-iframe-container,
+        .is-maximized #strategy-iframe-container {
             height: calc(100vh - 85px) !important;
             min-height: 0 !important;
         }
 
         /* 強制內置 Iframe 在全螢幕下達到 100% 高度與寬度 */
         .is-maximized #coinglass-iframe-container iframe,
-        .is-maximized #local-chart-container iframe {
+        .is-maximized #local-chart-container iframe,
+        .is-maximized #strategy-iframe-container iframe {
             height: 100% !important;
             width: 100% !important;
             border: none !important;
@@ -330,47 +332,36 @@
 
         </div>
 
-        <!-- 企業儲備動態 (原 Iframe 替換為原生表格) -->
+        <!-- 企業儲備動態 (直接內嵌 SaylorTracker) -->
         <div class="grid grid-cols-1 gap-6">
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
+            <div id="panel-strategy" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
                             <i data-lucide="database" class="w-5 h-5 text-accentPurple"></i>
                         </div>
                         <div>
-                            <h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Inc.)</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">Strategy 比特幣增減持紀錄。</p>
+                            <h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Tracker)</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">實時觀測 SaylorTracker 追蹤的比特幣購入紀錄與平均成本</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="renderStrategyTable()" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 更新動態
-                        </button>
-                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 前往來源
+                    <div class="flex flex-wrap items-center gap-2">
+                        <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
+                            <i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker
                         </a>
+                        <a href="https://www.strategy.com/purchases" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄
+                        </a>
+                        <!-- 全螢幕按鈕 -->
+                        <button onclick="toggleMaximize('panel-strategy')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注">
+                            <i id="panel-strategy-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
                     </div>
                 </div>
                 
-                <div class="w-full rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
-                    <div class="overflow-x-auto max-h-[400px]">
-                        <table class="w-full text-left border-collapse text-sm whitespace-nowrap">
-                            <thead class="sticky top-0 bg-[#0c0c0e] z-10 shadow-md">
-                                <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
-                                    <th class="py-3 px-4">交易日期</th>
-                                    <th class="py-3 px-4 text-center">交易類型</th>
-                                    <th class="py-3 px-4 text-right">數量 (BTC)</th>
-                                    <th class="py-3 px-4 text-right">交易均價 (USD)</th>
-                                    <th class="py-3 px-4 text-right">交易總額</th>
-                                    <th class="py-3 px-4 text-right">最新總持倉 (BTC)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="strategy-tbody" class="divide-y divide-zinc-800/50">
-                                <!-- 由 renderStrategyTable() 動態渲染，詳見下方 JS -->
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- SaylorTracker 內嵌網頁 -->
+                <div id="strategy-iframe-container" class="w-full h-[650px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative">
+                    <iframe src="https://saylortracker.com/?tab=home" class="w-full h-full border-none" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -1125,96 +1116,6 @@
             }
         }
 
-        // === Strategy Inc. 比特幣儲備交易紀錄 (動態渲染) ===
-        // 當 Strategy 官方更新 holdings 時，只需在此陣列新增/修改最新一筆或多筆，即可自動重新渲染表格
-        const strategyTransactions = [
-            {
-                date: '2026-07-06',
-                type: '賣出減持',
-                typeClass: 'rose',
-                amount: -2225,
-                avgPrice: 60773,
-                totalValue: -135.22,
-                totalHolding: 843775
-            },
-            {
-                date: '2026-06-30',
-                type: '賣出減持',
-                typeClass: 'rose',
-                amount: -1363,
-                avgPrice: 59256,
-                totalValue: -80.76,
-                totalHolding: 846000
-            },
-            {
-                date: '2026-06-22',
-                type: '買入增持',
-                typeClass: 'emerald',
-                amount: 520,
-                avgPrice: 67068,
-                totalValue: 34.87,
-                totalHolding: 847363
-            },
-            {
-                date: '2026-06-15',
-                type: '買入增持',
-                typeClass: 'emerald',
-                amount: 1587,
-                avgPrice: 63024,
-                totalValue: 100.02,
-                totalHolding: 846842
-            },
-            {
-                date: '2026-06-08',
-                type: '買入增持',
-                typeClass: 'emerald',
-                amount: 1550,
-                avgPrice: 65332,
-                totalValue: 101.26,
-                totalHolding: 845256
-            },
-            {
-                date: '2026-05-18',
-                type: '買入增持',
-                typeClass: 'emerald',
-                amount: 24869,
-                avgPrice: 80985,
-                totalValue: 2014.01,
-                totalHolding: 843738
-            }
-        ];
-
-        function renderStrategyTable() {
-            const tbody = document.getElementById('strategy-tbody');
-            if (!tbody) return;
-
-            tbody.innerHTML = '';
-
-            strategyTransactions.forEach(tx => {
-                const isBuy = tx.typeClass === 'emerald';
-                const amountStr = (tx.amount > 0 ? '+' : '') + tx.amount.toLocaleString();
-                const amountClass = isBuy ? 'text-emerald-400' : 'text-rose-400';
-                const valueStr = (tx.totalValue > 0 ? '+' : '') + '$' + Math.abs(tx.totalValue).toFixed(2) + ' M';
-                const valueClass = isBuy ? 'text-emerald-400' : 'text-rose-400';
-
-                const row = document.createElement('tr');
-                row.className = "hover:bg-zinc-800/30 transition-colors";
-                row.innerHTML = `
-                    <td class="py-3 px-4 text-zinc-300">${tx.date}</td>
-                    <td class="py-3 px-4 text-center">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-${tx.typeClass}-950/50 text-${tx.typeClass}-400 border border-${tx.typeClass}-900/50">
-                            ${tx.type}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4 text-right font-mono ${amountClass}">${amountStr}</td>
-                    <td class="py-3 px-4 text-right font-mono text-zinc-300">$${tx.avgPrice.toLocaleString()}</td>
-                    <td class="py-3 px-4 text-right font-mono ${valueClass}">${valueStr}</td>
-                    <td class="py-3 px-4 text-right font-mono font-bold text-accentCyan">${tx.totalHolding.toLocaleString()}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
         // 初始化全部數據與監聽器
         window.onload = function() {
             lucide.createIcons();
@@ -1231,11 +1132,7 @@
             startLiveTicker('mstr-price', 'mstr-change', 'mstr-status', 94.13, 0.26);
             startLiveTicker('strc-price', 'strc-change', 'strc-status', 86.28, 0.67);
 
-            // 啟動 Strategy 儲備表格動態渲染
-            renderStrategyTable();
-
             // 啟動 幣安期貨 API 每秒即時報價更新 (BTC / ETH / BNB / SOL / XRP / HYPE 六大幣真實市場最後成交價 + 24H 漲跌 + 高低點)
-            // 已實現每秒鐘從 https://fapi.binance.com 取得最新 ticker 數據並更新 DOM + 價格變動閃爍特效
             updateMainCryptoCards();
             setInterval(updateMainCryptoCards, 1000); 
         }
