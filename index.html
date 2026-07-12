@@ -130,22 +130,18 @@
         <div id="market-view-crypto" class="space-y-6">
         <!-- 核心指標卡 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Sentiment Index</span>
-                        <h3 class="text-xs sm:text-sm font-bold text-zinc-400 mt-0.5">全球市場恐懼與貪婪指數</h3>
-                    </div>
-                    <a href="https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex" target="_blank" class="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan transition-colors">
-                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    </a>
+            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC"><span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
+                    <div class="flex items-baseline gap-3 mb-2"><div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="btc-change" class="text-sm font-bold font-mono">--</div></div>
                 </div>
-                <div class="my-1.5 flex flex-wrap items-center gap-2">
-                    <span class="text-4xl sm:text-5xl font-black tracking-tight" id="sentiment-value">--</span>
-                    <span id="sentiment-text" class="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap bg-zinc-900 text-zinc-500">載入中...</span>
+                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
+                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="btc-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="btc-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
+                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
-            </div>
-            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=NASDAQ%3AMSTR" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            </a>
+            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=NASDAQ%3AMSTR" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xs font-bold text-zinc-400">NASDAQ:MSTR</span>
@@ -161,7 +157,7 @@
                     <div class="text-right text-zinc-500">BTC 儲備: <strong class="text-white font-mono">約 84 萬枚</strong></div>
                 </div>
             </a>
-            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=NASDAQ%3ASTRC" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-amber-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px] transition-colors">
+            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=NASDAQ%3ASTRC" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-amber-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xs font-bold text-zinc-400">NASDAQ:STRC</span>
@@ -175,17 +171,6 @@
                 <div class="border-t border-zinc-900 pt-2 flex justify-between items-center text-[11px] mt-1 shrink-0">
                     <div class="flex items-center gap-1.5 text-zinc-500"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Strategy 永續優先股</div>
                     <div class="text-right text-zinc-500">約定年化股息: <strong class="text-emerald-400 font-mono">12.00%</strong></div>
-                </div>
-            </a>
-            <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
-                <div class="flex flex-col justify-center h-full">
-                    <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC"><span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
-                    <div class="flex items-baseline gap-3 mb-2"><div id="btc-price" class="text-4xl font-black text-white font-mono tracking-tight transition-colors">--</div><div id="btc-change" class="text-sm font-bold font-mono">--</div></div>
-                </div>
-                <div class="border-t border-zinc-900 pt-2 grid grid-cols-3 gap-2 text-[10px] mt-1 shrink-0">
-                    <div class="text-zinc-500"><div class="mb-0.5">24H 高點</div><strong id="btc-high" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
-                    <div class="text-zinc-500 text-center"><div class="mb-0.5">24H 低點</div><strong id="btc-low" class="text-zinc-300 font-mono text-[11px]">--</strong></div>
-                    <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3AETHUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-blue-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
@@ -269,13 +254,13 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
-                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與山寨幣季節指數（CoinGlass 嵌入）</p></div>
+                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與恐懼與貪婪指數（CoinGlass 嵌入）</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
                             <button onclick="toggleChartSource('coinglass')" id="btn-src-coinglass" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">CoinGlass 實時 K 線</button>
                             <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">ETF 淨流向</button>
-                            <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">山寨幣指數</button>
+                            <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">恐懼與貪婪指數</button>
                         </div>
                         <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                         <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
@@ -726,8 +711,8 @@
             bC.className=type==='coinglass'?A:I; bL.className=type==='local'?A:I; bA.className=type==='altcoin'?A:I;
             cC.style.display=type==='coinglass'?'block':'none'; cL.style.display=type==='local'?'block':'none'; cA.style.display=type==='altcoin'?'block':'none';
             if(type==='local'&&eI&&!eI.getAttribute('src')) eI.setAttribute('src','https://www.coinglass.com/zh-TW/etf/bitcoin');
-            if(type==='altcoin'&&aI&&!aI.getAttribute('src')) aI.setAttribute('src','https://www.coinglass.com/zh-TW/pro/i/alt-coin-season');
-            if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/alt-coin-season',t:'前往 CoinGlass 山寨幣季節指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
+            if(type==='altcoin'&&aI&&!aI.getAttribute('src')) aI.setAttribute('src','https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex');
+            if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex',t:'前往 CoinGlass 恐懼與貪婪指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
         }
 
         // ===== 工具 =====
@@ -786,16 +771,6 @@
         function updateFundingRates(){
             const m={'BTCUSDT':'btc-funding','ETHUSDT':'eth-funding','BNBUSDT':'bnb-funding','SOLUSDT':'sol-funding','XRPUSDT':'xrp-funding','HYPEUSDT':'hype-funding'};
             Object.entries(m).forEach(([s,id])=>fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${s}`).then(r=>r.json()).then(d=>{const el=document.getElementById(id);if(el&&d&&d.lastFundingRate!==undefined){const rp=parseFloat(d.lastFundingRate)*100;el.innerText=`${rp>=0?'+':''}${rp.toFixed(4)}%`;el.className=`font-mono text-[11px] ${rp>=0?'text-emerald-400':'text-rose-500'}`;}}).catch(()=>{}));
-        }
-        function updateFngUI(v){let t='中立 (Neutral)',c='text-amber-500',b='bg-amber-950/40 border-amber-900/50';
-            if(v<=25){t='極度恐懼 (Extreme Fear)';c='text-rose-600';b='bg-rose-950/40 border-rose-900/50';}else if(v<=45){t='恐懼 (Fear)';c='text-rose-400';b='bg-rose-950/40 border-rose-900/50';}
-            else if(v>=75){t='極度貪婪 (Extreme Greed)';c='text-emerald-500';b='bg-emerald-950/40 border-emerald-900/50';}else if(v>=55){t='貪婪 (Greed)';c='text-emerald-400';b='bg-emerald-950/40 border-emerald-900/50';}
-            const fe=document.getElementById('sentiment-value'),ft=document.getElementById('sentiment-text');
-            if(fe){fe.innerText=v;fe.className=`text-4xl sm:text-5xl font-black tracking-tight transition-colors ${c}`;}
-            if(ft){ft.innerText=t;ft.className=`text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap transition-colors ${c}/80 ${b}`;}
-        }
-        function fetchFearAndGreedIndex(){
-            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://api.coinmarketcap.com/data-api/v3/fear-greed')}`).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const p=JSON.parse(d.contents);if(p&&p.data&&p.data.score)updateFngUI(Math.round(p.data.score));else throw 0;}).catch(()=>fetch('https://api.alternative.me/fng/').then(r=>r.json()).then(d=>{if(d&&d.data&&d.data.length)updateFngUI(parseInt(d.data[0].value));}).catch(()=>{}));
         }
         function drawSparkline(cid,prices,pos){const c=document.getElementById(cid);if(!c)return;const x=c.getContext('2d');if(!x)return;const dpr=window.devicePixelRatio||1;c.width=96*dpr;c.height=32*dpr;x.scale(dpr,dpr);x.clearRect(0,0,96,32);
             if(!prices||prices.length<2){x.beginPath();x.lineWidth=1;x.strokeStyle='#3f3f46';x.setLineDash([3,3]);x.moveTo(4,16);x.lineTo(92,16);x.stroke();x.setLineDash([]);return;}
@@ -1113,7 +1088,6 @@
         // ===== 初始化 =====
         window.onload=function(){
             lucide.createIcons();
-            fetchFearAndGreedIndex();setInterval(fetchFearAndGreedIndex,15*60*1000);
             fetchCryptoData();setInterval(()=>fetchCryptoData(true),60000);
             startUsStockCards();
             updateMainCryptoCards();setInterval(updateMainCryptoCards,1000);
