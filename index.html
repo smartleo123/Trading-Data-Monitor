@@ -255,6 +255,76 @@
             </div>
         </div>
 
+        <!-- 選擇權操作小抄卡 -->
+        <div class="grid grid-cols-1 gap-6">
+            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <button onclick="toggleCheatsheet()" class="w-full flex items-center justify-between gap-3 text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="notebook-pen" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div>
+                            <h2 class="text-md font-extrabold text-white">選擇權操作小抄</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">依你的操作角色，該看哪些指標、進場訊號方向（搭配 greeks.live 數據使用）</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-down" id="cheatsheet-chevron" class="w-5 h-5 text-zinc-500 shrink-0 transition-transform"></i>
+                </button>
+                <div id="cheatsheet-body" class="mt-5 space-y-5">
+                    <!-- 三角色表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                    <th class="py-3 px-3">操作角色</th>
+                                    <th class="py-3 px-3">最該看的指標</th>
+                                    <th class="py-3 px-3">理想進場訊號</th>
+                                    <th class="py-3 px-3">最大風險</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800/50">
+                                <tr class="hover:bg-zinc-800/30 transition-colors align-top">
+                                    <td class="py-4 px-3"><span class="inline-flex items-center gap-1.5 font-bold text-accentCyan"><i data-lucide="trending-up" class="w-4 h-4"></i>永續合約<br><span class="text-[10px] text-zinc-500 font-normal">方向性交易</span></span></td>
+                                    <td class="py-4 px-3 text-zinc-300"><strong class="text-white">GEX</strong>（Gamma 曝險）＞ <strong class="text-white">Max Pain</strong> ＞ <strong class="text-white">Option Flow</strong></td>
+                                    <td class="py-4 px-3 text-zinc-400">正 Gamma 高牆附近 → 做<strong class="text-zinc-200">區間</strong>；進入負 Gamma 區 → 波動放大，<strong class="text-zinc-200">順勢</strong>或減倉。到期日看價格往 Max Pain 磁吸方向</td>
+                                    <td class="py-4 px-3 text-rose-400/90">誤把 Gamma 牆當突破點、逆磁吸方向硬凹</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors align-top">
+                                    <td class="py-4 px-3"><span class="inline-flex items-center gap-1.5 font-bold text-emerald-400"><i data-lucide="arrow-down-to-line" class="w-4 h-4"></i>選擇權買方<br><span class="text-[10px] text-zinc-500 font-normal">買 Call / Put</span></span></td>
+                                    <td class="py-4 px-3 text-zinc-300"><strong class="text-white">IV 高低</strong> ＞ <strong class="text-white">VRP</strong> ＞ <strong class="text-white">Term Structure</strong></td>
+                                    <td class="py-4 px-3 text-zinc-400"><strong class="text-emerald-400">IV 相對低、市場平靜時進場</strong>；VRP 深度為負（實際波動＞隱含）代表 IV 被低估、買方有優勢。等波動放大獲利</td>
+                                    <td class="py-4 px-3 text-rose-400/90">IV 太高時買（IV Crush）、時間價值流失（Theta）</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-800/30 transition-colors align-top">
+                                    <td class="py-4 px-3"><span class="inline-flex items-center gap-1.5 font-bold text-amber-400"><i data-lucide="arrow-up-from-line" class="w-4 h-4"></i>選擇權賣方<br><span class="text-[10px] text-zinc-500 font-normal">賣 Call / Put 收權利金</span></span></td>
+                                    <td class="py-4 px-3 text-zinc-300"><strong class="text-white">VRP</strong> ＞ <strong class="text-white">IV 高低</strong> ＞ <strong class="text-white">GEX</strong> ＞ <strong class="text-white">Max Pain</strong></td>
+                                    <td class="py-4 px-3 text-zinc-400"><strong class="text-amber-400">IV 相對高、VRP 為正（保險費＞實際波動）時進場</strong>，賺波動率溢價。用 Max Pain 選價格不易到達的履約價</td>
+                                    <td class="py-4 px-3 text-rose-400/90">負 Gamma 環境裸賣（一根大棒打穿）、突發大波動</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 核心心法 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="bg-black/30 border border-zinc-900 rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2 text-accentCyan"><i data-lucide="trending-up" class="w-4 h-4"></i><span class="text-xs font-bold">永續玩家</span></div>
+                            <p class="text-[11px] text-zinc-400 leading-relaxed">重點放在 <strong class="text-zinc-200">GEX 與 Max Pain</strong> 這種「結構性」指標，判斷價格的磁吸與阻力，而非波動率指標。</p>
+                        </div>
+                        <div class="bg-black/30 border border-zinc-900 rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2 text-emerald-400"><i data-lucide="arrow-down-to-line" class="w-4 h-4"></i><span class="text-xs font-bold">買方</span></div>
+                            <p class="text-[11px] text-zinc-400 leading-relaxed">你在買「<strong class="text-zinc-200">便宜的波動</strong>」，所以要 <strong class="text-zinc-200">IV 低、VRP 負</strong>時進場，等波動放大。</p>
+                        </div>
+                        <div class="bg-black/30 border border-zinc-900 rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2 text-amber-400"><i data-lucide="arrow-up-from-line" class="w-4 h-4"></i><span class="text-xs font-bold">賣方</span></div>
+                            <p class="text-[11px] text-zinc-400 leading-relaxed">你在賣「<strong class="text-zinc-200">昂貴的波動</strong>」，所以要 <strong class="text-zinc-200">IV 高、VRP 正</strong>時進場，但務必躲開負 Gamma。</p>
+                        </div>
+                    </div>
+                    <div class="bg-accentPurple/5 border border-accentPurple/20 rounded-xl p-4">
+                        <p class="text-[11px] text-zinc-400 leading-relaxed"><strong class="text-accentPurple">關鍵認知：</strong>買方與賣方看<strong class="text-zinc-200">同樣的指標，但進場訊號完全相反</strong>。此外，這些選擇權指標（Deribit 資料）主要反映<strong class="text-zinc-200">大戶／機構的避險需求</strong>，不是方向性押注 — 它是「市場情緒溫度計」，該用<strong class="text-zinc-200">逆向思維</strong>解讀（極度恐慌常近底部、極度平靜要防自滿），而非當成聰明錢的買賣訊號直接照抄。</p>
+                    </div>
+                    <p class="text-[10px] text-zinc-600">* 本小抄為一般性教學整理，非投資建議。實際操作請搭配基本面、其他技術指標與自身風險承受度綜合判斷。</p>
+                </div>
+            </div>
+        </div>
+
         <!-- 企業儲備動態 -->
         <div class="grid grid-cols-1 gap-6">
             <div id="panel-strategy" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
@@ -653,6 +723,14 @@
         setInterval(updateClock, 1000); updateClock();
 
         // ===== 常用連結下拉選單 =====
+        // ===== 選擇權小抄折疊 =====
+        function toggleCheatsheet(){
+            const body=document.getElementById('cheatsheet-body');
+            const chev=document.getElementById('cheatsheet-chevron');
+            if(!body)return;
+            const hidden=body.classList.toggle('hidden');
+            if(chev)chev.style.transform=hidden?'rotate(-90deg)':'rotate(0deg)';
+        }
         function toggleLinksMenu(e){
             if(e)e.stopPropagation();
             const panel=document.getElementById('links-menu-panel');
