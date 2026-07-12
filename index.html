@@ -362,13 +362,72 @@
           function daysTo(d) { return (d - Date.now()) / 86400000; }
           function pctile(v, arr) { var s = arr.slice().sort(function (a, b) { return a - b; }); return s.filter(function (x) { return x <= v; }).length / s.length * 100; }
 
-          function api(path, params) {
+          /* --- 傳輸層 ---
+             瀏覽器直接 fetch Deribit REST 會被 CORS 擋下（Failed to fetch），
+             因此主通道改用 Deribit 官方 WebSocket JSON-RPC（不受 CORS 限制），
+             失敗時依序退回：HTTP 直連 → 公用 CORS 代理。 */
+          var ws = null, wsReady = null, rpcId = 0, pending = {};
+          function wsConnect() {
+            if (wsReady) return wsReady;
+            wsReady = new Promise(function (resolve, reject) {
+              var settled = false;
+              var done = function (ok, val) { if (!settled) { settled = true; ok ? resolve(val) : (wsReady = null, reject(val)); } };
+              var sock;
+              try { sock = new WebSocket('wss://www.deribit.com/ws/api/v2'); }
+              catch (e) { return done(false, e); }
+              sock.onopen = function () { ws = sock; done(true, sock); };
+              sock.onerror = function () { done(false, new Error('WebSocket error')); };
+              sock.onclose = function () { ws = null; wsReady = null; };
+              sock.onmessage = function (ev) {
+                try {
+                  var m = JSON.parse(ev.data);
+                  if (m.id && pending[m.id]) {
+                    var cb = pending[m.id]; delete pending[m.id];
+                    if (m.error) cb.reject(new Error(m.error.message || ('API error ' + m.error.code))); else cb.resolve(m.result);
+                  }
+                } catch (e) {}
+              };
+              setTimeout(function () { done(false, new Error('WebSocket timeout')); }, 8000);
+            });
+            return wsReady;
+          }
+          function apiWs(path, params) {
+            return wsConnect().then(function (sock) {
+              return new Promise(function (resolve, reject) {
+                var id = ++rpcId;
+                pending[id] = { resolve: resolve, reject: reject };
+                sock.send(JSON.stringify({ jsonrpc: '2.0', id: id, method: 'public/' + path, params: params || {} }));
+                setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new Error('timeout ' + path)); } }, 15000);
+              });
+            });
+          }
+          function apiHttp(path, params) {
             var qs = new URLSearchParams(params || {}).toString();
-            return fetch(API + path + (qs ? '?' + qs : '')).then(function (res) {
-              if (res.status === 429) return sleep(1200).then(function () { return api(path, params); });
-              if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + path);
-              return res.json();
-            }).then(function (j) { if (j.error) throw new Error('API ' + path); return j.result !== undefined ? j.result : j; });
+            var url = API + path + (qs ? '?' + qs : '');
+            var parse = function (txt) {
+              var j = JSON.parse(txt);
+              if (j.error) throw new Error('API ' + path);
+              return j.result !== undefined ? j.result : j;
+            };
+            var direct = function () {
+              return fetch(url).then(function (res) {
+                if (res.status === 429) return sleep(1200).then(direct);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text().then(parse);
+              });
+            };
+            var viaProxy = function (make) {
+              return fetch(make(url), { cache: 'no-store' }).then(function (res) {
+                if (!res.ok) throw new Error('proxy HTTP ' + res.status);
+                return res.text().then(parse);
+              });
+            };
+            return direct()
+              .catch(function () { return viaProxy(function (u) { return 'https://corsproxy.io/?url=' + encodeURIComponent(u); }); })
+              .catch(function () { return viaProxy(function (u) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }); });
+          }
+          function api(path, params) {
+            return apiWs(path, params).catch(function () { return apiHttp(path, params); });
           }
 
           /* ---------- 數據 ---------- */
