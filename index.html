@@ -1729,7 +1729,8 @@
         function fmtTwPrevClose(code){
             const v=TW_QUOTE_CACHE[code];
             if(typeof v==='number')return v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-            return '—';
+            if(v===false)return '—'; // 抓取失敗（點「更新前50大清單」或重新整理可重試）
+            return '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>'; // 佇列中／載入中
         }
         function loadTwPrevCloses(){
             TW_TOP50.forEach(s=>{
@@ -1752,7 +1753,7 @@
                     }
                     TW_QUOTE_CACHE[code]=(v!=null)?v:false;
                 }).catch(()=>{TW_QUOTE_CACHE[code]=false;}).then(()=>{
-                    document.querySelectorAll('[data-twq="'+code+'"]').forEach(el=>{el.innerText=fmtTwPrevClose(code);});
+                    document.querySelectorAll('[data-twq="'+code+'"]').forEach(el=>{el.innerHTML=fmtTwPrevClose(code);});
                     twQuoteActive--;pumpTwQuotes();
                 });
             }
@@ -1831,6 +1832,8 @@
     .q-loading{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#71717a;letter-spacing:.5px;line-height:2.5rem}
     .q-spin{width:14px;height:14px;border:2px solid #27272a;border-top-color:#06b6d4;border-radius:50%;animation:q-rot .9s linear infinite;flex-shrink:0}
     @keyframes q-rot{to{transform:rotate(360deg)}}
+    .q-loading-sm{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#71717a}
+    .q-loading-sm .q-spin{width:10px;height:10px;border-width:1.5px}
     </style>
     <script>
     (function () {
