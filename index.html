@@ -86,14 +86,11 @@
                     <button onclick="switchMarketView('crypto')" id="market-tab-crypto" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40">
                         <i data-lucide="bitcoin" class="w-3.5 h-3.5"></i> 加密貨幣
                     </button>
-                    <button onclick="switchMarketView('tw-stock')" id="market-tab-tw-stock" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
-                        <i data-lucide="landmark" class="w-3.5 h-3.5"></i> 台股
-                    </button>
                     <button onclick="switchMarketView('us-stock')" id="market-tab-us-stock" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
                         <i data-lucide="flag" class="w-3.5 h-3.5"></i> 美股
                     </button>
-                    <button onclick="switchMarketView('overview')" id="market-tab-overview" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
-                        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> 綜覽
+                    <button onclick="switchMarketView('tw-stock')" id="market-tab-tw-stock" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent">
+                        <i data-lucide="landmark" class="w-3.5 h-3.5"></i> 台股
                     </button>
                 </nav>
                 <div class="flex items-center gap-2 sm:gap-4 text-xs shrink-0">
@@ -645,72 +642,6 @@
 
         </div>
         <!-- /market-view-us-stock -->
-
-        <!-- ============================ 綜覽面板 ============================ -->
-        <div id="market-view-overview" class="hidden space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 加密貨幣欄 (依市值前三動態渲染) -->
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-5 relative space-y-4">
-                    <div class="flex items-center gap-2 pb-3 border-b border-zinc-850">
-                        <i data-lucide="bitcoin" class="w-5 h-5 text-accentCyan"></i>
-                        <h2 class="text-md font-extrabold text-white">加密貨幣</h2>
-                        <span class="text-[10px] text-zinc-600 ml-auto">市值前三</span>
-                    </div>
-                    <div id="overview-crypto-cards" class="space-y-4">
-                        <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] flex items-center justify-center text-zinc-600 text-xs">載入中...</div>
-                    </div>
-                    <button onclick="switchMarketView('crypto')" class="w-full text-xs font-bold text-accentCyan hover:text-white bg-accentCyan/10 hover:bg-accentCyan/20 border border-accentCyan/20 rounded-lg py-2 transition-colors">查看加密貨幣完整數據 →</button>
-                </div>
-                <!-- 台股欄 (Yahoo 自繪，因 TradingView 不提供台股即時嵌入) -->
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-5 relative space-y-4">
-                    <div class="flex items-center gap-2 pb-3 border-b border-zinc-850">
-                        <i data-lucide="landmark" class="w-5 h-5 text-accentPurple"></i>
-                        <h2 class="text-md font-extrabold text-white">台股</h2>
-                        <span class="text-[10px] text-zinc-600 ml-auto">Yahoo 即時</span>
-                    </div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl p-4 flex flex-col justify-center h-[100px]" data-ov-tw="0050.TW" data-ov-name="元大台灣50 (0050)">
-                        <div class="flex items-center justify-between mb-1"><span class="text-xs font-bold text-zinc-400">元大台灣50 · 0050</span><span data-ov-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span></div>
-                        <div class="flex items-baseline gap-2"><span data-ov-tw-price class="text-2xl font-black text-white font-mono">--</span><span data-ov-tw-change class="text-xs font-bold font-mono text-zinc-400">--</span></div>
-                    </div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl p-4 flex flex-col justify-center h-[100px]" data-ov-tw="2330.TW" data-ov-name="台積電 (2330)">
-                        <div class="flex items-center justify-between mb-1"><span class="text-xs font-bold text-zinc-400">台積電 · 2330</span><span data-ov-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span></div>
-                        <div class="flex items-baseline gap-2"><span data-ov-tw-price class="text-2xl font-black text-white font-mono">--</span><span data-ov-tw-change class="text-xs font-bold font-mono text-zinc-400">--</span></div>
-                    </div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl p-4 flex flex-col justify-center h-[100px]" data-ov-tw="2454.TW" data-ov-name="聯發科 (2454)">
-                        <div class="flex items-center justify-between mb-1"><span class="text-xs font-bold text-zinc-400">聯發科 · 2454</span><span data-ov-tw-status class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">--</span></div>
-                        <div class="flex items-baseline gap-2"><span data-ov-tw-price class="text-2xl font-black text-white font-mono">--</span><span data-ov-tw-change class="text-xs font-bold font-mono text-zinc-400">--</span></div>
-                    </div>
-                    <button onclick="switchMarketView('tw-stock')" class="w-full text-xs font-bold text-accentPurple hover:text-white bg-accentPurple/10 hover:bg-accentPurple/20 border border-accentPurple/20 rounded-lg py-2 transition-colors">查看台股完整數據 →</button>
-                </div>
-                <!-- 美股欄 -->
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-5 relative space-y-4">
-                    <div class="flex items-center gap-2 pb-3 border-b border-zinc-850">
-                        <i data-lucide="flag" class="w-5 h-5 text-emerald-400"></i>
-                        <h2 class="text-md font-extrabold text-white">美股</h2>
-                    </div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="AMEX:VT"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="AMEX:SPY"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="NASDAQ:NVDA"></div>
-                    <button onclick="switchMarketView('us-stock')" class="w-full text-xs font-bold text-emerald-400 hover:text-white bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg py-2 transition-colors">查看美股完整數據 →</button>
-                </div>
-            </div>
-            <!-- 綜覽宏觀指標 -->
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-5">
-                <div class="flex items-center gap-2 pb-3 mb-4 border-b border-zinc-850">
-                    <i data-lucide="globe" class="w-5 h-5 text-accentCyan"></i>
-                    <h2 class="text-md font-extrabold text-white">全球風險情緒溫度計</h2>
-                    <span class="text-[10px] text-zinc-600 ml-auto">指數以對應 ETF 呈現</span>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="BINGX:TLTUSDT.P" title="TLT 20年公債期貨"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="TOOBIT:VIXUSDT.P" title="VIX波動率期貨"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="BINGX:USDOLLARINDEXDXYUSDT.P" title="美元指數DXY期貨"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="TVC:GOLD" title="黃金"></div>
-                    <div class="bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden" data-tv-mini-symbol="BINANCE:BTCUSDT" title="比特幣"></div>
-                </div>
-            </div>
-        </div>
-        <!-- /market-view-overview -->
     </main>
 
     <footer class="border-t border-zinc-950 bg-black/60 py-6 mt-12 text-center text-xs text-zinc-600">
@@ -764,55 +695,10 @@
         const marketHeaders = {
             crypto: { title: '加密貨幣數據圖表', subtitle: 'CRYPTO RELATED PRODUCTS & BINANCE MARKET INTEGRATION' },
             'tw-stock': { title: '台股數據圖表', subtitle: 'TAIWAN STOCK MARKET & YAHOO / TRADINGVIEW INTEGRATION' },
-            'us-stock': { title: '美股數據圖表', subtitle: 'US STOCK MARKET & TRADINGVIEW INTEGRATION' },
-            overview: { title: '三大市場綜覽', subtitle: 'CRYPTO · TAIWAN · US — GLOBAL MARKET DASHBOARD' }
+            'us-stock': { title: '美股數據圖表', subtitle: 'US STOCK MARKET & TRADINGVIEW INTEGRATION' }
         };
-        const overviewState = { loaded: false };
-        function initOverview(){
-            if(overviewState.loaded)return;
-            renderMiniSymbolCards(document.getElementById('market-view-overview'));
-            renderOverviewCrypto();
-            startOverviewTwQuotes();
-            overviewState.loaded=true;
-        }
-        // 綜覽-加密貨幣前三 (用已抓的市值排序 cryptoDataList，轉成 Binance mini widget)
-        function renderOverviewCrypto(){
-            const box=document.getElementById('overview-crypto-cards');if(!box)return;
-            const top3=(cryptoDataList||[]).slice(0,3);
-            if(!top3.length){setTimeout(renderOverviewCrypto,1500);return;} // 資料未到，稍後重試
-            box.innerHTML='';
-            top3.forEach(c=>{
-                const sym='BINANCE:'+(c.symbol||'').toUpperCase()+'USDT';
-                const d=document.createElement('div');
-                d.className='bg-black/40 border border-zinc-900 rounded-xl h-[150px] overflow-hidden';
-                d.setAttribute('data-tv-mini-symbol',sym);
-                box.appendChild(d);
-            });
-            renderMiniSymbolCards(box);
-        }
-        // 綜覽-台股 Yahoo 報價 (TradingView 不提供台股即時嵌入)
-        function startOverviewTwQuotes(){
-            const fetchAll=()=>{
-                const open=isTwMarketOpen();
-                document.querySelectorAll('[data-ov-tw]').forEach(card=>{
-                    const sym=card.getAttribute('data-ov-tw');
-                    fetchYahooQuote(sym).then(q=>{
-                        const pe=card.querySelector('[data-ov-tw-price]'),ce=card.querySelector('[data-ov-tw-change]'),se=card.querySelector('[data-ov-tw-status]');
-                        if(q.price==null||isNaN(q.price))return;
-                        const ch=q.price-q.prevClose,pct=q.prevClose?(ch/q.prevClose)*100:0,sign=ch>=0?'+':'';
-                        pe.innerText=q.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-                        pe.className=`text-2xl font-black font-mono ${ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-white')}`;
-                        ce.innerText=`${sign}${ch.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;
-                        ce.className=`text-xs font-bold font-mono ${ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-zinc-400')}`;
-                        if(se){se.innerText=open?'LIVE':'收盤';se.className=open?'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse':'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}
-                    }).catch(()=>{});
-                });
-            };
-            fetchAll();
-            setInterval(fetchAll, isTwMarketOpen()?15000:120000);
-        }
         function switchMarketView(view) {
-            const views = { crypto: 'market-view-crypto', 'tw-stock': 'market-view-tw-stock', 'us-stock': 'market-view-us-stock', overview: 'market-view-overview' };
+            const views = { crypto: 'market-view-crypto', 'tw-stock': 'market-view-tw-stock', 'us-stock': 'market-view-us-stock' };
             Object.entries(views).forEach(([k, id]) => {
                 const el = document.getElementById(id); if (el) el.classList.toggle('hidden', k !== view);
                 const b = document.getElementById(`market-tab-${k}`); if (b) b.className = k === view ? marketTabActiveClass : marketTabInactiveClass;
@@ -821,7 +707,6 @@
             if (h) { document.getElementById('market-title').innerText = h.title; document.getElementById('market-subtitle').innerText = h.subtitle; }
             if (view === 'tw-stock') initTwStockView();
             if (view === 'us-stock') initUsStockView();
-            if (view === 'overview') initOverview();
         }
 
         // ===== 放大 =====
