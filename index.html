@@ -254,22 +254,33 @@
                 <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe></div>
             </div>
         </div>
-
-        <!-- 選擇權操作小抄卡 -->
+        <!-- 選擇權進出場 SOP -->
         <div class="grid grid-cols-1 gap-6">
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
-                <button onclick="toggleCheatsheet()" class="w-full flex items-center justify-between gap-3 text-left">
+                <button onclick="toggleSop()" class="w-full flex items-center justify-between gap-3 text-left">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="notebook-pen" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="clipboard-list" class="w-5 h-5 text-accentCyan"></i></div>
                         <div>
-                            <h2 class="text-md font-extrabold text-white">選擇權操作小抄</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">依你的操作角色，該看哪些指標、進場訊號方向（搭配 greeks.live 數據使用）</p>
+                            <h2 class="text-md font-extrabold text-white">選擇權進出場 SOP</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5">實戰操作手冊 — 快速對照 / 買方 / 賣方 / 樂透單 / 希臘字母 / 策略對照</p>
                         </div>
                     </div>
-                    <i data-lucide="chevron-down" id="cheatsheet-chevron" class="w-5 h-5 text-zinc-500 shrink-0 transition-transform"></i>
+                    <i data-lucide="chevron-down" id="sop-chevron" class="w-5 h-5 text-zinc-500 shrink-0 transition-transform"></i>
                 </button>
-                <div id="cheatsheet-body" class="mt-5 space-y-5">
-                    <!-- 三角色表格 -->
+                <div id="sop-body" class="mt-5">
+                <!-- 頁籤 -->
+                <div class="flex flex-wrap items-center gap-1.5 mb-5 border-b border-zinc-850 pb-3">
+                    <button onclick="switchSop('quick',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold transition-all bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">快速對照</button>
+                    <button onclick="switchSop('buyer',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">買方實戰</button>
+                    <button onclick="switchSop('seller',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">賣方實戰</button>
+                    <button onclick="switchSop('lotto',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">買方樂透單</button>
+                    <button onclick="switchSop('greeks',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">希臘字母</button>
+                    <button onclick="switchSop('compare',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">買方 vs 賣方</button>
+                    <button onclick="switchSop('skew',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">Skew ＆ 期貨比較</button>
+                </div>
+
+                <!-- 快速對照 (原選擇權操作小抄) -->
+                <div id="sop-quick" class="sop-panel space-y-5">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs sm:text-sm">
                             <thead>
@@ -302,7 +313,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- 核心心法 -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="bg-black/30 border border-zinc-900 rounded-xl p-4">
                             <div class="flex items-center gap-2 mb-2 text-accentCyan"><i data-lucide="trending-up" class="w-4 h-4"></i><span class="text-xs font-bold">永續玩家</span></div>
@@ -320,10 +330,160 @@
                     <div class="bg-accentPurple/5 border border-accentPurple/20 rounded-xl p-4">
                         <p class="text-[11px] text-zinc-400 leading-relaxed"><strong class="text-accentPurple">關鍵認知：</strong>買方與賣方看<strong class="text-zinc-200">同樣的指標，但進場訊號完全相反</strong>。此外，這些選擇權指標（Deribit 資料）主要反映<strong class="text-zinc-200">大戶／機構的避險需求</strong>，不是方向性押注 — 它是「市場情緒溫度計」，該用<strong class="text-zinc-200">逆向思維</strong>解讀（極度恐慌常近底部、極度平靜要防自滿），而非當成聰明錢的買賣訊號直接照抄。</p>
                     </div>
-                    <p class="text-[10px] text-zinc-600">* 本小抄為一般性教學整理，非投資建議。實際操作請搭配基本面、其他技術指標與自身風險承受度綜合判斷。</p>
+                </div>
+
+                <!-- 買方實戰 -->
+                <div id="sop-buyer" class="sop-panel hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-3 whitespace-nowrap">階段</th><th class="py-3 px-3 whitespace-nowrap">關鍵指標</th><th class="py-3 px-3">執行指令</th><th class="py-3 px-3">買方心法</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-zinc-800/50 align-top">
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-emerald-400" rowspan="4">1. 進場<br><span class="text-[10px] text-zinc-500 font-normal">Setup</span></td><td class="py-3 px-3 font-bold text-white">隱含波動率 IV</td><td class="py-3 px-3 text-zinc-300">IV Rank &lt; 20 時買進（買在風平浪靜時）</td><td class="py-3 px-3 text-zinc-500">買在無人問津。低 IV 權利金像跳樓大拍賣，行情爆發＋恐慌 IV 飆升 → 賺「價差＋恐慌溢價」雙倍暴利。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">到期日 DTE</td><td class="py-3 px-3 text-zinc-300">鎖定 60~90 天以上（遠離時間懸崖）</td><td class="py-3 px-3 text-zinc-500">用錢買時間。買太近（30天內）每天資金少 10%，須留足時間讓行情發酵。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">履約價 Strike</td><td class="py-3 px-3 text-zinc-300">買價平 ATM 或淺價外（Delta 0.45~0.55），甚至淺價內 ITM</td><td class="py-3 px-3 text-zinc-500">買高爆發力。別買深價外樂透，價平 Gamma 最大，一發動漲幅最像期貨，吃最肥一段。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">攻擊距離</td><td class="py-3 px-3 text-zinc-300">&lt; 2%（貼身肉搏）</td><td class="py-3 px-3 text-zinc-500">要在射程內，狙擊手不能離靶心太遠。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentCyan" rowspan="3">2. 持有<br><span class="text-[10px] text-zinc-500 font-normal">Maintenance</span></td><td class="py-3 px-3 font-bold text-white">時間流逝</td><td class="py-3 px-3 text-zinc-300">半衰期法則：時間過半、行情未動 → 砍單</td><td class="py-3 px-3 text-zinc-500">承認看錯、保留子彈。時間預測錯了，剩下 Theta 會像怪獸吞噬本金，撤退等下次。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">價格突破</td><td class="py-3 px-3 text-zinc-300">加碼 Pyramid 或不動，享受 Gamma 加速</td><td class="py-3 px-3 text-zinc-500">讓獲利奔跑。買方優勢是凸性，越往有利方向走賺越快，別急著全跑。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Vega 效應</td><td class="py-3 px-3 text-zinc-300">IV 飆升 &gt; 50%</td><td class="py-3 px-3 text-zinc-500">雙引擎點火。價格下跌賺 Delta ＋ 市場恐慌賺 Vega，暴利時刻別急著跑。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-rose-400" rowspan="4">3. 出場<br><span class="text-[10px] text-zinc-500 font-normal">Exit</span></td><td class="py-3 px-3 font-bold text-white">獲利目標</td><td class="py-3 px-3 text-zinc-300">獲利 +100%（翻倍）→ 賣出一半（Free Ride）</td><td class="py-3 px-3 text-zinc-500">拿回本金零風險博弈。買方勝率低，贏時連本帶利，先收回本金，剩下純利潤抱到天荒地老。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Gamma 劇減</td><td class="py-3 px-3 text-zinc-300">Delta 接近 1.0 時（滾動 Roll）</td><td class="py-3 px-3 text-zinc-500">落袋為安。Delta 變 1.0，Gamma 消失（沒加速），平倉換回 ATM 重享 Gamma 加速。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">技術面訊號</td><td class="py-3 px-3 text-zinc-300">關鍵支撐/壓力位滾動止盈 Roll</td><td class="py-3 px-3 text-zinc-500">鎖住利潤。真跌破關鍵位，把 Put 平倉換更低履約價 Put，鎖現金又保留暴賺機會。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">防守止損</td><td class="py-3 px-3 text-zinc-300">權利金虧損 50% 或跌破技術止損位 / 時間過半</td><td class="py-3 px-3 text-zinc-500">截斷虧損。買方要有歸零覺悟但別真歸零，設 50% 止損留本錢開下一槍。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentPurple">4. 總結</td><td class="py-3 px-3 font-bold text-white">核心哲學</td><td class="py-3 px-3 text-zinc-300">敵人：時間 Theta；盟友：波動 Vega</td><td class="py-3 px-3 text-zinc-500">要嘛大賺要嘛小賠。無聊的等待、瞬間的暴利。連輸三次小錢，抓到一次崩盤全賺回。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 賣方實戰 -->
+                <div id="sop-seller" class="sop-panel hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-3 whitespace-nowrap">階段</th><th class="py-3 px-3 whitespace-nowrap">關鍵指標</th><th class="py-3 px-3">執行指令</th><th class="py-3 px-3">賣方心法</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-zinc-800/50 align-top">
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-emerald-400" rowspan="4">1. 進場<br><span class="text-[10px] text-zinc-500 font-normal">Setup</span></td><td class="py-3 px-3 font-bold text-white">隱含波動率 IV</td><td class="py-3 px-3 text-zinc-300">IV Rank &gt; 50 時賣出（賣在市場恐慌時）</td><td class="py-3 px-3 text-zinc-500">賣在狂風暴雨。高 IV 恐慌溢價，等恐慌消退 IV Crush，賺時間錢＋波動率下降的錢（雙引擎）。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">到期日 DTE</td><td class="py-3 px-3 text-zinc-300">鎖定 30~45 天（黃金衰減期）</td><td class="py-3 px-3 text-zinc-500">吃魚身不吃魚頭。Theta 衰減加速甜蜜點，太遠賺得慢、太近 Gamma 風險大。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">履約價 Strike</td><td class="py-3 px-3 text-zinc-300">賣價外 OTM（Delta 0.15~0.30）</td><td class="py-3 px-3 text-zinc-500">預測「不會去哪」比「會去哪」容易。設下護城河，擁有 70~85% 先天勝率。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">安全距離</td><td class="py-3 px-3 text-zinc-300">&gt; 15%（BTC 標準）</td><td class="py-3 px-3 text-zinc-500">防插針。確保睡覺時一根 10% 的針插不爆。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentCyan" rowspan="4">2. 持有<br><span class="text-[10px] text-zinc-500 font-normal">Maintenance</span></td><td class="py-3 px-3 font-bold text-white">時間流逝</td><td class="py-3 px-3 text-zinc-300">什麼都不做（Do Nothing）躺著收租</td><td class="py-3 px-3 text-zinc-500">時間是唯一盟友。只要價格沒破防，每天睡醒資產自動增加（Theta）。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Vega 風險</td><td class="py-3 px-3 text-zinc-300">Portfolio Vega &lt; 1% 淨值（總帳戶曝險）</td><td class="py-3 px-3 text-zinc-500">防黑天鵝。總 Vega -500 時 IV 漲 1% 賠 500U，確保不讓保證金爆炸。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Delta 變化</td><td class="py-3 px-3 text-zinc-300">膨脹至 &gt; 0.40（警報響起）</td><td class="py-3 px-3 text-zinc-500">防線被突破。價格殺到家門口，Delta 變大＝從賣方被迫變接盤俠，準備平倉或對沖。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">保證金比率</td><td class="py-3 px-3 text-zinc-300">死守 &lt; 70%</td><td class="py-3 px-3 text-zinc-500">活下來才能收租。賣方最大敵人是保證金膨脹，留 30% 緩衝扛黑天鵝。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-rose-400" rowspan="3">3. 出場<br><span class="text-[10px] text-zinc-500 font-normal">Exit</span></td><td class="py-3 px-3 font-bold text-white">獲利目標</td><td class="py-3 px-3 text-zinc-300">獲利 +50% → 平倉 Take Profit</td><td class="py-3 px-3 text-zinc-500">不吃有刺的魚尾。剩 50% 利潤要扛同樣大風險且 Theta 變慢，不如平倉找下條肥魚。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">時間紅線</td><td class="py-3 px-3 text-zinc-300">剩餘 21 天（21 DTE）強制平倉/轉倉</td><td class="py-3 px-3 text-zinc-500">避開壓路機。最後 3 週是 Gamma 風險區，別為殘值冒被火車撞的風險。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">防守止損</td><td class="py-3 px-3 text-zinc-300">虧損達權利金 2~3 倍 / 觸碰履約價</td><td class="py-3 px-3 text-zinc-500">承認失敗保留戰力。賣方贏小輸大，絕不凹單，一次大賠抵銷十次獲利。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentPurple">4. 總結</td><td class="py-3 px-3 font-bold text-white">核心哲學</td><td class="py-3 px-3 text-zinc-300">敵人：極端行情（Gamma/Vega Explosion）</td><td class="py-3 px-3 text-zinc-500">無聊就是好交易。若心跳加速睡不著，代表部位太大或離現價太近。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 買方樂透單 -->
+                <div id="sop-lotto" class="sop-panel hidden">
+                    <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 mb-4 text-[11px] text-amber-200/80">⚡ 高風險短打策略：0DTE / 極短天期樂透單，用極低權利金博高倍率，嚴格控制單筆資金。</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-3 whitespace-nowrap">階段</th><th class="py-3 px-3 whitespace-nowrap">關鍵維度</th><th class="py-3 px-3">執行準則</th><th class="py-3 px-3">統計與風險邏輯</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-zinc-800/50 align-top">
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-emerald-400" rowspan="4">進場佈局</td><td class="py-3 px-3 font-bold text-white">合約選擇</td><td class="py-3 px-3 text-zinc-300">0DTE（當天到期）或 &lt; 3 天，挑 Δ 0.10~0.20 價外合約</td><td class="py-3 px-3 text-zinc-500">最大化 Gamma 爆發力、最小化內涵價值成本，用極低權利金博高倍率。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">時機</td><td class="py-3 px-3 text-zinc-300">數據公布（CPI/FOMC）後 3-5 分鐘，或當日到期合約結算前 1-2 小時（Deribit 每日 UTC 08:00／台北 16:00 到期）</td><td class="py-3 px-3 text-zinc-500">避開數據前高 IV 溢價，交易純方向性位移與 Gamma 擠壓。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">資金</td><td class="py-3 px-3 text-zinc-300">單筆不超過總資產 0.5% 或當月 Sell Call 獲利的 5%</td><td class="py-3 px-3 text-zinc-500">確保期望值 E&lt;0 的次數不影響核心本金。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">IV 環境</td><td class="py-3 px-3 text-zinc-300">IV 處於低位或剛開始噴發時進場</td><td class="py-3 px-3 text-zinc-500">避免買在 IV 頂峰，防止 IV Crush 吞噬獲利。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentCyan" rowspan="2">動態持有</td><td class="py-3 px-3 font-bold text-white">時間止損</td><td class="py-3 px-3 text-zinc-300">進場後 30 分鐘內無突破或帶量波動 → 市價平倉</td><td class="py-3 px-3 text-zinc-500">避免 Theta 加速衰減，時間不動就是虧損。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">波動監控</td><td class="py-3 px-3 text-zinc-300">觀察 IV 是否在價格噴發時同步上升（Vega 助攻）</td><td class="py-3 px-3 text-zinc-500">雙重引擎（方向＋波動）是樂透單翻 10 倍的關鍵。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-rose-400" rowspan="2">分批出場</td><td class="py-3 px-3 font-bold text-white">收回本金</td><td class="py-3 px-3 text-zinc-300">獲利 100%（翻倍）時立刻平倉 50% 部位</td><td class="py-3 px-3 text-zinc-500">零成本心理建設，剩下部位「免費」才拿得住。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">滾動停利</td><td class="py-3 px-3 text-zinc-300">剩餘部位在 300%、500%、1000% 逐級減碼</td><td class="py-3 px-3 text-zinc-500">捕捉肥尾效應，讓獲利奔跑直到 Gamma 遞減。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-accentPurple" rowspan="2">最終撤離</td><td class="py-3 px-3 font-bold text-white">清倉時限</td><td class="py-3 px-3 text-zinc-300">絕對不進結算，最遲於到期前 10-15 分鐘（台北約 15:45-15:50）全部清空</td><td class="py-3 px-3 text-zinc-500">避開結算前流動性枯竭導致無法成交或惡意滑價。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">情緒控制</td><td class="py-3 px-3 text-zinc-300">無論當天翻幾倍，當天不再重複進場</td><td class="py-3 px-3 text-zinc-500">防止賭徒謬誤，鎖住暴利。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 希臘字母 -->
+                <div id="sop-greeks" class="sop-panel hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-3">指標</th><th class="py-3 px-3">對賣方 Seller 是…</th><th class="py-3 px-3">對買方 Buyer 是…</th><th class="py-3 px-3">操作口訣</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-zinc-800/50 align-top">
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Delta<br><span class="text-[10px] text-zinc-500 font-normal">方向</span></td><td class="py-3 px-3 text-rose-400/90">敵人（希望越小越好）</td><td class="py-3 px-3 text-emerald-400/90">朋友（希望越大越好）</td><td class="py-3 px-3 text-zinc-400">賣方控制在 0.2 以下；買方買在 0.5，等它變 1.0。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Gamma<br><span class="text-[10px] text-zinc-500 font-normal">加速</span></td><td class="py-3 px-3 text-rose-400/90">炸彈 Risk（怕暴衝）</td><td class="py-3 px-3 text-emerald-400/90">火箭 Fuel（靠它暴賺）</td><td class="py-3 px-3 text-zinc-400">賣方剩 21 天快跑（Gamma 大）；買方買 ATM（Gamma 最大）。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Theta<br><span class="text-[10px] text-zinc-500 font-normal">時間</span></td><td class="py-3 px-3 text-emerald-400/90">薪水 Income（每天收錢）</td><td class="py-3 px-3 text-rose-400/90">租金 Cost（每天付錢）</td><td class="py-3 px-3 text-zinc-400">賣方賣 30-45 天（薪水最高）；買方買 60-90 天（給行情足夠發酵時間）。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">Vega<br><span class="text-[10px] text-zinc-500 font-normal">波動</span></td><td class="py-3 px-3 text-rose-400/90">逆風（IV 漲會賠錢）</td><td class="py-3 px-3 text-emerald-400/90">順風（IV 漲會賺錢）</td><td class="py-3 px-3 text-zinc-400">賣方 IV 高時進場（等風停）；買方 IV 低時進場（等風起）。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 買方 vs 賣方 -->
+                <div id="sop-compare" class="sop-panel hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                <th class="py-3 px-3">戰略維度</th><th class="py-3 px-3 text-amber-400">賣方策略 Seller</th><th class="py-3 px-3 text-emerald-400">買方策略 Buyer</th><th class="py-3 px-3">買方背後邏輯</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-zinc-800/50 align-top">
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">核心獲利來源</td><td class="py-3 px-3 text-zinc-300">Theta 時間價值，時間流逝即賺錢</td><td class="py-3 px-3 text-zinc-300">Gamma 加速度 ＋ Vega，要價格暴衝或 IV 飆升</td><td class="py-3 px-3 text-zinc-500">買方付了權利金，必須靠大波動覆蓋時間成本。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">進場時機 IV</td><td class="py-3 px-3 text-zinc-300">高波動 High IV，恐慌時賣權利金貴</td><td class="py-3 px-3 text-zinc-300">低波動 Low IV，像死水時買權利金便宜</td><td class="py-3 px-3 text-zinc-500">最關鍵差異。IV 低點買入，市場恐慌時 Vega 幫你賺（雙引擎）。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">黃金到期日 DTE</td><td class="py-3 px-3 text-zinc-300">30~45 天，瞄準 Theta 最快的懸崖</td><td class="py-3 px-3 text-zinc-300">60~90 天（甚至更長），避開 Theta 懸崖</td><td class="py-3 px-3 text-zinc-500">買時間。買 20 天內每天資金少 10%，還沒等到暴跌就先歸零。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">履約價 Delta</td><td class="py-3 px-3 text-zinc-300">價外 OTM（Delta &lt; 0.3），安全氣墊</td><td class="py-3 px-3 text-zinc-300">價平 ATM（Delta ≈ 0.5）或輕度價內 ITM</td><td class="py-3 px-3 text-zinc-500">Gamma 最大化。價平對價格最敏感，一發動翻倍最快。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">出場止盈</td><td class="py-3 px-3 text-zinc-300">獲利 50% 就跑，不吃魚尾</td><td class="py-3 px-3 text-zinc-300">獲利 100%~300% 甚至更高</td><td class="py-3 px-3 text-zinc-500">買方勝率低（約 30-40%），贏時必須大賺，不能賺 20% 就跑。</td></tr>
+                                <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">出場止損</td><td class="py-3 px-3 text-zinc-300">2 倍權利金 或被突破防守位</td><td class="py-3 px-3 text-zinc-300">權利金腰斬 -50% 或時間過半</td><td class="py-3 px-3 text-zinc-500">買方要有歸零心理準備，設止損是為了保留子彈。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Skew & 期貨比較 -->
+                <div id="sop-skew" class="sop-panel hidden space-y-6">
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i data-lucide="git-branch" class="w-4 h-4 text-accentPurple"></i>Skew 交易策略（賣方視角）</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                    <th class="py-3 px-3">Skew 狀態</th><th class="py-3 px-3">圖形特徵</th><th class="py-3 px-3">市場心理</th><th class="py-3 px-3">賣方策略</th>
+                                </tr></thead>
+                                <tbody class="divide-y divide-zinc-800/50 align-top">
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-rose-400">極度正偏</td><td class="py-3 px-3 text-zinc-300">左高右低（Put IV ≫ Call IV）</td><td class="py-3 px-3 text-zinc-400">恐慌 Panic，大家都在買跌</td><td class="py-3 px-3 text-emerald-400/90">✅ 賣出 Put（Short Put），收割恐懼溢價，賣方利潤最大化時刻</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-zinc-300">中性/平坦</td><td class="py-3 px-3 text-zinc-300">左右差不多（Put IV ≈ Call IV）</td><td class="py-3 px-3 text-zinc-400">平靜 Calm，多空平衡</td><td class="py-3 px-3 text-amber-400/90">⚠️ 一般操作，挑 Delta 合適的賣即可，無額外優勢</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-emerald-400">負偏</td><td class="py-3 px-3 text-zinc-300">左低右高（Put IV &lt; Call IV）</td><td class="py-3 px-3 text-zinc-400">貪婪 FOMO，大家都在買漲</td><td class="py-3 px-3 text-rose-400/90">❌ 暫停賣 Put（權利金太便宜），反而適合買 Put 埋伏崩盤</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i data-lucide="swords" class="w-4 h-4 text-accentCyan"></i>期貨 vs 期權買方比較</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead><tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                                    <th class="py-3 px-3">比較維度</th><th class="py-3 px-3">期貨合約 Futures</th><th class="py-3 px-3">保守型期權買方</th><th class="py-3 px-3">誰勝出</th>
+                                </tr></thead>
+                                <tbody class="divide-y divide-zinc-800/50 align-top">
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">爆倉風險</td><td class="py-3 px-3 text-zinc-400">有（會死）插針 5~10% 保證金不夠就強平歸零</td><td class="py-3 px-3 text-zinc-400">無（不死金牌）永遠不被強平，只損失權利金不負債</td><td class="py-3 px-3 text-emerald-400/90 font-bold">👑 期權</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">虧損下限</td><td class="py-3 px-3 text-zinc-400">理論無上限（不設止損或滑價）</td><td class="py-3 px-3 text-zinc-400">已鎖定，最多賠權利金，自帶絕對止損</td><td class="py-3 px-3 text-emerald-400/90 font-bold">👑 期權</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">獲利曲線</td><td class="py-3 px-3 text-zinc-400">線性，跌 $1 賺 $1</td><td class="py-3 px-3 text-zinc-400">凸性 Convex，跌越多賺越快（跌 $10k 可能賺 $15k）</td><td class="py-3 px-3 text-emerald-400/90 font-bold">👑 期權</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">時間成本</td><td class="py-3 px-3 text-zinc-400">無（只有資金費率），可等到天荒地老</td><td class="py-3 px-3 text-zinc-400">有（Theta 每天扣血），盤整會慢性死亡</td><td class="py-3 px-3 text-amber-400/90 font-bold">👑 期貨</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">波動率影響</td><td class="py-3 px-3 text-zinc-400">無關，恐慌時賺一樣多</td><td class="py-3 px-3 text-zinc-400">雙重獲利，暴跌時 IV 飆升 Vega 膨脹賺更多</td><td class="py-3 px-3 text-emerald-400/90 font-bold">👑 期權</td></tr>
+                                    <tr class="hover:bg-zinc-800/30"><td class="py-3 px-3 font-bold text-white">資金效率</td><td class="py-3 px-3 text-zinc-400">高（槓桿可開 100x）</td><td class="py-3 px-3 text-zinc-400">中（自帶槓桿），價平約 10-20 倍有效槓桿</td><td class="py-3 px-3 text-zinc-400 font-bold">平手</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-[10px] text-zinc-600 mt-5">* 本 SOP 為操作紀律整理，非投資建議。市場有風險，實際操作請依自身狀況判斷。</p>
                 </div>
             </div>
         </div>
+
 
         <!-- 企業儲備動態 -->
         <div class="grid grid-cols-1 gap-6">
@@ -723,14 +883,21 @@
         setInterval(updateClock, 1000); updateClock();
 
         // ===== 常用連結下拉選單 =====
-        // ===== 選擇權小抄折疊 =====
-        function toggleCheatsheet(){
-            const body=document.getElementById('cheatsheet-body');
-            const chev=document.getElementById('cheatsheet-chevron');
+        // ===== SOP 頁籤切換 =====
+        function toggleSop(){
+            const body=document.getElementById('sop-body'),chev=document.getElementById('sop-chevron');
             if(!body)return;
             const hidden=body.classList.toggle('hidden');
             if(chev)chev.style.transform=hidden?'rotate(-90deg)':'rotate(0deg)';
         }
+        function switchSop(name,btn){
+            document.querySelectorAll('.sop-panel').forEach(p=>p.classList.add('hidden'));
+            const panel=document.getElementById('sop-'+name);if(panel)panel.classList.remove('hidden');
+            document.querySelectorAll('.sop-tab').forEach(b=>b.className='sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all');
+            if(btn)btn.className='sop-tab text-xs px-3.5 py-2 rounded-lg font-bold transition-all bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+            if(window.lucide)lucide.createIcons();
+        }
+        // ===== 選擇權小抄折疊 =====
         function toggleLinksMenu(e){
             if(e)e.stopPropagation();
             const panel=document.getElementById('links-menu-panel');
