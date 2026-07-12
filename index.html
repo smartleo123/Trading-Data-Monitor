@@ -1133,7 +1133,7 @@
                                 <th class="py-3 px-4 w-16 text-center">排行</th>
                                 <th class="py-3 px-4">證券代號</th>
                                 <th class="py-3 px-4">證券名稱</th>
-                                <th class="py-3 px-4 text-right">昨收價</th>
+                                <th class="py-3 px-4 text-right">收盤價</th>
                                 <th class="py-3 px-4 text-right">市值佔大盤比重</th>
                                 <th class="py-3 px-4 text-center w-16">TradingView</th>
                                 <th class="py-3 px-4 text-center w-16">Yahoo 股市</th>
@@ -1144,7 +1144,7 @@
                     </table>
                 </div>
                 <div id="tw-weight-note" class="text-[11px] text-zinc-600 px-1 mt-3">
-                    <span class="text-zinc-500">*</span> 開啟台股頁籤時會自動透過公用代理同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重，確保排名即時正確；同步完成前暫以內嵌清單（資料日期 2026/06/30）顯示，亦可點「更新前50大清單」手動重抓。昨收價為 Yahoo Finance 前一交易日收盤，開啟頁籤後逐列背景載入（經公用代理，全部載完約需十餘秒）。
+                    <span class="text-zinc-500">*</span> 開啟台股頁籤時會自動透過公用代理同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重，確保排名即時正確；同步完成前暫以內嵌清單（資料日期 2026/06/30）顯示，亦可點「更新前50大清單」手動重抓。收盤價欄位：盤中顯示前一交易日昨收，收盤後與假日顯示最近一個交易日收盤（Yahoo Finance，開啟頁籤後逐列背景載入，全部載完約需十餘秒）。
                 </div>
             </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
@@ -1742,7 +1742,15 @@
                 const code=twQuoteQueue.shift();
                 twQuoteActive++;
                 fetchYahooQuote(code+'.TW').then(q=>{
-                    TW_QUOTE_CACHE[code]=(q&&typeof q.prevClose==='number')?q.prevClose:false;
+                    // 盤中→前一交易日昨收；休市(含週末/假日)→最近一個交易日收盤。
+                    // 不能一律用 chartPreviousClose：休市日它指的是「最後交易日的前一日」，會往前錯一天。
+                    let v=null;
+                    if(q){
+                        const live=(q.marketTime!=null)?((Date.now()/1000-q.marketTime)<300):isTwMarketOpen();
+                        if(live)v=(typeof q.prevClose==='number')?q.prevClose:null;
+                        else v=(typeof q.price==='number')?q.price:((typeof q.prevClose==='number')?q.prevClose:null);
+                    }
+                    TW_QUOTE_CACHE[code]=(v!=null)?v:false;
                 }).catch(()=>{TW_QUOTE_CACHE[code]=false;}).then(()=>{
                     document.querySelectorAll('[data-twq="'+code+'"]').forEach(el=>{el.innerText=fmtTwPrevClose(code);});
                     twQuoteActive--;pumpTwQuotes();
