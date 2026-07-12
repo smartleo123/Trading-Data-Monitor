@@ -1725,16 +1725,19 @@
          ═══════════════════════════════════════════════════════════ -->
     <nav id="section-nav" aria-label="區塊快速導航"></nav>
     <style>
-    #section-nav{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:3px;padding:10px 8px;background:rgba(20,20,22,.82);border:1px solid rgba(255,255,255,.08);border-radius:14px;backdrop-filter:blur(8px)}
+    /* 純文字導覽：無面板背景，靠文字陰影維持可讀性 */
+    #section-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:2px}
     @media(max-width:1023px){#section-nav{display:none}}
-    #section-nav .sn-item{display:flex;align-items:center;justify-content:flex-end;gap:9px;padding:7px 10px;border-radius:9px;cursor:pointer;background:none;border:none;font-family:inherit;transition:background .15s}
-    #section-nav .sn-item:hover{background:rgba(255,255,255,.06)}
-    #section-nav .sn-label{font-size:13.5px;font-weight:700;color:#a1a1aa;white-space:nowrap;transition:color .15s;pointer-events:none}
-    #section-nav .sn-dot{width:8px;height:8px;border-radius:50%;background:#3f3f46;flex-shrink:0;transition:background .18s,box-shadow .18s}
-    #section-nav .sn-item:hover .sn-dot{background:#71717a}
-    #section-nav .sn-item:hover .sn-label{color:#e4e4e7}
+    #section-nav .sn-item{display:flex;align-items:center;justify-content:flex-end;gap:9px;padding:6px 2px;cursor:pointer;background:none;border:none;font-family:inherit}
+    #section-nav .sn-label{font-size:13.5px;font-weight:700;color:#8b8b93;white-space:nowrap;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.6)}
+    #section-nav .sn-dot{width:8px;height:8px;border-radius:50%;background:#3f3f46;flex-shrink:0}
+    #section-nav .sn-item:hover .sn-dot{background:#e4e4e7}
+    #section-nav .sn-item:hover .sn-label{color:#fff}
     #section-nav .sn-item.sn-active .sn-dot{background:#06b6d4;box-shadow:0 0 8px rgba(6,182,212,.55)}
     #section-nav .sn-item.sn-active .sn-label{color:#06b6d4}
+    /* 窄螢幕（右側留白不足）自動切為圓點模式，hover 顯示標籤膠囊 */
+    #section-nav.sn-compact .sn-label{display:none}
+    #section-nav.sn-compact .sn-item:hover .sn-label,#section-nav.sn-compact .sn-item.sn-active .sn-label{display:inline-block;background:rgba(9,9,11,.92);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:3px 10px}
     </style>
     <script>
     (function () {
@@ -1781,18 +1784,37 @@
           btn.setAttribute('title', s[1]);
           btn.innerHTML = '<span class="sn-label">' + s[1] + '</span><span class="sn-dot"></span>';
           btn.addEventListener('click', function () {
+            /* 點擊立即高亮，平滑捲動期間鎖定不被 scroll 事件蓋掉 */
+            items.forEach(function (it) { it.btn.classList.remove('sn-active'); });
+            btn.classList.add('sn-active');
+            lockUntil = Date.now() + 900;
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
           nav.appendChild(btn);
           items.push({ el: el, btn: btn });
         });
+        updateMode();
         updateActive();
+      }
+
+      /* 右側留白不足時切為圓點模式，避免蓋到內容卡片（依導覽實際寬度動態判斷） */
+      function updateMode() {
+        var main = document.querySelector('main');
+        if (!main) return;
+        /* 內容實際邊緣 = main 右緣扣除其 padding（卡片不會貼到 main 邊上） */
+        var padR = parseFloat(getComputedStyle(main).paddingRight) || 0;
+        var contentRight = main.getBoundingClientRect().right - padR;
+        var margin = window.innerWidth - contentRight;
+        nav.classList.remove('sn-compact');
+        if (margin < nav.offsetWidth + 22) nav.classList.add('sn-compact');
       }
 
       /* 捲動時高亮：取「頂端已越過視窗上緣＋緩衝」的最後一個區塊 */
       var ticking = false;
+      var lockUntil = 0;
       function updateActive() {
         if (!items.length) return;
+        if (Date.now() < lockUntil) return;
         var active = 0;
         for (var i = 0; i < items.length; i++) {
           if (items[i].el.getBoundingClientRect().top <= HEADER_OFFSET + 40) active = i;
@@ -1806,7 +1828,7 @@
         ticking = true;
         requestAnimationFrame(function () { updateActive(); ticking = false; });
       }, { passive: true });
-      window.addEventListener('resize', updateActive, { passive: true });
+      window.addEventListener('resize', function () { updateMode(); updateActive(); }, { passive: true });
 
       /* 掛勾頁籤切換：包裝原本的 switchMarketView，切換後重建清單並回到頂部區塊 */
       if (typeof window.switchMarketView === 'function') {
