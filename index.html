@@ -132,8 +132,8 @@
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
         <div id="market-view-crypto" class="space-y-6">
         <!-- 核心指標卡 -->
-        <div id="sec-crypto-prices" class="bg-darkCard border border-zinc-850 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-6">
+        <div id="sec-crypto-prices">
+        <div class="flex items-center gap-3 mb-4">
             <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">幣安合約即時價格與資金費率・MSTR / STRC 美股行情</p></div>
         </div>
@@ -244,7 +244,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
-                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與恐懼與貪婪指數（選擇權波動率指標請點右上「選擇權指標」）</p></div>
+                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與恐懼與貪婪指數</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
@@ -252,7 +252,6 @@
                             <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">ETF 淨流向</button>
                             <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">恐懼與貪婪指數</button>
                         </div>
-                        <a href="https://www.greeks.live/deribit/tools/datalab/BTC" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentPurple hover:text-white shrink-0 flex items-center text-xs font-bold" title="前往 greeks.live 查看比特幣選擇權波動率指標">選擇權指標</a>
                         <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                         <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
@@ -286,6 +285,7 @@
             <div class="wr-maintabs">
               <button type="button" id="wr-tab-live" class="wr-maintab active">即時分析</button>
               <button type="button" id="wr-tab-sop" class="wr-maintab">進出場 SOP</button>
+              <a href="https://www.greeks.live/deribit/tools/datalab/BTC" target="_blank" rel="noopener noreferrer" class="wr-glink" title="前往 greeks.live 查看比特幣選擇權波動率指標">選擇權指標 ↗</a>
             </div>
             <div id="wr-content"></div>
             <div id="wr-sop" class="hidden">
@@ -504,6 +504,8 @@
         #btc-options-weekly .wr-maintab{font-size:13px;font-weight:700;padding:7px 16px;border-radius:10px;cursor:pointer;background:none;border:1px solid transparent;color:#a1a1aa;font-family:inherit;transition:all .15s}
         #btc-options-weekly .wr-maintab:hover{color:#e4e4e7}
         #btc-options-weekly .wr-maintab.active{background:rgba(6,182,212,.12);color:var(--wr-cyan);border-color:rgba(6,182,212,.25)}
+        #btc-options-weekly .wr-glink{margin-left:auto;align-self:center;font-size:12px;font-weight:700;color:#a855f7;text-decoration:none;padding:6px 14px;border-radius:10px;background:#1b1b1f;border:1px solid rgba(255,255,255,.08);transition:color .15s,border-color .15s}
+        #btc-options-weekly .wr-glink:hover{color:#fff;border-color:rgba(168,85,247,.4)}
         #btc-options-weekly .wr-status{color:var(--wr-ink2);font-size:13px;display:flex;align-items:center;gap:10px;padding:14px 2px}
         #btc-options-weekly .wr-spin{width:16px;height:16px;border:2px solid var(--wr-grid);border-top-color:var(--wr-cyan);border-radius:50%;animation:wr-rot 1s linear infinite}
         @keyframes wr-rot{to{transform:rotate(360deg)}}
@@ -950,8 +952,8 @@
         <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
             <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
-            <div id="sec-tw-quotes" class="bg-darkCard border border-zinc-850 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-6">
+            <div id="sec-tw-quotes">
+        <div class="flex items-center gap-3 mb-4">
             <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">加權指數與權值股 Yahoo Finance 即時行情（綠漲紅跌）</p></div>
         </div>
@@ -1179,8 +1181,8 @@
                 </div>
             </div>
             <!-- 美股自選代碼卡片 -->
-            <div id="sec-us-watchlist" class="bg-darkCard border border-zinc-850 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-6">
+            <div id="sec-us-watchlist">
+        <div class="flex items-center gap-3 mb-4">
             <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">自選 ETF 與個股 TradingView 即時行情卡</p></div>
         </div>
