@@ -1143,7 +1143,7 @@
                     </table>
                 </div>
                 <div id="tw-weight-note" class="text-[11px] text-zinc-600 px-1 mt-3">
-                    <span class="text-zinc-500">*</span> 清單已內嵌打包於本檔（資料日期 2026/06/30）。點「更新前50大清單」可透過公用代理即時抓取<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重；抓取成功後即以最新資料重繪。
+                    <span class="text-zinc-500">*</span> 開啟台股頁籤時會自動透過公用代理同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重，確保排名即時正確；同步完成前暫以內嵌清單（資料日期 2026/06/30）顯示，亦可點「更新前50大清單」手動重抓。
                 </div>
             </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
@@ -1720,11 +1720,12 @@
             if(window.lucide)lucide.createIcons();
         }
         // 一鍵：透過公用代理即時抓取元大 0050 官網最新持股權重 (JSON API)，成功則覆寫 TW_TOP50 並重繪
-        function refreshTwTop50FromYuanta(){
+        function refreshTwTop50FromYuanta(auto){
             const btn=document.getElementById('tw-weight-refresh-btn');
             const note=document.getElementById('tw-weight-note');
             const origHtml=btn?btn.innerHTML:'';
-            if(btn){btn.disabled=true;btn.innerHTML='<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> 抓取中...';if(window.lucide)lucide.createIcons();}
+            if(btn&&!auto){btn.disabled=true;btn.innerHTML='<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> 抓取中...';if(window.lucide)lucide.createIcons();}
+            if(auto&&note){note.innerHTML='<span class="text-accentCyan">⟳</span> 正在從元大 0050 官網同步最新持股權重…（同步完成前暫以內嵌清單顯示）';}
             // 元大 ETF 後台持股 API (回傳含股票明細)；多個代理輪替容錯
             const apiUrl='https://www.yuantaetfs.com/api/v1/etfBasicInfo/getFundHoldingStock?fundId=0050';
             const proxies=[
@@ -1757,16 +1758,16 @@
             tryProxy(0).then(()=>{
                 twWeightFilter='全部';
                 renderTwWeightFilters();renderTwWeightTable();
-                if(note){const d=new Date();note.innerHTML=`<span class="text-emerald-500">✓</span> 已於 ${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} 從<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>更新持股權重。`;}
-                if(btn){btn.disabled=false;btn.innerHTML='<i data-lucide="check" class="w-3.5 h-3.5"></i> 已更新';if(window.lucide)lucide.createIcons();setTimeout(()=>{btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();},2500);}
+                if(note){const d=new Date();note.innerHTML=`<span class="text-emerald-500">✓</span> 已於 ${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ${auto?'自動':''}從<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>同步最新持股權重，排名為即時資料。`;}
+                if(btn&&!auto){btn.disabled=false;btn.innerHTML='<i data-lucide="check" class="w-3.5 h-3.5"></i> 已更新';if(window.lucide)lucide.createIcons();setTimeout(()=>{btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();},2500);}
             }).catch(()=>{
-                if(note){note.innerHTML='<span class="text-rose-500">✗</span> 抓取失敗：0050 官網或公用代理暫時無法連線（政府/金融網站限制較嚴），請稍後再試，或直接前往<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>查看。目前顯示為內嵌打包清單。';}
-                if(btn){btn.disabled=false;btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();}
+                if(note){note.innerHTML='<span class="text-rose-500">✗</span> '+(auto?'自動同步失敗':'抓取失敗')+'：0050 官網或公用代理暫時無法連線（政府/金融網站限制較嚴）。目前顯示為內嵌清單（資料日期 2026/06/30），可點上方「更新前50大清單」重試，或直接前往<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>查看。';}
+                if(btn&&!auto){btn.disabled=false;btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();}
             });
         }
         function initTwStockView(){
             if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');refreshFinancialsTabVisibility('tw');twStockState.extrasLoaded=true;}
-            if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();}
+            if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();refreshTwTop50FromYuanta(true);}
         }
         function initUsStockView(){
             if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
