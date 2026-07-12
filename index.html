@@ -132,7 +132,7 @@
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
         <div id="market-view-crypto" class="space-y-6">
         <!-- 核心指標卡 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="sec-crypto-prices" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <a href="https://tw.tradingview.com/chart/jzJAOmW9/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2"><img src="https://assets.coincap.io/assets/icons/btc@2x.png" class="w-4 h-4 rounded-full bg-zinc-800" alt="BTC"><span class="text-xs font-bold text-zinc-400">BINANCE:BTCUSDT</span><span class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span></div>
@@ -655,7 +655,7 @@
         <!-- ▲▲ BTC 選擇權即時分析面板 結束 ▲▲ -->
         <!-- 選擇權進出場 SOP -->
         <div class="grid grid-cols-1 gap-6">
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+            <div id="sec-crypto-sop" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <button onclick="toggleSop()" class="w-full flex items-center justify-between gap-3 text-left">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="clipboard-list" class="w-5 h-5 text-accentCyan"></i></div>
@@ -930,7 +930,7 @@
         <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
             <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="sec-tw-quotes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 加權指數 -->
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[180px]" data-tw-quote="^TWII" data-tw-name="加權指數" data-tw-code="TAIEX">
                     <div class="flex flex-col justify-center h-full">
@@ -1089,7 +1089,7 @@
                 </div>
             </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
-            <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+            <div id="sec-tw-tech" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
                     <div class="flex-1"><h2 id="tw-tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tw-tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
@@ -1120,7 +1120,7 @@
         <!-- ============================ 美股面板 ============================ -->
         <div id="market-view-us-stock" class="hidden space-y-6">
             <!-- 總經宏觀指標 -->
-            <div>
+            <div id="sec-us-macro">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-accentPurple"></i></div>
                     <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">CPI 通膨、波動率、美元指數與黃金原油 — 判斷市場風險情緒的關鍵溫度計</p></div>
@@ -1153,7 +1153,7 @@
                 </div>
             </div>
             <!-- 美股自選代碼卡片 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="sec-us-watchlist" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:VT"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:VOO"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="CBOE:DRAM"></div>
@@ -1198,7 +1198,7 @@
             </div>
             <!-- 美股技術分析評級 (滿版，與台股一致) -->
             <div class="space-y-6">
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div id="sec-us-tech" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-5">
                         <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
                         <div class="flex-1"><h2 id="tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
@@ -1224,7 +1224,7 @@
                     </div>
                     <div id="us-technical-container" class="w-full h-[520px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
-                <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div id="sec-us-calendar" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">全球財經日曆</h2><p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程（欄位由左至右：實際 / 預測 / 前期）</p></div>
@@ -1705,5 +1705,107 @@
             updateFundingRates();setInterval(updateFundingRates,30000);
         };
     </script>
+    <!-- ═══════════════════════════════════════════════════════════
+         右側區塊快速導航（自包含）：隨頁籤切換清單、點擊平滑定位、
+         捲動時高亮當前區塊。桌面（≥1024px）顯示，行動裝置自動隱藏。
+         ═══════════════════════════════════════════════════════════ -->
+    <nav id="section-nav" aria-label="區塊快速導航"></nav>
+    <style>
+    #section-nav{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:4px;padding:8px 6px;background:rgba(20,20,22,.72);border:1px solid rgba(255,255,255,.08);border-radius:14px;backdrop-filter:blur(8px)}
+    @media(max-width:1023px){#section-nav{display:none}}
+    #section-nav .sn-item{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:5px 6px;border-radius:9px;cursor:pointer;background:none;border:none;font-family:inherit}
+    #section-nav .sn-label{font-size:11px;font-weight:700;color:#a1a1aa;white-space:nowrap;opacity:0;transform:translateX(6px);transition:opacity .18s,transform .18s,color .18s;pointer-events:none;max-width:0;overflow:hidden}
+    #section-nav:hover .sn-label,#section-nav .sn-item.sn-active .sn-label{opacity:1;transform:translateX(0);max-width:160px}
+    #section-nav .sn-dot{width:8px;height:8px;border-radius:50%;background:#3f3f46;flex-shrink:0;transition:background .18s,box-shadow .18s}
+    #section-nav .sn-item:hover .sn-dot{background:#71717a}
+    #section-nav .sn-item:hover .sn-label{color:#e4e4e7}
+    #section-nav .sn-item.sn-active .sn-dot{background:#06b6d4;box-shadow:0 0 8px rgba(6,182,212,.55)}
+    #section-nav .sn-item.sn-active .sn-label{color:#06b6d4}
+    </style>
+    <script>
+    (function () {
+      'use strict';
+      /* 各頁籤的區塊清單：[元素 id, 顯示名稱] */
+      var SECTIONS = {
+        'crypto': [
+          ['sec-crypto-prices', '即時價格'],
+          ['panel-chart', 'CoinGlass 大盤分析'],
+          ['btc-options-weekly', 'BTC 選擇權分析'],
+          ['sec-crypto-sop', '選擇權 SOP'],
+          ['panel-strategy', '企業儲備動態'],
+          ['panel-table', '前10大加密貨幣']
+        ],
+        'us-stock': [
+          ['sec-us-macro', '總經宏觀指標'],
+          ['sec-us-watchlist', '自選個股'],
+          ['panel-us-chart', '美股大盤分析'],
+          ['panel-us-heatmap', '板塊熱力圖'],
+          ['sec-us-tech', '技術分析評級'],
+          ['sec-us-calendar', '財經日曆']
+        ],
+        'tw-stock': [
+          ['sec-tw-quotes', '即時報價'],
+          ['panel-tw-weight', '台股前50大'],
+          ['sec-tw-tech', '技術分析評級']
+        ]
+      };
+      var HEADER_OFFSET = 96; // sticky 頂欄高度緩衝
+      var nav = document.getElementById('section-nav');
+      var currentView = 'crypto';
+      var items = [];
+
+      function buildNav(view) {
+        currentView = view;
+        nav.innerHTML = '';
+        items = [];
+        (SECTIONS[view] || []).forEach(function (s) {
+          var el = document.getElementById(s[0]);
+          if (!el) return;
+          el.style.scrollMarginTop = HEADER_OFFSET + 'px';
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'sn-item';
+          btn.setAttribute('title', s[1]);
+          btn.innerHTML = '<span class="sn-label">' + s[1] + '</span><span class="sn-dot"></span>';
+          btn.addEventListener('click', function () {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          nav.appendChild(btn);
+          items.push({ el: el, btn: btn });
+        });
+        updateActive();
+      }
+
+      /* 捲動時高亮：取「頂端已越過視窗上緣＋緩衝」的最後一個區塊 */
+      var ticking = false;
+      function updateActive() {
+        if (!items.length) return;
+        var active = 0;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].el.getBoundingClientRect().top <= HEADER_OFFSET + 40) active = i;
+        }
+        /* 捲到頁面最底部時，一律視為位於最後一個區塊（避免短頁面點最後一項卻高亮不到） */
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) active = items.length - 1;
+        items.forEach(function (it, i) { it.btn.classList.toggle('sn-active', i === active); });
+      }
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { updateActive(); ticking = false; });
+      }, { passive: true });
+      window.addEventListener('resize', updateActive, { passive: true });
+
+      /* 掛勾頁籤切換：包裝原本的 switchMarketView，切換後重建清單並回到頂部區塊 */
+      if (typeof window.switchMarketView === 'function') {
+        var _orig = window.switchMarketView;
+        window.switchMarketView = function (view) {
+          _orig(view);
+          buildNav(view);
+        };
+      }
+      buildNav(currentView);
+    })();
+    </script>
+    <!-- ▲▲ 右側區塊快速導航 結束 ▲▲ -->
 </body>
 </html>
