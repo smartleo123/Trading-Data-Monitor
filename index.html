@@ -529,17 +529,33 @@
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-accentPurple"></i></div>
-                    <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">利率、殖利率、波動率、美元與大宗商品 — 判斷市場風險情緒的關鍵溫度計</p></div>
+                    <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">CPI 通膨、波動率、美元指數與黃金原油 — 判斷市場風險情緒的關鍵溫度計</p></div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="BINGX:TLTUSDT.P" title="美國20年公債 TLT 期貨"></div>
+                    <a href="https://tradingeconomics.com/united-states/inflation-cpi" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-3 h-[160px] overflow-hidden flex flex-col justify-between transition-colors group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">美國 CPI 年增率</span>
+                            <span class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">2026/05</span>
+                        </div>
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-3xl font-black text-rose-400 font-mono tracking-tight">4.2</span>
+                            <span class="text-lg font-bold text-rose-400">%</span>
+                            <span class="text-[10px] font-bold text-rose-400 ml-1">▲ 加速</span>
+                        </div>
+                        <div class="space-y-1 text-[10px] font-mono">
+                            <div class="flex justify-between text-zinc-500"><span>前值 (4月)</span><span class="text-zinc-300 font-bold">3.8%</span></div>
+                            <div class="flex justify-between text-zinc-500"><span>下次預測</span><span class="text-amber-400 font-bold">~4.2%</span></div>
+                            <div class="flex justify-between text-zinc-500"><span>下次公布</span><span class="text-zinc-300 font-bold">7/15 (估)</span></div>
+                        </div>
+                        <div class="text-[9px] text-zinc-600 group-hover:text-accentPurple transition-colors">核心 CPI 2.9% · 點擊看即時 →</div>
+                    </a>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TOOBIT:VIXUSDT.P" title="VIX 波動率期貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="BINGX:USDOLLARINDEXDXYUSDT.P" title="美元指數 DXY 期貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TVC:GOLD" title="黃金現貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TVC:USOIL" title="WTI 原油"></div>
                 </div>
                 <div class="text-[11px] text-zinc-600 px-1 mt-2">
-                    <span class="text-zinc-500">*</span> 殖利率(TLT)、波動率(VIX)、美元指數(DXY)採用永續期貨報價（BingX / Toobit）；黃金、原油為 TradingView 原生報價。
+                    <span class="text-zinc-500">*</span> 美國 CPI 為靜態資料（2026/05 官方公布：年增 4.2%、前值 3.8%、核心 2.9%），數值每月手動更新，點卡片可看 Trading Economics 即時數據；波動率(VIX)、美元(DXY)採永續期貨，黃金、原油為 TradingView 原生報價。
                 </div>
             </div>
 
