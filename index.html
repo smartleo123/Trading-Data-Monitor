@@ -236,15 +236,15 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
-                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約 K 線、ETF 持倉流向、恐懼與貪婪指數與 greeks.live 選擇權波動率指標</p></div>
+                        <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與恐懼與貪婪指數（選擇權波動率指標請點右上「選擇權指標」）</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
                         <div class="bg-zinc-900 border border-zinc-850 p-1 rounded-xl flex gap-1">
                             <button onclick="toggleChartSource('coinglass')" id="btn-src-coinglass" class="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20">CoinGlass 實時 K 線</button>
                             <button onclick="toggleChartSource('local')" id="btn-src-local" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">ETF 淨流向</button>
                             <button onclick="toggleChartSource('altcoin')" id="btn-src-altcoin" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">恐懼與貪婪指數</button>
-                            <button onclick="toggleChartSource('options')" id="btn-src-options" class="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">選擇權指標</button>
                         </div>
+                        <a href="https://www.greeks.live/deribit/tools/datalab/BTC" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentPurple hover:text-white shrink-0 flex items-center gap-1.5 text-xs font-bold" title="前往 greeks.live 查看比特幣選擇權波動率指標"><i data-lucide="sigma" class="w-4 h-4"></i> 選擇權指標</a>
                         <a id="coinglass-source-link" href="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" target="_blank" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinGlass 實時 K 線頁面"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                         <button onclick="toggleMaximize('panel-chart')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-chart-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
@@ -252,12 +252,6 @@
                 <div id="coinglass-iframe-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"><iframe src="https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT" class="w-full h-full border-none" allowfullscreen></iframe></div>
                 <div id="local-chart-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="etf-flow-iframe" class="w-full h-full border-none"></iframe></div>
                 <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe></div>
-                <div id="options-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black">
-                    <iframe id="options-iframe" class="w-full h-full border-none relative z-10" allowfullscreen></iframe>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6 pointer-events-none">
-                        <div class="text-zinc-600 text-xs">若下方未顯示 greeks.live 選擇權圖表（部分網站禁止內嵌），請點擊右上角連結於新分頁開啟</div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -710,17 +704,16 @@
 
         // ===== CoinGlass 切換 =====
         function toggleChartSource(type) {
-            const bC=document.getElementById('btn-src-coinglass'),bL=document.getElementById('btn-src-local'),bA=document.getElementById('btn-src-altcoin'),bO=document.getElementById('btn-src-options');
-            const cC=document.getElementById('coinglass-iframe-container'),cL=document.getElementById('local-chart-container'),cA=document.getElementById('altcoin-iframe-container'),cO=document.getElementById('options-iframe-container');
-            const eI=document.getElementById('etf-flow-iframe'),aI=document.getElementById('altcoin-index-iframe'),oI=document.getElementById('options-iframe'),sL=document.getElementById('coinglass-source-link');
+            const bC=document.getElementById('btn-src-coinglass'),bL=document.getElementById('btn-src-local'),bA=document.getElementById('btn-src-altcoin');
+            const cC=document.getElementById('coinglass-iframe-container'),cL=document.getElementById('local-chart-container'),cA=document.getElementById('altcoin-iframe-container');
+            const eI=document.getElementById('etf-flow-iframe'),aI=document.getElementById('altcoin-index-iframe'),sL=document.getElementById('coinglass-source-link');
             const A="text-xs px-3 py-1.5 rounded-lg font-bold transition-all bg-accentCyan/10 text-accentCyan border border-accentCyan/20";
             const I="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
-            bC.className=type==='coinglass'?A:I; bL.className=type==='local'?A:I; bA.className=type==='altcoin'?A:I; if(bO)bO.className=type==='options'?A:I;
-            cC.style.display=type==='coinglass'?'block':'none'; cL.style.display=type==='local'?'block':'none'; cA.style.display=type==='altcoin'?'block':'none'; if(cO)cO.style.display=type==='options'?'block':'none';
+            bC.className=type==='coinglass'?A:I; bL.className=type==='local'?A:I; bA.className=type==='altcoin'?A:I;
+            cC.style.display=type==='coinglass'?'block':'none'; cL.style.display=type==='local'?'block':'none'; cA.style.display=type==='altcoin'?'block':'none';
             if(type==='local'&&eI&&!eI.getAttribute('src')) eI.setAttribute('src','https://www.coinglass.com/zh-TW/etf/bitcoin');
             if(type==='altcoin'&&aI&&!aI.getAttribute('src')) aI.setAttribute('src','https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex');
-            if(type==='options'&&oI&&!oI.getAttribute('src')) oI.setAttribute('src','https://www.greeks.live/deribit/tools/datalab/BTC');
-            if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex',t:'前往 CoinGlass 恐懼與貪婪指數頁面'},options:{u:'https://www.greeks.live/deribit/tools/datalab/BTC',t:'前往 greeks.live 選擇權數據頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
+            if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex',t:'前往 CoinGlass 恐懼與貪婪指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
         }
 
         // ===== 工具 =====
