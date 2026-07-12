@@ -70,7 +70,6 @@
     </style>
 </head>
 <body class="bg-darkBg text-zinc-100 font-sans min-h-full flex flex-col antialiased">
-
     <!-- 頂部導航欄 -->
     <div class="sticky top-0 z-40 bg-darkBg">
         <header class="border-b border-zinc-900 bg-darkBg/95 backdrop-blur px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
@@ -130,7 +129,6 @@
             </div>
         </header>
     </div>
-
     <main class="flex-grow p-6 space-y-6 max-w-[1600px] w-full mx-auto">
         <div id="market-view-crypto" class="space-y-6">
         <!-- 核心指標卡 -->
@@ -234,7 +232,6 @@
                 </div>
             </a>
         </div>
-
         <!-- CoinGlass 大盤分析 -->
         <div class="grid grid-cols-1 gap-6">
             <div id="panel-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
@@ -259,6 +256,344 @@
                 <div id="altcoin-iframe-container" class="w-full h-[550px] hidden relative rounded-xl overflow-hidden border border-zinc-900 bg-black"><iframe id="altcoin-index-iframe" class="w-full h-full border-none" allowfullscreen></iframe></div>
             </div>
         </div>
+        <!-- ═══════════════════════════════════════════════════════════════════
+             BTC 選擇權即時分析 · 可折疊面板（自包含，貼上即用）
+             貼進 index.html 的 <div id="market-view-crypto" class="space-y-6"> 內
+             任意位置（建議放在 CoinGlass 面板附近）。
+             展開時瀏覽器直接呼叫 Deribit 公開 API 即時計算，無需後端、無需排程。
+             ═══════════════════════════════════════════════════════════════════ -->
+        <div id="btc-options-weekly" class="bg-darkCard border border-zinc-800 rounded-2xl p-5">
+          <button type="button" id="wr-toggle" class="w-full flex items-center justify-between gap-3 text-left" aria-expanded="false" aria-controls="wr-body">
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+                <svg class="w-5 h-5 text-accentCyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 13l3-3 4 4 5-6"/></svg>
+              </div>
+              <div>
+                <h2 class="text-md font-extrabold text-white">BTC 選擇權即時分析</h2>
+                <p class="text-xs text-zinc-500 mt-0.5">Deribit 公開數據・展開時即時計算 IV／Skew／Max Pain／OI 牆與進出場參考</p>
+              </div>
+            </div>
+            <svg id="wr-chevron" class="w-5 h-5 text-zinc-500 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+
+          <div id="wr-body" class="hidden mt-5">
+            <div id="wr-content"></div>
+          </div>
+
+        <style>
+        /* 全部樣式限定在 #btc-options-weekly 之內，不影響頁面其他元素 */
+        #btc-options-weekly{--wr-card2:#1b1b1f;--wr-ink:#f4f4f5;--wr-ink2:#a1a1aa;--wr-muted:#8b8b93;--wr-grid:#27272a;--wr-border:rgba(255,255,255,.08);--wr-cyan:#06b6d4;--wr-green:#10b981;--wr-red:#ef4444;--wr-mark-s:#0da271;--wr-mark-r:#ef4444;--wr-mark-a:#0e9cb8}
+        #btc-options-weekly .wr-status{color:var(--wr-ink2);font-size:13px;display:flex;align-items:center;gap:10px;padding:14px 2px}
+        #btc-options-weekly .wr-spin{width:16px;height:16px;border:2px solid var(--wr-grid);border-top-color:var(--wr-cyan);border-radius:50%;animation:wr-rot 1s linear infinite}
+        @keyframes wr-rot{to{transform:rotate(360deg)}}
+        #btc-options-weekly .wr-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--wr-muted);margin-bottom:12px}
+        #btc-options-weekly .wr-bar button{color:var(--wr-cyan);background:none;border:1px solid var(--wr-border);border-radius:999px;padding:2px 12px;cursor:pointer;font-size:11.5px}
+        #btc-options-weekly .wr-bar button:hover{border-color:var(--wr-cyan)}
+        #btc-options-weekly .wr-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+        #btc-options-weekly .wr-tile{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:11px 13px}
+        #btc-options-weekly .wr-tile .k{font-size:11px;color:var(--wr-muted)}
+        #btc-options-weekly .wr-tile .v{font-size:19px;font-weight:700;color:var(--wr-ink);margin-top:1px}
+        #btc-options-weekly .wr-tile .d{font-size:11px;color:var(--wr-ink2);margin-top:1px;line-height:1.5}
+        #btc-options-weekly .wr-h{font-size:14.5px;font-weight:700;color:var(--wr-ink);margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--wr-grid)}
+        #btc-options-weekly .wr-h .no{color:var(--wr-cyan);font-weight:600;margin-right:7px;font-size:12.5px}
+        #btc-options-weekly .wr-lead{color:var(--wr-ink2);font-size:13px;line-height:1.8;margin-bottom:10px}
+        #btc-options-weekly .wr-ladder{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:14px 16px}
+        #btc-options-weekly .wr-lrow{display:flex;align-items:center;gap:11px;padding:6px 0;border-bottom:1px dashed var(--wr-grid)}
+        #btc-options-weekly .wr-lrow:last-child{border-bottom:none}
+        #btc-options-weekly .wr-lp{flex:0 0 122px;font-variant-numeric:tabular-nums;font-weight:700;font-size:13.5px;text-align:right}
+        #btc-options-weekly .wr-lb{height:9px;border-radius:4px;flex:0 0 auto}
+        #btc-options-weekly .wr-ln{font-size:12px;color:var(--wr-ink2)}
+        #btc-options-weekly .wr-r{color:var(--wr-red)}#btc-options-weekly .wr-s{color:var(--wr-green)}
+        #btc-options-weekly .wr-br{background:var(--wr-mark-r)}#btc-options-weekly .wr-bs{background:var(--wr-mark-s)}
+        #btc-options-weekly .wr-bspot{background:var(--wr-ink);height:2px!important;border-radius:0}
+        #btc-options-weekly .wr-lp.spot{color:var(--wr-ink)}
+        #btc-options-weekly table.wr-t{width:100%;border-collapse:collapse;background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;overflow:hidden;font-size:12.5px;margin-top:10px}
+        #btc-options-weekly table.wr-t th,#btc-options-weekly table.wr-t td{padding:9px 12px;text-align:left;vertical-align:top;color:var(--wr-ink2)}
+        #btc-options-weekly table.wr-t thead th{font-size:11.5px;color:var(--wr-muted);font-weight:600;border-bottom:1px solid var(--wr-grid)}
+        #btc-options-weekly table.wr-t tbody tr+tr td{border-top:1px solid var(--wr-grid)}
+        #btc-options-weekly table.wr-t td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;color:var(--wr-ink)}
+        #btc-options-weekly .wr-dl{color:var(--wr-green);font-weight:700}#btc-options-weekly .wr-ds{color:var(--wr-red);font-weight:700}
+        #btc-options-weekly .wr-cards{display:grid;grid-template-columns:1fr;gap:11px}
+        @media(min-width:900px){#btc-options-weekly .wr-cards{grid-template-columns:1fr 1fr}}
+        #btc-options-weekly .wr-card{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:14px 16px}
+        #btc-options-weekly .wr-card h4{font-size:13.5px;font-weight:700;color:var(--wr-ink);margin:0 0 3px}
+        #btc-options-weekly .wr-badge{display:inline-block;font-size:10.5px;font-weight:600;border-radius:999px;padding:1px 9px;margin-bottom:7px;background:rgba(6,182,212,.12);color:var(--wr-cyan)}
+        #btc-options-weekly .wr-badge.warn{background:rgba(239,68,68,.12);color:var(--wr-red)}
+        #btc-options-weekly .wr-card p{font-size:12px;color:var(--wr-ink2);margin:0}
+        #btc-options-weekly .wr-how{margin:7px 0;padding:9px 11px;background:rgba(0,0,0,.35);border-radius:8px;font-size:12px;color:var(--wr-ink)}
+        #btc-options-weekly .wr-risk{font-size:11px;color:var(--wr-muted);margin-top:7px!important}
+        #btc-options-weekly ul.wr-tips{list-style:none;margin:8px 0 0;padding:0}
+        #btc-options-weekly ul.wr-tips li{padding:6px 0 6px 16px;position:relative;font-size:12.5px;color:var(--wr-ink2);border-bottom:1px dashed var(--wr-grid)}
+        #btc-options-weekly ul.wr-tips li:last-child{border-bottom:none}
+        #btc-options-weekly ul.wr-tips li::before{content:"";position:absolute;left:1px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--wr-cyan)}
+        #btc-options-weekly .wr-callout{border-left:3px solid var(--wr-red);background:var(--wr-card2);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px;font-size:12px;color:var(--wr-ink2)}
+        #btc-options-weekly .wr-foot{margin-top:18px;padding-top:12px;border-top:1px solid var(--wr-grid);font-size:11px;color:var(--wr-muted);line-height:1.7}
+        #btc-options-weekly .wr-err{color:var(--wr-red);font-size:13px;padding:12px 2px}
+        #btc-options-weekly .wr-err button{margin-left:10px;color:var(--wr-cyan);background:none;border:1px solid var(--wr-border);border-radius:999px;padding:2px 12px;cursor:pointer;font-size:12px}
+        </style>
+
+        <script>
+        (function () {
+          'use strict';
+          var API = 'https://www.deribit.com/api/v2/public/';
+          var root = document.getElementById('btc-options-weekly');
+          var body = document.getElementById('wr-body');
+          var box = document.getElementById('wr-content');
+          var chevron = document.getElementById('wr-chevron');
+          var toggleBtn = document.getElementById('wr-toggle');
+          var loaded = false, loading = false;
+
+          toggleBtn.addEventListener('click', function () {
+            var open = body.classList.toggle('hidden') === false;
+            chevron.style.transform = open ? 'rotate(180deg)' : '';
+            toggleBtn.setAttribute('aria-expanded', open);
+            if (open && !loaded && !loading) load();
+          });
+
+          /* ---------- 工具 ---------- */
+          function $(html) { box.innerHTML = html; }
+          function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+          function fmt$(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+          function fmtK(n) { return n >= 1000 ? (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'K' : String(Math.round(n)); }
+          function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+          function nearest(arr, t) { return arr.reduce(function (a, b) { return Math.abs(b - t) < Math.abs(a - t) ? b : a; }); }
+          var MONTHS = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+          function parseExpiry(code) { var m = /^(\d{1,2})([A-Z]{3})(\d{2})$/.exec(code); return m ? new Date(Date.UTC(2000 + +m[3], MONTHS[m[2]], +m[1], 8)) : null; }
+          function daysTo(d) { return (d - Date.now()) / 86400000; }
+          function pctile(v, arr) { var s = arr.slice().sort(function (a, b) { return a - b; }); return s.filter(function (x) { return x <= v; }).length / s.length * 100; }
+
+          function api(path, params) {
+            var qs = new URLSearchParams(params || {}).toString();
+            return fetch(API + path + (qs ? '?' + qs : '')).then(function (res) {
+              if (res.status === 429) return sleep(1200).then(function () { return api(path, params); });
+              if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + path);
+              return res.json();
+            }).then(function (j) { if (j.error) throw new Error('API ' + path); return j.result !== undefined ? j.result : j; });
+          }
+
+          /* ---------- 數據 ---------- */
+          function fetchAll(onStep) {
+            var now = Date.now(), D = {};
+            onStep('抓取基礎數據（1/3）…');
+            return Promise.all([
+              api('get_index_price', { index_name: 'btc_usd' }),
+              api('ticker', { instrument_name: 'BTC-PERPETUAL' }),
+              api('get_book_summary_by_currency', { currency: 'BTC', kind: 'future' }),
+              api('get_volatility_index_data', { currency: 'BTC', start_timestamp: now - 90 * 86400000, end_timestamp: now, resolution: '43200' }),
+              api('get_tradingview_chart_data', { instrument_name: 'BTC-PERPETUAL', start_timestamp: now - 45 * 86400000, end_timestamp: now, resolution: '1D' })
+            ]).then(function (r) {
+              D.spot = r[0].index_price;
+              D.perp = { mark: r[1].mark_price, funding8h: (r[1].funding_8h || 0) * 100, high24: r[1].stats.high, low24: r[1].stats.low };
+              var futs = r[2].filter(function (f) { return f.instrument_name !== 'BTC-PERPETUAL'; })
+                .map(function (f) { return { mark: f.mark_price, exp: parseExpiry(f.instrument_name.split('-')[1]) }; })
+                .filter(function (f) { return f.exp; }).sort(function (a, b) { return a.exp - b.exp; });
+              var far = futs[futs.length - 1];
+              D.basisAnnual = far ? (far.mark / D.spot - 1) / (daysTo(far.exp) / 365) * 100 : 0;
+              var closes = r[3].data.map(function (c) { return c[4]; });
+              D.dvol = { latest: closes[closes.length - 1], min: Math.min.apply(null, r[3].data.map(function (c) { return c[3]; })), max: Math.max.apply(null, r[3].data.map(function (c) { return c[2]; })), pct: pctile(closes[closes.length - 1], closes) };
+              var n = r[4].ticks.length;
+              D.last30 = { high: Math.max.apply(null, r[4].high.slice(Math.max(0, n - 30))), low: Math.min.apply(null, r[4].low.slice(Math.max(0, n - 30))) };
+              onStep('分析未平倉結構（2/3）…');
+              return api('get_book_summary_by_currency', { currency: 'BTC', kind: 'option' });
+            }).then(function (sum) {
+              var opts = [];
+              sum.forEach(function (o) {
+                var p = o.instrument_name.split('-'); if (p.length !== 4) return;
+                var ed = parseExpiry(p[1]); if (!ed || ed <= new Date()) return;
+                opts.push({ expiry: p[1], ed: ed, K: +p[2], type: p[3], oi: o.open_interest || 0 });
+              });
+              D.opts = opts;
+              var near = opts.filter(function (o) { return daysTo(o.ed) <= 60; });
+              var pOI = 0, cOI = 0;
+              near.forEach(function (o) { if (o.type === 'P') pOI += o.oi; else cOI += o.oi; });
+              D.pcRatio = cOI ? pOI / cOI : 0;
+              function walls(f) { var m = {}; near.forEach(function (o) { if (f(o)) m[o.K] = (m[o.K] || 0) + o.oi; }); return Object.entries(m).map(function (e) { return [+e[0], e[1]]; }).sort(function (a, b) { return b[1] - a[1]; }); }
+              D.putWalls = walls(function (o) { return o.type === 'P' && o.K < D.spot && o.K > D.spot * 0.75; }).slice(0, 3);
+              D.callWalls = walls(function (o) { return o.type === 'C' && o.K > D.spot && o.K < D.spot * 1.3; }).slice(0, 3);
+              var g = {}; opts.forEach(function (o) { if (daysTo(o.ed) <= 30 && Math.abs(o.K / D.spot - 1) < 0.08) g[o.K] = (g[o.K] || 0) + o.oi; });
+              var ge = Object.entries(g).sort(function (a, b) { return b[1] - a[1]; })[0];
+              D.gamma = ge ? +ge[0] : Math.round(D.spot / 1000) * 1000;
+              var eo = {}; opts.forEach(function (o) { var d = daysTo(o.ed); if (d >= 14 && d <= 50) eo[o.expiry] = (eo[o.expiry] || 0) + o.oi; });
+              var big = Object.entries(eo).sort(function (a, b) { return b[1] - a[1]; })[0];
+              D.maxPain = null;
+              if (big) {
+                var es = opts.filter(function (o) { return o.expiry === big[0]; });
+                var ks = Array.from(new Set(es.map(function (o) { return o.K; }))).sort(function (a, b) { return a - b; });
+                var best = [Infinity, ks[0]];
+                ks.forEach(function (S) {
+                  var pay = 0;
+                  es.forEach(function (o) { pay += o.oi * (o.type === 'C' ? Math.max(0, S - o.K) : Math.max(0, o.K - S)); });
+                  if (pay < best[0]) best = [pay, S];
+                });
+                D.maxPain = { expiry: big[0], strike: best[1] };
+              }
+              onStep('取樣各期限 IV（3/3）…');
+              /* 挑 3 個代表到期日，各取 5 檔 */
+              var allExp = Array.from(new Set(opts.map(function (o) { return o.expiry; })))
+                .map(function (e) { return { code: e, dte: daysTo(parseExpiry(e)) }; })
+                .filter(function (e) { return e.dte > 0; }).sort(function (a, b) { return a.dte - b.dte; });
+              var picks = [];
+              [[5, 14], [15, 45], [60, 200]].forEach(function (w) {
+                var c = allExp.find(function (e) { return e.dte >= w[0] && e.dte <= w[1] && picks.indexOf(e) < 0; });
+                if (c) picks.push(c);
+              });
+              var jobs = [];
+              picks.forEach(function (e) {
+                var ks = Array.from(new Set(opts.filter(function (o) { return o.expiry === e.code; }).map(function (o) { return o.K; }))).sort(function (a, b) { return a - b; });
+                if (!ks.length) return;
+                var targets = Array.from(new Set([0.88, 0.94, 1.0, 1.07, 1.14].map(function (m) { return nearest(ks, D.spot * m); })));
+                jobs.push(Promise.all(targets.map(function (K) {
+                  var t = K < D.spot ? 'P' : 'C';
+                  return api('ticker', { instrument_name: 'BTC-' + e.code + '-' + K + '-' + t })
+                    .then(function (r) { return { K: K, type: t, iv: r.mark_iv, delta: r.greeks ? r.greeks.delta : 0 }; })
+                    .catch(function () { return null; });
+                })).then(function (qs) {
+                  qs = qs.filter(Boolean); if (!qs.length) return null;
+                  var atm = qs.reduce(function (a, b) { return Math.abs(b.K - D.spot) < Math.abs(a.K - D.spot) ? b : a; });
+                  var puts = qs.filter(function (q) { return q.type === 'P'; });
+                  var calls = qs.filter(function (q) { return q.type === 'C' && q.K > D.spot; });
+                  function by25(arr) { return arr.length ? arr.reduce(function (a, b) { return Math.abs(Math.abs(b.delta) - .25) < Math.abs(Math.abs(a.delta) - .25) ? b : a; }) : null; }
+                  var p = by25(puts), c = by25(calls);
+                  return { expiry: e.code, dte: Math.round(e.dte), atmIV: atm.iv, skew: p && c ? p.iv - c.iv : null };
+                }));
+              });
+              return Promise.all(jobs);
+            }).then(function (ivRows) {
+              D.ivRows = ivRows.filter(Boolean);
+              return D;
+            });
+          }
+
+          /* ---------- 規則式分析（與週報腳本同邏輯） ---------- */
+          function analyze(d) {
+            var a = {};
+            a.volRegime = d.dvol.pct < 25 ? 'low' : d.dvol.pct > 75 ? 'high' : 'mid';
+            a.volText = a.volRegime === 'low' ? 'DVOL ' + d.dvol.latest.toFixed(1) + ' 位於近三個月 ' + Math.round(d.dvol.pct) + '% 分位、貼近低檔——低波動壓縮期，選擇權相對便宜，但假突破多。'
+              : a.volRegime === 'high' ? 'DVOL ' + d.dvol.latest.toFixed(1) + '（' + Math.round(d.dvol.pct) + '% 分位）接近高檔——選擇權昂貴，賣方相對有利，嚴控尾部風險。'
+              : 'DVOL ' + d.dvol.latest.toFixed(1) + '（' + Math.round(d.dvol.pct) + '% 分位），波動率中性。';
+            var fs = 0; for (var i = 0; i < d.ivRows.length; i++) { if (d.ivRows[i].skew != null) { fs = d.ivRows[i].skew; break; } }
+            a.skewDef = fs > 2; a.skewCall = fs < -2;
+            a.skewText = a.skewDef ? '25Δ Put IV 高於 Call 約 ' + fs.toFixed(1) + ' 點，市場付溢價買下檔保護，偏防禦。'
+              : a.skewCall ? '25Δ Call IV 高於 Put 約 ' + (-fs).toFixed(1) + ' 點，上檔追價情緒偏強。' : 'Skew 大致平衡，方向情緒中性。';
+            a.fundText = d.perp.funding8h > 0.02 ? '資金費率 +' + d.perp.funding8h.toFixed(3) + '%/8h 偏熱，多頭擁擠。'
+              : d.perp.funding8h < -0.01 ? '資金費率 ' + d.perp.funding8h.toFixed(3) + '%/8h 為負，慎防軋空。'
+              : '資金費率 ' + (d.perp.funding8h >= 0 ? '+' : '') + d.perp.funding8h.toFixed(3) + '%/8h 近乎中性。';
+            a.basisText = d.basisAnnual > 15 ? '期貨年化基差 ' + d.basisAnnual.toFixed(1) + '% 偏高，槓桿擁擠。'
+              : d.basisAnnual < 5 ? '期貨年化基差僅 ' + d.basisAnnual.toFixed(1) + '%，槓桿情緒冷靜。'
+              : '期貨年化基差 ' + d.basisAnnual.toFixed(1) + '%，溫和正價差。';
+            a.putWall = d.putWalls.length ? d.putWalls[0][0] : null;
+            a.callWall = d.callWalls.length ? d.callWalls[0][0] : null;
+            var grid = d.spot > 80000 ? 2000 : 1000;
+            var snap = function (v) { return Math.round(v / grid) * grid; };
+            a.condor = { sp: a.putWall || snap(d.spot * .92), sc: a.callWall || snap(d.spot * 1.08) };
+            a.condor.bp = a.condor.sp - 2 * grid; a.condor.bc = a.condor.sc + 2 * grid;
+            a.ccStrike = a.callWall || snap(d.spot * 1.08);
+            a.callSpread = { b: snap(d.spot * 1.1), s: snap(d.spot * 1.33) };
+            a.putSpread = { b: snap(d.spot * .97), s: snap(d.spot * .88) };
+            var front = d.ivRows[0], mid = d.ivRows[d.ivRows.length - 1];
+            a.calGood = front && mid && front !== mid && front.atmIV > mid.atmIV;
+            a.front = front; a.mid = mid;
+            var supC = [d.maxPain && d.maxPain.strike, a.putWall].filter(function (v) { return v && v < d.spot * .995; });
+            var sup = supC.length ? Math.max.apply(null, supC) : snap(d.spot * .96);
+            var resC = [a.callWall, d.gamma].filter(function (v) { return v && v > d.spot * 1.005; });
+            var res = resC.length ? Math.min.apply(null, resC) : snap(d.spot * 1.04);
+            var bo = Math.max(res, d.last30.high), bd = Math.min(sup, d.last30.low);
+            var boT1 = snap(bo * 1.025), bdT1 = snap(bd * .975);
+            a.pp = {
+              lz: [sup, sup + grid / 2], ls: Math.min(d.last30.low, sup - grid), lt1: Math.min(snap(d.spot * 1.015), res - grid / 2), lt2: res,
+              sz: [res, res + grid / 2], ss: res + grid * 1.5, st1: Math.max(snap(d.spot * .985), sup + grid / 2), st2: sup,
+              bo: bo, bos: bo - grid * 1.2, bot1: boT1, bot2: Math.max(boT1 + grid, (a.callWall || snap(d.spot * 1.08)) + grid),
+              bd: bd, bds: bd + grid * 1.2, bdt1: bdT1, bdt2: Math.min(bdT1 - grid, (d.putWalls[1] && d.putWalls[1][0]) || snap(d.spot * .9))
+            };
+            return a;
+          }
+
+          /* ---------- 渲染 ---------- */
+          function render(d, a) {
+            var rows = [];
+            if (a.callWall) rows.push({ p: a.callWall, w: 68, n: 'Call 未平倉大牆（OI ' + fmtK(d.callWalls[0][1]) + '）・賣 Call 收租區' });
+            rows.push({ p: d.last30.high, w: 52, n: '近 30 日高點，突破確認位（日收上破才有效）' });
+            rows.push({ p: d.gamma, w: 90, n: 'OI/Gamma 集中區' });
+            if (d.maxPain) rows.push({ p: d.maxPain.strike, w: 66, n: 'Max Pain 磁吸位（' + d.maxPain.expiry + ' 到期）' });
+            rows.push({ p: d.last30.low, w: 90, n: '近 30 日低點，跌破轉弱' });
+            if (a.putWall) rows.push({ p: a.putWall, w: 68, n: 'Put 未平倉大牆（OI ' + fmtK(d.putWalls[0][1]) + '）' });
+            var mg = {};
+            rows.forEach(function (r) { if (mg[r.p]) { mg[r.p].n += '・' + r.n; mg[r.p].w = Math.max(mg[r.p].w, r.w); } else mg[r.p] = r; });
+            var lad = Object.values(mg).map(function (r) { return { price: r.p, cls: r.p >= d.spot ? 'wr-r' : 'wr-s', bar: r.p >= d.spot ? 'wr-br' : 'wr-bs', w: r.w, n: r.n }; });
+            lad.push({ price: d.spot + .5, spot: true });
+            lad.sort(function (x, y) { return y.price - x.price; });
+            var ladH = lad.map(function (l) {
+              return l.spot
+                ? '<div class="wr-lrow"><div class="wr-lp spot">' + fmt$(d.spot) + ' ◄</div><div class="wr-lb wr-bspot" style="width:90px"></div><div class="wr-ln"><strong>現價（指數）</strong></div></div>'
+                : '<div class="wr-lrow"><div class="wr-lp ' + l.cls + '">' + fmt$(l.price) + '</div><div class="wr-lb ' + l.bar + '" style="width:' + l.w + 'px"></div><div class="wr-ln">' + esc(l.n) + '</div></div>';
+            }).join('');
+            var ivH = d.ivRows.map(function (r) {
+              return '<tr><td>' + esc(r.expiry) + '</td><td class="num">' + r.dte + ' 天</td><td class="num">' + r.atmIV.toFixed(1) + '%</td><td class="num">' + (r.skew == null ? '—' : (r.skew >= 0 ? '+' : '') + r.skew.toFixed(1) + ' pt') + '</td></tr>';
+            }).join('');
+            var vc = a.calGood
+              ? { b: '做多波動率', t: '日曆價差 Calendar', body: '近月 IV（' + a.front.atmIV.toFixed(1) + '%）高於遠月（' + a.mid.atmIV.toFixed(1) + '%），賣貴買便宜。', how: '賣 ' + esc(a.front.expiry) + ' ATM ＋ 買 ' + esc(a.mid.expiry) + ' 同履約價。', risk: '價格大幅偏離履約價時兩頭受損。' }
+              : a.volRegime === 'low'
+                ? { b: '做多波動率', t: '遠月跨式 Straddle', body: 'DVOL 位於 ' + Math.round(d.dvol.pct) + '% 分位，買波動率相對便宜。', how: '買 ' + esc(a.mid ? a.mid.expiry : '60–90 天期') + ' ATM 跨式，等壓縮後變盤。', risk: '持續盤整時 theta 緩慢消耗，設定退出時間。' }
+                : { b: '做空波動率', t: '寬跨式收租（帶護翼）', body: '波動率偏高（' + Math.round(d.dvol.pct) + '% 分位），賣方有利。', how: '賣 ' + fmt$(a.condor.sp) + ' Put ＋ 賣 ' + fmt$(a.condor.sc) + ' Call，買 ' + fmt$(a.condor.bp) + '／' + fmt$(a.condor.bc) + ' 護翼。', risk: '高波動代表大行情機率高，倉位縮小。' };
+            var pp = a.pp;
+            var stamp = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
+            $('<div class="wr-bar"><span>數據時間：' + stamp + '（台北）・即時計算・僅供參考，非投資建議</span><button type="button" id="wr-refresh">重新整理</button></div>'
+              + '<div class="wr-tiles">'
+              + '<div class="wr-tile"><div class="k">BTC 指數</div><div class="v">' + fmt$(d.spot) + '</div><div class="d">永續 ' + fmt$(d.perp.mark) + '・24h ' + fmt$(d.perp.low24) + '–' + fmt$(d.perp.high24) + '</div></div>'
+              + '<div class="wr-tile"><div class="k">DVOL</div><div class="v">' + d.dvol.latest.toFixed(1) + '</div><div class="d">90日分位 ' + Math.round(d.dvol.pct) + '%（' + d.dvol.min.toFixed(0) + '–' + d.dvol.max.toFixed(0) + '）</div></div>'
+              + '<div class="wr-tile"><div class="k">ATM IV（近月）</div><div class="v">' + (a.front ? a.front.atmIV.toFixed(1) + '%' : '—') + '</div><div class="d">' + d.ivRows.map(function (r) { return esc(r.expiry) + ' ' + r.atmIV.toFixed(0) + '%'; }).join('・') + '</div></div>'
+              + '<div class="wr-tile"><div class="k">25Δ Skew</div><div class="v">' + (a.front && a.front.skew != null ? (a.front.skew >= 0 ? 'Put +' : 'Call +') + Math.abs(a.front.skew).toFixed(1) + 'pt' : '—') + '</div><div class="d">' + (a.skewDef ? '偏防禦' : a.skewCall ? '偏追漲' : '中性') + '</div></div>'
+              + '<div class="wr-tile"><div class="k">資金費率（8h）</div><div class="v">' + (d.perp.funding8h >= 0 ? '+' : '') + d.perp.funding8h.toFixed(3) + '%</div><div class="d">' + (Math.abs(d.perp.funding8h) < .01 ? '近乎中性' : d.perp.funding8h > 0 ? '多方付費' : '空方付費') + '</div></div>'
+              + '<div class="wr-tile"><div class="k">Put/Call OI（60日）</div><div class="v">' + d.pcRatio.toFixed(2) + '</div><div class="d">' + (d.maxPain ? 'Max Pain ' + fmt$(d.maxPain.strike) + '（' + esc(d.maxPain.expiry) + '）' : '') + '</div></div>'
+              + '</div>'
+              + '<div class="wr-h"><span class="no">01</span>市場結構解讀</div>'
+              + '<div class="wr-lead">' + a.volText + ' ' + a.skewText + ' ' + a.fundText + ' ' + a.basisText + '</div>'
+              + '<div class="wr-ladder">' + ladH + '</div>'
+              + '<table class="wr-t"><thead><tr><th>到期日</th><th>剩餘天數</th><th>ATM IV</th><th>25Δ Skew（Put−Call）</th></tr></thead><tbody>' + ivH + '</tbody></table>'
+              + '<div class="wr-h"><span class="no">02</span>選擇權策略參考</div>'
+              + '<div class="wr-cards">'
+              + '<div class="wr-card"><span class="wr-badge">看盤整</span><h4>鐵兀鷹 Iron Condor</h4><p>依 OI 牆設定區間收租。</p><div class="wr-how">賣 ' + fmt$(a.condor.sp) + ' Put ＋ 賣 ' + fmt$(a.condor.sc) + ' Call，買 ' + fmt$(a.condor.bp) + '／' + fmt$(a.condor.bc) + ' 護翼（30–45 天）。</div><p class="wr-risk">風險：重大事件（FOMC、CPI）週減倉。</p></div>'
+              + '<div class="wr-card"><span class="wr-badge">持有現貨</span><h4>Covered Call 收租</h4><p>在 Call 牆上方賣出收權利金。</p><div class="wr-how">賣 ' + fmt$(a.ccStrike) + ' 或更高履約價 Call（30–45 天）。' + (a.skewDef ? '加保護用 Put Spread（買 ' + fmt$(a.putSpread.b) + 'P／賣 ' + fmt$(a.putSpread.s) + 'P）較划算。' : '') + '</div><p class="wr-risk">風險：急漲突破履約價時獲利封頂。</p></div>'
+              + '<div class="wr-card"><span class="wr-badge' + (a.volRegime === 'high' ? ' warn' : '') + '">' + vc.b + '</span><h4>' + vc.t + '</h4><p>' + vc.body + '</p><div class="wr-how">' + vc.how + '</div><p class="wr-risk">風險：' + vc.risk + '</p></div>'
+              + '<div class="wr-card"><span class="wr-badge">中期方向</span><h4>遠月 Call Spread</h4><p>有限成本表達中期看漲。</p><div class="wr-how">買 ' + fmt$(a.callSpread.b) + ' Call／賣 ' + fmt$(a.callSpread.s) + ' Call（120 天以上）。</div><p class="wr-risk">風險：盤整時權利金隨 IV 下滑縮水。</p></div>'
+              + '</div>'
+              + '<div class="wr-callout"><strong>避免做的事：</strong>' + (a.skewDef ? '市場正為下檔付費（skew 偏 Put），' : '') + '裸賣價外 Put 博權利金風險報酬不佳；' + (a.volRegime === 'low' ? '低波動期追買短天期價外 Call 易被 gamma 牆與 Max Pain 磁吸消耗。' : '高波動期追買貴 IV 的短天期單腿部位勝率偏低。') + '</div>'
+              + '<div class="wr-h"><span class="no">03</span>永續合約進出場參考</div>'
+              + '<table class="wr-t"><thead><tr><th>情境</th><th>方向</th><th>進場區</th><th>停損</th><th>目標</th></tr></thead><tbody>'
+              + '<tr><td>區間操作</td><td class="wr-dl">做多</td><td class="num">' + fmt$(pp.lz[0]) + '–' + fmt$(pp.lz[1]) + ' 回踩</td><td class="num">' + fmt$(pp.ls) + ' 下方</td><td class="num">T1 ' + fmt$(pp.lt1) + '<br>T2 ' + fmt$(pp.lt2) + '</td></tr>'
+              + '<tr><td>區間操作</td><td class="wr-ds">做空</td><td class="num">' + fmt$(pp.sz[0]) + '–' + fmt$(pp.sz[1]) + ' 觸及</td><td class="num">' + fmt$(pp.ss) + ' 上方</td><td class="num">T1 ' + fmt$(pp.st1) + '<br>T2 ' + fmt$(pp.st2) + '</td></tr>'
+              + '<tr><td>向上突破</td><td class="wr-dl">追多</td><td class="num">日收 &gt; ' + fmt$(pp.bo) + ' 後回踩進場</td><td class="num">' + fmt$(pp.bos) + ' 下方</td><td class="num">T1 ' + fmt$(pp.bot1) + '<br>T2 ' + fmt$(pp.bot2) + '</td></tr>'
+              + '<tr><td>向下跌破</td><td class="wr-ds">追空</td><td class="num">日收 &lt; ' + fmt$(pp.bd) + ' 後反彈進場</td><td class="num">' + fmt$(pp.bds) + ' 上方</td><td class="num">T1 ' + fmt$(pp.bdt1) + '<br>T2 ' + fmt$(pp.bdt2) + '</td></tr>'
+              + '</tbody></table>'
+              + '<ul class="wr-tips">'
+              + '<li><strong>槓桿與倉位：</strong>槓桿 ≤ 3–5 倍，單筆虧損 ≤ 帳戶 1–2%——先定停損距離再反推倉位。</li>'
+              + '<li><strong>假突破過濾：</strong>只認日線收盤站上／跌破關鍵位，盤中刺穿不追單。</li>'
+              + '<li><strong>分批停利：</strong>T1 平一半並把停損移到成本價。</li>'
+              + '<li><strong>事件降槓桿：</strong>FOMC、CPI 前 24 小時至少減半槓桿。</li>'
+              + '</ul>'
+              + '<div class="wr-foot">水位由 Max Pain／Put 牆（支撐）、Call 牆／OI 集中區（壓力）、近 30 日高低點（突破確認）即時推導。規則式自動產生，僅供教育參考，不構成投資建議。數據源：Deribit 公開 API。</div>');
+            var rf = document.getElementById('wr-refresh');
+            if (rf) rf.addEventListener('click', function () { loaded = false; load(); });
+          }
+
+          function load() {
+            loading = true;
+            $('<div class="wr-status"><span class="wr-spin"></span><span id="wr-step">連線 Deribit…</span></div>');
+            var stepEl = function (t) { var el = document.getElementById('wr-step'); if (el) el.textContent = t; };
+            fetchAll(stepEl).then(function (d) {
+              render(d, analyze(d));
+              loaded = true; loading = false;
+            }).catch(function (e) {
+              loading = false;
+              $('<div class="wr-err">數據載入失敗（' + esc(e.message) + '）<button type="button" id="wr-retry">重試</button></div>');
+              var rt = document.getElementById('wr-retry');
+              if (rt) rt.addEventListener('click', load);
+            });
+          }
+        })();
+        </script>
+        </div>
+        <!-- ▲▲ BTC 選擇權即時分析面板 結束 ▲▲ -->
         <!-- 選擇權進出場 SOP -->
         <div class="grid grid-cols-1 gap-6">
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
@@ -283,7 +618,6 @@
                     <button onclick="switchSop('compare',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">買方 vs 賣方</button>
                     <button onclick="switchSop('skew',this)" class="sop-tab text-xs px-3.5 py-2 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all">Skew ＆ 期貨比較</button>
                 </div>
-
                 <!-- 快速對照 (原選擇權操作小抄) -->
                 <div id="sop-quick" class="sop-panel space-y-5">
                     <div class="overflow-x-auto">
@@ -336,7 +670,6 @@
                         <p class="text-[11px] text-zinc-400 leading-relaxed"><strong class="text-accentPurple">關鍵認知：</strong>買方與賣方看<strong class="text-zinc-200">同樣的指標，但進場訊號完全相反</strong>。此外，這些選擇權指標（Deribit 資料）主要反映<strong class="text-zinc-200">大戶／機構的避險需求</strong>，不是方向性押注 — 它是「市場情緒溫度計」，該用<strong class="text-zinc-200">逆向思維</strong>解讀（極度恐慌常近底部、極度平靜要防自滿），而非當成聰明錢的買賣訊號直接照抄。</p>
                     </div>
                 </div>
-
                 <!-- 買方實戰 -->
                 <div id="sop-buyer" class="sop-panel hidden">
                     <div class="overflow-x-auto">
@@ -361,7 +694,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!-- 賣方實戰 -->
                 <div id="sop-seller" class="sop-panel hidden">
                     <div class="overflow-x-auto">
@@ -386,7 +718,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!-- 買方樂透單 -->
                 <div id="sop-lotto" class="sop-panel hidden">
                     <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 mb-4 text-[11px] text-amber-200/80">⚡ 高風險短打策略：0DTE / 極短天期樂透單，用極低權利金博高倍率，嚴格控制單筆資金。</div>
@@ -410,7 +741,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!-- 希臘字母 -->
                 <div id="sop-greeks" class="sop-panel hidden">
                     <div class="overflow-x-auto">
@@ -427,7 +757,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!-- 買方 vs 賣方 -->
                 <div id="sop-compare" class="sop-panel hidden">
                     <div class="overflow-x-auto">
@@ -446,7 +775,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!-- Skew & 期貨比較 -->
                 <div id="sop-skew" class="sop-panel hidden space-y-6">
                     <div>
@@ -483,13 +811,10 @@
                         </div>
                     </div>
                 </div>
-
                 <p class="text-[10px] text-zinc-600 mt-5">* 本 SOP 為操作紀律整理，非投資建議。市場有風險，實際操作請依自身狀況判斷。</p>
                 </div>
             </div>
         </div>
-
-
         <!-- 企業儲備動態 -->
         <div class="grid grid-cols-1 gap-6">
             <div id="panel-strategy" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
@@ -507,7 +832,6 @@
                 <div id="strategy-iframe-container" class="w-full h-[650px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"><iframe src="https://saylortracker.com/?tab=home" class="w-full h-full border-none" allowfullscreen></iframe></div>
             </div>
         </div>
-
         <!-- 前 10 大加密貨幣 -->
         <div id="panel-table" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative transition-all duration-300">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -546,7 +870,6 @@
         <!-- /market-view-crypto -->
         <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
-
             <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 加權指數 -->
@@ -664,11 +987,9 @@
                     </div>
                 </div>
             </div>
-
             <div class="text-[11px] text-zinc-600 px-1 -mt-2">
                 <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。因經第三方代理轉發，偶有延遲或短暫離線屬正常現象。
             </div>
-
             <!-- 台股前 50 大個股 -->
             <div id="panel-tw-weight" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
@@ -708,7 +1029,6 @@
                     <span class="text-zinc-500">*</span> 清單已內嵌打包於本檔（資料日期 2026/06/30）。點「更新前50大清單」可透過公用代理即時抓取<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重；抓取成功後即以最新資料重繪。
                 </div>
             </div>
-
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
             <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
@@ -736,13 +1056,10 @@
                 </div>
                 <div id="tw-technical-container" class="w-full h-[520px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
-
         </div>
         <!-- /market-view-tw-stock -->
-
         <!-- ============================ 美股面板 ============================ -->
         <div id="market-view-us-stock" class="hidden space-y-6">
-
             <!-- 總經宏觀指標 -->
             <div>
                 <div class="flex items-center gap-3 mb-4">
@@ -776,7 +1093,6 @@
                     <span class="text-zinc-500">*</span> 美國 CPI 為靜態資料（2026/05 官方公布：年增 4.2%、前值 3.8%、核心 2.9%），數值每月手動更新，點卡片可看 Trading Economics 即時數據；波動率(VIX)、美元(DXY)採永續期貨，黃金、原油為 TradingView 原生報價。
                 </div>
             </div>
-
             <!-- 美股自選代碼卡片 -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="AMEX:VT"></div>
@@ -789,7 +1105,6 @@
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:AMZN"></div>
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[180px] overflow-hidden" data-tv-mini-symbol="NASDAQ:TSLA"></div>
             </div>
-
             <!-- 美股大盤分析 (改用可自由嵌入的 ETF 代碼，避免「僅在 TradingView 上可用」彈窗) -->
             <div id="panel-us-chart" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -811,7 +1126,6 @@
                 </div>
                 <div id="us-chart-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
-
             <!-- 美股產業板塊熱力圖 -->
             <div id="panel-us-heatmap" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -823,7 +1137,6 @@
                 </div>
                 <div id="us-heatmap-container" class="w-full h-[550px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
             </div>
-
             <!-- 美股技術分析評級 (滿版，與台股一致) -->
             <div class="space-y-6">
                 <div class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
@@ -860,11 +1173,9 @@
                     <div id="us-calendar-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
                 </div>
             </div>
-
         </div>
         <!-- /market-view-us-stock -->
     </main>
-
     <footer class="border-t border-zinc-950 bg-black/60 py-6 mt-12 text-center text-xs text-zinc-600">
         <div class="max-w-[1600px] mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
@@ -886,7 +1197,6 @@
                 el.innerText = `${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())} ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`; }
         }
         setInterval(updateClock, 1000); updateClock();
-
         // ===== 常用連結下拉選單 =====
         // ===== SOP 頁籤切換 =====
         function toggleSop(){
@@ -922,7 +1232,6 @@
             const chev=document.getElementById('links-menu-chevron');
             if(chev)chev.style.transform='rotate(0deg)';
         });
-
         // ===== 市場切換 =====
         const marketTabActiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all bg-gradient-to-r from-accentCyan/20 to-accentPurple/20 text-white border border-accentCyan/40";
         const marketTabInactiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent";
@@ -944,14 +1253,12 @@
             if (view === 'tw-stock') initTwStockView();
             if (view === 'us-stock') initUsStockView();
         }
-
         // ===== 放大 =====
         function toggleMaximize(id) {
             const el = document.getElementById(id); const icon = document.getElementById(`${id}-zoom-icon`); if (!el) return;
             if (el.classList.contains('is-maximized')) { el.classList.remove('is-maximized'); if (icon){icon.setAttribute('data-lucide','maximize'); lucide.createIcons();} }
             else { el.classList.add('is-maximized'); if (icon){icon.setAttribute('data-lucide','minimize'); lucide.createIcons();} }
         }
-
         // ===== CoinGlass 切換 =====
         function toggleChartSource(type) {
             const bC=document.getElementById('btn-src-coinglass'),bL=document.getElementById('btn-src-local'),bA=document.getElementById('btn-src-altcoin');
@@ -965,7 +1272,6 @@
             if(type==='altcoin'&&aI&&!aI.getAttribute('src')) aI.setAttribute('src','https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex');
             if(sL){const m={coinglass:{u:'https://www.coinglass.com/tv/zh-TW/Binance_BTCUSDT',t:'前往 CoinGlass 實時 K 線頁面'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex',t:'前往 CoinGlass 恐懼與貪婪指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
         }
-
         // ===== 工具 =====
         function formatNumber(num) {
             if (num == null) return 'N/A'; const a = Math.abs(num);
@@ -1071,7 +1377,6 @@
                 tb.appendChild(row);setTimeout(()=>drawSparkline(`sparkline-${c.id}`,c.sparkline_in_7d?.price||[],pos),10);});lucide.createIcons();}
         function handleSearch(v){searchFilter=v.trim().toLowerCase();renderCryptoTable();}
         function upd(){const el=document.getElementById('last-updated');if(el){const n=new Date();el.innerText=`最後更新: 今天 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')} (自動即時同步)`;}}
-
         // ===== TradingView Widget 通用 =====
         function renderMiniSymbolCards(root){if(!root)return;root.querySelectorAll('[data-tv-mini-symbol]').forEach(card=>{const sym=card.getAttribute('data-tv-mini-symbol');card.innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.height='100%';c.style.width='100%';const w=document.createElement('div');w.className='tradingview-widget-container__widget';c.appendChild(w);const s=document.createElement('script');s.type='text/javascript';s.src='https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';s.async=true;s.text=JSON.stringify({symbol:sym,width:'100%',height:'100%',locale:'zh_TW',dateRange:'1D',colorTheme:'dark',isTransparent:true,autosize:true});c.appendChild(s);card.appendChild(c);});}
         let currentTvSymbol={tw:'TWSE:0050',us:'AMEX:SPY'};
@@ -1192,7 +1497,6 @@
         }
         function renderEconomicCalendar(cid,cf){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-events.js',{width:'100%',height:'100%',colorTheme:'dark',isTransparent:true,locale:'zh_TW',importanceFilter:'0,1',countryFilter:cf});}
         function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
-
         // ============================================================
         // 台股即時報價小卡 (Yahoo Finance 經公用代理自繪；綠漲紅跌)
         // ============================================================
@@ -1249,7 +1553,6 @@
         function startTwRealtimeQuotes(){fetchTwQuotes();if(twQuotesTimer)clearInterval(twQuotesTimer);const tick=()=>{fetchTwQuotes();clearInterval(twQuotesTimer);twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);};twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);}
         // 保留原啟動函式名，改為呼叫自繪報價
         function renderTwSingleQuotes(){startTwRealtimeQuotes();}
-
         // ============================================================
         // 台股前 50 大個股 (清單內嵌打包於本檔；可一鍵抓取 0050 官網最新持股更新)
         // ============================================================
@@ -1329,13 +1632,11 @@
             if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');refreshFinancialsTabVisibility('tw');twStockState.extrasLoaded=true;}
             if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();}
         }
-
         function initUsStockView(){
             if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
             if(!usStockState.chartLoaded){switchTvChart('us','AMEX:SPY',document.querySelector('.tv-chart-tab-us'));usStockState.chartLoaded=true;}
             if(!usStockState.extrasLoaded){renderStockHeatmap('us-heatmap-container','SPX500');renderTechnicalGauge('us-technical-container','AMEX:VT');refreshFinancialsTabVisibility('us');renderEconomicCalendar('us-calendar-container','us,eu,cn,jp,gb');usStockState.extrasLoaded=true;}
         }
-
         // ===== 初始化 =====
         window.onload=function(){
             lucide.createIcons();
