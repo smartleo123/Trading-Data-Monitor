@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HakuTrade</title>
+    <!-- 分頁圖示：趨勢突破箭頭（比特幣橘）。SVG 為主，PNG 供 Safari 等後備 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22gB%22 x1=%220%22 y1=%2264%22 x2=%2264%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f7931a%22/%3E%3Cstop offset=%221%22 stop-color=%22%23ffb84d%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x=%221%22 y=%221%22 width=%2262%22 height=%2262%22 rx=%2214%22 fill=%22%23141416%22 stroke=%22%233f3f46%22 stroke-width=%222%22/%3E%3Cpath d=%22M10 48 L24 34 L33 42 L50 20%22 fill=%22none%22 stroke=%22url(%23gB)%22 stroke-width=%227%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M38 16 L52 16 L52 30%22 fill=%22none%22 stroke=%22url(%23gB)%22 stroke-width=%227%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAJBUlEQVR4nORbfXAUZxn/7d0ld7l83JEP4ADzVTpOaR3GDjAEOiQKBB2jtQNjO2onDlpaHQr0D1uqtnSijB9/aIu1KKIUOzitnY6SoJaS2hBgwLagximjQ4EcDZDvr0tyua/dPs/u3WXvsnu3Cfm4C7+Zu3ef3X139/l8n+fdfS0wgIqKTfkWi1QtCNgISHfTLhf9igRByEIKQJIkLz1bJ23elCT8BxDeMZn8x5uamvqT9RUSHVy7dm2u2Wz/EV38O3SqBWkFKSiK2Gc2B/aQIIb0ztIVQGXlxgeoOUCnFDLt841icHAAQ0MeBIN++gUgihJSASaTAIslg36ZyMnJhcPhRGamNXxU6giFhG+dPv3WMa2+mgIg5r9HpkSaFwRmvL39usx4OoEFsXDhYlitNnIRiIIgfffkyRM/jz/PHL9j3bqNLxLfu5n5jo4baGtzw+/3I93Az9zb201bEguDFC1sKikpn+d2X3lTfV6MACorq58gvp8JBPxwuy+TySeNISmPkZFhDA97kJubB7PZvLq4uGzg2rUr5yLHowK47771GwTB9Iokicy8MDrqxVxBIBAgIQzB6cyXiMdqsoRzZAmX+ZiJ/5Yu/bzVbDa9StHeRCY/p5iPgHm6ft0tMI/0O1JVVWXj/bIAFi0KPUE+UjAw0A+PZwBzFTyKKW4tFIpixk7eJwuAIuQubjs7b2Kuo6urgxMnGr8FmWehsnL9SgoF77KPtLZ+iNsBZWV3wm7PZsWvNEmSaTPvHBoaxO2CSE4jisJmC0WFVUx4vakR+D61JBMry63IzzZhMugdFvHeVR/++5F+7uL1Doe3pJUWcofFHBp57J9t7K5xYGe1g6sbDkxjB8bRSFLFAM8fH8RP/6qdx/CwGMYiErPgUnbOrgDuLcmMZV4K1xmaNFQ0xvar6F3VeVhenKl5rwivdFkXj4m5Sv/ZLWw+XWKNZTamRWwLdQsdGlhRatW8l0hlYvgk5+QcbVqgx7xK4zGalxReVZqPoQnzDMSRlKnxW9oC2mavbhkqWorSkLmP0hNAyljAe1d8aLw4qhB6lsAwHBNgCCk1y/Pwb7rkIXD5JzLhtOvrhofIh9fmwMKlnG5MgCGk3DQXWwL/9GDPFND4lAsWmgVSFD9mETycS+rAaQBpNs8HvPD1ApQVKY89FgO0Y4IRpNAokByPVOWiZnl4Ilrt84liQhKkjQWsKLPi2fud2j6fKE9IgrSwAB7Pf//NQgp6gva4r5MnGEHKWwDFOhzcWoiivPDsnUrz8TEAWnSy6yPFsbvGiTV32sZrNmFeIBi2gJQWQPU9WXh8Y55C6Pi4uyeknzEaQMoKYEm+BftrC2Nz/zgfb+sNoeFfI/oZowGkpAAyLQL+sK0QdqugM85L8JPiaw90wheUEtcOSTBtQXD9MhseWp2D0YCEQ80eXHAbn2/42YP5uMuVoRA6zD39px5cvBFAxdKQbu3QNywmvde0CODRz+TiuQfmRR9mywo7Hjvcg6MXRpL2/VpFDh5cla0a2tTRXWlf++cQ/nhOmdaKVpEaQmhpSy70KXeBb382lvlIu7+2gI7lJey7bFEG9m5xRpkXNDK8i9f9ePK1vmifaBUZd7/GD7wJa4oIptQCmHk5W9MISMzMs/c7UFJoxtOv942LUY4sEw5vK4I1w6Tp89wOjIio/W03/MHYzuoqUqRzW64F8H5rcuYZUyYAmfkvz9MPSOG2lsrYhQ4Lth0aY4QP//obBXLkT9T/sZe7KfIHNe+frIrUw5S4gKbmE7Sb7rHhjcfnIy9Luf1OmsCsuisrYb99jR40/W8UU41bFsD2DWHNMwwwH2lXlGaiftcCfIUC3lNfSCy805d8+HHD9LyqvyUXYM1//4vO5OmoDv3JhRa5vtdnnt7leUTZXaYLk7YAXc1PlE7YAlsPdhsazyeLSQlg+4Y8leYxbqiK0Hvr+3Hvnhu41B6IHdcNts+80Wc4mk8WExaAbPZfciqEPAcHzWSl7mg/XmwcxM3+EGp+0YH3r/o1mZR0mD9GOf7Bk9P/YdaEBBAb7aGM78A4zdf9pQ/7/zH28INeEZt/2Yk3W8KZoIpZIY7m9mpXADuO9GAmYFgA0XGeIWiUpirNq5mPgMf8rb/rxuHTQwljgtdHyc6Bbnj9EmYChgQQo3mGThuv+XjwabspC/zh0T4ly4sLeNzuONKLSx0BzBSSCkCJ9iqfl1vE0QL2NgwkZF6Nl9724NFDPRgcHStluWrc/kovjv07ecE0lUiYBzxSGRnnwzuiPhtLc7TngDcRNBCjZy6NYhtVjk7KCA80eXClK4iZhq4AOFOr2+xEzLy7bKaI8dm99X3E/OSiNX/N8ZNjs/tVmq4AeDJD7+MDoz6fDtCNARJUJWkEqhigF+3TDVx8y1MrghAri1d5xiXi8xGofD6dmefP6xVIQybiqYM3LZZYbzjf6pcnLmREoz6w58/9k/b5VAGvLVAgtFsEZalJOe+M/1DqZUpaWruD+GpFNoKiYhXN/5/6mnymMSYAqd0iScIFEsJqu92u+n5uDDwJMR0TEbOJrCy73JL1XzCJYqiBibw8B24XOBxKSk8CqDd5vf1v08aI3Z4Dmy0lFoFNK1j7/OOVZqdOnXjHdP78eU68X+KDvMZmrsPlWhLeEl6gP1Ee+0Kh4Tp+kZKdnYP8/ELMVRQUFIW1j65AwFPH+2QBnDlzhsY16SE6IJIVSJEgMZfAPC1YsIjnX3h+bcvZs2flr8Oja4Z4DU1p6R0eeoHxOV5yxguNgsGZL06mAzabDSUl5bxoit/P7Gxufuv1yLGYVWNu9+VzdGKR2WxZxZHS6x1Jia/IbwWszOLiO+REj9T/q+bmE8+pj49bN0iW8LfS0nIviWqD05kv8MjAQuCVoukENnmXazHmz3fxazmeeHiyubnxB/Hn6b5E56Wz5C/PU+dipn0+n7zgKLJ0NhAIgpfYpQLYrjMy9JbOopU0T2Z/ol6zb7KLr1tXvZWuv4M2lyONwFkeNfvI3w8nOi+pACJYs6Z6PrlRDb/VoovfTVa1DOGF1bMPqZue6QOyhBZRlN6lbP/4qVN/7zLS82MAAAD//52P9+IAAAAGSURBVAMATJSjIs3wMgkAAAAASUVORK5CYII=">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
     <!-- Tailwind CSS 引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide 圖標庫 引入 -->
@@ -715,8 +719,8 @@
               near.forEach(function (o) { if (o.type === 'P') pOI += o.oi; else cOI += o.oi; });
               D.pcRatio = cOI ? pOI / cOI : 0;
               function walls(f) { var m = {}; near.forEach(function (o) { if (f(o)) m[o.K] = (m[o.K] || 0) + o.oi; }); return Object.entries(m).map(function (e) { return [+e[0], e[1]]; }).sort(function (a, b) { return b[1] - a[1]; }); }
-              D.putWalls = walls(function (o) { return o.type === 'P' && o.K < D.spot && o.K > D.spot * 0.75; }).slice(0, 3);
-              D.callWalls = walls(function (o) { return o.type === 'C' && o.K > D.spot && o.K < D.spot * 1.3; }).slice(0, 3);
+              D.putWalls = walls(function (o) { return o.type === 'P' && o.K < D.spot && o.K > D.spot * 0.75; }).slice(0, 6);
+              D.callWalls = walls(function (o) { return o.type === 'C' && o.K > D.spot && o.K < D.spot * 1.3; }).slice(0, 6);
               var g = {}; opts.forEach(function (o) { if (daysTo(o.ed) <= 30 && Math.abs(o.K / D.spot - 1) < 0.08) g[o.K] = (g[o.K] || 0) + o.oi; });
               var ge = Object.entries(g).sort(function (a, b) { return b[1] - a[1]; })[0];
               D.gamma = ge ? +ge[0] : Math.round(D.spot / 1000) * 1000;
@@ -820,9 +824,25 @@
             var front = d.ivRows[0], mid = d.ivRows[d.ivRows.length - 1];
             a.calGood = front && mid && front !== mid && front.atmIV > mid.atmIV;
             a.front = front; a.mid = mid;
-            var supC = [d.maxPain && d.maxPain.strike, a.putWall].filter(function (v) { return v && v < d.spot * .995; });
+            /* 進出場水位僅取「可交易區間」（現價下方 1–10%／上方 1–10%）內的候選：
+               距現價 -20% 的深度價外 Put 牆是尾部避險單，不是回踩進場點；
+               牆的挑選從 OI 排行由大到小找第一根落在區間內的，區間外的只留給價位圖當參考 */
+            function inBand(v, lo, hi) { return typeof v === 'number' && v >= d.spot * lo && v <= d.spot * hi; }
+            function wallInBand(walls, lo, hi) {
+              for (var w = 0; w < walls.length; w++) { if (inBand(walls[w][0], lo, hi)) return walls[w][0]; }
+              return null;
+            }
+            var supC = [
+              (d.maxPain && inBand(d.maxPain.strike, 0.90, 0.99)) ? d.maxPain.strike : null,
+              wallInBand(d.putWalls, 0.90, 0.99),
+              inBand(d.last30.low, 0.90, 0.99) ? d.last30.low : null
+            ].filter(Boolean);
             var sup = supC.length ? Math.max.apply(null, supC) : snap(d.spot * .96);
-            var resC = [a.callWall, d.gamma].filter(function (v) { return v && v > d.spot * 1.005; });
+            var resC = [
+              wallInBand(d.callWalls, 1.01, 1.10),
+              inBand(d.gamma, 1.01, 1.10) ? d.gamma : null,
+              inBand(d.last30.high, 1.01, 1.10) ? d.last30.high : null
+            ].filter(Boolean);
             var res = resC.length ? Math.min.apply(null, resC) : snap(d.spot * 1.04);
             var bo = Math.max(res, d.last30.high), bd = Math.min(sup, d.last30.low);
             var boT1 = snap(bo * 1.025), bdT1 = snap(bd * .975);
@@ -886,6 +906,7 @@
               + '</div>'
               + '<div class="wr-callout"><strong>避免做的事：</strong>' + (a.skewDef ? '市場正為下檔付費（skew 偏 Put），' : '') + '裸賣價外 Put 博權利金風險報酬不佳；' + (a.volRegime === 'low' ? '低波動期追買短天期價外 Call 易被 gamma 牆與 Max Pain 磁吸消耗。' : '高波動期追買貴 IV 的短天期單腿部位勝率偏低。') + '</div>'
               + '<div class="wr-h"><span class="no">03</span>永續合約進出場參考</div>'
+              + '<div class="wr-lead">水位僅取距現價 ±10% 內的有效支撐壓力（Max Pain／Put 牆／30日低 vs Call 牆／Gamma 區／30日高）；更遠的深度價外大牆屬尾部避險參考，見上方價位圖。</div>'
               + '<table class="wr-t"><thead><tr><th>情境</th><th>方向</th><th>進場區</th><th>停損</th><th>目標</th></tr></thead><tbody>'
               + '<tr><td>區間操作</td><td class="wr-dl">做多</td><td class="num">' + fmt$(pp.lz[0]) + '–' + fmt$(pp.lz[1]) + ' 回踩</td><td class="num">' + fmt$(pp.ls) + ' 下方</td><td class="num">T1 ' + fmt$(pp.lt1) + '<br>T2 ' + fmt$(pp.lt2) + '</td></tr>'
               + '<tr><td>區間操作</td><td class="wr-ds">做空</td><td class="num">' + fmt$(pp.sz[0]) + '–' + fmt$(pp.sz[1]) + ' 觸及</td><td class="num">' + fmt$(pp.ss) + ' 上方</td><td class="num">T1 ' + fmt$(pp.st1) + '<br>T2 ' + fmt$(pp.st2) + '</td></tr>'
@@ -1104,7 +1125,7 @@
                 </div>
             </div>
             <div class="text-[11px] text-zinc-600 px-1 mt-4">
-                <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格。因經第三方代理轉發，偶有延遲或短暫離線屬正常現象。
+                <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格；盤中若 Yahoo 數據延遲超過 5 分鐘，會改顯示 <span class="text-amber-400 font-bold">延遲</span> 標示（滑鼠停留可見延遲分鐘數），價格仍會持續更新。因經第三方代理轉發，偶有延遲或短暫離線屬正常現象。
             </div>
             </div>
             <!-- 台股前 50 大個股 -->
@@ -1375,6 +1396,8 @@
             if (h) { document.getElementById('market-title').innerText = h.title; document.getElementById('market-subtitle').innerText = h.subtitle; }
             if (view === 'tw-stock') initTwStockView();
             if (view === 'us-stock') initUsStockView();
+            // 預載的 TradingView widget 在隱藏時量不到尺寸，顯示後補發 resize 觸發重新量測
+            setTimeout(()=>{window.dispatchEvent(new Event('resize'));},60);
         }
         // ===== 放大 =====
         function toggleMaximize(id) {
@@ -1418,7 +1441,7 @@
                 pe.innerText='$'+price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
                 ce.innerText=(changePct>=0?'+':'')+changePct.toFixed(2)+'%';
                 ce.className=`text-sm font-bold font-mono ${changePct>=0?'text-emerald-400':'text-rose-500'}`;
-                if(se){const open=(q.marketTime!=null)?((Date.now()/1000-q.marketTime)<300):isUSMarketOpen();se.innerText=open?'LIVE':'CLOSED';se.className=open?'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse':'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}
+                if(se){const st=quoteState(q,isUSMarketOpen());se.innerText=st==='live'?'LIVE':(st==='delayed'?'延遲':'CLOSED');se.title=st==='delayed'?('Yahoo 報價延遲約 '+Math.round((Date.now()/1000-q.marketTime)/60)+' 分鐘'):'';se.className=st==='live'?'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse':(st==='delayed'?'text-[9px] font-bold bg-amber-950/80 border border-amber-800 text-amber-400 px-1.5 py-0.5 rounded':'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded');}
                 if(prevShown>0&&Math.abs(price-prevShown)>0.001){pe.style.backgroundColor=up?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';setTimeout(()=>pe.style.backgroundColor='transparent',350);}
             }).catch(()=>{
                 if(se){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}
@@ -1642,13 +1665,23 @@
         function twColorClass(ch){return ch>0?'text-emerald-400':(ch<0?'text-rose-500':'text-zinc-400');}
         function updateTwCard(card,q,open){
             const pe=card.querySelector('[data-tw-price]'),ce=card.querySelector('[data-tw-change]'),se=card.querySelector('[data-tw-status]');
-            if(q.marketTime!=null)open=(Date.now()/1000-q.marketTime)<300; // 依數據新鮮度覆寫時鐘判斷（假日防誤亮 LIVE）
+            const qst=quoteState(q,open); // live/delayed/closed：延遲不誤判收盤、假日不誤亮 LIVE
             const last=q.price,prev=q.prevClose;if(last==null||isNaN(last))return;
             const prevShown=parseFloat((pe.innerText||'').replace(/[^0-9.]/g,''))||0;const change=last-prev,pct=prev?(change/prev)*100:0;const sign=change>=0?'+':'';
             pe.innerText=last.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
             pe.className=`text-4xl font-black font-mono tracking-tight transition-colors ${change>0?'text-emerald-400':(change<0?'text-rose-500':'text-white')}`;
             ce.innerText=`${sign}${change.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;ce.className=`text-sm font-bold font-mono ${twColorClass(change)}`;
-            if(se){if(open){se.innerText='LIVE';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
+            if(se){if(qst==='live'){se.innerText='LIVE';se.title='';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else if(qst==='delayed'){se.innerText='延遲';se.title='Yahoo 報價延遲約 '+Math.round((Date.now()/1000-q.marketTime)/60)+' 分鐘，價格仍會持續更新';se.className='text-[9px] font-bold bg-amber-950/80 border border-amber-800 text-amber-400 px-1.5 py-0.5 rounded';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.title='';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
+        }
+        // 市場狀態三態：live=盤中即時(時間戳5分內)、delayed=盤中但數據延遲、closed=收盤/假日(時間戳>6小時)
+        function quoteState(q,clockOpen){
+            if(q&&q.marketTime!=null){
+                const age=Date.now()/1000-q.marketTime;
+                if(age<300)return clockOpen?'live':'closed';
+                if(clockOpen&&age<21600)return 'delayed';
+                return 'closed';
+            }
+            return clockOpen?'live':'closed';
         }
         // 從 Yahoo Finance chart API 取報價，經多個公用代理輪替容錯，回傳 {price, prevClose, open}
         function fetchYahooQuote(symbol){
@@ -1747,9 +1780,9 @@
                     // 不能一律用 chartPreviousClose：休市日它指的是「最後交易日的前一日」，會往前錯一天。
                     let v=null;
                     if(q){
-                        const live=(q.marketTime!=null)?((Date.now()/1000-q.marketTime)<300):isTwMarketOpen();
-                        if(live)v=(typeof q.prevClose==='number')?q.prevClose:null;
-                        else v=(typeof q.price==='number')?q.price:((typeof q.prevClose==='number')?q.prevClose:null);
+                        const st=quoteState(q,isTwMarketOpen());
+                        if(st==='closed')v=(typeof q.price==='number')?q.price:((typeof q.prevClose==='number')?q.prevClose:null); // 休市/假日→最近一個交易日收盤
+                        else v=(typeof q.prevClose==='number')?q.prevClose:null; // 盤中(即時或延遲皆同)→前一交易日收盤
                     }
                     TW_QUOTE_CACHE[code]=(v!=null)?v:false;
                 }).catch(()=>{TW_QUOTE_CACHE[code]=false;}).then(()=>{
@@ -1822,6 +1855,13 @@
             updateMainCryptoCards();setInterval(updateMainCryptoCards,1000);
             updateFundingRates();setInterval(updateFundingRates,30000);
         };
+        // 預先載入：台股報價卡、前50大清單與收盤價、美股報價卡——腳本執行時 DOM 已就緒，
+        // 立即開抓，不等 window.onload（外部 iframe 會拖慢 load 事件），也不等頁籤開啟
+        (function preloadQuotes(){
+            renderTwSingleQuotes();
+            twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();refreshTwTop50FromYuanta(true);
+            renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;
+        })();
     </script>
     <!-- ═══════════════════════════════════════════════════════════
          報價卡載入狀態：取得首筆報價前顯示「轉圈＋資料獲取中」，
@@ -1857,16 +1897,10 @@
       mainIds.forEach(function (id) { var el = document.getElementById(id); if (el) { mainEls.push(el); setLoading(el); } });
       setTimeout(function () { expire(mainEls); }, TIMEOUT_MS);
 
-      /* 台股卡：先顯示載入狀態，但逾時計時等台股頁籤首次開啟（開始抓報價）才起算 */
+      /* 台股卡：報價已改為頁面載入即預載，逾時計時同步起算 */
       var twEls = Array.prototype.slice.call(document.querySelectorAll('[data-tw-price]'));
       twEls.forEach(setLoading);
-      if (typeof window.initTwStockView === 'function') {
-        var _init = window.initTwStockView, twTimerStarted = false;
-        window.initTwStockView = function () {
-          _init();
-          if (!twTimerStarted) { twTimerStarted = true; setTimeout(function () { expire(twEls); }, TIMEOUT_MS); }
-        };
-      }
+      setTimeout(function () { expire(twEls); }, TIMEOUT_MS);
     })();
     </script>
     <!-- ▲▲ 報價卡載入狀態 結束 ▲▲ -->
