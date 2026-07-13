@@ -139,7 +139,7 @@
         <div id="sec-crypto-prices" data-nav="即時報價">
         <div class="flex items-center gap-3 mb-4">
             <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
-            <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">幣安合約即時價格與資金費率・MSTR / STRC 美股行情</p></div>
+            <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">幣安合約即時價格與資金費率・MSTR / STRC 為幣安股票永續合約報價（24h 更新）</p></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <a href="https://tw.tradingview.com/chart/?symbol=BINANCE%3ABTCUSDT" target="_blank" class="block bg-darkCard border border-zinc-850 hover:border-accentCyan/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
@@ -153,10 +153,11 @@
                     <div class="text-zinc-500 text-right"><div class="mb-0.5">資金費率</div><strong id="btc-funding" class="font-mono text-[11px] text-zinc-300">--</strong></div>
                 </div>
             </a>
-            <a href="https://tw.tradingview.com/chart/?symbol=NASDAQ%3AMSTR" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
+            <a href="https://www.tradingview.com/chart/QMsS3MjL/?symbol=BINANCE%3AMSTRUSDT.P" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs font-bold text-zinc-400">NASDAQ:MSTR</span>
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:MSTRUSDT.P</span>
+                        <span class="text-[9px] font-bold bg-violet-950/80 border border-violet-800 text-violet-300 px-1.5 py-0.5 rounded" title="幣安股票永續合約，24 小時交易">永續合約</span>
                         <span id="mstr-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
@@ -169,10 +170,11 @@
                     <div class="text-right text-zinc-500">BTC 儲備: <strong id="mstr-btc-reserve" class="text-white font-mono">約 84 萬枚</strong></div>
                 </div>
             </a>
-            <a href="https://tw.tradingview.com/chart/?symbol=NASDAQ%3ASTRC" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-amber-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
+            <a href="https://www.tradingview.com/chart/QMsS3MjL/?symbol=BINANCE%3ASTRCUSDT.P" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-amber-500/50 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between h-[198px] transition-colors">
                 <div class="flex flex-col justify-center h-full">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs font-bold text-zinc-400">NASDAQ:STRC</span>
+                        <span class="text-xs font-bold text-zinc-400">BINANCE:STRCUSDT.P</span>
+                        <span class="text-[9px] font-bold bg-violet-950/80 border border-violet-800 text-violet-300 px-1.5 py-0.5 rounded" title="幣安股票永續合約，24 小時交易">永續合約</span>
                         <span id="strc-status" class="text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse">LIVE</span>
                     </div>
                     <div class="flex items-baseline gap-3 mb-2">
@@ -1447,12 +1449,29 @@
                 if(se){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}
             });
         }
+        // MSTR/STRC：幣安股票永續合約報價（24h 即時）。徽章依美股時段顯示 LIVE/CLOSED，
+        // 但收盤時價格仍持續更新（永續合約不休市），滑鼠停留徽章可見說明
+        function updatePerpStockCard(pid,cid,sid,symbol){
+            const pe=document.getElementById(pid),ce=document.getElementById(cid),se=document.getElementById(sid);
+            if(!pe||!ce)return;
+            fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${symbol}`).then(r=>r.json()).then(d=>{
+                if(!d||!d.lastPrice)return;
+                const prevShown=parseFloat((pe.innerText||'').replace(/[^0-9.]/g,''))||0;
+                const cp=parseFloat(d.lastPrice),cpc=parseFloat(d.priceChangePercent);
+                pe.innerText='$'+cp.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+                ce.innerText=(cpc>=0?'+':'')+cpc.toFixed(2)+'% (24h)';
+                ce.className=`text-sm font-bold font-mono ${cpc>=0?'text-emerald-400':'text-rose-500'}`;
+                if(se){const open=isUSMarketOpen();se.innerText=open?'LIVE':'CLOSED';se.title=open?'':'美股未開盤；永續合約 24 小時交易，價格仍即時更新';se.className=open?'text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse':'text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}
+                if(prevShown>0&&Math.abs(cp-prevShown)>0.001){pe.style.backgroundColor=cp>=prevShown?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)';pe.style.borderRadius='6px';pe.style.padding='2px 8px';pe.style.marginLeft='-8px';setTimeout(()=>pe.style.backgroundColor='transparent',350);}
+            }).catch(()=>{
+                if(se&&(se.innerText==='--'||se.innerText==='')){se.innerText='離線';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-600 px-1.5 py-0.5 rounded';}
+            });
+        }
         function startUsStockCards(){
             (function loop(){
-                updateStockCard('mstr-price','mstr-change','mstr-status','MSTR');
-                updateStockCard('strc-price','strc-change','strc-status','STRC');
-                // 每輪結束依「當下」盤中狀態決定下次間隔，跨越開收盤自動切換頻率
-                setTimeout(loop, isUSMarketOpen()?15000:300000);
+                updatePerpStockCard('mstr-price','mstr-change','mstr-status','MSTRUSDT');
+                updatePerpStockCard('strc-price','strc-change','strc-status','STRCUSDT');
+                setTimeout(loop,5000); // 永續合約 24 小時交易，固定 5 秒更新
             })();
         }
         // MSTR 比特幣儲備量：自 CoinGecko 企業持倉 API 即時更新（失敗時保留內嵌預設值）
@@ -1850,7 +1869,6 @@
         window.onload=function(){
             lucide.createIcons();
             fetchCryptoData();setInterval(()=>fetchCryptoData(true),60000);
-            startUsStockCards();
             updateMstrReserve();setInterval(updateMstrReserve,3600000);
             updateMainCryptoCards();setInterval(updateMainCryptoCards,1000);
             updateFundingRates();setInterval(updateFundingRates,30000);
@@ -1858,6 +1876,7 @@
         // 預先載入：台股報價卡、前50大清單與收盤價、美股報價卡——腳本執行時 DOM 已就緒，
         // 立即開抓，不等 window.onload（外部 iframe 會拖慢 load 事件），也不等頁籤開啟
         (function preloadQuotes(){
+            startUsStockCards(); // MSTR/STRC 幣安永續報價
             renderTwSingleQuotes();
             twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();refreshTwTop50FromYuanta(true);
             renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;
