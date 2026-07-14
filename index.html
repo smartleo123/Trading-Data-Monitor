@@ -2989,7 +2989,16 @@
     #wr-calc .sc-dir.sell{color:#ef4444;background:rgba(239,68,68,.12)}
     #wr-calc .sc-legs input{width:100px;background:#141416;border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#f4f4f5;font-size:12.5px;padding:5px 7px;outline:none;font-variant-numeric:tabular-nums;text-align:right}
     #wr-calc .sc-legs input:focus{border-color:#06b6d4}
-    #wr-calc .sc-legs .auto{font-size:10px;color:#52525b;margin-left:4px}
+    #wr-calc .sc-legs .theo{display:inline-block;font-size:10.5px;color:#8b8b93;margin-left:6px;cursor:pointer;white-space:nowrap;border-bottom:1px dotted rgba(255,255,255,.2)}
+    #wr-calc .sc-legs .theo:hover{color:#22d3ee;border-bottom-color:rgba(6,182,212,.5)}
+    #wr-calc .sc-legs select{background:#141416;border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#f4f4f5;font-size:12.5px;padding:4px 6px;outline:none;font-family:inherit;cursor:pointer}
+    #wr-calc .sc-legs select:focus{border-color:#06b6d4}
+    #wr-calc .sc-legs select.d-buy{color:#0da271}#wr-calc .sc-legs select.d-sell{color:#ef4444}
+    #wr-calc .sc-rm{background:none;border:none;color:#71717a;cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:6px;font-family:inherit}
+    #wr-calc .sc-rm:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+    #wr-calc .sc-add{font-size:12px;font-weight:700;border-radius:9px;padding:7px 14px;cursor:pointer;border:1px dashed rgba(255,255,255,.2);background:#1b1b1f;color:#a1a1aa;font-family:inherit;margin-top:10px}
+    #wr-calc .sc-add:hover{color:#22d3ee;border-color:rgba(6,182,212,.4)}
+    #wr-calc .sc-empty{color:#71717a;font-size:12.5px;padding:14px 8px}
     #wr-calc .sc-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
     @media(min-width:640px){#wr-calc .sc-metrics{grid-template-columns:repeat(3,1fr)}}
     #wr-calc .sc-tile{background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:11px 13px}
@@ -3036,7 +3045,8 @@
         { k: 'short-straddle', n: '賣出跨式 Short Straddle（收租）', legs: function (S) { return [{ t: 'C', d: -1, K: snap(S, 1.0) }, { t: 'P', d: -1, K: snap(S, 1.0) }]; } },
         { k: 'iron-condor', n: '鐵兀鷹 Iron Condor（收租）', legs: function (S) { return [{ t: 'P', d: 1, K: snap(S, 0.88) }, { t: 'P', d: -1, K: snap(S, 0.95) }, { t: 'C', d: -1, K: snap(S, 1.05) }, { t: 'C', d: 1, K: snap(S, 1.12) }]; } },
         { k: 'covered-call', n: '掩護性買權 Covered Call', legs: function (S) { return [{ t: 'U', d: 1, K: 0 }, { t: 'C', d: -1, K: snap(S, 1.05) }]; } },
-        { k: 'protective-put', n: '保護性賣權 Protective Put', legs: function (S) { return [{ t: 'U', d: 1, K: 0 }, { t: 'P', d: 1, K: snap(S, 0.95) }]; } }
+        { k: 'protective-put', n: '保護性賣權 Protective Put', legs: function (S) { return [{ t: 'U', d: 1, K: 0 }, { t: 'P', d: 1, K: snap(S, 0.95) }]; } },
+        { k: 'custom', n: '⊕ 自訂部位 Custom（自由增減）', legs: function (S) { return [{ t: 'C', d: 1, K: snap(S, 1.0) }]; } }
       ];
 
       function defaults() {
@@ -3142,35 +3152,73 @@
       function parseNum(v) { var n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? NaN : n; }
       function premInput(i) { return box.querySelector('#sc-legs-body input[data-leg="' + i + '"][data-f="prem"]'); }
 
-      /* 只在「策略／重設」時重建腿位列（避免逐字輸入時整列被重建、游標跳掉、數字被截斷） */
+      function markCustom() { state.strat = 'custom'; var sel = box.querySelector('#sc-select'); if (sel) sel.value = 'custom'; }
+      function autoPrem(l) { return l.t === 'U' ? 0 : Math.round(bsPrice(l.t, state.spot, l.K, state.dte / 365, state.iv / 100)); }
+      function theoTxt(l) { return '理論：$' + autoPrem(l).toLocaleString('en-US'); }
+      function refreshTheo(i) { var sp = box.querySelector('#sc-theo-' + i); if (sp) sp.textContent = theoTxt(state.legs[i]); }
+
+      /* 只在「策略／新增／刪除／改方向或類型」時重建部位列（逐字輸入時不重建，游標才不會跳） */
       function renderLegs() {
-        var legTypeName = { C: '買權 Call', P: '賣權 Put', U: '現貨 BTC' };
-        box.querySelector('#sc-legs-body').innerHTML = state.legs.map(function (l, i) {
-          var dir = l.d > 0 ? '<span class="sc-dir buy">買</span>' : '<span class="sc-dir sell">賣</span>';
+        var body = box.querySelector('#sc-legs-body');
+        if (!state.legs.length) { body.innerHTML = '<tr><td colspan="5"><div class="sc-empty">尚無部位——按下方「＋ 新增部位」開始自組，或從上方選一個預設策略。</div></td></tr>'; return; }
+        var opt = function (v, txt, cur) { return '<option value="' + v + '"' + (v === cur ? ' selected' : '') + '>' + txt + '</option>'; };
+        body.innerHTML = state.legs.map(function (l, i) {
+          var dSel = '<select class="' + (l.d > 0 ? 'd-buy' : 'd-sell') + '" data-leg="' + i + '" data-f="d">' + opt('1', '買', String(l.d)) + opt('-1', '賣', String(l.d)) + '</select>';
+          var tSel = '<select data-leg="' + i + '" data-f="t">' + opt('C', '買權 Call', l.t) + opt('P', '賣權 Put', l.t) + opt('U', '現貨 BTC', l.t) + '</select>';
           var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="K" value="' + l.K + '">';
-          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="auto" id="sc-auto-' + i + '" style="' + (l.premAuto ? '' : 'display:none') + '">理論</span>';
-          return '<tr><td>' + dir + '</td><td>' + legTypeName[l.t] + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td></tr>';
+          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="theo" id="sc-theo-' + i + '" data-leg="' + i + '" title="Black-Scholes 理論價・點此套用">' + theoTxt(l) + '</span>';
+          return '<tr><td>' + dSel + '</td><td>' + tSel + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td><td class="r"><button class="sc-rm" data-leg="' + i + '" title="刪除此部位">✕</button></td></tr>';
         }).join('');
-        box.querySelectorAll('#sc-legs-body input').forEach(function (inp) {
+        /* 數字輸入：逐字更新，不重建列 */
+        body.querySelectorAll('input').forEach(function (inp) {
           inp.addEventListener('input', function () {
             var i = +inp.getAttribute('data-leg'), f = inp.getAttribute('data-f'), v = parseNum(inp.value);
-            if (isNaN(v)) { renderOutputs(); return; } /* 允許中途空白，不動輸入框 */
+            if (isNaN(v)) { renderOutputs(); return; }
             if (f === 'K') {
               state.legs[i].K = v;
-              if (state.legs[i].premAuto) { state.legs[i].prem = Math.round(bsPrice(state.legs[i].t, state.spot, v, state.dte / 365, state.iv / 100));
+              refreshTheo(i);
+              if (state.legs[i].premAuto) { state.legs[i].prem = autoPrem(state.legs[i]);
                 var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = state.legs[i].prem; }
-            } else {
-              state.legs[i].prem = v; state.legs[i].premAuto = false;
-              var lab = box.querySelector('#sc-auto-' + i); if (lab) lab.style.display = 'none';
-            }
-            renderOutputs(); /* 只更新指標與圖，不重建輸入框 */
+            } else { state.legs[i].prem = v; state.legs[i].premAuto = false; }
+            renderOutputs();
           });
         });
+        /* 點「理論：$…」套用該理論價 */
+        body.querySelectorAll('.theo').forEach(function (sp) {
+          sp.addEventListener('click', function () {
+            var i = +sp.getAttribute('data-leg'); state.legs[i].prem = autoPrem(state.legs[i]); state.legs[i].premAuto = true;
+            var pin = premInput(i); if (pin) pin.value = state.legs[i].prem;
+            renderOutputs();
+          });
+        });
+        /* 方向／類型選單：離散事件，可安全重建列 */
+        body.querySelectorAll('select').forEach(function (se) {
+          se.addEventListener('change', function () {
+            var i = +se.getAttribute('data-leg'), f = se.getAttribute('data-f');
+            if (f === 'd') state.legs[i].d = +se.value;
+            else { state.legs[i].t = se.value; if (state.legs[i].t === 'U') state.legs[i].entry = state.spot;
+              else if (state.legs[i].premAuto) state.legs[i].prem = autoPrem(state.legs[i]); }
+            markCustom(); renderLegs(); renderOutputs();
+          });
+        });
+        /* 刪除部位 */
+        body.querySelectorAll('.sc-rm').forEach(function (btn) {
+          btn.addEventListener('click', function () { state.legs.splice(+btn.getAttribute('data-leg'), 1); markCustom(); renderLegs(); renderOutputs(); });
+        });
+      }
+      function addLeg() {
+        var l = { t: 'C', d: 1, K: snap(state.spot, 1.0), prem: 0, premAuto: true, entry: state.spot };
+        l.prem = autoPrem(l); state.legs.push(l); markCustom(); renderLegs(); renderOutputs();
       }
 
       /* 只更新損益指標與到期損益圖（可安全地在每次輸入時呼叫） */
       function renderOutputs() {
         var S0 = state.spot, qty = state.qty;
+        if (!state.legs.length) {
+          box.querySelector('#sc-metrics').innerHTML = '<div class="sc-empty" style="grid-column:1/-1">尚無部位，新增後即時試算損益。</div>';
+          box.querySelector('#sc-chart').innerHTML = '<div class="sc-empty">尚無部位可繪製損益圖。</div>';
+          return;
+        }
         var m = metrics(state.legs, S0, qty);
         var rrTxt = m.rr != null ? ('1 : ' + m.rr.toFixed(2)) : '—';
         var netTxt = m.netDebit > 0 ? ('淨支出 ' + usd(m.netDebit)) : m.netDebit < 0 ? ('淨收入 ' + usd(-m.netDebit)) : '$0';
@@ -3189,7 +3237,8 @@
       function recomputeAuto() {
         state.legs.forEach(function (l, i) {
           if (l.t === 'U') { l.entry = state.spot; return; }
-          if (l.premAuto) { l.prem = Math.round(bsPrice(l.t, state.spot, l.K, state.dte / 365, state.iv / 100));
+          refreshTheo(i); /* 理論價提示隨現價/IV/DTE 即時更新 */
+          if (l.premAuto) { l.prem = autoPrem(l);
             var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = l.prem; }
         });
         renderOutputs();
@@ -3213,8 +3262,9 @@
           + '</div></div>'
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
           + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
-          + '<div><div class="sc-hd">腿位（履約價與權利金可手動微調；「理論」＝以現價 IV/DTE 用 Black-Scholes 估算）</div>'
-          + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約價</th><th style="text-align:right">權利金 (USD)</th></tr></thead><tbody id="sc-legs-body"></tbody></table></div>'
+          + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-Scholes 理論價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
+          + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約價</th><th style="text-align:right">權利金 (USD)</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
+          + '<button class="sc-add" id="sc-add">＋ 新增部位</button></div>'
           + '<div><div class="sc-hd">損益指標</div><div class="sc-metrics" id="sc-metrics"></div></div>'
           + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
           + '<div class="sc-chart" id="sc-chart"></div>'
@@ -3234,8 +3284,9 @@
           var d2 = defaults(); if (d2.spot == null) return;
           state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1);
           box.querySelector('#sc-spot').value = state.spot; box.querySelector('#sc-iv').value = state.iv;
-          rebuildLegs();
+          if (state.strat === 'custom') recomputeAuto(); else rebuildLegs();
         });
+        box.querySelector('#sc-add').addEventListener('click', addLeg);
         rebuildLegs();
       }
 
