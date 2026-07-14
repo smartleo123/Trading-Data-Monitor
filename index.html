@@ -1259,7 +1259,7 @@
             </div>
             <!-- ═══════════════════════════════════════════════════════════════
                  台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券
-                 資料源：證交所 rwd JSON（經公用代理）
+                 資料源：證交所 rwd JSON（經公用代理，多家輪替＋逾時）
                  HTML 部分插入台股頁籤；<!== TW-CHIPS-SCRIPT ==> 之後的 JS/CSS 插到 body 結尾前
                  ═══════════════════════════════════════════════════════════════ -->
             <!-- 三大法人籌碼 -->
@@ -2530,7 +2530,16 @@
     #ha-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px;flex:0 0 auto}
     #ha-chips button{font-size:11px;color:#a1a1aa;background:#1b1b1f;border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:5px 11px;cursor:pointer}
     #ha-chips button:hover{color:#22d3ee;border-color:rgba(6,182,212,.35)}
-    .ha-foot{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.08);flex:0 0 auto;align-items:flex-end}
+    .ha-toolbar{display:flex;align-items:center;gap:9px;padding:8px 14px 0;flex:0 0 auto}
+    .ha-switch{display:inline-flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;padding:2px;font-family:inherit}
+    .ha-track{width:32px;height:18px;border-radius:99px;background:#3f3f46;position:relative;transition:background .18s;flex:0 0 auto}
+    .ha-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .18s}
+    .ha-switch[aria-checked="true"] .ha-track{background:#06b6d4}
+    .ha-switch[aria-checked="true"] .ha-thumb{transform:translateX(14px)}
+    .ha-sw-label{font-size:12px;font-weight:700;color:#a1a1aa}
+    .ha-switch[aria-checked="true"] .ha-sw-label{color:#22d3ee}
+    .ha-web-hint{font-size:10.5px;color:#71717a;line-height:1.4}
+    .ha-foot{display:flex;gap:8px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,.08);flex:0 0 auto;align-items:flex-end}
     #ha-input{flex:1;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#f4f4f5;font-size:13px;padding:9px 12px;
       outline:none;resize:none;max-height:96px;line-height:1.5;font-family:inherit;min-width:0}
     #ha-input:focus{border-color:#06b6d4}
@@ -2570,8 +2579,15 @@
         <button>台積電現在能進場嗎？</button>
         <button>台指期今天怎麼看？</button>
       </div>
+      <div class="ha-toolbar">
+        <button id="ha-web" class="ha-switch" role="switch" aria-checked="false" title="連網搜尋最新資訊">
+          <span class="ha-track"><span class="ha-thumb"></span></span>
+          <span class="ha-sw-label">🌐 連網搜尋</span>
+        </button>
+        <span class="ha-web-hint" id="ha-web-hint">關閉：只依本頁數據＋既有知識</span>
+      </div>
       <div class="ha-foot">
-        <textarea id="ha-input" rows="1" placeholder="問我加密貨幣／美股／台股的盤面或操作…"></textarea>
+        <textarea id="ha-input" rows="1" placeholder="問我加密貨幣／美股／台股的盤面或操作…（Enter 換行，按 ▶ 送出）"></textarea>
         <button id="ha-send" title="送出"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
       <div class="ha-note">AI 生成內容僅供參考，非投資建議・數據來自本頁即時面板</div>
@@ -2579,20 +2595,29 @@
     <script>
     (function () {
       'use strict';
-      var KEY_LS = 'groq_api_key';
+      var KEY_LS = 'groq_api_key', WEB_LS = 'ha_web_search';
       var fab = document.getElementById('ha-fab'), panel = document.getElementById('ha-panel');
       var msgsEl = document.getElementById('ha-msgs'), input = document.getElementById('ha-input');
       var sendBtn = document.getElementById('ha-send'), chips = document.getElementById('ha-chips');
       var modeEl = document.getElementById('ha-mode'), settings = document.getElementById('ha-settings');
       var keyInput = document.getElementById('ha-key');
+      var webBtn = document.getElementById('ha-web'), webHint = document.getElementById('ha-web-hint');
       var history = [];           /* {role,content} 只留對話，system 每次即時重建 */
       var busy = false, lastFreeAt = 0;
 
       function groqKey() { try { return localStorage.getItem(KEY_LS) || ''; } catch (e) { return ''; } }
+      function webOn() { try { return localStorage.getItem(WEB_LS) === '1'; } catch (e) { return false; } }
       function updateMode() {
-        var k = groqKey();
-        modeEl.textContent = k ? 'Groq・Llama 3.3 70B' : '免費模式';
-        modeEl.style.color = k ? '#22d3ee' : '';
+        var k = groqKey(), w = webOn();
+        var base = k ? (w ? 'Groq・Compound 網搜' : 'Groq・Llama 3.3 70B') : (w ? '免費・SearchGPT 網搜' : '免費模式');
+        modeEl.textContent = base;
+        modeEl.style.color = (k || w) ? '#22d3ee' : '';
+      }
+      function updateWebUI() {
+        var w = webOn();
+        webBtn.setAttribute('aria-checked', w ? 'true' : 'false');
+        webHint.textContent = w ? '開啟：會連網搜尋最新資訊補充本頁數據' : '關閉：只依本頁數據＋既有知識';
+        updateMode();
       }
 
       /* ── system prompt：跨市場即時快照 + 操作紀律 ── */
@@ -2645,6 +2670,10 @@
           '台指期：注意每月第三個週三結算、轉倉時點、夜盤流動性較差；可搭配三大法人與融資融券籌碼判斷方向。',
           '美股：注意 PDT 當沖規則（帳戶 < $2.5 萬時 5 個交易日內當沖 ≤ 3 次）、盤前盤後流動性差易跳空、財報日與 FOMC 波動放大；指數期貨（ES/NQ/MES/MNQ 等）注意保證金與季度轉倉、近全天候交易。',
           '一律限價單優先於市價單，尤其流動性差或波動大的標的。');
+        if (webOn())
+          lines.push('【連網模式：開啟】你可以搜尋網路上的最新資訊（新聞、總經數據、個股消息）來補充本頁未涵蓋的部分；引用外部資訊時簡短標明來源與時間，並與本頁即時數據交叉比對。');
+        else
+          lines.push('【連網模式：關閉】本次不連網搜尋，只依上方本頁即時數據與你既有的知識判斷。若某個問題明顯需要最新外部消息（例如剛發生的新聞、今天的美股個股報價），就說明你沒有即時外部資料、可能已過時，並提醒使用者可打開輸入框上方的「連網搜尋」開關。不要杜撰最新消息或即時報價。');
         return lines.join('\n');
       }
 
@@ -2665,14 +2694,15 @@
       }
       function setBusy(b) { busy = b; sendBtn.disabled = b; input.disabled = b; }
 
-      /* ── 後端呼叫 ── */
+      /* ── 後端呼叫（依「連網搜尋」開關切換模型） ── */
       function callAI(messages) {
-        var k = groqKey();
+        var k = groqKey(), web = webOn();
         if (k) {
+          /* 連網 → groq/compound-mini（內建網搜）；否則 Llama 3.3 70B */
           return fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + k },
-            body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, temperature: 0.4, max_tokens: 1024 })
+            body: JSON.stringify({ model: web ? 'groq/compound-mini' : 'llama-3.3-70b-versatile', messages: messages, temperature: 0.4, max_tokens: 1024 })
           }).then(function (r) {
             if (r.status === 401 || r.status === 403) throw new Error('Groq 金鑰無效或過期，請到設定（齒輪）更新；或清除金鑰改走免費通道。');
             if (r.status === 429) throw new Error('Groq 免費額度暫時用罄，稍後再試，或先清除金鑰改走免費通道。');
@@ -2685,10 +2715,11 @@
         var p = wait > 0 ? new Promise(function (res) { setTimeout(res, wait); }) : Promise.resolve();
         return p.then(function () {
           lastFreeAt = Date.now();
+          /* 連網 → searchgpt（內建網搜）；否則 openai */
           return fetch('https://text.pollinations.ai/openai', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model: 'openai', messages: messages, temperature: 0.4, referrer: 'hakutrade' })
+            body: JSON.stringify({ model: web ? 'searchgpt' : 'openai', messages: messages, temperature: 0.4, referrer: 'hakutrade' })
           });
         }).then(function (r) {
           if (r.status === 429) throw new Error('免費通道限流中（匿名約 15 秒一則），請稍候幾秒再送，或到設定貼上免費 Groq 金鑰解除限制。');
@@ -2729,7 +2760,7 @@
         if (open) {
           if (!msgsEl.children.length)
             addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
-          updateMode(); input.focus();
+          updateWebUI(); input.focus();
         }
       });
       document.getElementById('ha-close').addEventListener('click', function () { panel.classList.remove('open'); });
@@ -2740,19 +2771,26 @@
       document.getElementById('ha-key-save').addEventListener('click', function () {
         try { var v = keyInput.value.trim(); if (v) localStorage.setItem(KEY_LS, v); else localStorage.removeItem(KEY_LS); } catch (e) {}
         updateMode(); settings.classList.remove('open');
-        addMsg('assistant', groqKey() ? '已切換至 <strong>Groq・Llama 3.3 70B</strong>，回覆會更快更聰明。金鑰只存在你這台瀏覽器。' : '已改走免費通道（約 15 秒可問一則）。');
+        addMsg('assistant', groqKey() ? '已切換至 <strong>Groq 通道</strong>（' + (webOn() ? 'Compound 網搜模型' : 'Llama 3.3 70B') + '），金鑰只存在你這台瀏覽器。' : '已改走免費通道（約 15 秒可問一則）。');
       });
       document.getElementById('ha-key-clear').addEventListener('click', function () {
         try { localStorage.removeItem(KEY_LS); } catch (e) {}
         keyInput.value = ''; updateMode();
       });
-      sendBtn.addEventListener('click', function () { send(); });
-      input.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+      /* 連網搜尋開關（狀態存 localStorage） */
+      webBtn.addEventListener('click', function () {
+        var next = !webOn();
+        try { localStorage.setItem(WEB_LS, next ? '1' : '0'); } catch (e) {}
+        updateWebUI();
+        if (msgsEl.children.length) addMsg('assistant', next
+          ? '已開啟<strong>連網搜尋</strong>——之後的問題我會視需要搜尋最新網路資訊，來補充本頁未涵蓋的內容（回覆可能略慢幾秒）。'
+          : '已關閉連網搜尋——只依本頁即時數據與我既有的知識回答。');
       });
+      sendBtn.addEventListener('click', function () { send(); });
+      /* 依需求：Enter 只換行，不送出；一律按送出鈕才送 */
       input.addEventListener('input', function () { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 96) + 'px'; });
       chips.addEventListener('click', function (e) { if (e.target.tagName === 'BUTTON') send(e.target.textContent); });
-      updateMode();
+      updateWebUI();
     })();
     </script>
 </body>
