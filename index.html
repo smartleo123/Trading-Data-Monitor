@@ -20,6 +20,7 @@
             theme: {
                 extend: {
                     colors: {
+                        zinc: { 850: '#e5e7eb' }, // 全站面板白色外框色（原依賴無效 class 退回預設色，現明確固定，升級 Tailwind 不再受影響）
                         darkBg: '#09090b',
                         darkCard: '#141416',
                         accentCyan: '#06b6d4',
@@ -138,7 +139,7 @@
         <!-- 核心指標卡 -->
         <div id="sec-crypto-prices" data-nav="即時報價">
         <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
+            <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">幣安合約即時價格與資金費率・MSTR / STRC 為幣安股票永續合約報價（24h 更新）</p></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -249,7 +250,7 @@
             <div id="panel-chart" data-nav="CoinGlass 大盤分析" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="line-chart" class="w-5 h-5 text-accentCyan"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">CoinGlass 大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">幣安 BTCUSDT 合約即時 K 線、華爾街 ETF 每日持倉流向與恐懼與貪婪指數</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
@@ -273,10 +274,10 @@
              任意位置（建議放在 CoinGlass 面板附近）。
              展開時瀏覽器直接呼叫 Deribit 公開 API 即時計算，無需後端、無需排程。
              ═══════════════════════════════════════════════════════════════════ -->
-        <div id="btc-options-weekly" data-nav="BTC 選擇權分析" class="bg-darkCard border border-zinc-800 rounded-2xl p-5">
+        <div id="btc-options-weekly" data-nav="BTC 選擇權分析" class="bg-darkCard border border-zinc-850 rounded-2xl p-6">
           <button type="button" id="wr-toggle" class="w-full flex items-center justify-between gap-3 text-left" aria-expanded="false" aria-controls="wr-body">
             <div class="flex items-center gap-3">
-              <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl">
+              <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl">
                 <svg class="w-5 h-5 text-accentCyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 13l3-3 4 4 5-6"/></svg>
               </div>
               <div>
@@ -928,6 +929,21 @@
 
           /* ---------- 渲染 ---------- */
           function render(d, a) {
+            /* 匯出即時快照給右下角 AI 助理當回答上下文 */
+            try {
+              window.WR_SNAPSHOT = {
+                updatedAt: new Date().toISOString(),
+                spot: d.spot, dvol: +d.dvol.latest.toFixed(1), dvolPct: Math.round(d.dvol.pct), volRegime: a.volRegime,
+                funding8h: d.perp.funding8h, basisAnnual: +d.basisAnnual.toFixed(1),
+                maxPain: d.maxPain ? { strike: d.maxPain.strike, expiry: d.maxPain.expiry } : null,
+                callWall: a.callWall, putWall: a.putWall, gammaZone: d.gamma,
+                last30: { high: d.last30.high, low: d.last30.low },
+                ivRows: d.ivRows.map(function (r) { return { expiry: r.expiry, atmIV: r.atmIV != null ? +r.atmIV.toFixed(1) : null, skew: r.skew != null ? +r.skew.toFixed(1) : null }; }),
+                perpLevels: { longZone: a.pp.lz, longStop: a.pp.ls, shortZone: a.pp.sz, shortStop: a.pp.ss, breakoutUp: a.pp.bo, breakoutDown: a.pp.bd },
+                strategies: { condor: a.condor, bullPut: a.bullPut, callSpread: a.callSpread, putSpread: a.putSpread, coveredCall: a.ccStrike, buyCallK: a.buyCallK, buyPutK: a.buyPutK }
+              };
+              document.dispatchEvent(new CustomEvent('wr-snapshot'));
+            } catch (e) { /* 快照失敗不影響面板 */ }
             var rows = [];
             if (a.callWall) rows.push({ p: a.callWall, w: 68, n: 'Call 未平倉大牆（OI ' + fmtK(d.callWalls[0][1]) + '）・賣 Call 收租區' });
             rows.push({ p: d.last30.high, w: 52, n: '近 30 日高點，突破確認位（日收上破才有效）' });
@@ -1024,12 +1040,12 @@
             <div id="panel-strategy" data-nav="企業儲備動態" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="database" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="database" class="w-5 h-5 text-accentPurple"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">企業儲備動態 (Strategy Tracker)</h2><p class="text-xs text-zinc-500 mt-0.5">實時觀測 SaylorTracker 追蹤的比特幣購入紀錄與平均成本</p></div>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker</a>
-                        <a href="https://www.strategy.com/purchases" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 transition-colors flex items-center gap-1.5 text-xs font-semibold" style="color:#f7931a" onmouseover="this.style.color='#ffa733'" onmouseout="this.style.color='#f7931a'"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄</a>
+                        <a href="https://saylortracker.com/?tab=home" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Strategy Tracker</a>
+                        <a href="https://www.strategy.com/purchases" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 transition-colors flex items-center gap-1.5 text-xs font-semibold" style="color:#f7931a" onmouseover="this.style.color='#ffa733'" onmouseout="this.style.color='#f7931a'"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> Strategy 購買紀錄</a>
                         <button onclick="toggleMaximize('panel-strategy')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-strategy-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                     </div>
                 </div>
@@ -1040,12 +1056,12 @@
         <div id="panel-table" data-nav="前10大加密貨幣" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative transition-all duration-300">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="trending-up" class="w-5 h-5 text-accentCyan"></i></div>
+                    <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="trending-up" class="w-5 h-5 text-accentCyan"></i></div>
                     <div><h2 class="text-md font-extrabold text-white">前 10 大加密貨幣 (排除穩定幣)</h2><p class="text-xs text-zinc-500 mt-0.5">實時去除各類衍生穩定幣 (USDT/USDC/USDe/Frax等)，動態重構相對市佔權重</p></div>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     <div class="relative w-full sm:w-48"><i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i><input id="crypto-search" type="text" placeholder="搜尋代號/名稱..." oninput="handleSearch(this.value)" class="w-full bg-zinc-900 border border-zinc-850 hover:border-zinc-700 focus:border-accentCyan text-xs px-9 py-2.5 rounded-xl outline-none transition-colors text-white placeholder-zinc-500"></div>
-                    <button onclick="fetchCryptoData(false)" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 刷新行情</button>
+                    <button onclick="fetchCryptoData(false)" class="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> 刷新行情</button>
                     <a href="https://www.coinlore.com/" target="_blank" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white" title="前往 CoinLore 官網"><i data-lucide="external-link" class="w-4 h-4"></i></a>
                     <button onclick="toggleMaximize('panel-table')" class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200"><i id="panel-table-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
                 </div>
@@ -1077,7 +1093,7 @@
             <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
             <div id="sec-tw-quotes" data-nav="即時報價">
         <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
+            <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">加權指數與權值股 Yahoo Finance 即時行情（綠漲紅跌）</p></div>
         </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1204,7 +1220,7 @@
             <div id="panel-tw-weight" data-nav="台股前50大" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="pie-chart" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="pie-chart" class="w-5 h-5 text-accentPurple"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">台股前 50 大個股</h2><p class="text-xs text-zinc-500 mt-0.5">依臺灣50指數成分股與市值權重排序。清單已內嵌打包，可一鍵抓取 0050 官網最新持股更新</p></div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -1227,6 +1243,7 @@
                                 <th class="py-3 px-4">證券代號</th>
                                 <th class="py-3 px-4">證券名稱</th>
                                 <th class="py-3 px-4 text-right">收盤價</th>
+                                <th class="py-3 px-4 text-right">法人買賣超(張)</th>
                                 <th class="py-3 px-4 text-right">市值佔大盤比重</th>
                                 <th class="py-3 px-4 text-center w-16">TradingView</th>
                                 <th class="py-3 px-4 text-center w-16">Yahoo 股市</th>
@@ -1240,10 +1257,59 @@
                     <span class="text-zinc-500">*</span> 開啟台股頁籤時會自動透過公用代理同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>最新持股權重，確保排名即時正確；同步完成前暫以內嵌清單（資料日期 2026/06/30）顯示，亦可點「更新前50大清單」手動重抓。收盤價欄位：盤中顯示前一交易日昨收，收盤後與假日顯示最近一個交易日收盤（Yahoo Finance，開啟頁籤後逐列背景載入，全部載完約需十餘秒）。
                 </div>
             </div>
+            <!-- ═══════════════════════════════════════════════════════════════
+                 台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券＋外資期貨／券商分點
+                 資料源：證交所 rwd JSON（經公用代理）、期交所 OpenAPI、FinMind（分點，需 token）
+                 HTML 部分插入台股頁籤；<!== TW-CHIPS-SCRIPT ==> 之後的 JS/CSS 插到 body 結尾前
+                 ═══════════════════════════════════════════════════════════════ -->
+            <!-- 三大法人籌碼 -->
+            <div id="sec-tw-inst" data-nav="三大法人籌碼" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="users" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div><h2 class="text-md font-extrabold text-white">三大法人籌碼動向</h2><p class="text-xs text-zinc-500 mt-0.5">證交所官方數據（T+1 盤後公布）・買賣超金額與個股排行，切到台股頁籤時載入</p></div>
+                    </div>
+                    <button onclick="loadTwChips(true)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white flex items-center gap-1.5">重新整理</button>
+                </div>
+                <div id="twc-inst-tiles" class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5"></div>
+                <div class="twc-h">近 20 個交易日買賣超（億元）</div>
+                <div id="twc-inst-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div>
+                <div class="twc-h" style="margin-top:18px">當日個股買賣超排行（三大法人合計）</div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div><div class="twc-sub twc-buy">買超 Top 10</div><div id="twc-rank-buy"></div></div>
+                    <div><div class="twc-sub twc-sell">賣超 Top 10</div><div id="twc-rank-sell"></div></div>
+                </div>
+            </div>
+            <!-- 融資融券＋外資期貨 -->
+            <div id="sec-tw-margin" data-nav="融資融券・期貨部位" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="scale" class="w-5 h-5 text-accentPurple"></i></div>
+                    <div><h2 class="text-md font-extrabold text-white">融資融券・外資期貨部位</h2><p class="text-xs text-zinc-500 mt-0.5">散戶槓桿溫度計（證交所）＋大戶期貨籌碼（期交所／FinMind）</p></div>
+                </div>
+                <div id="twc-margin-tiles" class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div><div class="twc-h">近 20 個交易日融資餘額（億元）</div><div id="twc-margin-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div></div>
+                    <div><div class="twc-h">外資台指期淨部位（口）</div><div id="twc-futs" class="rounded-xl border border-zinc-900 bg-black/30 p-4 text-sm text-zinc-400"></div></div>
+                </div>
+            </div>
+            <!-- 券商分點 -->
+            <div id="sec-tw-branch" data-nav="券商分點" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="map-pin" class="w-5 h-5 text-amber-400"></i></div>
+                    <div><h2 class="text-md font-extrabold text-white">券商分點進出</h2><p class="text-xs text-zinc-500 mt-0.5">個股分點買賣超（FinMind 數據，需免費註冊 token；官方分點日報有驗證碼無法直接自動化）</p></div>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <input id="twc-branch-token" type="password" placeholder="FinMind API token（只存在你的瀏覽器）" class="flex-1 min-w-[220px] bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none">
+                    <input id="twc-branch-stock" type="text" value="2330" placeholder="股票代號" class="w-28 bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none">
+                    <button onclick="loadTwBranch()" class="text-sm px-4 py-2 rounded-lg font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition-colors">查詢分點</button>
+                    <a href="https://finmindtrade.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-zinc-500 hover:text-accentCyan underline">註冊 FinMind →</a>
+                </div>
+                <div id="twc-branch-body" class="text-sm text-zinc-500">輸入 FinMind token 與股票代號後查詢；token 僅儲存於你自己的瀏覽器（localStorage），不會上傳到任何地方。</div>
+            </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
             <div id="sec-tw-tech" data-nav="技術分析評級" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
-                    <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
+                    <div class="p-2.5 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
                     <div class="flex-1"><h2 id="tw-tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tw-tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
                     <a id="tw-tech-news-link" href="https://tw.tradingview.com/symbols/TWSE-0050/news/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0 flex items-center gap-1.5 text-sm font-bold" title="前往 TradingView 查看新聞"><i data-lucide="newspaper" class="w-4 h-4"></i> 新聞</a>
                     <a id="tw-tech-source-link" href="https://tw.tradingview.com/symbols/TWSE-0050/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
@@ -1274,7 +1340,7 @@
             <!-- 總經宏觀指標 -->
             <div id="sec-us-macro" data-nav="總經宏觀指標">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-accentPurple"></i></div>
+                    <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-accentPurple"></i></div>
                     <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">CPI 通膨、波動率、美元指數與黃金原油 — 判斷市場風險情緒的關鍵溫度計</p></div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -1306,7 +1372,7 @@
             <!-- 美股自選代碼卡片 -->
             <div id="sec-us-watchlist" data-nav="即時報價">
         <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
+            <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
             <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">自選 ETF 與個股 TradingView 即時行情卡</p></div>
         </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1325,7 +1391,7 @@
             <div id="panel-us-chart" data-nav="美股大盤分析" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 flex flex-col justify-between relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="flag" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="flag" class="w-5 h-5 text-accentCyan"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">美股大盤分析</h2><p class="text-xs text-zinc-500 mt-0.5">採用可自由嵌入之 ETF 追蹤標的（SPY/DIA/QQQ/SOXX/VT），避免指數代碼彈窗限制</p></div>
                     </div>
                     <div class="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-start">
@@ -1346,7 +1412,7 @@
             <div id="panel-us-heatmap" data-nav="板塊熱力圖" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative panel-transition">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="grid-3x3" class="w-5 h-5 text-accentPurple"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="grid-3x3" class="w-5 h-5 text-accentPurple"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">標普 500 產業板塊熱力圖</h2><p class="text-xs text-zinc-500 mt-0.5">依市值權重呈現各產業/個股當日漲跌強弱，一眼看穿資金流向</p></div>
                     </div>
                     <button onclick="toggleMaximize('panel-us-heatmap')" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-zinc-200" title="放大專注"><i id="panel-us-heatmap-zoom-icon" data-lucide="maximize" class="w-4 h-4"></i></button>
@@ -1357,7 +1423,7 @@
             <div class="space-y-6">
                 <div id="sec-us-tech" data-nav="技術分析評級" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-5">
-                        <div class="p-2.5 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
+                        <div class="p-2.5 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="gauge" class="w-6 h-6 text-accentPurple"></i></div>
                         <div class="flex-1"><h2 id="tech-title" class="text-lg font-extrabold text-white">技術分析評級</h2><p id="tech-subtitle" class="text-xs text-zinc-500 mt-0.5">股市多空儀表</p></div>
                         <a id="tech-news-link" href="https://tw.tradingview.com/symbols/AMEX-VT/news/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0 flex items-center gap-1.5 text-sm font-bold" title="前往 TradingView 查看新聞"><i data-lucide="newspaper" class="w-4 h-4"></i> 新聞</a>
                         <a id="tech-source-link" href="https://tw.tradingview.com/symbols/AMEX-VT/technicals/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white shrink-0" title="前往 TradingView 查看技術分析資料來源"><i data-lucide="external-link" class="w-4 h-4"></i></a>
@@ -1383,7 +1449,7 @@
                 </div>
                 <div id="sec-us-calendar" data-nav="財經日曆" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2 bg-gradient-to-br from-zinc-850 to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i></div>
+                        <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="calendar-clock" class="w-5 h-5 text-accentCyan"></i></div>
                         <div><h2 class="text-md font-extrabold text-white">全球財經日曆</h2><p class="text-xs text-zinc-500 mt-0.5">FOMC、CPI、非農等重大數據發布時程（欄位由左至右：實際 / 預測 / 前期）</p></div>
                     </div>
                     <div id="us-calendar-container" class="w-full h-[400px] rounded-xl overflow-hidden border border-zinc-900 bg-black relative"></div>
@@ -1836,12 +1902,13 @@
             const tb=document.getElementById('tw-weight-tbody');if(!tb)return;
             const kw=(keyword!=null?keyword:(document.getElementById('tw-weight-search')?.value||'')).trim().toLowerCase();
             const rows=TW_TOP50.filter(it=>(twWeightFilter==='全部'||it.cat===twWeightFilter)&&(it.code.toLowerCase().includes(kw)||it.name.toLowerCase().includes(kw)));
-            if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';return;}
+            if(!rows.length){tb.innerHTML='<tr><td colspan="9" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';return;}
             tb.innerHTML=rows.map(it=>{const tvUrl=`https://tw.tradingview.com/chart/?symbol=TWSE%3A${it.code}`;const yUrl=`https://tw.stock.yahoo.com/quote/${it.code}.TW`;const newsUrl=`https://tw.tradingview.com/symbols/TWSE-${it.code}/news/`;
-                return `<tr class="hover:bg-zinc-800/30 transition-colors group"><td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${it.r}</td><td class="py-3 px-4 font-mono font-bold text-zinc-200">${it.code}</td><td class="py-3 px-4"><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${it.name}</div><div class="text-[10px] text-zinc-500">${it.cat}</div></td><td class="py-3 px-4 text-right"><span class="font-mono text-zinc-300" data-twq="${it.code}">${fmtTwPrevClose(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono font-bold text-zinc-100">${it.w.toFixed(4)}%</span></td><td class="py-3 px-4 text-center"><a href="${tvUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 圖表"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${yUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="Yahoo 股市"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${newsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 新聞"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i></a></td></tr>`;
+                return `<tr class="hover:bg-zinc-800/30 transition-colors group"><td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${it.r}</td><td class="py-3 px-4 font-mono font-bold text-zinc-200">${it.code}</td><td class="py-3 px-4"><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${it.name}</div><div class="text-[10px] text-zinc-500">${it.cat}</div></td><td class="py-3 px-4 text-right"><span class="font-mono text-zinc-300" data-twq="${it.code}">${fmtTwPrevClose(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono" data-twi="${it.code}">${fmtTwInst(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono font-bold text-zinc-100">${it.w.toFixed(4)}%</span></td><td class="py-3 px-4 text-center"><a href="${tvUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 圖表"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${yUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="Yahoo 股市"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${newsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 新聞"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i></a></td></tr>`;
             }).join('');
             if(window.lucide)lucide.createIcons();
             loadTwPrevCloses(); // 背景補抓尚未快取的昨收價
+            if(window.fillTwInstColumn)fillTwInstColumn();
         }
         // ============================================================
         // 昨收價：Yahoo 前一交易日收盤，4 併發背景載入，結果快取（失敗標記不重試）
@@ -1854,6 +1921,17 @@
             if(v===false)return '—'; // 抓取失敗（點「更新前50大清單」或重新整理可重試）
             return '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>'; // 佇列中／載入中
         }
+        // 法人買賣超欄（資料由台股籌碼板塊的 T86 載入後填入 window.TW_INST_MAP）
+        function fmtTwInst(code){
+            const m=window.TW_INST_MAP;
+            const v=m?m[code]:undefined;
+            if(v===undefined)return '<span class="text-zinc-600">—</span>';
+            const z=Math.round(v/1000);
+            return '<span class="'+(z>=0?'text-emerald-400':'text-rose-500')+'">'+(z>=0?'+':'')+z.toLocaleString()+'</span>';
+        }
+        window.fillTwInstColumn=function(){
+            document.querySelectorAll('[data-twi]').forEach(el=>{el.innerHTML=fmtTwInst(el.getAttribute('data-twi'));});
+        };
         function loadTwPrevCloses(){
             TW_TOP50.forEach(s=>{
                 if(TW_QUOTE_CACHE[s.code]===undefined&&twQuoteQueue.indexOf(s.code)<0)twQuoteQueue.push(s.code);
@@ -1993,6 +2071,371 @@
     })();
     </script>
     <!-- ▲▲ 報價卡載入狀態 結束 ▲▲ -->
+
+    <style>
+    .twc-h{font-size:12.5px;font-weight:700;color:#a1a1aa;margin-bottom:8px}
+    .twc-sub{font-size:12px;font-weight:700;margin-bottom:6px}
+    .twc-buy{color:#10b981}.twc-sell{color:#ef4444}
+    .twc-tile{background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:11px 13px}
+    .twc-tile .k{font-size:11px;color:#8b8b93}.twc-tile .v{font-size:19px;font-weight:700;margin-top:1px}
+    .twc-tile .d{font-size:11px;color:#a1a1aa;margin-top:1px}
+    .twc-pos{color:#10b981}.twc-neg{color:#ef4444}
+    table.twc-t{width:100%;border-collapse:collapse;font-size:12.5px}
+    table.twc-t th{font-size:11px;color:#8b8b93;font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid #27272a}
+    table.twc-t td{padding:6px 8px;border-bottom:1px dashed #27272a;color:#a1a1aa}
+    table.twc-t td.num{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+    table.twc-t tr:last-child td{border-bottom:none}
+    .twc-legend{display:flex;gap:14px;font-size:11px;color:#a1a1aa;margin-bottom:6px}
+    .twc-legend span{display:inline-flex;align-items:center;gap:5px}
+    .twc-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+    .twc-err{color:#ef4444;font-size:12.5px}
+    </style>
+    <script>
+    (function () {
+      'use strict';
+      /* 系列色（已通過色彩驗證器：dark surface #141416） */
+      var C_FOREIGN = '#3987e5', C_TRUST = '#c98500', C_DEALER = '#9085e9';
+      var twcLoaded = false, twcLoading = false;
+
+      /* ── 共用：經公用代理抓證交所 JSON ── */
+      function viaProxy(url) {
+        var proxies = [
+          function (u) { return { url: 'https://api.allorigins.win/get?url=' + encodeURIComponent(u), wrap: 'json' }; },
+          function (u) { return { url: 'https://corsproxy.io/?url=' + encodeURIComponent(u), wrap: 'raw' }; },
+          function (u) { return { url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u), wrap: 'raw' }; }
+        ];
+        function tryOne(i) {
+          if (i >= proxies.length) return Promise.reject(new Error('proxies failed'));
+          var p = proxies[i](url);
+          return fetch(p.url, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (txt) {
+            if (p.wrap === 'json') { var w = JSON.parse(txt); return JSON.parse(w.contents); }
+            return JSON.parse(txt);
+          }).catch(function () { return tryOne(i + 1); });
+        }
+        return tryOne(0);
+      }
+      function num(s) { var v = parseFloat(String(s).replace(/,/g, '')); return isNaN(v) ? 0 : v; }
+      function fmtE(v, dec) { return (v >= 0 ? '+' : '') + v.toFixed(dec === undefined ? 1 : dec); }
+      function cls(v) { return v >= 0 ? 'twc-pos' : 'twc-neg'; }
+
+      /* 交易日清單：從今天往回走，跳過週末（假日靠回應為空自動再往前） */
+      function dateList(n) {
+        var out = [], d = new Date();
+        while (out.length < n) {
+          var day = d.getDay();
+          if (day !== 0 && day !== 6) {
+            out.push(d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0'));
+          }
+          d.setDate(d.getDate() - 1);
+        }
+        return out;
+      }
+
+      /* ── 三大法人（BFI82U 每日 + T86 個股） ── */
+      function parseBFI(j) {
+        var rows = (j && j.data) || [];
+        if (!rows.length) return null;
+        var f = 0, t = 0, dl = 0;
+        rows.forEach(function (r) {
+          var name = String(r[0]), diff = num(r[3]);
+          if (name.indexOf('外資') === 0) f += diff;
+          else if (name.indexOf('投信') === 0) t += diff;
+          else if (name.indexOf('自營商') === 0) dl += diff;
+        });
+        return { f: f / 1e8, t: t / 1e8, d: dl / 1e8 }; /* 億元 */
+      }
+      function loadInst(days) {
+        var results = {}, queue = days.slice(), active = 0, done = 0;
+        return new Promise(function (resolve) {
+          function pump() {
+            while (active < 3 && queue.length) {
+              (function (dt) {
+                active++;
+                viaProxy('https://www.twse.com.tw/rwd/zh/fund/BFI82U?date=' + dt + '&response=json')
+                  .then(function (j) { var p = parseBFI(j); if (p) results[dt] = p; })
+                  .catch(function () {})
+                  .then(function () { active--; done++; (queue.length || active) ? pump() : resolve(results); });
+              })(queue.shift());
+            }
+            if (!queue.length && !active && done) resolve(results);
+          }
+          pump();
+        });
+      }
+      function loadT86(days, i) {
+        i = i || 0;
+        if (i >= Math.min(days.length, 6)) return Promise.resolve(null);
+        return viaProxy('https://www.twse.com.tw/rwd/zh/fund/T86?date=' + days[i] + '&selectType=ALLBUT0999&response=json')
+          .then(function (j) {
+            if (j && j.data && j.data.length) return { date: days[i], rows: j.data };
+            return loadT86(days, i + 1);
+          }).catch(function () { return loadT86(days, i + 1); });
+      }
+
+      /* ── 融資融券（MI_MARGN） ── */
+      function findTable(j, kw) {
+        if (j && j.tables) { for (var i = 0; i < j.tables.length; i++) { if ((j.tables[i].title || '').indexOf(kw) >= 0) return j.tables[i]; } }
+        if (j && (j.title || '').indexOf(kw) >= 0) return j;
+        return null;
+      }
+      function parseMargin(j) {
+        var t = findTable(j, '信用交易統計');
+        if (!t || !t.data) return null;
+        var out = {};
+        t.data.forEach(function (r) {
+          var name = String(r[0]);
+          if (name.indexOf('融資金額') >= 0) { out.finPrev = num(r[4]) / 1e5; out.finNow = num(r[5]) / 1e5; } /* 仟元→億 */
+          else if (name.indexOf('融券') === 0) { out.shortPrev = num(r[4]); out.shortNow = num(r[5]); }        /* 張 */
+          else if (name.indexOf('融資') === 0) { out.finUnitNow = num(r[5]); }                                  /* 張 */
+        });
+        return (out.finNow !== undefined) ? out : null;
+      }
+      function loadMargin(days) {
+        var results = {}, queue = days.slice(), active = 0, done = 0;
+        return new Promise(function (resolve) {
+          function pump() {
+            while (active < 3 && queue.length) {
+              (function (dt) {
+                active++;
+                viaProxy('https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?date=' + dt + '&selectType=MS&response=json')
+                  .then(function (j) { var p = parseMargin(j); if (p) results[dt] = p; })
+                  .catch(function () {})
+                  .then(function () { active--; done++; (queue.length || active) ? pump() : resolve(results); });
+              })(queue.shift());
+            }
+            if (!queue.length && !active && done) resolve(results);
+          }
+          pump();
+        });
+      }
+
+      /* ── 外資期貨淨部位：期交所 OpenAPI 優先，失敗退 FinMind（若有 token） ── */
+      function loadFuts() {
+        var box = document.getElementById('twc-futs');
+        box.innerHTML = '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
+        fetch('https://openapi.taifex.com.tw/v1/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate', { cache: 'no-store' })
+          .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+          .then(function (arr) {
+            if (!Array.isArray(arr)) throw 0;
+            /* 找臺股期貨(TX)＋外資 的多空淨額未平倉口數（欄名防禦性比對） */
+            var row = arr.find(function (o) {
+              var s = JSON.stringify(o);
+              return /臺股期貨|TX/.test(s) && /外資/.test(s);
+            });
+            if (!row) throw 0;
+            var keys = Object.keys(row);
+            var netKey = keys.find(function (k) { return /淨額.*口數|口數.*淨額/.test(k) && /未平倉/.test(k); }) ||
+                         keys.find(function (k) { return /未平倉/.test(k) && /淨/.test(k); });
+            var dateKey = keys.find(function (k) { return /日期|Date/i.test(k); });
+            if (!netKey) throw 0;
+            var net = num(row[netKey]);
+            box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
+              + '<div class="k">外資臺股期貨未平倉淨額（' + (dateKey ? row[dateKey] : '最新') + '）</div>'
+              + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
+              + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：期交所 OpenAPI</div></div>';
+          })
+          .catch(function () {
+            var token = localStorage.getItem('finmind_token') || '';
+            if (!token) { box.innerHTML = '<span class="twc-err">期交所 OpenAPI 暫時無法取得。</span><br>可於下方「券商分點」區塊填入 FinMind token 後重新整理，改用 FinMind 期貨法人數據。'; return; }
+            var end = new Date(), start = new Date(); start.setDate(start.getDate() - 10);
+            var f = function (d) { return d.toISOString().slice(0, 10); };
+            fetch('https://api.finmindtrade.com/api/v4/data?dataset=TaiwanFuturesInstitutionalInvestors&data_id=TX&start_date=' + f(start) + '&end_date=' + f(end) + '&token=' + encodeURIComponent(token), { cache: 'no-store' })
+              .then(function (r) { return r.json(); })
+              .then(function (j) {
+                var rows = (j.data || []).filter(function (o) { return /外資/.test(o.institutional_investors || ''); });
+                if (!rows.length) throw 0;
+                var last = rows[rows.length - 1];
+                var net = num(last.long_open_interest_balance_volume) - num(last.short_open_interest_balance_volume);
+                box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
+                  + '<div class="k">外資臺股期貨未平倉淨額（' + last.date + '）</div>'
+                  + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
+                  + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：FinMind</div></div>';
+              })
+              .catch(function () { box.innerHTML = '<span class="twc-err">期交所與 FinMind 皆暫時無法取得外資期貨部位。</span>'; });
+          });
+      }
+
+      /* ── 圖表（SVG 手繪；含 <title> 懸浮提示與圖例） ── */
+      function barChart(el, series) { /* series: [{date, f, t, d}] 舊→新 */
+        if (!series.length) { el.innerHTML = '<span class="twc-err">近期數據暫時無法取得。</span>'; return; }
+        var W = 720, H = 200, pad = 34;
+        var maxAbs = 1;
+        series.forEach(function (s) {
+          var pos = Math.max(0, s.f) + Math.max(0, s.t) + Math.max(0, s.d);
+          var neg = Math.min(0, s.f) + Math.min(0, s.t) + Math.min(0, s.d);
+          maxAbs = Math.max(maxAbs, pos, -neg);
+        });
+        var zero = H / 2, scale = (H / 2 - 14) / maxAbs;
+        var bw = Math.min(22, (W - pad - 8) / series.length - 4);
+        var rects = '';
+        series.forEach(function (s, i) {
+          var x = pad + i * ((W - pad - 8) / series.length) + 2;
+          var upY = zero, dnY = zero;
+          [['f', C_FOREIGN, '外資'], ['t', C_TRUST, '投信'], ['d', C_DEALER, '自營商']].forEach(function (cfg) {
+            var v = s[cfg[0]], h = Math.abs(v) * scale;
+            if (h < 0.5) return;
+            var y; if (v >= 0) { y = upY - h; upY -= h + 1; } else { y = dnY + 1; dnY += h + 1; }
+            rects += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw + '" height="' + h.toFixed(1) + '" rx="1.5" fill="' + cfg[1] + '"><title>' + s.date + ' ' + cfg[2] + ' ' + fmtE(v) + ' 億</title></rect>';
+          });
+        });
+        var yLbl = maxAbs.toFixed(0);
+        el.innerHTML = '<div class="twc-legend"><span><i style="background:' + C_FOREIGN + '"></i>外資</span><span><i style="background:' + C_TRUST + '"></i>投信</span><span><i style="background:' + C_DEALER + '"></i>自營商</span></div>'
+          + '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto" role="img" aria-label="三大法人近20日買賣超">'
+          + '<line x1="' + pad + '" y1="' + zero + '" x2="' + W + '" y2="' + zero + '" stroke="#3f3f46" stroke-width="1"/>'
+          + '<text x="2" y="16" font-size="10" fill="#8b8b93">+' + yLbl + '億</text><text x="2" y="' + (H - 6) + '" font-size="10" fill="#8b8b93">-' + yLbl + '億</text>'
+          + rects + '</svg>';
+      }
+      function lineChart(el, series) { /* [{date, v}] 舊→新，億元 */
+        if (!series.length) { el.innerHTML = '<span class="twc-err">近期數據暫時無法取得。</span>'; return; }
+        var W = 720, H = 180, pad = 6;
+        var vs = series.map(function (s) { return s.v; });
+        var mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), rg = (mx - mn) || 1;
+        var pts = series.map(function (s, i) {
+          return (pad + i / (series.length - 1) * (W - pad * 2)).toFixed(1) + ',' + (H - 20 - (s.v - mn) / rg * (H - 46)).toFixed(1);
+        });
+        el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto" role="img" aria-label="融資餘額趨勢">'
+          + '<text x="2" y="14" font-size="10" fill="#8b8b93">高 ' + mx.toFixed(0) + ' 億</text>'
+          + '<text x="2" y="' + (H - 4) + '" font-size="10" fill="#8b8b93">低 ' + mn.toFixed(0) + ' 億（' + series[0].date + '→' + series[series.length - 1].date + '）</text>'
+          + '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#0e9cb8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+      }
+
+      /* ── 主載入 ── */
+      window.loadTwChips = function (force) {
+        if (twcLoading || (twcLoaded && !force)) return;
+        twcLoading = true;
+        var spinner = '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
+        document.getElementById('twc-inst-tiles').innerHTML = '<div class="twc-tile"><div class="k">三大法人數據</div><div class="v">' + spinner + '</div></div>';
+        document.getElementById('twc-inst-chart').innerHTML = spinner;
+        document.getElementById('twc-margin-tiles').innerHTML = '<div class="twc-tile"><div class="k">融資融券數據</div><div class="v">' + spinner + '</div></div>';
+        document.getElementById('twc-margin-chart').innerHTML = spinner;
+        document.getElementById('twc-rank-buy').innerHTML = spinner;
+        document.getElementById('twc-rank-sell').innerHTML = spinner;
+        var days = dateList(26); /* 抓 26 個平日，扣掉假日後湊 20 個交易日 */
+
+        /* 三大法人 */
+        loadInst(days).then(function (res) {
+          var dts = Object.keys(res).sort();
+          var series = dts.slice(-20).map(function (dt) {
+            var r = res[dt];
+            return { date: dt.slice(4, 6) + '/' + dt.slice(6, 8), f: r.f, t: r.t, d: r.d };
+          });
+          barChart(document.getElementById('twc-inst-chart'), series);
+          if (series.length) {
+            var last = series[series.length - 1], total = last.f + last.t + last.d;
+            document.getElementById('twc-inst-tiles').innerHTML =
+              '<div class="twc-tile"><div class="k">外資（' + last.date + '）</div><div class="v ' + cls(last.f) + '">' + fmtE(last.f) + ' 億</div></div>'
+              + '<div class="twc-tile"><div class="k">投信</div><div class="v ' + cls(last.t) + '">' + fmtE(last.t) + ' 億</div></div>'
+              + '<div class="twc-tile"><div class="k">自營商</div><div class="v ' + cls(last.d) + '">' + fmtE(last.d) + ' 億</div></div>'
+              + '<div class="twc-tile"><div class="k">三大法人合計</div><div class="v ' + cls(total) + '">' + fmtE(total) + ' 億</div><div class="d">' + (total >= 0 ? '法人偏買方' : '法人偏賣方') + '</div></div>';
+          } else {
+            document.getElementById('twc-inst-tiles').innerHTML = '<div class="twc-tile"><div class="k">三大法人</div><div class="v twc-err" style="font-size:13px">暫時無法取得</div></div>';
+          }
+        });
+
+        /* T86 個股排行＋前50大法人欄 */
+        loadT86(days).then(function (t86) {
+          if (!t86) {
+            document.getElementById('twc-rank-buy').innerHTML = '<span class="twc-err">暫時無法取得。</span>';
+            document.getElementById('twc-rank-sell').innerHTML = '';
+            return;
+          }
+          var rows = t86.rows.map(function (r) {
+            return { code: String(r[0]).trim(), name: String(r[1]).trim(), foreign: num(r[4]), trust: num(r[10]), net: num(r[r.length - 1]) };
+          });
+          window.TW_INST_MAP = {};
+          rows.forEach(function (r) { window.TW_INST_MAP[r.code] = r.net; });
+          if (typeof window.fillTwInstColumn === 'function') window.fillTwInstColumn();
+          var sorted = rows.slice().sort(function (a, b) { return b.net - a.net; });
+          function tbl(list) {
+            return '<table class="twc-t"><thead><tr><th>代號</th><th>名稱</th><th style="text-align:right">外資(張)</th><th style="text-align:right">投信(張)</th><th style="text-align:right">合計(張)</th></tr></thead><tbody>'
+              + list.map(function (r) {
+                  return '<tr><td class="num" style="text-align:left;color:#e4e4e7">' + r.code + '</td><td>' + r.name + '</td>'
+                    + '<td class="num ' + cls(r.foreign) + '">' + Math.round(r.foreign / 1000).toLocaleString() + '</td>'
+                    + '<td class="num ' + cls(r.trust) + '">' + Math.round(r.trust / 1000).toLocaleString() + '</td>'
+                    + '<td class="num ' + cls(r.net) + '">' + Math.round(r.net / 1000).toLocaleString() + '</td></tr>';
+                }).join('') + '</tbody></table>';
+          }
+          document.getElementById('twc-rank-buy').innerHTML = tbl(sorted.slice(0, 10));
+          document.getElementById('twc-rank-sell').innerHTML = tbl(sorted.slice(-10).reverse());
+        });
+
+        /* 融資融券 */
+        loadMargin(days).then(function (res) {
+          var dts = Object.keys(res).sort();
+          var series = dts.slice(-20).map(function (dt) { return { date: dt.slice(4, 6) + '/' + dt.slice(6, 8), v: res[dt].finNow }; });
+          lineChart(document.getElementById('twc-margin-chart'), series);
+          if (dts.length) {
+            var m = res[dts[dts.length - 1]];
+            var chg = m.finNow - m.finPrev, sChg = m.shortNow - m.shortPrev;
+            var ratio = m.finUnitNow ? (m.shortNow / m.finUnitNow * 100) : null;
+            document.getElementById('twc-margin-tiles').innerHTML =
+              '<div class="twc-tile"><div class="k">融資餘額</div><div class="v">' + m.finNow.toFixed(0) + ' 億</div><div class="d ' + cls(chg) + '">今日 ' + fmtE(chg) + ' 億</div></div>'
+              + '<div class="twc-tile"><div class="k">融券餘額</div><div class="v">' + m.shortNow.toLocaleString() + ' 張</div><div class="d ' + cls(-sChg) + '">今日 ' + (sChg >= 0 ? '+' : '') + sChg.toLocaleString() + ' 張</div></div>'
+              + '<div class="twc-tile"><div class="k">券資比</div><div class="v">' + (ratio != null ? ratio.toFixed(2) + '%' : '—') + '</div><div class="d">融券張數／融資張數</div></div>'
+              + '<div class="twc-tile"><div class="k">解讀</div><div class="v" style="font-size:13px;line-height:1.6;font-weight:600;color:#a1a1aa">' + (chg > 5 ? '融資快速增加，散戶槓桿升溫' : chg < -5 ? '融資退潮，槓桿降溫（籌碼沉澱）' : '融資變化平穩') + '</div></div>';
+          } else {
+            document.getElementById('twc-margin-tiles').innerHTML = '<div class="twc-tile"><div class="k">融資融券</div><div class="v twc-err" style="font-size:13px">暫時無法取得</div></div>';
+          }
+          twcLoaded = true; twcLoading = false;
+        });
+
+        loadFuts();
+      };
+
+      /* ── 券商分點（FinMind） ── */
+      var tokenInput = document.getElementById('twc-branch-token');
+      tokenInput.value = localStorage.getItem('finmind_token') || '';
+      tokenInput.addEventListener('change', function () { localStorage.setItem('finmind_token', tokenInput.value.trim()); });
+      window.loadTwBranch = function () {
+        var token = tokenInput.value.trim();
+        localStorage.setItem('finmind_token', token);
+        var stock = (document.getElementById('twc-branch-stock').value || '2330').trim();
+        var body = document.getElementById('twc-branch-body');
+        if (!token) { body.innerHTML = '<span class="twc-err">請先填入 FinMind token（免費註冊：finmindtrade.com）。</span>'; return; }
+        body.innerHTML = '<span class="q-loading-sm"><span class="q-spin"></span>查詢 ' + stock + ' 分點資料中…</span>';
+        function tryDate(offset) {
+          if (offset > 6) { body.innerHTML = '<span class="twc-err">近一週查無 ' + stock + ' 的分點資料。</span>'; return; }
+          var d = new Date(); d.setDate(d.getDate() - offset);
+          if (d.getDay() === 0 || d.getDay() === 6) return tryDate(offset + 1);
+          var ds = d.toISOString().slice(0, 10);
+          fetch('https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockTradingDailyReport&data_id=' + encodeURIComponent(stock) + '&start_date=' + ds + '&end_date=' + ds + '&token=' + encodeURIComponent(token), { cache: 'no-store' })
+            .then(function (r) { return r.json(); })
+            .then(function (j) {
+              if (j.status && j.status !== 200) { body.innerHTML = '<span class="twc-err">FinMind：' + (j.msg || j.status) + '</span>'; return; }
+              var rows = j.data || [];
+              if (!rows.length) return tryDate(offset + 1);
+              var agg = {};
+              rows.forEach(function (r) {
+                var k = r.securities_trader || r.securities_trader_id || '?';
+                if (!agg[k]) agg[k] = { buy: 0, sell: 0 };
+                agg[k].buy += num(r.buy); agg[k].sell += num(r.sell);
+              });
+              var list = Object.keys(agg).map(function (k) { return { name: k, buy: agg[k].buy, sell: agg[k].sell, net: agg[k].buy - agg[k].sell }; })
+                .sort(function (a, b) { return b.net - a.net; });
+              function tbl(items) {
+                return '<table class="twc-t"><thead><tr><th>券商分點</th><th style="text-align:right">買進(張)</th><th style="text-align:right">賣出(張)</th><th style="text-align:right">買賣超(張)</th></tr></thead><tbody>'
+                  + items.map(function (r) {
+                      return '<tr><td style="color:#e4e4e7">' + r.name + '</td><td class="num">' + Math.round(r.buy / 1000).toLocaleString() + '</td><td class="num">' + Math.round(r.sell / 1000).toLocaleString() + '</td><td class="num ' + cls(r.net) + '">' + Math.round(r.net / 1000).toLocaleString() + '</td></tr>';
+                    }).join('') + '</tbody></table>';
+              }
+              body.innerHTML = '<div class="twc-h">' + stock + '・' + ds + '・分點買賣超（共 ' + list.length + ' 個分點）</div>'
+                + '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">'
+                + '<div><div class="twc-sub twc-buy">買超分點 Top 10</div>' + tbl(list.slice(0, 10)) + '</div>'
+                + '<div><div class="twc-sub twc-sell">賣超分點 Top 10</div>' + tbl(list.slice(-10).reverse()) + '</div></div>';
+            })
+            .catch(function () { body.innerHTML = '<span class="twc-err">FinMind 連線失敗，稍後再試。</span>'; });
+        }
+        tryDate(0);
+      };
+
+      /* 台股頁籤首次開啟時載入籌碼數據（重量級分析，不隨頁面預載） */
+      if (typeof window.initTwStockView === 'function') {
+        var _init = window.initTwStockView;
+        window.initTwStockView = function () { _init(); loadTwChips(); };
+      }
+    })();
+    </script>
+    <!-- ▲▲ 台股籌碼板塊 結束 ▲▲ -->
     <!-- ═══════════════════════════════════════════════════════════
          右側區塊快速導航（自包含）：隨頁籤切換清單、點擊平滑定位、
          捲動時高亮當前區塊。桌面（≥1024px）顯示，行動裝置自動隱藏。
@@ -2127,5 +2570,249 @@
     })();
     </script>
     <!-- ▲▲ 右側區塊快速導航 結束 ▲▲ -->
+    <!-- ══════════════ HakuTrade AI 助理（右下角聊天小工具） ══════════════
+         雙軌後端：
+           ① 預設 Pollinations.AI（免金鑰、免登錄，匿名層約 15 秒一則）
+           ② 設定裡貼上免費 Groq API 金鑰（僅存 localStorage）→ 自動升級 Llama 3.3 70B
+         回答時注入 window.WR_SNAPSHOT（BTC 選擇權面板即時計算結果）＋ SOP 鐵律摘要 -->
+    <style>
+    #ha-fab{position:fixed;right:20px;bottom:20px;z-index:70;width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
+      background:linear-gradient(135deg,#06b6d4,#a855f7);box-shadow:0 4px 18px rgba(6,182,212,.35),0 2px 8px rgba(0,0,0,.5);
+      display:flex;align-items:center;justify-content:center;transition:transform .18s ease,box-shadow .18s ease}
+    #ha-fab:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(168,85,247,.45),0 2px 8px rgba(0,0,0,.5)}
+    #ha-fab svg{width:26px;height:26px;pointer-events:none}
+    #ha-panel{position:fixed;right:20px;bottom:86px;z-index:70;width:min(390px,calc(100vw - 32px));height:min(600px,calc(100vh - 130px));
+      background:#141416;border:1px solid #e5e7eb;border-radius:16px;display:none;flex-direction:column;overflow:hidden;
+      box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:inherit}
+    #ha-panel.open{display:flex}
+    .ha-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex:0 0 auto}
+    .ha-head .ha-dot{width:9px;height:9px;border-radius:50%;background:#10b981;flex:0 0 auto;box-shadow:0 0 6px rgba(16,185,129,.8)}
+    .ha-head .ha-title{font-size:14.5px;font-weight:700;color:#f4f4f5}
+    .ha-head .ha-mode{font-size:10.5px;color:#a1a1aa;background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:99px;padding:2px 9px;margin-left:2px}
+    .ha-head button{margin-left:auto;background:none;border:none;color:#a1a1aa;cursor:pointer;padding:4px;border-radius:8px;display:flex}
+    .ha-head button:hover{color:#f4f4f5;background:#1b1b1f}
+    .ha-head button+button{margin-left:2px}
+    #ha-settings{display:none;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);background:#101012;flex:0 0 auto}
+    #ha-settings.open{display:block}
+    #ha-settings label{font-size:11.5px;color:#a1a1aa;display:block;margin-bottom:6px}
+    #ha-settings .row{display:flex;gap:8px}
+    #ha-settings input{flex:1;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#f4f4f5;font-size:12px;padding:7px 10px;outline:none;min-width:0}
+    #ha-settings input:focus{border-color:#06b6d4}
+    #ha-settings button{font-size:12px;font-weight:700;border-radius:8px;padding:7px 12px;cursor:pointer;border:1px solid rgba(6,182,212,.3);background:rgba(6,182,212,.12);color:#22d3ee}
+    #ha-settings button.clr{border-color:rgba(255,255,255,.12);background:#1b1b1f;color:#a1a1aa}
+    #ha-settings .hint{font-size:10.5px;color:#71717a;margin-top:7px;line-height:1.6}
+    #ha-settings .hint a{color:#22d3ee;text-decoration:none}
+    #ha-msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:10px}
+    .ha-msg{max-width:86%;font-size:13px;line-height:1.7;border-radius:14px;padding:9px 13px;white-space:pre-wrap;word-break:break-word}
+    .ha-msg.u{align-self:flex-end;background:rgba(6,182,212,.14);border:1px solid rgba(6,182,212,.25);color:#e4f7fb;border-bottom-right-radius:4px}
+    .ha-msg.a{align-self:flex-start;background:#1b1b1f;border:1px solid rgba(255,255,255,.08);color:#e4e4e7;border-bottom-left-radius:4px}
+    .ha-msg.a strong{color:#f4f4f5}
+    .ha-msg.a code{background:#27272a;border-radius:4px;padding:1px 5px;font-size:12px}
+    .ha-msg.err{border-color:rgba(239,68,68,.35);color:#fca5a5}
+    .ha-msg.typing{color:#a1a1aa;font-size:12.5px}
+    .ha-msg.typing i{display:inline-block;width:5px;height:5px;margin:0 1.5px;border-radius:50%;background:#a1a1aa;animation:haB 1.2s infinite}
+    .ha-msg.typing i:nth-child(2){animation-delay:.2s}.ha-msg.typing i:nth-child(3){animation-delay:.4s}
+    @keyframes haB{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+    #ha-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px;flex:0 0 auto}
+    #ha-chips button{font-size:11px;color:#a1a1aa;background:#1b1b1f;border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:5px 11px;cursor:pointer}
+    #ha-chips button:hover{color:#22d3ee;border-color:rgba(6,182,212,.35)}
+    .ha-foot{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.08);flex:0 0 auto;align-items:flex-end}
+    #ha-input{flex:1;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#f4f4f5;font-size:13px;padding:9px 12px;
+      outline:none;resize:none;max-height:96px;line-height:1.5;font-family:inherit;min-width:0}
+    #ha-input:focus{border-color:#06b6d4}
+    #ha-send{width:38px;height:38px;flex:0 0 auto;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#06b6d4,#a855f7);transition:opacity .15s}
+    #ha-send:disabled{opacity:.35;cursor:not-allowed}
+    .ha-note{font-size:10px;color:#52525b;text-align:center;padding:0 14px 9px;flex:0 0 auto}
+    @media(max-width:640px){#ha-panel{bottom:82px}}
+    </style>
+    <button id="ha-fab" aria-label="開啟 AI 助理" title="HakuTrade AI 助理">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        <path d="M9 10h.01M12.5 10h.01M16 10h.01" stroke-width="2.6"/>
+      </svg>
+    </button>
+    <div id="ha-panel" role="dialog" aria-label="HakuTrade AI 助理">
+      <div class="ha-head">
+        <span class="ha-dot"></span>
+        <span class="ha-title">HakuTrade AI 助理</span>
+        <span class="ha-mode" id="ha-mode">免費模式</span>
+        <button id="ha-gear" title="設定（Groq 金鑰）"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <button id="ha-close" title="關閉"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div id="ha-settings">
+        <label>Groq API 金鑰（選填，貼上後升級為 Llama 3.3 70B，回覆更快更聰明）</label>
+        <div class="row">
+          <input id="ha-key" type="password" placeholder="gsk_..." autocomplete="off">
+          <button id="ha-key-save">儲存</button>
+          <button id="ha-key-clear" class="clr">清除</button>
+        </div>
+        <div class="hint">到 <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> 免費註冊即可取得。金鑰僅儲存於你自己的瀏覽器（localStorage），不會上傳到任何地方。未填時走 Pollinations 免費通道（約 15 秒可問一則）。</div>
+      </div>
+      <div id="ha-msgs"></div>
+      <div id="ha-chips">
+        <button>現在盤面適合買方還是賣方？</button>
+        <button>永續合約現在能進場嗎？</button>
+        <button>用一句話總結今天的選擇權數據</button>
+      </div>
+      <div class="ha-foot">
+        <textarea id="ha-input" rows="1" placeholder="問我盤面數據或操作想法…"></textarea>
+        <button id="ha-send" title="送出"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+      </div>
+      <div class="ha-note">AI 生成內容僅供參考，非投資建議・數據來自本頁即時面板</div>
+    </div>
+    <script>
+    (function () {
+      'use strict';
+      var KEY_LS = 'groq_api_key';
+      var fab = document.getElementById('ha-fab'), panel = document.getElementById('ha-panel');
+      var msgsEl = document.getElementById('ha-msgs'), input = document.getElementById('ha-input');
+      var sendBtn = document.getElementById('ha-send'), chips = document.getElementById('ha-chips');
+      var modeEl = document.getElementById('ha-mode'), settings = document.getElementById('ha-settings');
+      var keyInput = document.getElementById('ha-key');
+      var history = [];           /* {role,content} 只留對話，system 每次即時重建 */
+      var busy = false, lastFreeAt = 0;
+
+      function groqKey() { try { return localStorage.getItem(KEY_LS) || ''; } catch (e) { return ''; } }
+      function updateMode() {
+        var k = groqKey();
+        modeEl.textContent = k ? 'Groq・Llama 3.3 70B' : '免費模式';
+        modeEl.style.color = k ? '#22d3ee' : '';
+      }
+
+      /* ── system prompt：即時快照 + SOP 鐵律 ── */
+      function fm(v) { return typeof v === 'number' ? '$' + Math.round(v).toLocaleString('en-US') : '—'; }
+      function sysPrompt() {
+        var s = window.WR_SNAPSHOT;
+        var lines = ['你是「HakuTrade AI 助理」，鑲在使用者自建的交易儀表板網頁右下角，以繁體中文回答加密貨幣（尤其 BTC 選擇權與永續合約）相關問題。',
+          '回答原則：直接、具體、先給結論再給理由；一般問題控制在 200 字內，使用者要求詳細才展開；引用下方即時數據佐證；結尾不必重複免責聲明（介面已顯示），但對高風險操作要明確提示風險與停損；不確定的事直說不知道。'];
+        if (s) {
+          var iv = (s.ivRows || []).map(function (r) { return r.expiry + ' ATM IV ' + (r.atmIV != null ? r.atmIV + '%' : '—') + (r.skew != null ? '（25Δ skew ' + (r.skew > 0 ? '+' : '') + r.skew + 'pt' + (r.skew > 0 ? '，Put 貴' : r.skew < 0 ? '，Call 貴' : '') + '）' : ''); }).join('；');
+          lines.push('【本頁面板即時數據（' + s.updatedAt + ' 更新，來源 Deribit）】',
+            'BTC 指數現價 ' + fm(s.spot) + '。DVOL ' + s.dvol + '，位於 90 日 ' + s.dvolPct + '% 分位（' + (s.volRegime === 'low' ? '低波動壓縮，選擇權便宜' : s.volRegime === 'high' ? '高波動，選擇權昂貴' : '波動中性') + '）。',
+            '永續資金費率 ' + (s.funding8h >= 0 ? '+' : '') + s.funding8h.toFixed(3) + '%/8h；期貨年化基差 ' + s.basisAnnual + '%。',
+            'IV 期限結構：' + iv + '。',
+            'Max Pain ' + (s.maxPain ? fm(s.maxPain.strike) + '（' + s.maxPain.expiry + ' 到期）' : '—') + '；Call OI 牆 ' + fm(s.callWall) + '；Put OI 牆 ' + fm(s.putWall) + '；Gamma 集中區 ' + fm(s.gammaZone) + '。',
+            '近 30 日高低點 ' + fm(s.last30.high) + ' / ' + fm(s.last30.low) + '。',
+            '永續參考水位：多單掛 ' + fm(s.perpLevels.longZone[0]) + '–' + fm(s.perpLevels.longZone[1]) + '（損 ' + fm(s.perpLevels.longStop) + '）；空單掛 ' + fm(s.perpLevels.shortZone[0]) + '–' + fm(s.perpLevels.shortZone[1]) + '（損 ' + fm(s.perpLevels.shortStop) + '）；日收上破 ' + fm(s.perpLevels.breakoutUp) + ' 追多、下破 ' + fm(s.perpLevels.breakoutDown) + ' 追空。',
+            '面板算出的參考結構：Iron Condor 賣 ' + fm(s.strategies.condor.sp) + 'P/' + fm(s.strategies.condor.sc) + 'C；Bull Put Spread 賣 ' + fm(s.strategies.bullPut.s) + 'P買 ' + fm(s.strategies.bullPut.b) + 'P；Covered Call ' + fm(s.strategies.coveredCall) + '；買方看漲參考 ' + fm(s.strategies.buyCallK) + ' Call、看跌參考 ' + fm(s.strategies.buyPutK) + ' Put。');
+        } else {
+          lines.push('【注意】選擇權面板的即時數據尚未載入完成，暫時沒有現價與 IV 等數字。請告知使用者稍等幾秒（面板載入後我就能引用即時數據），只回答不需要即時數據的問題。');
+        }
+        lines.push('【使用者的 SOP 鐵律（回答操作問題時要對照）】',
+          '買方：主準則 Delta 0.30–0.45、60–90 天期避 theta 懸崖；獲利 +100% 先出一半、權利金 -50% 停損；IV 高分位不單腿追買、改價差。',
+          '賣方：Delta 0.15–0.30；獲利 50% 平倉、剩 21 天強制離場、虧損達 2 倍權利金止損；Skew 偏 Put 貴時優先 Bull Put Spread、避免裸賣 Put。',
+          '通用：重大事件（FOMC/CPI）前 48 小時不新開淨賣方倉；同一到期日曝險 ≤ 30% 且監控總 Vega；流動性差時一律限價單。',
+          '永續：槓桿 ≤ 3–5 倍、單筆風險 ≤ 帳戶 1–2%、突破只認日線收盤。');
+        return lines.join('\n');
+      }
+
+      /* ── UI helpers ── */
+      function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function mdLite(t) {
+        return esc(t)
+          .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      }
+      function addMsg(role, html, cls) {
+        var div = document.createElement('div');
+        div.className = 'ha-msg ' + (role === 'user' ? 'u' : 'a') + (cls ? ' ' + cls : '');
+        div.innerHTML = html;
+        msgsEl.appendChild(div);
+        msgsEl.scrollTop = msgsEl.scrollHeight;
+        return div;
+      }
+      function setBusy(b) { busy = b; sendBtn.disabled = b; input.disabled = b; }
+
+      /* ── 後端呼叫 ── */
+      function callAI(messages) {
+        var k = groqKey();
+        if (k) {
+          return fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + k },
+            body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, temperature: 0.4, max_tokens: 1024 })
+          }).then(function (r) {
+            if (r.status === 401 || r.status === 403) throw new Error('Groq 金鑰無效或過期，請到設定（齒輪）更新；或清除金鑰改走免費通道。');
+            if (r.status === 429) throw new Error('Groq 免費額度暫時用罄，稍後再試，或先清除金鑰改走免費通道。');
+            if (!r.ok) throw new Error('Groq 服務回應 ' + r.status + '，請稍後再試。');
+            return r.json();
+          }).then(function (j) { return j.choices[0].message.content; });
+        }
+        /* Pollinations 匿名層：客戶端先擋 15 秒節流，避免必然的 429 */
+        var wait = 15000 - (Date.now() - lastFreeAt);
+        var p = wait > 0 ? new Promise(function (res) { setTimeout(res, wait); }) : Promise.resolve();
+        return p.then(function () {
+          lastFreeAt = Date.now();
+          return fetch('https://text.pollinations.ai/openai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'openai', messages: messages, temperature: 0.4, referrer: 'hakutrade' })
+          });
+        }).then(function (r) {
+          if (r.status === 429) throw new Error('免費通道限流中（匿名約 15 秒一則），請稍候幾秒再送，或到設定貼上免費 Groq 金鑰解除限制。');
+          if (!r.ok) throw new Error('免費 AI 通道回應 ' + r.status + '。可稍後再試，或到設定（齒輪）貼上免費 Groq 金鑰。');
+          return r.json();
+        }).then(function (j) {
+          if (j && j.choices && j.choices[0]) return j.choices[0].message.content;
+          throw new Error('免費通道回傳格式異常，請稍後再試。');
+        });
+      }
+
+      function send(text) {
+        text = (text || input.value).trim();
+        if (!text || busy) return;
+        input.value = ''; input.style.height = 'auto';
+        chips.style.display = 'none';
+        addMsg('user', esc(text));
+        history.push({ role: 'user', content: text });
+        var typing = addMsg('assistant', '思考中 <i></i><i></i><i></i>', 'typing');
+        if (!groqKey() && Date.now() - lastFreeAt < 15000) typing.innerHTML = '免費通道節流中，稍等幾秒… <i></i><i></i><i></i>';
+        setBusy(true);
+        var messages = [{ role: 'system', content: sysPrompt() }].concat(history.slice(-12));
+        callAI(messages).then(function (reply) {
+          typing.remove();
+          addMsg('assistant', mdLite(reply));
+          history.push({ role: 'assistant', content: reply });
+        }).catch(function (e) {
+          typing.remove();
+          addMsg('assistant', esc(e && e.message ? e.message : '連線失敗，請稍後再試。'), 'err');
+          history.pop(); /* 失敗的問題移出歷史，讓使用者可原文重送 */
+          input.value = text;
+        }).then(function () { setBusy(false); input.focus(); });
+      }
+
+      /* ── 事件 ── */
+      fab.addEventListener('click', function () {
+        var open = panel.classList.toggle('open');
+        if (open) {
+          if (!msgsEl.children.length)
+            addMsg('assistant', '嗨，我是 HakuTrade AI 助理。我看得到本頁選擇權面板的<strong>即時數據</strong>（現價、DVOL、IV、skew、Max Pain、OI 牆、資金費率），也熟你的進出場 SOP——想做什麼操作，直接問我合不合理。');
+          updateMode(); input.focus();
+        }
+      });
+      document.getElementById('ha-close').addEventListener('click', function () { panel.classList.remove('open'); });
+      document.getElementById('ha-gear').addEventListener('click', function () {
+        settings.classList.toggle('open');
+        keyInput.value = groqKey();
+      });
+      document.getElementById('ha-key-save').addEventListener('click', function () {
+        try { var v = keyInput.value.trim(); if (v) localStorage.setItem(KEY_LS, v); else localStorage.removeItem(KEY_LS); } catch (e) {}
+        updateMode(); settings.classList.remove('open');
+        addMsg('assistant', groqKey() ? '已切換至 <strong>Groq・Llama 3.3 70B</strong>，回覆會更快更聰明。金鑰只存在你這台瀏覽器。' : '已改走免費通道（約 15 秒可問一則）。');
+      });
+      document.getElementById('ha-key-clear').addEventListener('click', function () {
+        try { localStorage.removeItem(KEY_LS); } catch (e) {}
+        keyInput.value = ''; updateMode();
+      });
+      sendBtn.addEventListener('click', function () { send(); });
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+      });
+      input.addEventListener('input', function () { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 96) + 'px'; });
+      chips.addEventListener('click', function (e) { if (e.target.tagName === 'BUTTON') send(e.target.textContent); });
+      updateMode();
+    })();
+    </script>
 </body>
 </html>
