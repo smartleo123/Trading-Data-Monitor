@@ -2499,7 +2499,10 @@
       background:#141416;border:1px solid #e5e7eb;border-radius:16px;display:none;flex-direction:column;overflow:hidden;
       box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:inherit}
     #ha-panel.open{display:flex}
-    .ha-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex:0 0 auto}
+    #ha-resize{position:absolute;top:0;left:0;width:24px;height:24px;cursor:nwse-resize;z-index:6;padding:5px;touch-action:none}
+    #ha-resize svg{width:12px;height:12px;color:#52525b;pointer-events:none;transition:color .15s}
+    #ha-resize:hover svg{color:#22d3ee}
+    .ha-head{display:flex;align-items:center;gap:10px;padding:13px 16px 13px 22px;border-bottom:1px solid rgba(255,255,255,.08);flex:0 0 auto}
     .ha-head .ha-dot{width:9px;height:9px;border-radius:50%;background:#10b981;flex:0 0 auto;box-shadow:0 0 6px rgba(16,185,129,.8)}
     .ha-head .ha-title{font-size:14.5px;font-weight:700;color:#f4f4f5}
     .ha-head .ha-mode{font-size:10.5px;color:#a1a1aa;background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:99px;padding:2px 9px;margin-left:2px}
@@ -2541,7 +2544,7 @@
     .ha-web-hint{font-size:10.5px;color:#71717a;line-height:1.4}
     .ha-foot{display:flex;gap:8px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,.08);flex:0 0 auto;align-items:flex-end}
     #ha-input{flex:1;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#f4f4f5;font-size:13px;padding:9px 12px;
-      outline:none;resize:none;max-height:96px;line-height:1.5;font-family:inherit;min-width:0}
+      outline:none;resize:none;max-height:96px;overflow-y:auto;line-height:1.5;font-family:inherit;min-width:0}
     #ha-input:focus{border-color:#06b6d4}
     #ha-send{width:38px;height:38px;flex:0 0 auto;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
       background:linear-gradient(135deg,#06b6d4,#a855f7);transition:opacity .15s}
@@ -2556,6 +2559,7 @@
       </svg>
     </button>
     <div id="ha-panel" role="dialog" aria-label="HakuTrade AI 助理">
+      <div id="ha-resize" title="拖曳左上角調整視窗大小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10 V4 H10 M4 4 L11 11 M4 16 V20 H8 M4 20 L9 15"/></svg></div>
       <div class="ha-head">
         <span class="ha-dot"></span>
         <span class="ha-title">HakuTrade AI 助理</span>
@@ -2587,10 +2591,10 @@
         <span class="ha-web-hint" id="ha-web-hint">關閉：只依本頁數據＋既有知識</span>
       </div>
       <div class="ha-foot">
-        <textarea id="ha-input" rows="1" placeholder="問我加密貨幣／美股／台股的盤面或操作…（Enter 換行，按 ▶ 送出）"></textarea>
-        <button id="ha-send" title="送出"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+        <textarea id="ha-input" rows="1" placeholder="問我盤面或操作想法…"></textarea>
+        <button id="ha-send" title="送出（Enter 換行）"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
-      <div class="ha-note">AI 生成內容僅供參考，非投資建議・數據來自本頁即時面板</div>
+      <div class="ha-note">Enter 換行・按 ▶ 送出　·　AI 內容僅供參考，非投資建議</div>
     </div>
     <script>
     (function () {
@@ -2602,8 +2606,40 @@
       var modeEl = document.getElementById('ha-mode'), settings = document.getElementById('ha-settings');
       var keyInput = document.getElementById('ha-key');
       var webBtn = document.getElementById('ha-web'), webHint = document.getElementById('ha-web-hint');
+      var resizeEl = document.getElementById('ha-resize');
+      var SIZE_LS = 'ha_size';
       var history = [];           /* {role,content} 只留對話，system 每次即時重建 */
       var busy = false, lastFreeAt = 0;
+
+      /* ── 視窗大小可調（拖曳左上角；面板錨定右下，故往左上拉即放大） ── */
+      function clampW(w) { return Math.max(300, Math.min(w, Math.min(window.innerWidth - 24, 720))); }
+      function clampH(h) { return Math.max(360, Math.min(h, window.innerHeight - 110)); }
+      function applySize() {
+        var s; try { s = JSON.parse(localStorage.getItem(SIZE_LS) || 'null'); } catch (e) { s = null; }
+        if (s && s.w && s.h) { panel.style.width = clampW(s.w) + 'px'; panel.style.height = clampH(s.h) + 'px'; }
+      }
+      (function () {
+        var resizing = false, anchorR = 0, anchorB = 0;
+        resizeEl.addEventListener('pointerdown', function (e) {
+          resizing = true;
+          var r = panel.getBoundingClientRect(); anchorR = r.right; anchorB = r.bottom; /* 右下角固定 */
+          try { resizeEl.setPointerCapture(e.pointerId); } catch (err) {}
+          e.preventDefault();
+        });
+        resizeEl.addEventListener('pointermove', function (e) {
+          if (!resizing) return;
+          panel.style.width = clampW(anchorR - e.clientX) + 'px';
+          panel.style.height = clampH(anchorB - e.clientY) + 'px';
+        });
+        function end(e) {
+          if (!resizing) return; resizing = false;
+          try { resizeEl.releasePointerCapture(e.pointerId); } catch (err) {}
+          try { localStorage.setItem(SIZE_LS, JSON.stringify({ w: parseInt(panel.style.width, 10), h: parseInt(panel.style.height, 10) })); } catch (err) {}
+        }
+        resizeEl.addEventListener('pointerup', end);
+        resizeEl.addEventListener('pointercancel', end);
+        window.addEventListener('resize', function () { if (panel.style.width) { panel.style.width = clampW(parseInt(panel.style.width, 10)) + 'px'; panel.style.height = clampH(parseInt(panel.style.height, 10)) + 'px'; } });
+      })();
 
       function groqKey() { try { return localStorage.getItem(KEY_LS) || ''; } catch (e) { return ''; } }
       function webOn() { try { return localStorage.getItem(WEB_LS) === '1'; } catch (e) { return false; } }
@@ -2758,6 +2794,7 @@
       fab.addEventListener('click', function () {
         var open = panel.classList.toggle('open');
         if (open) {
+          applySize();
           if (!msgsEl.children.length)
             addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
           updateWebUI(); input.focus();
