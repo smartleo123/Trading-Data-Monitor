@@ -1258,7 +1258,7 @@
                 </div>
             </div>
             <!-- ═══════════════════════════════════════════════════════════════
-                 台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券＋外資期貨／券商分點
+                 台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券＋外資期貨
                  資料源：證交所 rwd JSON（經公用代理）、期交所 OpenAPI、FinMind（分點，需 token）
                  HTML 部分插入台股頁籤；<!== TW-CHIPS-SCRIPT ==> 之後的 JS/CSS 插到 body 結尾前
                  ═══════════════════════════════════════════════════════════════ -->
@@ -1291,20 +1291,6 @@
                     <div><div class="twc-h">近 20 個交易日融資餘額（億元）</div><div id="twc-margin-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div></div>
                     <div><div class="twc-h">外資台指期淨部位（口）</div><div id="twc-futs" class="rounded-xl border border-zinc-900 bg-black/30 p-4 text-sm text-zinc-400"></div></div>
                 </div>
-            </div>
-            <!-- 券商分點 -->
-            <div id="sec-tw-branch" data-nav="券商分點" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="map-pin" class="w-5 h-5 text-amber-400"></i></div>
-                    <div><h2 class="text-md font-extrabold text-white">券商分點進出</h2><p class="text-xs text-zinc-500 mt-0.5">個股分點買賣超（FinMind 整日券商分點；此資料集為<span class="text-amber-400/90">贊助會員 sponsor 專屬</span>，免費 token 會被拒絕。官方分點日報有驗證碼無法自動化）</p></div>
-                </div>
-                <div class="flex flex-wrap items-center gap-2 mb-4">
-                    <input id="twc-branch-token" type="password" placeholder="FinMind API token（只存在你的瀏覽器）" class="flex-1 min-w-[220px] bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none">
-                    <input id="twc-branch-stock" type="text" value="2330" placeholder="股票代號" class="w-28 bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none">
-                    <button onclick="loadTwBranch()" class="text-sm px-4 py-2 rounded-lg font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition-colors">查詢分點</button>
-                    <a href="https://finmindtrade.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-zinc-500 hover:text-accentCyan underline">註冊 FinMind →</a>
-                </div>
-                <div id="twc-branch-body" class="text-sm text-zinc-500">輸入 FinMind token 與股票代號後查詢；token 僅儲存於你自己的瀏覽器（localStorage），不會上傳到任何地方。<br><span class="text-xs text-zinc-600">注意：整日券商分點是 FinMind 贊助會員（sponsor）專屬資料集，免費 token 會回權限錯誤；一般免費 token 可用於本頁其他籌碼（三大法人／融資融券／期貨）。</span></div>
             </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
             <div id="sec-tw-tech" data-nav="技術分析評級" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
@@ -2213,8 +2199,9 @@
       function loadFuts() {
         var box = document.getElementById('twc-futs');
         box.innerHTML = '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
-        fetch('https://openapi.taifex.com.tw/v1/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate', { cache: 'no-store' })
-          .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        /* 外資台指期未平倉淨額：官方期交所 OpenAPI（公開免 token），經公用代理避開瀏覽器 CORS——
+           與本頁三大法人／融資融券相同的取得方式，故可靠度一致 */
+        viaProxy('https://openapi.taifex.com.tw/v1/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate')
           .then(function (arr) {
             if (!Array.isArray(arr)) throw 0;
             /* 找臺股期貨(TX)＋外資 的多空淨額未平倉口數（欄名防禦性比對） */
@@ -2233,27 +2220,11 @@
             box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
               + '<div class="k">外資臺股期貨未平倉淨額（' + (dateKey ? row[dateKey] : '最新') + '）</div>'
               + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
-              + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：期交所 OpenAPI</div></div>';
+              + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：期交所 OpenAPI（官方每日更新）</div></div>';
           })
           .catch(function () {
-            var token = localStorage.getItem('finmind_token') || '';
-            if (!token) { box.innerHTML = '<span class="twc-err">期交所 OpenAPI 暫時無法取得。</span><br>可於下方「券商分點」區塊填入 FinMind token 後重新整理，改用 FinMind 期貨法人數據。'; return; }
-            var end = new Date(), start = new Date(); start.setDate(start.getDate() - 10);
-            var f = function (d) { return d.toISOString().slice(0, 10); };
-            fetch('https://api.finmindtrade.com/api/v4/data?dataset=TaiwanFuturesInstitutionalInvestors&data_id=TX&start_date=' + f(start) + '&end_date=' + f(end), { cache: 'no-store', headers: { 'Authorization': 'Bearer ' + token } })
-              .then(function (r) { return r.json(); })
-              .then(function (j) {
-                var rows = (j.data || []).filter(function (o) { return /外資/.test(o.institutional_investors || ''); });
-                if (!rows.length) throw 0;
-                var last = rows[rows.length - 1];
-                var net = num(last.long_open_interest_balance_volume) - num(last.short_open_interest_balance_volume);
-                twSnap({ foreignFutures: { date: last.date, netLots: net, source: 'FinMind' } });
-                box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
-                  + '<div class="k">外資臺股期貨未平倉淨額（' + last.date + '）</div>'
-                  + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
-                  + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：FinMind</div></div>';
-              })
-              .catch(function () { box.innerHTML = '<span class="twc-err">期交所與 FinMind 皆暫時無法取得外資期貨部位。</span>'; });
+            box.innerHTML = '<span class="twc-err">外資台指期部位暫時無法取得，稍後重新整理即可。</span>'
+              + '<br><span style="color:#71717a;font-size:11px">數據源：期交所 OpenAPI（官方每日更新，經公用代理取得）</span>';
           });
       }
 
@@ -2391,66 +2362,6 @@
         });
 
         loadFuts();
-      };
-
-      /* ── 券商分點（FinMind） ── */
-      var tokenInput = document.getElementById('twc-branch-token');
-      tokenInput.value = localStorage.getItem('finmind_token') || '';
-      tokenInput.addEventListener('change', function () { localStorage.setItem('finmind_token', tokenInput.value.trim()); });
-      function branchSponsorMsg(detail) {
-        return '<span class="twc-err">無法取得整日券商分點（' + detail + '）。</span>'
-          + '<div style="color:#a1a1aa;font-size:12px;margin-top:6px;line-height:1.7">'
-          + 'FinMind 的整日券商分點（TaiwanStockTradingDailyReport）現為 <b style="color:#e4e4e7">贊助會員（sponsor）專屬</b>資料集，免費 token 會被拒絕；瀏覽器常把這個權限錯誤直接顯示成「連線失敗」。<br>'
-          + '若你已是 FinMind 贊助會員仍失敗，請確認 token 正確、或改查前一個交易日。其餘籌碼（三大法人／融資融券／外資期貨）不受影響。'
-          + '</div>';
-      }
-      window.loadTwBranch = function () {
-        var token = tokenInput.value.trim();
-        localStorage.setItem('finmind_token', token);
-        var stock = (document.getElementById('twc-branch-stock').value || '2330').trim();
-        var body = document.getElementById('twc-branch-body');
-        if (!token) { body.innerHTML = '<span class="twc-err">請先填入 FinMind token（免費註冊：finmindtrade.com）。</span>'; return; }
-        body.innerHTML = '<span class="q-loading-sm"><span class="q-spin"></span>查詢 ' + stock + ' 分點資料中…</span>';
-        function tryDate(offset) {
-          if (offset > 6) { body.innerHTML = '<span class="twc-err">近一週查無 ' + stock + ' 的分點資料。</span>'; return; }
-          var d = new Date(); d.setDate(d.getDate() - offset);
-          if (d.getDay() === 0 || d.getDay() === 6) return tryDate(offset + 1);
-          var ds = d.toISOString().slice(0, 10);
-          /* FinMind v4 現行認證方式：Authorization: Bearer <token>（token 不再放 URL query） */
-          fetch('https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockTradingDailyReport&data_id=' + encodeURIComponent(stock) + '&start_date=' + ds + '&end_date=' + ds, { cache: 'no-store', headers: { 'Authorization': 'Bearer ' + token } })
-            .then(function (r) { return r.text().then(function (t) { var j = null; try { j = JSON.parse(t); } catch (e) {} return { httpOk: r.ok, httpStatus: r.status, j: j }; }); })
-            .then(function (res) {
-              var j = res.j;
-              if ((j && j.status !== undefined && j.status !== 200) || !res.httpOk) {
-                var code = (j && j.status !== undefined) ? j.status : res.httpStatus;
-                var msg = (j && j.msg) || ('HTTP ' + res.httpStatus);
-                if (code === 402 || code === 403 || /sponsor|贊助|permission|權限|paid|付費|上限|limit/i.test(msg)) { body.innerHTML = branchSponsorMsg('FinMind：' + msg); return; }
-                body.innerHTML = '<span class="twc-err">FinMind：' + msg + '（代碼 ' + code + '），稍後再試或換一個交易日。</span>'; return;
-              }
-              var rows = (j && j.data) || [];
-              if (!rows.length) return tryDate(offset + 1);
-              var agg = {};
-              rows.forEach(function (r) {
-                var k = r.securities_trader || r.securities_trader_id || '?';
-                if (!agg[k]) agg[k] = { buy: 0, sell: 0 };
-                agg[k].buy += num(r.buy); agg[k].sell += num(r.sell);
-              });
-              var list = Object.keys(agg).map(function (k) { return { name: k, buy: agg[k].buy, sell: agg[k].sell, net: agg[k].buy - agg[k].sell }; })
-                .sort(function (a, b) { return b.net - a.net; });
-              function tbl(items) {
-                return '<table class="twc-t"><thead><tr><th>券商分點</th><th style="text-align:right">買進(張)</th><th style="text-align:right">賣出(張)</th><th style="text-align:right">買賣超(張)</th></tr></thead><tbody>'
-                  + items.map(function (r) {
-                      return '<tr><td style="color:#e4e4e7">' + r.name + '</td><td class="num">' + Math.round(r.buy / 1000).toLocaleString() + '</td><td class="num">' + Math.round(r.sell / 1000).toLocaleString() + '</td><td class="num ' + cls(r.net) + '">' + Math.round(r.net / 1000).toLocaleString() + '</td></tr>';
-                    }).join('') + '</tbody></table>';
-              }
-              body.innerHTML = '<div class="twc-h">' + stock + '・' + ds + '・分點買賣超（共 ' + list.length + ' 個分點）</div>'
-                + '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">'
-                + '<div><div class="twc-sub twc-buy">買超分點 Top 10</div>' + tbl(list.slice(0, 10)) + '</div>'
-                + '<div><div class="twc-sub twc-sell">賣超分點 Top 10</div>' + tbl(list.slice(-10).reverse()) + '</div></div>';
-            })
-            .catch(function () { body.innerHTML = branchSponsorMsg('瀏覽器連線被阻擋（CORS 或斷線）'); });
-        }
-        tryDate(0);
       };
 
       /* 台股頁籤首次開啟時載入籌碼數據（重量級分析，不隨頁面預載） */
@@ -2742,7 +2653,7 @@
           }
           lines.push.apply(lines, twl);
         } else {
-          lines.push('【台股】籌碼數據（三大法人／融資融券／外資期貨／券商分點）需使用者先切到「台股」頁籤才會載入。若使用者問台股籌碼但這裡沒有數字，請提醒他先開啟台股頁籤，我就能引用即時籌碼。個股技術面與基本面仍可依你的知識回答。');
+          lines.push('【台股】籌碼數據（三大法人／融資融券／外資期貨）需使用者先切到「台股」頁籤才會載入。若使用者問台股籌碼但這裡沒有數字，請提醒他先開啟台股頁籤，我就能引用即時籌碼。個股技術面與基本面仍可依你的知識回答。');
         }
 
         /* 美股：以報價卡與 TradingView 圖表為主，無結構化籌碼 */
