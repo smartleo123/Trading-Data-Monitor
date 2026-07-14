@@ -1258,8 +1258,8 @@
                 </div>
             </div>
             <!-- ═══════════════════════════════════════════════════════════════
-                 台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券＋外資期貨
-                 資料源：證交所 rwd JSON（經公用代理）、期交所 OpenAPI、FinMind（分點，需 token）
+                 台股籌碼板塊（自包含）：三大法人動向＋買賣超排行／融資融券
+                 資料源：證交所 rwd JSON（經公用代理）
                  HTML 部分插入台股頁籤；<!== TW-CHIPS-SCRIPT ==> 之後的 JS/CSS 插到 body 結尾前
                  ═══════════════════════════════════════════════════════════════ -->
             <!-- 三大法人籌碼 -->
@@ -1280,17 +1280,14 @@
                     <div><div class="twc-sub twc-sell">賣超 Top 10</div><div id="twc-rank-sell"></div></div>
                 </div>
             </div>
-            <!-- 融資融券＋外資期貨 -->
-            <div id="sec-tw-margin" data-nav="融資融券・期貨部位" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
+            <!-- 融資融券 -->
+            <div id="sec-tw-margin" data-nav="融資融券" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="scale" class="w-5 h-5 text-accentPurple"></i></div>
-                    <div><h2 class="text-md font-extrabold text-white">融資融券・外資期貨部位</h2><p class="text-xs text-zinc-500 mt-0.5">散戶槓桿溫度計（證交所）＋大戶期貨籌碼（期交所／FinMind）</p></div>
+                    <div><h2 class="text-md font-extrabold text-white">融資融券</h2><p class="text-xs text-zinc-500 mt-0.5">散戶槓桿溫度計（證交所官方數據）</p></div>
                 </div>
                 <div id="twc-margin-tiles" class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5"></div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <div><div class="twc-h">近 20 個交易日融資餘額（億元）</div><div id="twc-margin-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div></div>
-                    <div><div class="twc-h">外資台指期淨部位（口）</div><div id="twc-futs" class="rounded-xl border border-zinc-900 bg-black/30 p-4 text-sm text-zinc-400"></div></div>
-                </div>
+                <div><div class="twc-h">近 20 個交易日融資餘額（億元）</div><div id="twc-margin-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div></div>
             </div>
             <!-- 台股技術分析評級 (自選股票，預設 0050) -->
             <div id="sec-tw-tech" data-nav="技術分析評級" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
@@ -2211,39 +2208,6 @@
         });
       }
 
-      /* ── 外資期貨淨部位：期交所 OpenAPI 優先，失敗退 FinMind（若有 token） ── */
-      function loadFuts() {
-        var box = document.getElementById('twc-futs');
-        box.innerHTML = '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
-        /* 外資台指期未平倉淨額：官方期交所 OpenAPI（公開免 token），經公用代理避開瀏覽器 CORS——
-           與本頁三大法人／融資融券相同的取得方式，故可靠度一致 */
-        viaProxy('https://openapi.taifex.com.tw/v1/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate')
-          .then(function (arr) {
-            if (!Array.isArray(arr)) throw 0;
-            /* 找臺股期貨(TX)＋外資 的多空淨額未平倉口數（欄名防禦性比對） */
-            var row = arr.find(function (o) {
-              var s = JSON.stringify(o);
-              return /臺股期貨|TX/.test(s) && /外資/.test(s);
-            });
-            if (!row) throw 0;
-            var keys = Object.keys(row);
-            var netKey = keys.find(function (k) { return /淨額.*口數|口數.*淨額/.test(k) && /未平倉/.test(k); }) ||
-                         keys.find(function (k) { return /未平倉/.test(k) && /淨/.test(k); });
-            var dateKey = keys.find(function (k) { return /日期|Date/i.test(k); });
-            if (!netKey) throw 0;
-            var net = num(row[netKey]);
-            twSnap({ foreignFutures: { date: dateKey ? row[dateKey] : '最新', netLots: net, source: '期交所' } });
-            box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
-              + '<div class="k">外資臺股期貨未平倉淨額（' + (dateKey ? row[dateKey] : '最新') + '）</div>'
-              + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
-              + '<div class="d">' + (net >= 0 ? '外資期貨偏多' : '外資期貨偏空') + '・數據源：期交所 OpenAPI（官方每日更新）</div></div>';
-          })
-          .catch(function () {
-            box.innerHTML = '<span class="twc-err">外資台指期部位暫時無法取得，稍後重新整理即可。</span>'
-              + '<br><span style="color:#71717a;font-size:11px">數據源：期交所 OpenAPI（官方每日更新，經公用代理取得）</span>';
-          });
-      }
-
       /* ── 圖表（SVG 手繪；含 <title> 懸浮提示與圖例） ── */
       function barChart(el, series) { /* series: [{date, f, t, d}] 舊→新 */
         if (!series.length) { el.innerHTML = '<span class="twc-err">近期數據暫時無法取得。</span>'; return; }
@@ -2376,8 +2340,6 @@
           }
           twcLoaded = true; twcLoading = false;
         });
-
-        loadFuts();
       };
 
       /* 台股頁籤首次開啟時載入籌碼數據（重量級分析，不隨頁面預載） */
@@ -2659,17 +2621,16 @@
         /* 台股：籌碼面板快照（使用者開過台股頁籤才有） */
         var tw = window.TW_CHIPS_SNAPSHOT;
         if (tw && tw.inst) {
-          var twl = ['【台股・籌碼即時數據（' + tw.updatedAt + ' 更新，來源 TWSE／期交所）】',
+          var twl = ['【台股・籌碼即時數據（' + tw.updatedAt + ' 更新，來源 TWSE 證交所）】',
             '三大法人（' + tw.inst.date + '）：外資 ' + sgn(tw.inst.foreign) + ' 億、投信 ' + sgn(tw.inst.trust) + ' 億、自營商 ' + sgn(tw.inst.dealer) + ' 億，合計 ' + sgn(tw.inst.total) + ' 億（' + (tw.inst.total >= 0 ? '法人偏買方' : '法人偏賣方') + '）。'];
           if (tw.margin) twl.push('融資餘額 ' + tw.margin.finBalance + ' 億（今日 ' + sgn(tw.margin.finChg) + ' 億，' + (tw.margin.finChg > 0 ? '槓桿升溫' : tw.margin.finChg < 0 ? '槓桿降溫' : '平穩') + '）；融券 ' + tw.margin.shortBalance.toLocaleString() + ' 張；券資比 ' + (tw.margin.shortMarginRatio != null ? tw.margin.shortMarginRatio + '%' : '—') + '。');
-          if (tw.foreignFutures) twl.push('外資台指期未平倉淨額 ' + sgn(tw.foreignFutures.netLots) + ' 口（' + (tw.foreignFutures.netLots >= 0 ? '偏多' : '偏空') + '，' + tw.foreignFutures.date + '，' + tw.foreignFutures.source + '）。');
           if (tw.stockLeaders) {
             twl.push('法人買超前五：' + tw.stockLeaders.topBuy.map(function (x) { return x.name + '(' + x.code + ') ' + sgn(x.netLots) + '張'; }).join('、') + '。');
             twl.push('法人賣超前五：' + tw.stockLeaders.topSell.map(function (x) { return x.name + '(' + x.code + ') ' + sgn(x.netLots) + '張'; }).join('、') + '。');
           }
           lines.push.apply(lines, twl);
         } else {
-          lines.push('【台股】籌碼數據（三大法人／融資融券／外資期貨）需使用者先切到「台股」頁籤才會載入。若使用者問台股籌碼但這裡沒有數字，請提醒他先開啟台股頁籤，我就能引用即時籌碼。個股技術面與基本面仍可依你的知識回答。');
+          lines.push('【台股】籌碼數據（三大法人／融資融券）需使用者先切到「台股」頁籤才會載入。若使用者問台股籌碼但這裡沒有數字，請提醒他先開啟台股頁籤，我就能引用即時籌碼。個股技術面與基本面仍可依你的知識回答。');
         }
 
         /* 美股：以報價卡與 TradingView 圖表為主，無結構化籌碼 */
@@ -2681,7 +2642,7 @@
           '選擇權（詳見面板 SOP 頁籤）：買方 Delta 0.30–0.45、選 60–90 天期避 theta 懸崖、獲利 +100% 出一半、-50% 停損；賣方 Delta 0.15–0.30、獲利 50% 平倉、剩 21 天離場、事件前不新開淨賣方；IV 高分位別單腿追買、改用價差。',
           '加密永續：槓桿 ≤ 3–5 倍、突破只認日線收盤、資金費率過熱時慎防多殺多。',
           '台股個股：注意 10% 漲跌停、現股當沖需開通資格與注意處置股、除權息與資券最後回補日；對照上方籌碼——法人連續買超＋融券高位（潛在回補動能）偏多，法人倒貨＋融資過熱偏空。',
-          '台指期：注意每月第三個週三結算、轉倉時點、夜盤流動性較差；方向可參考外資期貨未平倉淨額。',
+          '台指期：注意每月第三個週三結算、轉倉時點、夜盤流動性較差；可搭配三大法人與融資融券籌碼判斷方向。',
           '美股：注意 PDT 當沖規則（帳戶 < $2.5 萬時 5 個交易日內當沖 ≤ 3 次）、盤前盤後流動性差易跳空、財報日與 FOMC 波動放大；指數期貨（ES/NQ/MES/MNQ 等）注意保證金與季度轉倉、近全天候交易。',
           '一律限價單優先於市價單，尤其流動性差或波動大的標的。');
         return lines.join('\n');
@@ -2767,7 +2728,7 @@
         var open = panel.classList.toggle('open');
         if (open) {
           if (!msgsEl.children.length)
-            addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券、外資期貨；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
+            addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
           updateMode(); input.focus();
         }
       });
