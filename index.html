@@ -2972,7 +2972,8 @@
     #wr-calc .sc-hd{font-size:12.5px;font-weight:700;color:#a1a1aa;margin-bottom:8px}
     #wr-calc .sc-note{font-size:11px;color:#71717a}
     #wr-calc .sc-inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    @media(min-width:640px){#wr-calc .sc-inputs{grid-template-columns:repeat(4,1fr)}}
+    @media(min-width:560px){#wr-calc .sc-inputs{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:820px){#wr-calc .sc-inputs{grid-template-columns:repeat(5,1fr)}}
     #wr-calc .sc-field label{display:block;font-size:11px;color:#8b8b93;margin-bottom:4px}
     #wr-calc .sc-field input,#wr-calc .sc-field select{width:100%;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#f4f4f5;font-size:13px;padding:8px 10px;outline:none;font-family:inherit;font-variant-numeric:tabular-nums}
     #wr-calc .sc-field input:focus,#wr-calc .sc-field select:focus{border-color:#06b6d4}
@@ -3021,11 +3022,16 @@
 
       function ncdf(x) { var t = 1 / (1 + 0.2316419 * Math.abs(x)); var d = 0.3989423 * Math.exp(-x * x / 2);
         var p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
-      function bsPrice(type, S, K, T, sig) {
-        if (T <= 0 || sig <= 0) return type === 'C' ? Math.max(S - K, 0) : Math.max(K - S, 0);
-        var d1 = (Math.log(S / K) + 0.5 * sig * sig * T) / (sig * Math.sqrt(T)), d2 = d1 - sig * Math.sqrt(T);
-        return type === 'C' ? S * ncdf(d1) - K * ncdf(d2) : K * ncdf(-d2) - S * ncdf(-d1);
+      /* Black-76：以「遠期價 F」定價（F = 現價 × (1 + 年化基差×T)），r=0 折現。
+         較 BS-用現價-r=0 更貼近交易所——交易所選擇權是以期貨／遠期定價，非現貨。 */
+      function b76(type, F, K, T, sig) {
+        if (T <= 0 || sig <= 0) return type === 'C' ? Math.max(F - K, 0) : Math.max(K - F, 0);
+        var sq = sig * Math.sqrt(T);
+        var d1 = (Math.log(F / K) + 0.5 * sig * sig * T) / sq, d2 = d1 - sq;
+        return type === 'C' ? F * ncdf(d1) - K * ncdf(d2) : K * ncdf(-d2) - F * ncdf(-d1);
       }
+      function fwd(T) { return state.spot * (1 + (state.basis || 0) / 100 * T); }
+      function theoPrice(type, K) { var T = state.dte / 365; return b76(type, fwd(T), K, T, state.iv / 100); }
       function niceStep(S) { var e = Math.pow(10, Math.floor(Math.log10(S)) - 1); return e < 1 ? 1 : e; }
       function snap(S, mul) { var st = niceStep(S); return Math.round(S * mul / st) * st; }
       function usd(n) { if (n === Infinity) return '無上限'; if (n === -Infinity) return '無下限'; var s = n < 0 ? '-' : ''; return s + '$' + Math.round(Math.abs(n)).toLocaleString('en-US'); }
@@ -3054,15 +3060,14 @@
         var spot = (s && s.spot) ? s.spot : null;
         var iv = null;
         if (s && s.ivRows && s.ivRows.length) { for (var i = 0; i < s.ivRows.length; i++) { if (s.ivRows[i].atmIV != null) { iv = s.ivRows[i].atmIV; break; } } }
-        return { spot: spot, iv: iv != null ? iv : 45, dte: 30 };
+        var basis = (s && typeof s.basisAnnual === 'number') ? s.basisAnnual : 0;
+        return { spot: spot, iv: iv != null ? iv : 45, dte: 30, basis: basis };
       }
 
-      function buildLegs(stratKey, S, IV, DTE) {
+      function buildLegs(stratKey, S) {
         var st = STRATS.filter(function (x) { return x.k === stratKey; })[0] || STRATS[0];
-        var T = DTE / 365, sig = IV / 100;
         return st.legs(S).map(function (l) {
-          var prem = l.t === 'U' ? 0 : bsPrice(l.t, S, l.K, T, sig);
-          return { t: l.t, d: l.d, K: l.K, prem: Math.round(prem), premAuto: true, entry: S };
+          return { t: l.t, d: l.d, K: l.K, prem: l.t === 'U' ? 0 : Math.round(theoPrice(l.t, l.K)), premAuto: true, entry: S };
         });
       }
 
@@ -3153,7 +3158,7 @@
       function premInput(i) { return box.querySelector('#sc-legs-body input[data-leg="' + i + '"][data-f="prem"]'); }
 
       function markCustom() { state.strat = 'custom'; var sel = box.querySelector('#sc-select'); if (sel) sel.value = 'custom'; }
-      function autoPrem(l) { return l.t === 'U' ? 0 : Math.round(bsPrice(l.t, state.spot, l.K, state.dte / 365, state.iv / 100)); }
+      function autoPrem(l) { return l.t === 'U' ? 0 : Math.round(theoPrice(l.t, l.K)); }
       function theoTxt(l) { return '理論：$' + autoPrem(l).toLocaleString('en-US'); }
       function refreshTheo(i) { var sp = box.querySelector('#sc-theo-' + i); if (sp) sp.textContent = theoTxt(state.legs[i]); }
 
@@ -3244,20 +3249,21 @@
         renderOutputs();
       }
 
-      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot, state.iv, state.dte); renderLegs(); renderOutputs(); }
+      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot); renderLegs(); renderOutputs(); }
 
       function build() {
         var d = defaults();
         if (d.spot == null) { box.innerHTML = '<div class="wr-status" style="padding:24px 2px;color:#a1a1aa">等「即時分析」頁籤載入 BTC 現價後，這裡會自動帶入現價與 ATM IV。可先切到即時分析等它載入，再回來試算。</div>'; return; }
         built = true;
-        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, qty: 1, legs: [] };
+        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), qty: 1, legs: [] };
         box.innerHTML =
           '<div class="sc-wrap">'
-          + '<div><div class="sc-hd">參數（預設帶入即時現價與近月 ATM IV；1 口＝1 BTC、美元計價）</div>'
+          + '<div><div class="sc-hd">參數（預設帶入即時現價、近月 ATM IV 與期貨年化基差；1 口＝1 BTC、美元計價）</div>'
           + '<div class="sc-inputs">'
           + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="text" inputmode="decimal" autocomplete="off" value="' + state.spot + '"></div>'
           + '<div class="sc-field"><label>隱含波動率 IV (%)</label><input id="sc-iv" type="text" inputmode="decimal" autocomplete="off" value="' + state.iv + '"></div>'
           + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" inputmode="decimal" autocomplete="off" value="' + state.dte + '"></div>'
+          + '<div class="sc-field"><label>年化基差 (%)</label><input id="sc-basis" type="text" inputmode="decimal" autocomplete="off" value="' + state.basis + '"></div>'
           + '<div class="sc-field"><label>合約口數</label><input id="sc-qty" type="text" inputmode="numeric" autocomplete="off" value="' + state.qty + '"></div>'
           + '</div></div>'
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
@@ -3269,7 +3275,7 @@
           + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
-          + '<div class="sc-note">計算為到期日內在價值損益，未計手續費、資金費率與提前平倉時間價值；權利金理論價 r=0。僅供教育試算，非投資建議。</div>'
+          + '<div class="sc-note">損益＝到期內在價值，未計手續費與提前平倉的時間價值。理論價用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價（比 r=0 用現價更貼近交易所），但只用單一 IV、未套用各履約價的波動率微笑（smile/skew），故與交易所各檔報價仍會有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
           + '</div>';
         var sel = box.querySelector('#sc-select');
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
@@ -3278,12 +3284,13 @@
         /* 現價/IV/DTE 改變只重算理論權利金與圖，保留使用者微調過的履約價，不重建腿位列 */
         box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.spot = v; recomputeAuto(); } });
         box.querySelector('#sc-iv').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.iv = v; recomputeAuto(); } });
+        box.querySelector('#sc-basis').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (!isNaN(v)) { state.basis = v; recomputeAuto(); } });
         box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.dte = v; recomputeAuto(); } });
         box.querySelector('#sc-qty').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.qty = Math.round(v); renderOutputs(); } });
         box.querySelector('#sc-reload').addEventListener('click', function () {
           var d2 = defaults(); if (d2.spot == null) return;
-          state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1);
-          box.querySelector('#sc-spot').value = state.spot; box.querySelector('#sc-iv').value = state.iv;
+          state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1); state.basis = +d2.basis.toFixed(1);
+          box.querySelector('#sc-spot').value = state.spot; box.querySelector('#sc-iv').value = state.iv; box.querySelector('#sc-basis').value = state.basis;
           if (state.strat === 'custom') recomputeAuto(); else rebuildLegs();
         });
         box.querySelector('#sc-add').addEventListener('click', addLeg);
