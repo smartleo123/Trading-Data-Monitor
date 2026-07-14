@@ -2229,6 +2229,7 @@
             var dateKey = keys.find(function (k) { return /日期|Date/i.test(k); });
             if (!netKey) throw 0;
             var net = num(row[netKey]);
+            twSnap({ foreignFutures: { date: dateKey ? row[dateKey] : '最新', netLots: net, source: '期交所' } });
             box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
               + '<div class="k">外資臺股期貨未平倉淨額（' + (dateKey ? row[dateKey] : '最新') + '）</div>'
               + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
@@ -2246,6 +2247,7 @@
                 if (!rows.length) throw 0;
                 var last = rows[rows.length - 1];
                 var net = num(last.long_open_interest_balance_volume) - num(last.short_open_interest_balance_volume);
+                twSnap({ foreignFutures: { date: last.date, netLots: net, source: 'FinMind' } });
                 box.innerHTML = '<div class="twc-tile" style="background:transparent;border:none;padding:0">'
                   + '<div class="k">外資臺股期貨未平倉淨額（' + last.date + '）</div>'
                   + '<div class="v ' + cls(net) + '">' + (net >= 0 ? '+' : '') + net.toLocaleString('en-US') + ' 口</div>'
@@ -2300,6 +2302,11 @@
       }
 
       /* ── 主載入 ── */
+      window.TW_CHIPS_SNAPSHOT = window.TW_CHIPS_SNAPSHOT || {};
+      function twSnap(patch) {
+        Object.assign(window.TW_CHIPS_SNAPSHOT, patch, { updatedAt: new Date().toISOString() });
+        try { document.dispatchEvent(new CustomEvent('tw-chips-snapshot')); } catch (e) {}
+      }
       window.loadTwChips = function (force) {
         if (twcLoading || (twcLoaded && !force)) return;
         twcLoading = true;
@@ -2322,6 +2329,7 @@
           barChart(document.getElementById('twc-inst-chart'), series);
           if (series.length) {
             var last = series[series.length - 1], total = last.f + last.t + last.d;
+            twSnap({ inst: { date: last.date, foreign: +last.f.toFixed(1), trust: +last.t.toFixed(1), dealer: +last.d.toFixed(1), total: +total.toFixed(1) } });
             document.getElementById('twc-inst-tiles').innerHTML =
               '<div class="twc-tile"><div class="k">外資（' + last.date + '）</div><div class="v ' + cls(last.f) + '">' + fmtE(last.f) + ' 億</div></div>'
               + '<div class="twc-tile"><div class="k">投信</div><div class="v ' + cls(last.t) + '">' + fmtE(last.t) + ' 億</div></div>'
@@ -2346,6 +2354,8 @@
           rows.forEach(function (r) { window.TW_INST_MAP[r.code] = r.net; });
           if (typeof window.fillTwInstColumn === 'function') window.fillTwInstColumn();
           var sorted = rows.slice().sort(function (a, b) { return b.net - a.net; });
+          var brief = function (r) { return { code: r.code, name: r.name, netLots: Math.round(r.net / 1000) }; };
+          twSnap({ stockLeaders: { topBuy: sorted.slice(0, 5).map(brief), topSell: sorted.slice(-5).reverse().map(brief) } });
           function tbl(list) {
             return '<table class="twc-t"><thead><tr><th>代號</th><th>名稱</th><th style="text-align:right">外資(張)</th><th style="text-align:right">投信(張)</th><th style="text-align:right">合計(張)</th></tr></thead><tbody>'
               + list.map(function (r) {
@@ -2368,6 +2378,7 @@
             var m = res[dts[dts.length - 1]];
             var chg = m.finNow - m.finPrev, sChg = m.shortNow - m.shortPrev;
             var ratio = m.finUnitNow ? (m.shortNow / m.finUnitNow * 100) : null;
+            twSnap({ margin: { finBalance: +m.finNow.toFixed(1), finChg: +chg.toFixed(1), shortBalance: m.shortNow, shortChg: sChg, shortMarginRatio: ratio != null ? +ratio.toFixed(2) : null } });
             document.getElementById('twc-margin-tiles').innerHTML =
               '<div class="twc-tile"><div class="k">融資餘額</div><div class="v">' + m.finNow.toFixed(0) + ' 億</div><div class="d ' + cls(chg) + '">今日 ' + fmtE(chg) + ' 億</div></div>'
               + '<div class="twc-tile"><div class="k">融券餘額</div><div class="v">' + m.shortNow.toLocaleString() + ' 張</div><div class="d ' + cls(-sChg) + '">今日 ' + (sChg >= 0 ? '+' : '') + sChg.toLocaleString() + ' 張</div></div>'
@@ -2651,12 +2662,13 @@
       </div>
       <div id="ha-msgs"></div>
       <div id="ha-chips">
-        <button>現在盤面適合買方還是賣方？</button>
-        <button>永續合約現在能進場嗎？</button>
-        <button>用一句話總結今天的選擇權數據</button>
+        <button>BTC 現在適合買方還是賣方？</button>
+        <button>今天三大法人籌碼偏多還偏空？</button>
+        <button>台積電現在能進場嗎？</button>
+        <button>台指期今天怎麼看？</button>
       </div>
       <div class="ha-foot">
-        <textarea id="ha-input" rows="1" placeholder="問我盤面數據或操作想法…"></textarea>
+        <textarea id="ha-input" rows="1" placeholder="問我加密貨幣／美股／台股的盤面或操作…"></textarea>
         <button id="ha-send" title="送出"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
       <div class="ha-note">AI 生成內容僅供參考，非投資建議・數據來自本頁即時面板</div>
@@ -2680,15 +2692,18 @@
         modeEl.style.color = k ? '#22d3ee' : '';
       }
 
-      /* ── system prompt：即時快照 + SOP 鐵律 ── */
+      /* ── system prompt：跨市場即時快照 + 操作紀律 ── */
       function fm(v) { return typeof v === 'number' ? '$' + Math.round(v).toLocaleString('en-US') : '—'; }
+      function sgn(v) { return typeof v === 'number' ? (v >= 0 ? '+' : '') + v : '—'; }
       function sysPrompt() {
+        var lines = ['你是「HakuTrade AI 助理」，鑲在使用者自建的跨市場交易儀表板右下角，用繁體中文協助分析與操作決策。你涵蓋三大市場、不限於選擇權：加密貨幣（現貨／選擇權／永續合約）、美股（個股／ETF／指數期貨／選擇權）、台股（個股／ETF／台指期／籌碼）。',
+          '回答原則：先判斷使用者問的是哪個市場、哪種商品（個股、期貨、還是選擇權），對症回答；先給結論再給理由；一般問題約 200 字內，要求詳細才展開；能引用下方即時數據就引用並標明，數據沒有涵蓋的（例如某支美股個股即時報價）就依你的知識與使用者提供的價位分析，並提醒以券商即時報價為準；對高風險操作明確提示風險、部位控管與停損；不確定或缺數據時直說，不要編造數字。'];
+
+        /* 加密貨幣：BTC 選擇權面板快照 */
         var s = window.WR_SNAPSHOT;
-        var lines = ['你是「HakuTrade AI 助理」，鑲在使用者自建的交易儀表板網頁右下角，以繁體中文回答加密貨幣（尤其 BTC 選擇權與永續合約）相關問題。',
-          '回答原則：直接、具體、先給結論再給理由；一般問題控制在 200 字內，使用者要求詳細才展開；引用下方即時數據佐證；結尾不必重複免責聲明（介面已顯示），但對高風險操作要明確提示風險與停損；不確定的事直說不知道。'];
         if (s) {
           var iv = (s.ivRows || []).map(function (r) { return r.expiry + ' ATM IV ' + (r.atmIV != null ? r.atmIV + '%' : '—') + (r.skew != null ? '（25Δ skew ' + (r.skew > 0 ? '+' : '') + r.skew + 'pt' + (r.skew > 0 ? '，Put 貴' : r.skew < 0 ? '，Call 貴' : '') + '）' : ''); }).join('；');
-          lines.push('【本頁面板即時數據（' + s.updatedAt + ' 更新，來源 Deribit）】',
+          lines.push('【加密貨幣・BTC 選擇權即時數據（' + s.updatedAt + ' 更新，來源 Deribit）】',
             'BTC 指數現價 ' + fm(s.spot) + '。DVOL ' + s.dvol + '，位於 90 日 ' + s.dvolPct + '% 分位（' + (s.volRegime === 'low' ? '低波動壓縮，選擇權便宜' : s.volRegime === 'high' ? '高波動，選擇權昂貴' : '波動中性') + '）。',
             '永續資金費率 ' + (s.funding8h >= 0 ? '+' : '') + s.funding8h.toFixed(3) + '%/8h；期貨年化基差 ' + s.basisAnnual + '%。',
             'IV 期限結構：' + iv + '。',
@@ -2697,13 +2712,37 @@
             '永續參考水位：多單掛 ' + fm(s.perpLevels.longZone[0]) + '–' + fm(s.perpLevels.longZone[1]) + '（損 ' + fm(s.perpLevels.longStop) + '）；空單掛 ' + fm(s.perpLevels.shortZone[0]) + '–' + fm(s.perpLevels.shortZone[1]) + '（損 ' + fm(s.perpLevels.shortStop) + '）；日收上破 ' + fm(s.perpLevels.breakoutUp) + ' 追多、下破 ' + fm(s.perpLevels.breakoutDown) + ' 追空。',
             '面板算出的參考結構：Iron Condor 賣 ' + fm(s.strategies.condor.sp) + 'P/' + fm(s.strategies.condor.sc) + 'C；Bull Put Spread 賣 ' + fm(s.strategies.bullPut.s) + 'P買 ' + fm(s.strategies.bullPut.b) + 'P；Covered Call ' + fm(s.strategies.coveredCall) + '；買方看漲參考 ' + fm(s.strategies.buyCallK) + ' Call、看跌參考 ' + fm(s.strategies.buyPutK) + ' Put。');
         } else {
-          lines.push('【注意】選擇權面板的即時數據尚未載入完成，暫時沒有現價與 IV 等數字。請告知使用者稍等幾秒（面板載入後我就能引用即時數據），只回答不需要即時數據的問題。');
+          lines.push('【加密貨幣】BTC 選擇權面板即時數據尚在載入，暫無現價與 IV。若使用者問加密貨幣操作，請他稍等幾秒面板載入，或先回答不需即時數據的部分。');
         }
-        lines.push('【使用者的 SOP 鐵律（回答操作問題時要對照）】',
-          '買方：主準則 Delta 0.30–0.45、60–90 天期避 theta 懸崖；獲利 +100% 先出一半、權利金 -50% 停損；IV 高分位不單腿追買、改價差。',
-          '賣方：Delta 0.15–0.30；獲利 50% 平倉、剩 21 天強制離場、虧損達 2 倍權利金止損；Skew 偏 Put 貴時優先 Bull Put Spread、避免裸賣 Put。',
-          '通用：重大事件（FOMC/CPI）前 48 小時不新開淨賣方倉；同一到期日曝險 ≤ 30% 且監控總 Vega；流動性差時一律限價單。',
-          '永續：槓桿 ≤ 3–5 倍、單筆風險 ≤ 帳戶 1–2%、突破只認日線收盤。');
+
+        /* 台股：籌碼面板快照（使用者開過台股頁籤才有） */
+        var tw = window.TW_CHIPS_SNAPSHOT;
+        if (tw && tw.inst) {
+          var twl = ['【台股・籌碼即時數據（' + tw.updatedAt + ' 更新，來源 TWSE／期交所）】',
+            '三大法人（' + tw.inst.date + '）：外資 ' + sgn(tw.inst.foreign) + ' 億、投信 ' + sgn(tw.inst.trust) + ' 億、自營商 ' + sgn(tw.inst.dealer) + ' 億，合計 ' + sgn(tw.inst.total) + ' 億（' + (tw.inst.total >= 0 ? '法人偏買方' : '法人偏賣方') + '）。'];
+          if (tw.margin) twl.push('融資餘額 ' + tw.margin.finBalance + ' 億（今日 ' + sgn(tw.margin.finChg) + ' 億，' + (tw.margin.finChg > 0 ? '槓桿升溫' : tw.margin.finChg < 0 ? '槓桿降溫' : '平穩') + '）；融券 ' + tw.margin.shortBalance.toLocaleString() + ' 張；券資比 ' + (tw.margin.shortMarginRatio != null ? tw.margin.shortMarginRatio + '%' : '—') + '。');
+          if (tw.foreignFutures) twl.push('外資台指期未平倉淨額 ' + sgn(tw.foreignFutures.netLots) + ' 口（' + (tw.foreignFutures.netLots >= 0 ? '偏多' : '偏空') + '，' + tw.foreignFutures.date + '，' + tw.foreignFutures.source + '）。');
+          if (tw.stockLeaders) {
+            twl.push('法人買超前五：' + tw.stockLeaders.topBuy.map(function (x) { return x.name + '(' + x.code + ') ' + sgn(x.netLots) + '張'; }).join('、') + '。');
+            twl.push('法人賣超前五：' + tw.stockLeaders.topSell.map(function (x) { return x.name + '(' + x.code + ') ' + sgn(x.netLots) + '張'; }).join('、') + '。');
+          }
+          lines.push.apply(lines, twl);
+        } else {
+          lines.push('【台股】籌碼數據（三大法人／融資融券／外資期貨／券商分點）需使用者先切到「台股」頁籤才會載入。若使用者問台股籌碼但這裡沒有數字，請提醒他先開啟台股頁籤，我就能引用即時籌碼。個股技術面與基本面仍可依你的知識回答。');
+        }
+
+        /* 美股：以報價卡與 TradingView 圖表為主，無結構化籌碼 */
+        lines.push('【美股】本頁美股區以即時報價卡與 TradingView 圖表為主，無結構化籌碼數據。分析美股個股／ETF／指數期貨時，依標的價位、技術面、財報與總經事件並結合你的知識判斷，提醒使用者以券商即時報價為準。');
+
+        /* 跨市場操作紀律 */
+        lines.push('【操作紀律】',
+          '共通：單筆風險 ≤ 帳戶 1–2%；進場前先定停損與目標價、算好風險報酬比（至少 1:1.5）；順勢操作、虧損不逆勢加碼；重大事件（FOMC/CPI/財報/結算）前降槓桿或減倉。',
+          '選擇權（詳見面板 SOP 頁籤）：買方 Delta 0.30–0.45、選 60–90 天期避 theta 懸崖、獲利 +100% 出一半、-50% 停損；賣方 Delta 0.15–0.30、獲利 50% 平倉、剩 21 天離場、事件前不新開淨賣方；IV 高分位別單腿追買、改用價差。',
+          '加密永續：槓桿 ≤ 3–5 倍、突破只認日線收盤、資金費率過熱時慎防多殺多。',
+          '台股個股：注意 10% 漲跌停、現股當沖需開通資格與注意處置股、除權息與資券最後回補日；對照上方籌碼——法人連續買超＋融券高位（潛在回補動能）偏多，法人倒貨＋融資過熱偏空。',
+          '台指期：注意每月第三個週三結算、轉倉時點、夜盤流動性較差；方向可參考外資期貨未平倉淨額。',
+          '美股：注意 PDT 當沖規則（帳戶 < $2.5 萬時 5 個交易日內當沖 ≤ 3 次）、盤前盤後流動性差易跳空、財報日與 FOMC 波動放大；指數期貨（ES/NQ/MES/MNQ 等）注意保證金與季度轉倉、近全天候交易。',
+          '一律限價單優先於市價單，尤其流動性差或波動大的標的。');
         return lines.join('\n');
       }
 
@@ -2787,7 +2826,7 @@
         var open = panel.classList.toggle('open');
         if (open) {
           if (!msgsEl.children.length)
-            addMsg('assistant', '嗨，我是 HakuTrade AI 助理。我看得到本頁選擇權面板的<strong>即時數據</strong>（現價、DVOL、IV、skew、Max Pain、OI 牆、資金費率），也熟你的進出場 SOP——想做什麼操作，直接問我合不合理。');
+            addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券、外資期貨；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
           updateMode(); input.focus();
         }
       });
