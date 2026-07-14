@@ -3139,19 +3139,41 @@
         svg.addEventListener('touchmove', move, { passive: true }); svg.addEventListener('touchend', leave);
       }
 
-      function render() {
-        var S0 = state.spot, qty = state.qty;
+      function parseNum(v) { var n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? NaN : n; }
+      function premInput(i) { return box.querySelector('#sc-legs-body input[data-leg="' + i + '"][data-f="prem"]'); }
+
+      /* 只在「策略／重設」時重建腿位列（避免逐字輸入時整列被重建、游標跳掉、數字被截斷） */
+      function renderLegs() {
         var legTypeName = { C: '買權 Call', P: '賣權 Put', U: '現貨 BTC' };
-        var legRows = state.legs.map(function (l, i) {
+        box.querySelector('#sc-legs-body').innerHTML = state.legs.map(function (l, i) {
           var dir = l.d > 0 ? '<span class="sc-dir buy">買</span>' : '<span class="sc-dir sell">賣</span>';
-          var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="number" data-leg="' + i + '" data-f="K" value="' + l.K + '" step="' + niceStep(S0) + '">';
-          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="number" data-leg="' + i + '" data-f="prem" value="' + l.prem + '">' + (l.premAuto ? '<span class="auto">理論</span>' : '');
+          var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="K" value="' + l.K + '">';
+          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="auto" id="sc-auto-' + i + '" style="' + (l.premAuto ? '' : 'display:none') + '">理論</span>';
           return '<tr><td>' + dir + '</td><td>' + legTypeName[l.t] + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td></tr>';
         }).join('');
+        box.querySelectorAll('#sc-legs-body input').forEach(function (inp) {
+          inp.addEventListener('input', function () {
+            var i = +inp.getAttribute('data-leg'), f = inp.getAttribute('data-f'), v = parseNum(inp.value);
+            if (isNaN(v)) { renderOutputs(); return; } /* 允許中途空白，不動輸入框 */
+            if (f === 'K') {
+              state.legs[i].K = v;
+              if (state.legs[i].premAuto) { state.legs[i].prem = Math.round(bsPrice(state.legs[i].t, state.spot, v, state.dte / 365, state.iv / 100));
+                var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = state.legs[i].prem; }
+            } else {
+              state.legs[i].prem = v; state.legs[i].premAuto = false;
+              var lab = box.querySelector('#sc-auto-' + i); if (lab) lab.style.display = 'none';
+            }
+            renderOutputs(); /* 只更新指標與圖，不重建輸入框 */
+          });
+        });
+      }
+
+      /* 只更新損益指標與到期損益圖（可安全地在每次輸入時呼叫） */
+      function renderOutputs() {
+        var S0 = state.spot, qty = state.qty;
         var m = metrics(state.legs, S0, qty);
         var rrTxt = m.rr != null ? ('1 : ' + m.rr.toFixed(2)) : '—';
         var netTxt = m.netDebit > 0 ? ('淨支出 ' + usd(m.netDebit)) : m.netDebit < 0 ? ('淨收入 ' + usd(-m.netDebit)) : '$0';
-        box.querySelector('#sc-legs-body').innerHTML = legRows;
         box.querySelector('#sc-metrics').innerHTML =
           tile('最大獲利', usd(m.maxP), m.maxP > 0 ? 'pos' : 'neu', '到期最佳情況') +
           tile('最大虧損', usd(m.maxL), 'neg', '到期最差情況') +
@@ -3160,20 +3182,20 @@
           tile('損益兩平', m.be.length ? m.be.map(function (b) { return '$' + Math.round(b).toLocaleString(); }).join('、') : '—', 'neu', '到期損益 = 0 的價位') +
           tile('到期＠現價', (m.atSpot >= 0 ? '+' : '') + usd(m.atSpot), m.atSpot >= 0 ? 'pos' : 'neg', '若到期時 = 現價');
         drawPayoff(box.querySelector('#sc-chart'), state.legs, S0, qty);
-        /* 綁定 leg input */
-        box.querySelectorAll('#sc-legs-body input').forEach(function (inp) {
-          inp.addEventListener('input', function () {
-            var i = +inp.getAttribute('data-leg'), f = inp.getAttribute('data-f'), v = parseFloat(inp.value);
-            if (isNaN(v)) return;
-            if (f === 'K') { state.legs[i].K = v; if (state.legs[i].premAuto) state.legs[i].prem = Math.round(bsPrice(state.legs[i].t, S0, v, state.dte / 365, state.iv / 100)); }
-            else { state.legs[i].prem = v; state.legs[i].premAuto = false; }
-            render();
-          });
-        });
       }
       function tile(k, v, cls, sub) { return '<div class="sc-tile"><div class="k">' + k + '</div><div class="v ' + cls + '">' + v + '</div><div class="s">' + sub + '</div></div>'; }
 
-      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot, state.iv, state.dte); render(); }
+      /* 改現價/IV/DTE：保留使用者設定的履約價，只更新「理論」權利金與現貨成本基準（不重建輸入框） */
+      function recomputeAuto() {
+        state.legs.forEach(function (l, i) {
+          if (l.t === 'U') { l.entry = state.spot; return; }
+          if (l.premAuto) { l.prem = Math.round(bsPrice(l.t, state.spot, l.K, state.dte / 365, state.iv / 100));
+            var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = l.prem; }
+        });
+        renderOutputs();
+      }
+
+      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot, state.iv, state.dte); renderLegs(); renderOutputs(); }
 
       function build() {
         var d = defaults();
@@ -3184,10 +3206,10 @@
           '<div class="sc-wrap">'
           + '<div><div class="sc-hd">參數（預設帶入即時現價與近月 ATM IV；1 口＝1 BTC、美元計價）</div>'
           + '<div class="sc-inputs">'
-          + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="number" value="' + state.spot + '"></div>'
-          + '<div class="sc-field"><label>隱含波動率 IV (%)</label><input id="sc-iv" type="number" value="' + state.iv + '"></div>'
-          + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="number" value="' + state.dte + '"></div>'
-          + '<div class="sc-field"><label>合約口數</label><input id="sc-qty" type="number" value="' + state.qty + '" min="1"></div>'
+          + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="text" inputmode="decimal" autocomplete="off" value="' + state.spot + '"></div>'
+          + '<div class="sc-field"><label>隱含波動率 IV (%)</label><input id="sc-iv" type="text" inputmode="decimal" autocomplete="off" value="' + state.iv + '"></div>'
+          + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" inputmode="decimal" autocomplete="off" value="' + state.dte + '"></div>'
+          + '<div class="sc-field"><label>合約口數</label><input id="sc-qty" type="text" inputmode="numeric" autocomplete="off" value="' + state.qty + '"></div>'
           + '</div></div>'
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
           + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
@@ -3203,10 +3225,11 @@
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
         sel.value = state.strat;
         sel.addEventListener('change', function () { state.strat = sel.value; rebuildLegs(); });
-        box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.spot = v; rebuildLegs(); } });
-        box.querySelector('#sc-iv').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.iv = v; rebuildLegs(); } });
-        box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.dte = v; rebuildLegs(); } });
-        box.querySelector('#sc-qty').addEventListener('input', function (e) { var v = parseInt(e.target.value, 10); if (v > 0) { state.qty = v; render(); } });
+        /* 現價/IV/DTE 改變只重算理論權利金與圖，保留使用者微調過的履約價，不重建腿位列 */
+        box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.spot = v; recomputeAuto(); } });
+        box.querySelector('#sc-iv').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.iv = v; recomputeAuto(); } });
+        box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.dte = v; recomputeAuto(); } });
+        box.querySelector('#sc-qty').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.qty = Math.round(v); renderOutputs(); } });
         box.querySelector('#sc-reload').addEventListener('click', function () {
           var d2 = defaults(); if (d2.spot == null) return;
           state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1);
