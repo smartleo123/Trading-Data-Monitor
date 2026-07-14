@@ -292,6 +292,7 @@
             <div class="wr-maintabs">
               <button type="button" id="wr-tab-live" class="wr-maintab active">即時分析</button>
               <button type="button" id="wr-tab-sop" class="wr-maintab">進出場 SOP</button>
+              <button type="button" id="wr-tab-calc" class="wr-maintab">策略試算</button>
               <a href="https://www.greeks.live/deribit/tools/datalab/BTC" target="_blank" rel="noopener noreferrer" class="wr-glink" title="前往 greeks.live 查看比特幣選擇權波動率指標">選擇權指標 ↗</a>
             </div>
             <div id="wr-content"></div>
@@ -502,6 +503,7 @@
                         </div>
                         <p class="text-[10px] text-zinc-600 mt-5">* 本 SOP 為操作紀律整理，非投資建議。市場有風險，實際操作請依自身狀況判斷。</p>
             </div>
+            <div id="wr-calc" class="hidden"></div>
           </div>
 
         <style>
@@ -602,20 +604,25 @@
             if (open && !loaded && !loading) load();
           });
 
-          /* 主頁籤：即時分析 / 進出場 SOP */
+          /* 主頁籤：即時分析 / 進出場 SOP / 策略試算 */
           var tabLive = document.getElementById('wr-tab-live');
           var tabSop = document.getElementById('wr-tab-sop');
+          var tabCalc = document.getElementById('wr-tab-calc');
           var sopBox = document.getElementById('wr-sop');
+          var calcBox = document.getElementById('wr-calc');
           function switchMainTab(which) {
-            var live = which === 'live';
-            box.classList.toggle('hidden', !live);
-            sopBox.classList.toggle('hidden', live);
-            tabLive.classList.toggle('active', live);
-            tabSop.classList.toggle('active', !live);
-            if (!live && window.lucide) lucide.createIcons();
+            box.classList.toggle('hidden', which !== 'live');
+            sopBox.classList.toggle('hidden', which !== 'sop');
+            calcBox.classList.toggle('hidden', which !== 'calc');
+            tabLive.classList.toggle('active', which === 'live');
+            tabSop.classList.toggle('active', which === 'sop');
+            tabCalc.classList.toggle('active', which === 'calc');
+            if (which === 'calc' && typeof window.WR_initCalc === 'function') window.WR_initCalc();
+            if (which !== 'live' && window.lucide) lucide.createIcons();
           }
           tabLive.addEventListener('click', function () { switchMainTab('live'); });
           tabSop.addEventListener('click', function () { switchMainTab('sop'); });
+          tabCalc.addEventListener('click', function () { switchMainTab('calc'); });
 
           /* ---------- 工具 ---------- */
           function $(html) { box.innerHTML = html; }
@@ -2062,6 +2069,8 @@
     .twc-legend span{display:inline-flex;align-items:center;gap:5px}
     .twc-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
     .twc-err{color:#ef4444;font-size:12.5px}
+    .twc-tip{position:absolute;pointer-events:none;z-index:20;background:#0b0b0d;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:6px 9px;font-size:11.5px;line-height:1.5;color:#e4e4e7;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:0;transition:opacity .1s;transform:translate(-50%,-115%)}
+    .twc-tip .d{color:#8b8b93}.twc-tip .v{font-weight:700;font-variant-numeric:tabular-nums}
     </style>
     <script>
     (function () {
@@ -2222,18 +2231,56 @@
           + '<text x="2" y="16" font-size="10" fill="#8b8b93">+' + yLbl + '億</text><text x="2" y="' + (H - 6) + '" font-size="10" fill="#8b8b93">-' + yLbl + '億</text>'
           + rects + '</svg>';
       }
-      function lineChart(el, series) { /* [{date, v}] 舊→新，億元 */
+      function lineChart(el, series) { /* [{date, v}] 舊→新，億元：X 軸日期、Y 軸餘額、hover 浮窗 */
         if (!series.length) { el.innerHTML = '<span class="twc-err">近期數據暫時無法取得。</span>'; return; }
-        var W = 720, H = 180, pad = 6;
+        var W = 720, H = 230, padL = 54, padR = 14, padT = 12, padB = 30;
+        var n = series.length, plotW = W - padL - padR, plotH = H - padT - padB;
         var vs = series.map(function (s) { return s.v; });
-        var mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), rg = (mx - mn) || 1;
-        var pts = series.map(function (s, i) {
-          return (pad + i / (series.length - 1) * (W - pad * 2)).toFixed(1) + ',' + (H - 20 - (s.v - mn) / rg * (H - 46)).toFixed(1);
-        });
-        el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto" role="img" aria-label="融資餘額趨勢">'
-          + '<text x="2" y="14" font-size="10" fill="#8b8b93">高 ' + mx.toFixed(0) + ' 億</text>'
-          + '<text x="2" y="' + (H - 4) + '" font-size="10" fill="#8b8b93">低 ' + mn.toFixed(0) + ' 億（' + series[0].date + '→' + series[series.length - 1].date + '）</text>'
-          + '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#0e9cb8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+        var mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), span = (mx - mn) || Math.abs(mx) || 1;
+        var yMin = mn - span * 0.1, yMax = mx + span * 0.1;
+        function X(i) { return padL + (n === 1 ? plotW / 2 : i / (n - 1) * plotW); }
+        function Y(v) { return padT + (1 - (v - yMin) / (yMax - yMin)) * plotH; }
+        var C = '#0e9cb8'; /* 單一系列青（已通過色彩驗證器 on #141416） */
+        var s = '';
+        /* Y 軸格線與刻度（4 段） */
+        for (var t = 0; t <= 4; t++) {
+          var yv = yMin + (yMax - yMin) * (t / 4), yy = Y(yv);
+          s += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#27272a" stroke-width="1"/>';
+          s += '<text x="' + (padL - 6) + '" y="' + (yy + 3.5).toFixed(1) + '" font-size="11" fill="#71717a" text-anchor="end">' + Math.round(yv) + '</text>';
+        }
+        s += '<text x="10" y="' + (padT + 4) + '" font-size="10.5" fill="#8b8b93">億元</text>';
+        /* X 軸日期刻度（約 5 個） */
+        var stepX = Math.max(1, Math.round((n - 1) / 4));
+        for (var i = 0; i < n; i += stepX) {
+          s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" font-size="11" fill="#71717a" text-anchor="middle">' + series[i].date + '</text>';
+        }
+        if ((n - 1) % stepX !== 0) s += '<text x="' + X(n - 1).toFixed(1) + '" y="' + (H - 9) + '" font-size="11" fill="#71717a" text-anchor="middle">' + series[n - 1].date + '</text>';
+        /* 面積漸層＋折線 */
+        var line = series.map(function (r, i) { return X(i).toFixed(1) + ',' + Y(r.v).toFixed(1); }).join(' ');
+        var gid = 'twg' + Math.round(X(0));
+        s += '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C + '" stop-opacity="0.28"/><stop offset="1" stop-color="' + C + '" stop-opacity="0"/></linearGradient></defs>';
+        s += '<polygon points="' + X(0).toFixed(1) + ',' + (padT + plotH) + ' ' + line + ' ' + X(n - 1).toFixed(1) + ',' + (padT + plotH) + '" fill="url(#' + gid + ')"/>';
+        s += '<polyline points="' + line + '" fill="none" stroke="' + C + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+        /* hover 元件（預設隱藏） */
+        s += '<line id="mgc-guide" x1="0" y1="' + padT + '" x2="0" y2="' + (padT + plotH) + '" stroke="#52525b" stroke-width="1" stroke-dasharray="3 3" style="opacity:0"/>';
+        s += '<circle id="mgc-dot" r="4" fill="' + C + '" stroke="#0b0b0d" stroke-width="1.5" style="opacity:0"/>';
+        el.style.position = 'relative';
+        el.innerHTML = '<svg id="mgc-svg" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block" role="img" aria-label="近20日融資餘額趨勢">' + s + '</svg>'
+          + '<div class="twc-tip" id="mgc-tip"></div>';
+        var svg = el.querySelector('#mgc-svg'), tip = el.querySelector('#mgc-tip'), guide = el.querySelector('#mgc-guide'), dot = el.querySelector('#mgc-dot');
+        function onMove(ev) {
+          var r = svg.getBoundingClientRect();
+          var cx = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) / r.width * W;
+          var frac = (cx - padL) / plotW; var idx = Math.max(0, Math.min(n - 1, Math.round(frac * (n - 1))));
+          var px = X(idx), py = Y(series[idx].v);
+          guide.setAttribute('x1', px); guide.setAttribute('x2', px); guide.style.opacity = 1;
+          dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.style.opacity = 1;
+          tip.innerHTML = '<span class="d">' + series[idx].date + '</span>　<span class="v">' + Math.round(series[idx].v).toLocaleString() + ' 億</span>';
+          tip.style.left = (px / W * r.width) + 'px'; tip.style.top = (py / H * r.height) + 'px'; tip.style.opacity = 1;
+        }
+        function onLeave() { guide.style.opacity = 0; dot.style.opacity = 0; tip.style.opacity = 0; }
+        svg.addEventListener('mousemove', onMove); svg.addEventListener('mouseleave', onLeave);
+        svg.addEventListener('touchmove', onMove, { passive: true }); svg.addEventListener('touchend', onLeave);
       }
 
       /* ── 主載入 ── */
@@ -2919,5 +2966,261 @@
       fetchLiveEcon().catch(function () {}); /* 最佳努力抓 TradingView 即時日曆；成功則覆寫、失敗維持內建 */
     })();
     </script>
+    <!-- ═══ BTC 選擇權「策略試算」頁籤：損益計算器（讀 window.WR_SNAPSHOT 即時現價／IV，不 hardcode） ═══ -->
+    <style>
+    #wr-calc .sc-wrap{display:flex;flex-direction:column;gap:16px}
+    #wr-calc .sc-hd{font-size:12.5px;font-weight:700;color:#a1a1aa;margin-bottom:8px}
+    #wr-calc .sc-note{font-size:11px;color:#71717a}
+    #wr-calc .sc-inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media(min-width:640px){#wr-calc .sc-inputs{grid-template-columns:repeat(4,1fr)}}
+    #wr-calc .sc-field label{display:block;font-size:11px;color:#8b8b93;margin-bottom:4px}
+    #wr-calc .sc-field input,#wr-calc .sc-field select{width:100%;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#f4f4f5;font-size:13px;padding:8px 10px;outline:none;font-family:inherit;font-variant-numeric:tabular-nums}
+    #wr-calc .sc-field input:focus,#wr-calc .sc-field select:focus{border-color:#06b6d4}
+    #wr-calc .sc-strat{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+    #wr-calc .sc-strat .sc-field{flex:1;min-width:220px}
+    #wr-calc .sc-btn{font-size:12px;font-weight:700;border-radius:9px;padding:8px 12px;cursor:pointer;border:1px solid rgba(6,182,212,.3);background:rgba(6,182,212,.12);color:#22d3ee;font-family:inherit;white-space:nowrap}
+    #wr-calc .sc-btn:hover{background:rgba(6,182,212,.2)}
+    #wr-calc table.sc-legs{width:100%;border-collapse:collapse;font-size:12.5px}
+    #wr-calc table.sc-legs th{font-size:11px;color:#8b8b93;font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid #27272a}
+    #wr-calc table.sc-legs td{padding:5px 8px;border-bottom:1px dashed #27272a;color:#d4d4d8}
+    #wr-calc table.sc-legs td.r{text-align:right}
+    #wr-calc .sc-dir{font-weight:800;padding:2px 8px;border-radius:6px;font-size:11px}
+    #wr-calc .sc-dir.buy{color:#0da271;background:rgba(13,162,113,.12)}
+    #wr-calc .sc-dir.sell{color:#ef4444;background:rgba(239,68,68,.12)}
+    #wr-calc .sc-legs input{width:100px;background:#141416;border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#f4f4f5;font-size:12.5px;padding:5px 7px;outline:none;font-variant-numeric:tabular-nums;text-align:right}
+    #wr-calc .sc-legs input:focus{border-color:#06b6d4}
+    #wr-calc .sc-legs .auto{font-size:10px;color:#52525b;margin-left:4px}
+    #wr-calc .sc-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media(min-width:640px){#wr-calc .sc-metrics{grid-template-columns:repeat(3,1fr)}}
+    #wr-calc .sc-tile{background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:11px 13px}
+    #wr-calc .sc-tile .k{font-size:11px;color:#8b8b93}
+    #wr-calc .sc-tile .v{font-size:18px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+    #wr-calc .sc-tile .s{font-size:10.5px;color:#71717a;margin-top:1px}
+    #wr-calc .pos{color:#0da271}#wr-calc .neg{color:#ef4444}#wr-calc .neu{color:#e4e4e7}
+    #wr-calc .sc-chart{position:relative}
+    #wr-calc .sc-tip{position:absolute;pointer-events:none;z-index:20;background:#0b0b0d;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:6px 9px;font-size:11.5px;line-height:1.5;color:#e4e4e7;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:0;transition:opacity .1s;transform:translate(-50%,-118%)}
+    #wr-calc .sc-tip .d{color:#8b8b93}#wr-calc .sc-tip .v{font-weight:700;font-variant-numeric:tabular-nums}
+    #wr-calc .sc-legend{display:flex;gap:16px;font-size:11px;color:#8b8b93;margin-top:6px;flex-wrap:wrap}
+    #wr-calc .sc-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+    </style>
+    <script>
+    (function () {
+      'use strict';
+      var box = document.getElementById('wr-calc');
+      if (!box) return;
+      var built = false, state = null;
+
+      function ncdf(x) { var t = 1 / (1 + 0.2316419 * Math.abs(x)); var d = 0.3989423 * Math.exp(-x * x / 2);
+        var p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+      function bsPrice(type, S, K, T, sig) {
+        if (T <= 0 || sig <= 0) return type === 'C' ? Math.max(S - K, 0) : Math.max(K - S, 0);
+        var d1 = (Math.log(S / K) + 0.5 * sig * sig * T) / (sig * Math.sqrt(T)), d2 = d1 - sig * Math.sqrt(T);
+        return type === 'C' ? S * ncdf(d1) - K * ncdf(d2) : K * ncdf(-d2) - S * ncdf(-d1);
+      }
+      function niceStep(S) { var e = Math.pow(10, Math.floor(Math.log10(S)) - 1); return e < 1 ? 1 : e; }
+      function snap(S, mul) { var st = niceStep(S); return Math.round(S * mul / st) * st; }
+      function usd(n) { if (n === Infinity) return '無上限'; if (n === -Infinity) return '無下限'; var s = n < 0 ? '-' : ''; return s + '$' + Math.round(Math.abs(n)).toLocaleString('en-US'); }
+
+      /* 策略樣板：legs(S)→[{t:'C'|'P'|'U', d:+1買/-1賣, K}] */
+      var STRATS = [
+        { k: 'long-call', n: '買進買權 Long Call', legs: function (S) { return [{ t: 'C', d: 1, K: snap(S, 1.03) }]; } },
+        { k: 'long-put', n: '買進賣權 Long Put', legs: function (S) { return [{ t: 'P', d: 1, K: snap(S, 0.97) }]; } },
+        { k: 'short-call', n: '賣出買權 Short Call（裸賣）', legs: function (S) { return [{ t: 'C', d: -1, K: snap(S, 1.05) }]; } },
+        { k: 'short-put', n: '賣出賣權 Short Put（收租）', legs: function (S) { return [{ t: 'P', d: -1, K: snap(S, 0.95) }]; } },
+        { k: 'bull-call', n: '買權多頭價差 Bull Call', legs: function (S) { return [{ t: 'C', d: 1, K: snap(S, 1.0) }, { t: 'C', d: -1, K: snap(S, 1.1) }]; } },
+        { k: 'bear-put', n: '賣權空頭價差 Bear Put', legs: function (S) { return [{ t: 'P', d: 1, K: snap(S, 1.0) }, { t: 'P', d: -1, K: snap(S, 0.9) }]; } },
+        { k: 'bull-put', n: '賣權多頭價差 Bull Put（收租）', legs: function (S) { return [{ t: 'P', d: -1, K: snap(S, 0.97) }, { t: 'P', d: 1, K: snap(S, 0.9) }]; } },
+        { k: 'bear-call', n: '買權空頭價差 Bear Call（收租）', legs: function (S) { return [{ t: 'C', d: -1, K: snap(S, 1.03) }, { t: 'C', d: 1, K: snap(S, 1.1) }]; } },
+        { k: 'straddle', n: '買進跨式 Long Straddle', legs: function (S) { return [{ t: 'C', d: 1, K: snap(S, 1.0) }, { t: 'P', d: 1, K: snap(S, 1.0) }]; } },
+        { k: 'strangle', n: '買進勒式 Long Strangle', legs: function (S) { return [{ t: 'C', d: 1, K: snap(S, 1.05) }, { t: 'P', d: 1, K: snap(S, 0.95) }]; } },
+        { k: 'short-straddle', n: '賣出跨式 Short Straddle（收租）', legs: function (S) { return [{ t: 'C', d: -1, K: snap(S, 1.0) }, { t: 'P', d: -1, K: snap(S, 1.0) }]; } },
+        { k: 'iron-condor', n: '鐵兀鷹 Iron Condor（收租）', legs: function (S) { return [{ t: 'P', d: 1, K: snap(S, 0.88) }, { t: 'P', d: -1, K: snap(S, 0.95) }, { t: 'C', d: -1, K: snap(S, 1.05) }, { t: 'C', d: 1, K: snap(S, 1.12) }]; } },
+        { k: 'covered-call', n: '掩護性買權 Covered Call', legs: function (S) { return [{ t: 'U', d: 1, K: 0 }, { t: 'C', d: -1, K: snap(S, 1.05) }]; } },
+        { k: 'protective-put', n: '保護性賣權 Protective Put', legs: function (S) { return [{ t: 'U', d: 1, K: 0 }, { t: 'P', d: 1, K: snap(S, 0.95) }]; } }
+      ];
+
+      function defaults() {
+        var s = window.WR_SNAPSHOT;
+        var spot = (s && s.spot) ? s.spot : null;
+        var iv = null;
+        if (s && s.ivRows && s.ivRows.length) { for (var i = 0; i < s.ivRows.length; i++) { if (s.ivRows[i].atmIV != null) { iv = s.ivRows[i].atmIV; break; } } }
+        return { spot: spot, iv: iv != null ? iv : 45, dte: 30 };
+      }
+
+      function buildLegs(stratKey, S, IV, DTE) {
+        var st = STRATS.filter(function (x) { return x.k === stratKey; })[0] || STRATS[0];
+        var T = DTE / 365, sig = IV / 100;
+        return st.legs(S).map(function (l) {
+          var prem = l.t === 'U' ? 0 : bsPrice(l.t, S, l.K, T, sig);
+          return { t: l.t, d: l.d, K: l.K, prem: Math.round(prem), premAuto: true, entry: S };
+        });
+      }
+
+      function legPnl(l, S, qty) {
+        var intr = l.t === 'C' ? Math.max(S - l.K, 0) : l.t === 'P' ? Math.max(l.K - S, 0) : (S - l.entry);
+        var prem = l.t === 'U' ? 0 : l.prem;
+        return l.d * qty * (intr - prem);
+      }
+      function totalPnl(legs, S, qty) { var p = 0; for (var i = 0; i < legs.length; i++) p += legPnl(legs[i], S, qty); return p; }
+
+      function metrics(legs, S0, qty) {
+        var strikes = legs.filter(function (l) { return l.t !== 'U'; }).map(function (l) { return l.K; });
+        var kinks = [0].concat(strikes).concat([S0 * 3]);
+        var vals = kinks.map(function (k) { return totalPnl(legs, k, qty); });
+        var upSlope = legs.reduce(function (a, l) { return a + ((l.t === 'C' || l.t === 'U') ? l.d * qty : 0); }, 0);
+        var maxP = upSlope > 0 ? Infinity : Math.max.apply(null, vals);
+        var maxL = upSlope < 0 ? -Infinity : Math.min.apply(null, vals);
+        /* 損益兩平：細掃 0→2.5S 找變號點 */
+        var be = [], lo = 0, hi = S0 * 2.5, N = 500, prev = totalPnl(legs, lo, qty), prevS = lo;
+        for (var i = 1; i <= N; i++) { var s = lo + (hi - lo) * i / N, v = totalPnl(legs, s, qty);
+          if ((prev <= 0 && v > 0) || (prev >= 0 && v < 0)) { var f = prev / (prev - v); be.push(prevS + (s - prevS) * f); }
+          prev = v; prevS = s; }
+        var netDebit = legs.reduce(function (a, l) { return a + (l.t === 'U' ? 0 : l.d * qty * l.prem); }, 0);
+        var rr = (maxP > 0 && maxP !== Infinity && maxL < 0 && maxL !== -Infinity) ? (maxP / Math.abs(maxL)) : null;
+        return { maxP: maxP, maxL: maxL, be: be, netDebit: netDebit, rr: rr, atSpot: totalPnl(legs, S0, qty) };
+      }
+
+      function drawPayoff(el, legs, S0, qty) {
+        var strikes = legs.filter(function (l) { return l.t !== 'U'; }).map(function (l) { return l.K; });
+        var allx = strikes.concat([S0]);
+        var xMin = Math.max(0, Math.min.apply(null, allx) * 0.8), xMax = Math.max.apply(null, allx) * 1.2;
+        var W = 720, H = 300, padL = 60, padR = 16, padT = 14, padB = 30, plotW = W - padL - padR, plotH = H - padT - padB;
+        var N = 140, xs = [], ys = [], yMin = Infinity, yMax = -Infinity;
+        for (var i = 0; i <= N; i++) { var s = xMin + (xMax - xMin) * i / N, p = totalPnl(legs, s, qty); xs.push(s); ys.push(p); if (p < yMin) yMin = p; if (p > yMax) yMax = p; }
+        var pad = (yMax - yMin) * 0.12 || Math.abs(yMax) || 100; yMin -= pad; yMax += pad; if (yMin > 0) yMin = -pad; if (yMax < 0) yMax = pad;
+        function X(v) { return padL + (v - xMin) / (xMax - xMin) * plotW; }
+        function Y(p) { return padT + (1 - (p - yMin) / (yMax - yMin)) * plotH; }
+        var zeroY = Y(0);
+        var s = '';
+        /* Y 軸格線＋刻度 */
+        for (var t = 0; t <= 4; t++) { var pv = yMin + (yMax - yMin) * t / 4, yy = Y(pv);
+          s += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#232326" stroke-width="1"/>';
+          s += '<text x="' + (padL - 6) + '" y="' + (yy + 3.5).toFixed(1) + '" font-size="11" fill="#71717a" text-anchor="end">' + usd(pv) + '</text>'; }
+        /* X 軸價格刻度 */
+        for (var t2 = 0; t2 <= 4; t2++) { var xv = xMin + (xMax - xMin) * t2 / 4;
+          s += '<text x="' + X(xv).toFixed(1) + '" y="' + (H - 9) + '" font-size="11" fill="#71717a" text-anchor="middle">$' + Math.round(xv / 1000) + 'K</text>'; }
+        /* 損益面積：綠(獲利,零線上) / 紅(虧損,零線下)，用 clip 分割 */
+        var poly = xs.map(function (x, i) { return X(x).toFixed(1) + ',' + Y(ys[i]).toFixed(1); }).join(' ');
+        var area = X(xs[0]).toFixed(1) + ',' + zeroY.toFixed(1) + ' ' + poly + ' ' + X(xs[xs.length - 1]).toFixed(1) + ',' + zeroY.toFixed(1);
+        s += '<defs><clipPath id="scAbove"><rect x="0" y="0" width="' + W + '" height="' + Math.max(0, zeroY).toFixed(1) + '"/></clipPath>'
+          + '<clipPath id="scBelow"><rect x="0" y="' + zeroY.toFixed(1) + '" width="' + W + '" height="' + Math.max(0, H - zeroY).toFixed(1) + '"/></clipPath></defs>';
+        s += '<polygon points="' + area + '" fill="#0da271" fill-opacity="0.16" clip-path="url(#scAbove)"/>';
+        s += '<polygon points="' + area + '" fill="#ef4444" fill-opacity="0.16" clip-path="url(#scBelow)"/>';
+        /* 零線 */
+        s += '<line x1="' + padL + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + zeroY.toFixed(1) + '" stroke="#5b5b63" stroke-width="1.5"/>';
+        /* 損益線 */
+        s += '<polyline points="' + poly + '" fill="none" stroke="#d4d4d8" stroke-width="2" stroke-linejoin="round"/>';
+        /* 現價標記 */
+        s += '<line x1="' + X(S0).toFixed(1) + '" y1="' + padT + '" x2="' + X(S0).toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#06b6d4" stroke-width="1" stroke-dasharray="4 3"/>';
+        s += '<text x="' + X(S0).toFixed(1) + '" y="' + (padT + 10) + '" font-size="10.5" fill="#22d3ee" text-anchor="middle">現價 $' + Math.round(S0 / 1000) + 'K</text>';
+        /* 損益兩平標記 */
+        var m = metrics(legs, S0, qty);
+        m.be.forEach(function (b) { if (b >= xMin && b <= xMax) {
+          s += '<circle cx="' + X(b).toFixed(1) + '" cy="' + zeroY.toFixed(1) + '" r="3.5" fill="#e4e4e7"/>';
+          s += '<text x="' + X(b).toFixed(1) + '" y="' + (zeroY - 7).toFixed(1) + '" font-size="10" fill="#a1a1aa" text-anchor="middle">$' + Math.round(b).toLocaleString() + '</text>'; } });
+        /* hover 元件 */
+        s += '<line id="sc-guide" x1="0" y1="' + padT + '" x2="0" y2="' + (padT + plotH) + '" stroke="#52525b" stroke-width="1" stroke-dasharray="3 3" style="opacity:0"/>';
+        s += '<circle id="sc-dot" r="4.5" fill="#d4d4d8" stroke="#0b0b0d" stroke-width="1.5" style="opacity:0"/>';
+        el.innerHTML = '<svg id="sc-svg" viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block" role="img" aria-label="到期損益圖">' + s + '</svg>'
+          + '<div class="sc-tip" id="sc-tip"></div>';
+        var svg = el.querySelector('#sc-svg'), tip = el.querySelector('#sc-tip'), guide = el.querySelector('#sc-guide'), dot = el.querySelector('#sc-dot');
+        function move(ev) {
+          var r = svg.getBoundingClientRect();
+          var cx = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) / r.width * W;
+          var xv = xMin + (Math.max(padL, Math.min(W - padR, cx)) - padL) / plotW * (xMax - xMin);
+          var pv = totalPnl(legs, xv, qty), px = X(xv), py = Y(pv);
+          guide.setAttribute('x1', px); guide.setAttribute('x2', px); guide.style.opacity = 1;
+          dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.style.opacity = 1;
+          tip.innerHTML = '<span class="d">到期 $' + Math.round(xv).toLocaleString() + '</span><br><span class="v ' + (pv >= 0 ? 'pos' : 'neg') + '">' + (pv >= 0 ? '+' : '') + usd(pv) + '</span>';
+          tip.style.left = (px / W * r.width) + 'px'; tip.style.top = (py / H * r.height) + 'px'; tip.style.opacity = 1;
+        }
+        function leave() { guide.style.opacity = 0; dot.style.opacity = 0; tip.style.opacity = 0; }
+        svg.addEventListener('mousemove', move); svg.addEventListener('mouseleave', leave);
+        svg.addEventListener('touchmove', move, { passive: true }); svg.addEventListener('touchend', leave);
+      }
+
+      function render() {
+        var S0 = state.spot, qty = state.qty;
+        var legTypeName = { C: '買權 Call', P: '賣權 Put', U: '現貨 BTC' };
+        var legRows = state.legs.map(function (l, i) {
+          var dir = l.d > 0 ? '<span class="sc-dir buy">買</span>' : '<span class="sc-dir sell">賣</span>';
+          var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="number" data-leg="' + i + '" data-f="K" value="' + l.K + '" step="' + niceStep(S0) + '">';
+          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="number" data-leg="' + i + '" data-f="prem" value="' + l.prem + '">' + (l.premAuto ? '<span class="auto">理論</span>' : '');
+          return '<tr><td>' + dir + '</td><td>' + legTypeName[l.t] + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td></tr>';
+        }).join('');
+        var m = metrics(state.legs, S0, qty);
+        var rrTxt = m.rr != null ? ('1 : ' + m.rr.toFixed(2)) : '—';
+        var netTxt = m.netDebit > 0 ? ('淨支出 ' + usd(m.netDebit)) : m.netDebit < 0 ? ('淨收入 ' + usd(-m.netDebit)) : '$0';
+        box.querySelector('#sc-legs-body').innerHTML = legRows;
+        box.querySelector('#sc-metrics').innerHTML =
+          tile('最大獲利', usd(m.maxP), m.maxP > 0 ? 'pos' : 'neu', '到期最佳情況') +
+          tile('最大虧損', usd(m.maxL), 'neg', '到期最差情況') +
+          tile('風險報酬比', rrTxt, 'neu', '獲利 ÷ 虧損') +
+          tile('淨權利金', netTxt, m.netDebit > 0 ? 'neg' : 'pos', '建倉現金流（美元／口）') +
+          tile('損益兩平', m.be.length ? m.be.map(function (b) { return '$' + Math.round(b).toLocaleString(); }).join('、') : '—', 'neu', '到期損益 = 0 的價位') +
+          tile('到期＠現價', (m.atSpot >= 0 ? '+' : '') + usd(m.atSpot), m.atSpot >= 0 ? 'pos' : 'neg', '若到期時 = 現價');
+        drawPayoff(box.querySelector('#sc-chart'), state.legs, S0, qty);
+        /* 綁定 leg input */
+        box.querySelectorAll('#sc-legs-body input').forEach(function (inp) {
+          inp.addEventListener('input', function () {
+            var i = +inp.getAttribute('data-leg'), f = inp.getAttribute('data-f'), v = parseFloat(inp.value);
+            if (isNaN(v)) return;
+            if (f === 'K') { state.legs[i].K = v; if (state.legs[i].premAuto) state.legs[i].prem = Math.round(bsPrice(state.legs[i].t, S0, v, state.dte / 365, state.iv / 100)); }
+            else { state.legs[i].prem = v; state.legs[i].premAuto = false; }
+            render();
+          });
+        });
+      }
+      function tile(k, v, cls, sub) { return '<div class="sc-tile"><div class="k">' + k + '</div><div class="v ' + cls + '">' + v + '</div><div class="s">' + sub + '</div></div>'; }
+
+      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot, state.iv, state.dte); render(); }
+
+      function build() {
+        var d = defaults();
+        if (d.spot == null) { box.innerHTML = '<div class="wr-status" style="padding:24px 2px;color:#a1a1aa">等「即時分析」頁籤載入 BTC 現價後，這裡會自動帶入現價與 ATM IV。可先切到即時分析等它載入，再回來試算。</div>'; return; }
+        built = true;
+        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, qty: 1, legs: [] };
+        box.innerHTML =
+          '<div class="sc-wrap">'
+          + '<div><div class="sc-hd">參數（預設帶入即時現價與近月 ATM IV；1 口＝1 BTC、美元計價）</div>'
+          + '<div class="sc-inputs">'
+          + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="number" value="' + state.spot + '"></div>'
+          + '<div class="sc-field"><label>隱含波動率 IV (%)</label><input id="sc-iv" type="number" value="' + state.iv + '"></div>'
+          + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="number" value="' + state.dte + '"></div>'
+          + '<div class="sc-field"><label>合約口數</label><input id="sc-qty" type="number" value="' + state.qty + '" min="1"></div>'
+          + '</div></div>'
+          + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
+          + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
+          + '<div><div class="sc-hd">腿位（履約價與權利金可手動微調；「理論」＝以現價 IV/DTE 用 Black-Scholes 估算）</div>'
+          + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約價</th><th style="text-align:right">權利金 (USD)</th></tr></thead><tbody id="sc-legs-body"></tbody></table></div>'
+          + '<div><div class="sc-hd">損益指標</div><div class="sc-metrics" id="sc-metrics"></div></div>'
+          + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
+          + '<div class="sc-chart" id="sc-chart"></div>'
+          + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
+          + '<div class="sc-note">計算為到期日內在價值損益，未計手續費、資金費率與提前平倉時間價值；權利金理論價 r=0。僅供教育試算，非投資建議。</div>'
+          + '</div>';
+        var sel = box.querySelector('#sc-select');
+        sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
+        sel.value = state.strat;
+        sel.addEventListener('change', function () { state.strat = sel.value; rebuildLegs(); });
+        box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.spot = v; rebuildLegs(); } });
+        box.querySelector('#sc-iv').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.iv = v; rebuildLegs(); } });
+        box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.dte = v; rebuildLegs(); } });
+        box.querySelector('#sc-qty').addEventListener('input', function (e) { var v = parseInt(e.target.value, 10); if (v > 0) { state.qty = v; render(); } });
+        box.querySelector('#sc-reload').addEventListener('click', function () {
+          var d2 = defaults(); if (d2.spot == null) return;
+          state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1);
+          box.querySelector('#sc-spot').value = state.spot; box.querySelector('#sc-iv').value = state.iv;
+          rebuildLegs();
+        });
+        rebuildLegs();
+      }
+
+      /* 首次開啟策略試算頁籤時建置；資料未就緒則等 wr-snapshot 事件 */
+      window.WR_initCalc = function () { if (!built) build(); };
+      document.addEventListener('wr-snapshot', function () { if (!built && !box.classList.contains('hidden')) build(); });
+    })();
+    </script>
+    <!-- ═══ 策略試算頁籤 結束 ═══ -->
 </body>
 </html>
