@@ -1324,29 +1324,16 @@
             <div id="sec-us-macro" data-nav="總經宏觀指標">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-accentPurple"></i></div>
-                    <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">CPI 通膨、波動率、美元指數與黃金原油 — 判斷市場風險情緒的關鍵溫度計</p></div>
+                    <div><h2 class="text-md font-extrabold text-white">總經宏觀指標</h2><p class="text-xs text-zinc-500 mt-0.5">波動率、美元指數與黃金、原油 — 判斷市場風險情緒的關鍵溫度計</p></div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    <a href="https://tradingeconomics.com/united-states/inflation-cpi" target="_blank" rel="noopener noreferrer" class="block bg-darkCard border border-zinc-850 hover:border-accentPurple/50 rounded-2xl p-3 h-[160px] overflow-hidden flex flex-col justify-between transition-colors group">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">美國 CPI 通膨</span>
-                            <span class="text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded">官方數據</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center flex-1 gap-2 text-center">
-                            <i data-lucide="trending-up" class="w-7 h-7 text-accentPurple"></i>
-                            <span class="text-[11px] text-zinc-400 leading-snug">年增率・核心 CPI・公布時程<br>皆以官方即時為準</span>
-                        </div>
-                        <div class="text-[10px] text-zinc-500 group-hover:text-accentPurple transition-colors font-bold flex items-center justify-between">
-                            <span>Trading Economics</span><span>看即時 →</span>
-                        </div>
-                    </a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TOOBIT:VIXUSDT.P" title="VIX 波動率期貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="BINGX:USDOLLARINDEXDXYUSDT.P" title="美元指數 DXY 期貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TVC:GOLD" title="黃金現貨"></div>
                     <div class="bg-darkCard border border-zinc-850 rounded-2xl p-2 h-[160px] overflow-hidden" data-tv-mini-symbol="TVC:USOIL" title="WTI 原油"></div>
                 </div>
                 <div class="text-[11px] text-zinc-600 px-1 mt-2">
-                    <span class="text-zinc-500">*</span> 美國 CPI 通膨點卡片可看 Trading Economics 即時官方數據（年增率、核心、公布時程）；波動率(VIX)、美元(DXY)採永續期貨，黃金、原油為 TradingView 原生報價。
+                    <span class="text-zinc-500">*</span> 波動率(VIX)、美元(DXY)採永續期貨，黃金、原油為 TradingView 原生報價。
                 </div>
             </div>
             <!-- 美股自選代碼卡片 -->
@@ -2492,6 +2479,8 @@
       display:flex;align-items:center;justify-content:center;transition:transform .18s ease,box-shadow .18s ease}
     #ha-fab:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(168,85,247,.45),0 2px 8px rgba(0,0,0,.5)}
     #ha-fab svg{width:26px;height:26px;pointer-events:none}
+    .ha-badge{position:absolute;top:-2px;right:-2px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;border:2px solid #09090b;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.45);animation:haPulse 1.8s ease-in-out infinite}
+    @keyframes haPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
     #ha-panel{position:fixed;right:20px;bottom:86px;z-index:70;width:min(390px,calc(100vw - 32px));height:min(600px,calc(100vh - 130px));
       background:#141416;border:1px solid #e5e7eb;border-radius:16px;display:none;flex-direction:column;overflow:hidden;
       box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:inherit}
@@ -2554,6 +2543,7 @@
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
         <path d="M9 10h.01M12.5 10h.01M16 10h.01" stroke-width="2.6"/>
       </svg>
+      <span id="ha-badge" class="ha-badge" style="display:none">0</span>
     </button>
     <div id="ha-panel" role="dialog" aria-label="HakuTrade AI 助理">
       <div id="ha-resize" title="拖曳左上角調整視窗大小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10 V4 H10 M4 4 L11 11 M4 16 V20 H8 M4 20 L9 15"/></svg></div>
@@ -2604,9 +2594,101 @@
       var keyInput = document.getElementById('ha-key');
       var webBtn = document.getElementById('ha-web'), webHint = document.getElementById('ha-web-hint');
       var resizeEl = document.getElementById('ha-resize');
-      var SIZE_LS = 'ha_size';
+      var badgeEl = document.getElementById('ha-badge');
+      var SIZE_LS = 'ha_size', ECON_SEEN_LS = 'ha_econ_seen';
       var history = [];           /* {role,content} 只留對話，system 每次即時重建 */
-      var busy = false, lastFreeAt = 0;
+      var busy = false, lastFreeAt = 0, econShown = false;
+
+      /* ══ 今日重要經濟數據 ══
+         優先「即時」：經公用代理抓 TradingView 經濟日曆資料端點（伺服器端取用不受瀏覽器 CORS 限制，
+           與本頁證交所數據同一機制）——動態、免維護。
+         取不到時退回「內建行事曆」：規則型（非農＝每月第一個週五、初領失業金＝每週四，永不過期）＋
+           官方固定日期（BLS CPI 排程至 2026/12、Fed FOMC 排程至 2027/12）。 */
+      function pad2(n) { return ('0' + n).slice(-2); }
+      function ymd(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+      /* 官方固定日期（美東發布日）：CPI 為 BLS 已公布排程；FOMC 至 2027 為 Fed 暫定排程 */
+      var ECON_CPI = { '2026-07-14': '6月', '2026-08-12': '7月', '2026-09-11': '8月', '2026-10-14': '9月', '2026-11-10': '10月', '2026-12-10': '11月' };
+      var ECON_FOMC = ['2026-07-29', '2026-09-16', '2026-10-28', '2026-12-09',
+        '2027-01-27', '2027-03-17', '2027-04-28', '2027-06-09', '2027-07-28', '2027-09-15', '2027-10-27', '2027-12-08'];
+      function builtinEconFor(d) {
+        var key = ymd(d), out = [];
+        if (ECON_CPI[key]) out.push({ n: '美國 CPI 消費者物價指數（' + ECON_CPI[key] + '）', t: '台北 20:30', imp: 'high' });
+        if (ECON_FOMC.indexOf(key) >= 0) out.push({ n: 'FOMC 聯準會利率決議', t: '台北隔日 02:00', imp: 'high' });
+        var dow = d.getDay(); /* 0=日..6=六 */
+        if (dow === 5 && d.getDate() <= 7) out.push({ n: '美國非農就業報告 (NFP)', t: '台北 20:30', imp: 'high' });
+        if (dow === 4) out.push({ n: '美國初領失業金人數', t: '台北 20:30', imp: 'med' });
+        return out;
+      }
+      var liveEcon = null; /* null＝未取得（用內建）；陣列＝TradingView 即時結果 */
+      function todaysEcon() { return liveEcon !== null ? liveEcon : builtinEconFor(new Date()); }
+      /* 事件英文標題 → 中文（關鍵字比對，未命中就用原文） */
+      function zhEcon(t) {
+        t = t || '';
+        if (/Nonfarm|Non-Farm/i.test(t)) return '美國非農就業 (NFP)';
+        if (/Jobless Claims/i.test(t)) return '美國初領失業金';
+        if (/Fed Interest Rate|FOMC|Rate Decision/i.test(t)) return 'FOMC 利率決議';
+        if (/Consumer Price Index|\bCPI\b/i.test(t)) return '美國 CPI' + (/Core/i.test(t) ? '（核心）' : '');
+        if (/Producer Price Index|\bPPI\b/i.test(t)) return '美國 PPI 生產者物價';
+        if (/\bPCE\b/i.test(t)) return '美國 PCE 物價指數';
+        if (/Retail Sales/i.test(t)) return '美國零售銷售';
+        if (/Gross Domestic Product|\bGDP\b/i.test(t)) return '美國 GDP';
+        if (/ISM.*Manufacturing/i.test(t)) return 'ISM 製造業 PMI';
+        if (/ISM.*(Services|Non-Manufacturing)/i.test(t)) return 'ISM 服務業 PMI';
+        if (/Unemployment Rate/i.test(t)) return '美國失業率';
+        if (/Michigan/i.test(t)) return '密大消費者信心';
+        return t;
+      }
+      function haPxFetch(u) {
+        var c = new AbortController(); var t = setTimeout(function () { try { c.abort(); } catch (e) {} }, 9000);
+        return fetch(u, { cache: 'no-store', signal: c.signal }).then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
+      }
+      function fetchLiveEcon() {
+        var d = new Date();
+        var start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
+        var end = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59);
+        var api = 'https://economic-calendar.tradingview.com/events?from=' + start.toISOString() + '&to=' + end.toISOString() + '&countries=US';
+        var proxies = [
+          'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(api),
+          'https://corsproxy.io/?url=' + encodeURIComponent(api),
+          'https://api.allorigins.win/raw?url=' + encodeURIComponent(api)
+        ];
+        var i = 0;
+        function tryOne() {
+          if (i >= proxies.length) return Promise.reject(new Error('econ proxy failed'));
+          return haPxFetch(proxies[i++]).then(function (r) { if (!r.ok) throw 0; return r.text(); })
+            .then(function (txt) { var j = JSON.parse(txt); if (!j || j.status !== 'ok' || !Array.isArray(j.result)) throw 0; return j; })
+            .catch(function () { return tryOne(); });
+        }
+        return tryOne().then(function (j) {
+          var out = j.result.filter(function (e) { return e.importance >= 0; }).map(function (e) {
+            var dt = new Date(e.date), tpe = new Date(dt.getTime() + 8 * 3600000);
+            return { n: zhEcon(e.title), t: '台北 ' + pad2(tpe.getUTCHours()) + ':' + pad2(tpe.getUTCMinutes()), imp: e.importance >= 1 ? 'high' : 'med', live: true };
+          });
+          out.sort(function (a, b) { return (b.imp === 'high') - (a.imp === 'high'); });
+          liveEcon = out.slice(0, 6);
+          refreshBadge();
+          return liveEcon;
+        });
+      }
+      function econSeenToday() { try { return localStorage.getItem(ECON_SEEN_LS) === ymd(new Date()); } catch (e) { return false; } }
+      function markEconSeen() { try { localStorage.setItem(ECON_SEEN_LS, ymd(new Date())); } catch (e) {} }
+      function refreshBadge() {
+        var evs = todaysEcon();
+        if (evs.length && !econSeenToday() && !panel.classList.contains('open')) {
+          badgeEl.textContent = evs.length; badgeEl.style.display = 'flex';
+        } else { badgeEl.style.display = 'none'; }
+      }
+      function econSummaryHTML() {
+        var evs = todaysEcon(); if (!evs.length) return '';
+        var d = new Date(), ds = (d.getMonth() + 1) + '/' + d.getDate();
+        var rows = evs.map(function (e) {
+          return '• ' + e.n + '　<span style="color:#8b8b93">' + e.t + '</span>　' + (e.imp === 'high' ? '<span style="color:#ef4444;font-weight:700">高影響</span>' : '<span style="color:#c98500;font-weight:700">中</span>');
+        }).join('<br>');
+        var src = (liveEcon !== null) ? '即時日曆' : '內建排程';
+        return '<strong>📅 今日重要數據（' + ds + '）</strong>　<span style="color:#52525b;font-size:11px">' + src + '</span><br>' + rows
+          + '<br><span style="color:#a1a1aa">數據公布前後波動放大：賣方留意 IV Crush、永續注意流動性與滑價、進場前先設停損。想針對某項數據怎麼佈局，直接問我。</span>';
+      }
+      function injectEconSummary() { var h = econSummaryHTML(); if (h) { addMsg('assistant', h); econShown = true; } }
 
       /* ── 視窗大小可調（拖曳左上角；面板錨定右下，故往左上拉即放大） ── */
       function clampW(w) { return Math.max(300, Math.min(w, Math.min(window.innerWidth - 24, 720))); }
@@ -2659,6 +2741,11 @@
       function sysPrompt() {
         var lines = ['你是「HakuTrade AI 助理」，鑲在使用者自建的跨市場交易儀表板右下角，用繁體中文協助分析與操作決策。你涵蓋三大市場、不限於選擇權：加密貨幣（現貨／選擇權／永續合約）、美股（個股／ETF／指數期貨／選擇權）、台股（個股／ETF／台指期／籌碼）。',
           '回答原則：先判斷使用者問的是哪個市場、哪種商品（個股、期貨、還是選擇權），對症回答；先給結論再給理由；一般問題約 200 字內，要求詳細才展開；能引用下方即時數據就引用並標明，數據沒有涵蓋的（例如某支美股個股即時報價）就依你的知識與使用者提供的價位分析，並提醒以券商即時報價為準；對高風險操作明確提示風險、部位控管與停損；不確定或缺數據時直說，不要編造數字。'];
+
+        /* 今日重要經濟數據（本地行事曆） */
+        var _ev = todaysEcon();
+        if (_ev.length)
+          lines.push('【今日重要經濟數據】' + _ev.map(function (e) { return e.n + '（' + e.t + '，' + (e.imp === 'high' ? '高影響' : '中影響') + '）'; }).join('；') + '。若使用者問今天有什麼數據，據此回答，並提醒公布前後波動放大、注意 IV 與流動性。');
 
         /* 加密貨幣：BTC 選擇權面板快照 */
         var s = window.WR_SNAPSHOT;
@@ -2792,8 +2879,11 @@
         var open = panel.classList.toggle('open');
         if (open) {
           applySize();
-          if (!msgsEl.children.length)
+          if (!msgsEl.children.length) {
             addMsg('assistant', '嗨，我是 HakuTrade AI 助理，涵蓋<strong>加密貨幣、美股、台股</strong>——選擇權、個股、期貨都能聊。我看得到本頁的<strong>即時數據</strong>：BTC 選擇權（現價、DVOL、IV、skew、OI 牆、資金費率）與台股籌碼（三大法人、融資融券；開過台股頁籤後）。想做什麼操作，直接問我合不合理。');
+            injectEconSummary(); /* 若今日有重要數據，主動提示 */
+          }
+          markEconSeen(); refreshBadge(); /* 點開＝已讀，紅點消失 */
           updateWebUI(); input.focus();
         }
       });
@@ -2825,6 +2915,8 @@
       input.addEventListener('input', function () { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 96) + 'px'; });
       chips.addEventListener('click', function (e) { if (e.target.tagName === 'BUTTON') send(e.target.textContent); });
       updateWebUI();
+      refreshBadge(); /* 載入時先以內建行事曆顯示紅色未讀數字（即時） */
+      fetchLiveEcon().catch(function () {}); /* 最佳努力抓 TradingView 即時日曆；成功則覆寫、失敗維持內建 */
     })();
     </script>
 </body>
