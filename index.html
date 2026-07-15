@@ -3101,10 +3101,13 @@
     #wr-calc .sc-field input,#wr-calc .sc-field select{width:100%;background:#1b1b1f;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#f4f4f5;font-size:13px;padding:8px 10px;outline:none;font-family:inherit;font-variant-numeric:tabular-nums}
     #wr-calc .sc-field input:focus,#wr-calc .sc-field select:focus{border-color:#06b6d4}
     #wr-calc #sc-basis-view{color:#8b8b93;cursor:default;background:#141416}
-    #wr-calc .sc-strat{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
-    #wr-calc .sc-strat .sc-field{flex:1;min-width:220px}
+    #wr-calc .sc-strat{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:end}
+    #wr-calc .sc-strat .sc-field{flex:0 0 auto}
+    #wr-calc #sc-select{width:260px;max-width:100%}
     #wr-calc .sc-chk{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#a1a1aa;cursor:pointer;white-space:nowrap;padding-bottom:2px}
     #wr-calc .sc-chk input{width:15px;height:15px;accent-color:#06b6d4;cursor:pointer}
+    #wr-calc .sc-help{font-size:11.5px;color:#71717a;line-height:1.7;background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.15);border-radius:9px;padding:8px 11px;margin-top:2px}
+    #wr-calc .sc-help b{color:#a1a1aa;font-weight:700}
     #wr-calc .sc-btn{font-size:12px;font-weight:700;border-radius:9px;padding:8px 12px;cursor:pointer;border:1px solid rgba(6,182,212,.3);background:rgba(6,182,212,.12);color:#22d3ee;font-family:inherit;white-space:nowrap}
     #wr-calc .sc-btn:hover{background:rgba(6,182,212,.2)}
     #wr-calc table.sc-legs{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -3393,7 +3396,7 @@
         var d = defaults();
         if (d.spot == null) { box.innerHTML = '<div class="wr-status" style="padding:24px 2px;color:#a1a1aa">等「即時分析」頁籤載入 BTC 現價後，這裡會自動帶入現價與 ATM IV。可先切到即時分析等它載入，再回來試算。</div>'; return; }
         built = true;
-        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), useSmile: false, legs: [] };
+        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), useSmile: true, legs: [] };
         box.innerHTML =
           '<div class="sc-wrap">'
           + '<div><div class="sc-hd">參數（預設帶入即時現價與近月 ATM IV；口數改由每個部位各自設定；1 口＝1 BTC、美元計價）</div>'
@@ -3404,8 +3407,8 @@
           + '<div class="sc-field"><label>年化基差（即時帶入）</label><input id="sc-basis-view" type="text" value="' + (state.basis >= 0 ? '+' : '') + state.basis + '%" readonly tabindex="-1" title="由面板即時期貨基差自動帶入，用於理論價的遠期定價，無需手動輸入"></div>'
           + '</div></div>'
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
-          + '<label class="sc-chk" title="改用面板「進階盤面」的波動率微笑，讓每個履約價用自己的市場 IV 定價（更貼近交易所報價）"><input type="checkbox" id="sc-smile"> 用市場 IV 微笑逐檔定價</label>'
           + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
+          + '<div class="sc-help"><b>理論價已用「波動率微笑」逐檔定價。</b> 不同履約價在市場上的隱含波動率（IV）其實各不相同——通常價外選擇權的 IV 比價平的高，畫成曲線像微笑（波動率微笑／偏斜）。本試算<b>每個部位都用它自己履約價的市場 IV</b> 估權利金，比所有部位套同一個 IV 更貼近交易所實際報價。資料取自「即時分析」的進階盤面；若尚未載入、或某履約價超出微笑範圍，會自動退回用上方的 IV 估算。</div>'
           + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-Scholes 理論價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
           + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約價</th><th style="text-align:right">權利金 (USD)</th><th style="text-align:right">口數</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
           + '<button class="sc-add" id="sc-add">＋ 新增部位</button></div>'
@@ -3431,11 +3434,6 @@
           if (state.strat === 'custom') recomputeAuto(); else rebuildLegs();
         });
         box.querySelector('#sc-add').addEventListener('click', addLeg);
-        box.querySelector('#sc-smile').addEventListener('change', function (e) {
-          state.useSmile = e.target.checked;
-          if (state.useSmile && (!window.WR_SMILE || !window.WR_SMILE.expiries || !window.WR_SMILE.expiries.length)) { e.target.checked = false; state.useSmile = false; alert('尚未取得波動率微笑資料——請先切到「即時分析」頁籤等面板載入完成，再回來勾選。'); return; }
-          recomputeAuto();
-        });
         rebuildLegs();
       }
 
