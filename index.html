@@ -990,6 +990,15 @@
           }
 
           /* ---------- 進階圖表（SVG） ---------- */
+          /* 產生「整數級距」的座標刻度（如 5K/10K 一格），讓橫軸更易判讀 */
+          function axisTicks(min, max, target) {
+            var span = max - min; if (span <= 0) return [min];
+            var raw = span / (target || 8), mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
+            var step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+            var ticks = [], start = Math.ceil(min / step) * step;
+            for (var v = start; v <= max + step * 1e-6; v += step) ticks.push(v);
+            return ticks;
+          }
           function smileSVG(smile, spot) {
             if (!smile || !smile.length) return '<div class="wr-foot">目前 IV 資料不足以繪製微笑曲線。</div>';
             var W = 720, H = 250, padL = 46, padR = 14, padT = 14, padB = 28, pw = W - padL - padR, ph = H - padT - padB;
@@ -1000,7 +1009,9 @@
             function Y(v) { return padT + (1 - (v - iMin) / (iMax - iMin)) * ph; }
             var cols = ['#0e9cb8', '#c98500', '#9085e9'], s = '';
             for (var t = 0; t <= 3; t++) { var iv = iMin + (iMax - iMin) * t / 3, yy = Y(iv); s += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#232326"/><text x="' + (padL - 5) + '" y="' + (yy + 3.5).toFixed(1) + '" font-size="10" fill="#71717a" text-anchor="end">' + iv.toFixed(0) + '%</text>'; }
-            for (var t2 = 0; t2 <= 4; t2++) { var kv = kMin + (kMax - kMin) * t2 / 4; s += '<text x="' + X(kv).toFixed(1) + '" y="' + (H - 9) + '" font-size="10" fill="#71717a" text-anchor="middle">$' + Math.round(kv / 1000) + 'K</text>'; }
+            axisTicks(kMin, kMax, 8).forEach(function (kv) { if (kv < kMin || kv > kMax) return; var xx = X(kv);
+              s += '<line x1="' + xx.toFixed(1) + '" y1="' + padT + '" x2="' + xx.toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#1c1c1f"/>';
+              s += '<text x="' + xx.toFixed(1) + '" y="' + (H - 9) + '" font-size="10" fill="#71717a" text-anchor="middle">$' + Math.round(kv / 1000) + 'K</text>'; });
             s += '<line x1="' + X(spot).toFixed(1) + '" y1="' + padT + '" x2="' + X(spot).toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#06b6d4" stroke-width="1" stroke-dasharray="4 3"/>';
             smile.forEach(function (sm, i) { var pts = sm.pts.map(function (p) { return X(p.K).toFixed(1) + ',' + Y(p.iv).toFixed(1); }).join(' '); s += '<polyline points="' + pts + '" fill="none" stroke="' + cols[i % 3] + '" stroke-width="2" stroke-linejoin="round"/>'; });
             var lgd = '<div class="wr-lgd">' + smile.map(function (sm, i) { return '<span><i style="background:' + cols[i % 3] + '"></i>' + esc(sm.expiry) + '（' + sm.dte + '天）</span>'; }).join('') + '<span><i style="background:#06b6d4"></i>現價</span></div>';
@@ -1014,11 +1025,17 @@
             var kMin = Math.min.apply(null, bars.map(function (x) { return x.K; })), kMax = Math.max.apply(null, bars.map(function (x) { return x.K; }));
             function X(k) { return padL + (k - kMin) / ((kMax - kMin) || 1) * pw; }
             var zeroY = padT + ph / 2, bw = Math.max(2, pw / bars.length * 0.66), s = '';
+            axisTicks(kMin, kMax, 8).forEach(function (kv) { if (kv < kMin || kv > kMax) return; var xx = X(kv);
+              s += '<line x1="' + xx.toFixed(1) + '" y1="' + padT + '" x2="' + xx.toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#1c1c1f"/>'; });
             s += '<line x1="' + padL + '" y1="' + zeroY + '" x2="' + (W - padR) + '" y2="' + zeroY + '" stroke="#5b5b63"/>';
             bars.forEach(function (x) { var h = Math.abs(x.gex) / mx * (ph / 2 - 4), xx = X(x.K) - bw / 2, y = x.gex >= 0 ? zeroY - h : zeroY; s += '<rect x="' + xx.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="' + (x.gex >= 0 ? '#0da271' : '#ef4444') + '" fill-opacity="0.75"/>'; });
-            s += '<line x1="' + X(spot).toFixed(1) + '" y1="' + padT + '" x2="' + X(spot).toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#06b6d4" stroke-dasharray="4 3"/><text x="' + X(spot).toFixed(1) + '" y="' + (padT - 4) + '" font-size="10" fill="#22d3ee" text-anchor="middle">現價</text>';
-            if (gex.flip) s += '<line x1="' + X(gex.flip).toFixed(1) + '" y1="' + padT + '" x2="' + X(gex.flip).toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#e4e4e7" stroke-dasharray="2 2"/><text x="' + X(gex.flip).toFixed(1) + '" y="' + (padT - 4) + '" font-size="10" fill="#a1a1aa" text-anchor="middle">flip</text>';
-            for (var t = 0; t <= 4; t++) { var kv = kMin + (kMax - kMin) * t / 4; s += '<text x="' + X(kv).toFixed(1) + '" y="' + (H - 6) + '" font-size="10" fill="#71717a" text-anchor="middle">$' + Math.round(kv / 1000) + 'K</text>'; }
+            /* 現價與 flip 線；標籤若過近則左右錯開，避免「現價flip」疊字 */
+            var spotX = X(spot), flipX = gex.flip ? X(gex.flip) : null;
+            var near = flipX != null && Math.abs(flipX - spotX) < 34;
+            s += '<line x1="' + spotX.toFixed(1) + '" y1="' + padT + '" x2="' + spotX.toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#06b6d4" stroke-dasharray="4 3"/><text x="' + (spotX + (near ? -5 : 0)).toFixed(1) + '" y="' + (padT - 4) + '" font-size="10" fill="#22d3ee" text-anchor="' + (near ? 'end' : 'middle') + '">現價</text>';
+            if (gex.flip) s += '<line x1="' + flipX.toFixed(1) + '" y1="' + padT + '" x2="' + flipX.toFixed(1) + '" y2="' + (padT + ph) + '" stroke="#e4e4e7" stroke-dasharray="2 2"/><text x="' + (flipX + (near ? 5 : 0)).toFixed(1) + '" y="' + (padT - 4) + '" font-size="10" fill="#a1a1aa" text-anchor="' + (near ? 'start' : 'middle') + '">flip</text>';
+            axisTicks(kMin, kMax, 8).forEach(function (kv) { if (kv < kMin || kv > kMax) return;
+              s += '<text x="' + X(kv).toFixed(1) + '" y="' + (H - 6) + '" font-size="10" fill="#71717a" text-anchor="middle">$' + Math.round(kv / 1000) + 'K</text>'; });
             return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block" role="img" aria-label="Gamma 曝險">' + s + '</svg>';
           }
           function flowHTML(flow) {
