@@ -3211,8 +3211,9 @@
       }
 
       function legPnl(l, S) {
-        var intr = l.t === 'C' ? Math.max(S - l.K, 0) : l.t === 'P' ? Math.max(l.K - S, 0) : (S - l.entry);
-        var prem = l.t === 'U' ? 0 : l.prem;
+        var intr = l.t === 'C' ? Math.max(S - l.K, 0) : l.t === 'P' ? Math.max(l.K - S, 0)
+          : l.t === 'F' ? (S - l.K) : (S - l.entry);
+        var prem = (l.t === 'U' || l.t === 'F') ? 0 : l.prem;
         return l.d * (l.qty || 1) * (intr - prem);
       }
       function totalPnl(legs, S) { var p = 0; for (var i = 0; i < legs.length; i++) p += legPnl(legs[i], S); return p; }
@@ -3221,7 +3222,7 @@
         var strikes = legs.filter(function (l) { return l.t !== 'U'; }).map(function (l) { return l.K; });
         var kinks = [0].concat(strikes).concat([S0 * 3]);
         var vals = kinks.map(function (k) { return totalPnl(legs, k); });
-        var upSlope = legs.reduce(function (a, l) { return a + ((l.t === 'C' || l.t === 'U') ? l.d * (l.qty || 1) : 0); }, 0);
+        var upSlope = legs.reduce(function (a, l) { return a + ((l.t === 'C' || l.t === 'U' || l.t === 'F') ? l.d * (l.qty || 1) : 0); }, 0);
         var maxP = upSlope > 0 ? Infinity : Math.max.apply(null, vals);
         var maxL = upSlope < 0 ? -Infinity : Math.min.apply(null, vals);
         /* 損益兩平：細掃 0→2.5S 找變號點 */
@@ -3229,7 +3230,7 @@
         for (var i = 1; i <= N; i++) { var s = lo + (hi - lo) * i / N, v = totalPnl(legs, s);
           if ((prev <= 0 && v > 0) || (prev >= 0 && v < 0)) { var f = prev / (prev - v); be.push(prevS + (s - prevS) * f); }
           prev = v; prevS = s; }
-        var netDebit = legs.reduce(function (a, l) { return a + (l.t === 'U' ? 0 : l.d * (l.qty || 1) * l.prem); }, 0);
+        var netDebit = legs.reduce(function (a, l) { return a + ((l.t === 'U' || l.t === 'F') ? 0 : l.d * (l.qty || 1) * l.prem); }, 0);
         var rr = (maxP > 0 && maxP !== Infinity && maxL < 0 && maxL !== -Infinity) ? (maxP / Math.abs(maxL)) : null;
         return { maxP: maxP, maxL: maxL, be: be, netDebit: netDebit, rr: rr, atSpot: totalPnl(legs, S0) };
       }
@@ -3297,7 +3298,7 @@
       function premInput(i) { return box.querySelector('#sc-legs-body input[data-leg="' + i + '"][data-f="prem"]'); }
 
       function markCustom() { state.strat = 'custom'; var sel = box.querySelector('#sc-select'); if (sel) sel.value = 'custom'; }
-      function autoPrem(l) { return l.t === 'U' ? 0 : Math.round(theoPrice(l.t, l.K)); }
+      function autoPrem(l) { return (l.t === 'U' || l.t === 'F') ? 0 : Math.round(theoPrice(l.t, l.K)); }
       function theoTxt(l) { return '理論：$' + autoPrem(l).toLocaleString('en-US'); }
       function refreshTheo(i) { var sp = box.querySelector('#sc-theo-' + i); if (sp) sp.textContent = theoTxt(state.legs[i]); }
 
@@ -3308,9 +3309,9 @@
         var opt = function (v, txt, cur) { return '<option value="' + v + '"' + (v === cur ? ' selected' : '') + '>' + txt + '</option>'; };
         body.innerHTML = state.legs.map(function (l, i) {
           var dSel = '<select class="' + (l.d > 0 ? 'd-buy' : 'd-sell') + '" data-leg="' + i + '" data-f="d">' + opt('1', '買', String(l.d)) + opt('-1', '賣', String(l.d)) + '</select>';
-          var tSel = '<select data-leg="' + i + '" data-f="t">' + opt('C', '買權 Call', l.t) + opt('P', '賣權 Put', l.t) + opt('U', '現貨 BTC', l.t) + '</select>';
+          var tSel = '<select data-leg="' + i + '" data-f="t">' + opt('C', '買權 Call', l.t) + opt('P', '賣權 Put', l.t) + opt('F', '期貨 Futures', l.t) + opt('U', '現貨 BTC', l.t) + '</select>';
           var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="K" value="' + l.K + '">';
-          var pCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="theo" id="sc-theo-' + i + '" data-leg="' + i + '" title="Black-Scholes 理論價・點此套用">' + theoTxt(l) + '</span>';
+          var pCell = (l.t === 'U' || l.t === 'F') ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="theo" id="sc-theo-' + i + '" data-leg="' + i + '" title="Black-Scholes 理論價・點此套用">' + theoTxt(l) + '</span>';
           var qCell = '<input type="text" inputmode="numeric" autocomplete="off" data-leg="' + i + '" data-f="qty" value="' + (l.qty || 1) + '" style="width:56px">';
           return '<tr><td>' + dSel + '</td><td>' + tSel + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td><td class="r">' + qCell + '</td><td class="r"><button class="sc-rm" data-leg="' + i + '" title="刪除此部位">✕</button></td></tr>';
         }).join('');
@@ -3342,7 +3343,9 @@
           se.addEventListener('change', function () {
             var i = +se.getAttribute('data-leg'), f = se.getAttribute('data-f');
             if (f === 'd') state.legs[i].d = +se.value;
-            else { state.legs[i].t = se.value; if (state.legs[i].t === 'U') state.legs[i].entry = state.spot;
+            else { state.legs[i].t = se.value;
+              if (state.legs[i].t === 'U') state.legs[i].entry = state.spot;
+              else if (state.legs[i].t === 'F') { state.legs[i].K = Math.round(state.spot); state.legs[i].prem = 0; }
               else if (state.legs[i].premAuto) state.legs[i].prem = autoPrem(state.legs[i]); }
             markCustom(); renderLegs(); renderOutputs();
           });
@@ -3399,10 +3402,9 @@
         state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), useSmile: true, legs: [] };
         box.innerHTML =
           '<div class="sc-wrap">'
-          + '<div><div class="sc-hd">參數（預設帶入即時現價與近月 ATM IV；口數改由每個部位各自設定；1 口＝1 BTC、美元計價）</div>'
+          + '<div><div class="sc-hd">參數（現價即時帶入；IV 由波動率微笑逐檔自動套用、基差即時帶入，皆無需手動輸入；口數改由每個部位各自設定；1 口＝1 BTC、美元計價）</div>'
           + '<div class="sc-inputs">'
           + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="text" inputmode="decimal" autocomplete="off" value="' + state.spot + '"></div>'
-          + '<div class="sc-field"><label>隱含波動率 IV (%)</label><input id="sc-iv" type="text" inputmode="decimal" autocomplete="off" value="' + state.iv + '"></div>'
           + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" inputmode="decimal" autocomplete="off" value="' + state.dte + '"></div>'
           + '<div class="sc-field"><label>年化基差（即時帶入）</label><input id="sc-basis-view" type="text" value="' + (state.basis >= 0 ? '+' : '') + state.basis + '%" readonly tabindex="-1" title="由面板即時期貨基差自動帶入，用於理論價的遠期定價，無需手動輸入"></div>'
           + '</div></div>'
@@ -3410,26 +3412,25 @@
           + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
           + '<div class="sc-help"><b>理論價已用「波動率微笑」逐檔定價。</b> 不同履約價在市場上的隱含波動率（IV）其實各不相同——通常價外選擇權的 IV 比價平的高，畫成曲線像微笑（波動率微笑／偏斜）。本試算<b>每個部位都用它自己履約價的市場 IV</b> 估權利金，比所有部位套同一個 IV 更貼近交易所實際報價。資料取自「即時分析」的進階盤面；若尚未載入、或某履約價超出微笑範圍，會自動退回用上方的 IV 估算。</div>'
           + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-Scholes 理論價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
-          + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約價</th><th style="text-align:right">權利金 (USD)</th><th style="text-align:right">口數</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
+          + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約/進場價</th><th style="text-align:right">權利金 (USD)</th><th style="text-align:right">口數</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
           + '<button class="sc-add" id="sc-add">＋ 新增部位</button></div>'
           + '<div><div class="sc-hd">損益指標</div><div class="sc-metrics" id="sc-metrics"></div></div>'
           + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
-          + '<div class="sc-note">損益＝到期內在價值，未計手續費與提前平倉的時間價值。理論價用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價（比 r=0 用現價更貼近交易所），但只用單一 IV、未套用各履約價的波動率微笑（smile/skew），故與交易所各檔報價仍會有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
+          + '<div class="sc-note">損益＝到期內在價值，未計手續費與提前平倉的時間價值。期貨部位為線性損益＝方向×口數×(到期價−進場價)，在「履約/進場價」欄填你的進場價，無權利金、無時間價值，常用來與選擇權搭配（如避險、合成部位）。理論價（選擇權）用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價，並由波動率微笑逐檔套用各履約價的市場 IV；若微笑尚未載入或超出範圍會退回單一 IV，與交易所各檔報價仍可能有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
           + '</div>';
         var sel = box.querySelector('#sc-select');
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
         sel.value = state.strat;
         sel.addEventListener('change', function () { state.strat = sel.value; rebuildLegs(); });
-        /* 現價/IV/DTE 改變只重算理論權利金與圖，保留使用者微調過的履約價，不重建腿位列 */
+        /* 現價/DTE 改變只重算理論權利金與圖，保留使用者微調過的履約價，不重建腿位列 */
         box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.spot = v; recomputeAuto(); } });
-        box.querySelector('#sc-iv').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.iv = v; recomputeAuto(); } });
         box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (v > 0) { state.dte = v; recomputeAuto(); } });
         box.querySelector('#sc-reload').addEventListener('click', function () {
           var d2 = defaults(); if (d2.spot == null) return;
           state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1); state.basis = +d2.basis.toFixed(1);
-          box.querySelector('#sc-spot').value = state.spot; box.querySelector('#sc-iv').value = state.iv;
+          box.querySelector('#sc-spot').value = state.spot;
           var bv = box.querySelector('#sc-basis-view'); if (bv) bv.value = (state.basis >= 0 ? '+' : '') + state.basis + '%';
           if (state.strat === 'custom') recomputeAuto(); else rebuildLegs();
         });
