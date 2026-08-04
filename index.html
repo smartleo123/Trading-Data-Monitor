@@ -2387,7 +2387,7 @@
       }
       function lineChart(el, series) { /* [{date, v}] 舊→新，億元：X 軸日期、Y 軸餘額、hover 浮窗 */
         if (!series.length) { el.innerHTML = '<span class="twc-err">近期數據暫時無法取得。</span>'; return; }
-        var W = 720, H = 230, padL = 54, padR = 14, padT = 12, padB = 30;
+        var W = 720, H = 236, padL = 54, padR = 14, padT = 26, padB = 30;
         var n = series.length, plotW = W - padL - padR, plotH = H - padT - padB;
         var vs = series.map(function (s) { return s.v; });
         var mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), span = (mx - mn) || Math.abs(mx) || 1;
@@ -2402,7 +2402,7 @@
           s += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#27272a" stroke-width="1"/>';
           s += '<text x="' + (padL - 6) + '" y="' + (yy + 3.5).toFixed(1) + '" font-size="11" fill="#71717a" text-anchor="end">' + Math.round(yv) + '</text>';
         }
-        s += '<text x="10" y="' + (padT + 4) + '" font-size="10.5" fill="#8b8b93">億元</text>';
+        s += '<text x="' + (padL - 6) + '" y="12" font-size="10.5" fill="#8b8b93" text-anchor="end">億元</text>';
         /* X 軸日期刻度（約 5 個） */
         var stepX = Math.max(1, Math.round((n - 1) / 4));
         for (var i = 0; i < n; i += stepX) {
