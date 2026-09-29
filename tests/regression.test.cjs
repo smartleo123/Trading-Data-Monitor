@@ -1,0 +1,43 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const {JSDOM,VirtualConsole}=require('jsdom');
+const html=fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8');
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+async function boot(t,{icons=true}={}) {
+  const calls=[],timers=new Map(),errors=[];let next=1;
+  const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
+  const dom=new JSDOM(html,{url:'https://test.invalid/',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){
+    Object.defineProperty(w.HTMLElement.prototype,'innerText',{get(){return this.textContent},set(v){this.textContent=v}});
+    w.tailwind={};if(icons)w.lucide={createIcons(){}};
+    w.fetch=(...args)=>{calls.push(args);return new Promise(()=>{})};
+    w.AbortController=AbortController;
+    w.setTimeout=(fn,ms)=>{const id=next++;timers.set(id,{fn,ms});return id};w.clearTimeout=id=>timers.delete(id);
+    w.setInterval=(fn,ms)=>{const id=next++;timers.set(id,{fn,ms,interval:true});return id};w.clearInterval=w.clearTimeout;
+    w.requestAnimationFrame=()=>0;w.HTMLCanvasElement.prototype.getContext=()=>null;
+  }});
+  t.after(()=>dom.window.close());await flush();
+  const w=dom.window,d=w.document;
+  const input=(selector,value)=>{const el=d.querySelector(selector);assert.ok(el,selector);el.value=String(value);el.dispatchEvent(new w.Event('input',{bubbles:true}));};
+  const select=(selector,value)=>{const el=d.querySelector(selector);el.value=value;el.dispatchEvent(new w.Event('change',{bubbles:true}));};
+  const metric=label=>[...d.querySelectorAll('#sc-metrics .sc-tile')].find(e=>e.querySelector('.k').textContent===label)?.querySelector('.v').textContent;
+  const calc=()=>{w.WR_SNAPSHOT={spot:100000,ivRows:[{atmIV:45}],basisAnnual:0};d.getElementById('wr-tab-calc').click();};
+  return {w,d,calls,timers,errors,input,select,metric,calc};
+}
+const leg=(i,f)=>`#sc-legs-body [data-leg="${i}"][data-f="${f}"]`;
+test('all inline JavaScript parses',()=>{for(const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi))if(!/\bsrc=/.test(m[1]))new vm.Script(m[2]);});
+test('page initializes and all three market buttons switch their panels',async t=>{const a=await boot(t);assert.deepEqual(a.errors,[]);for(const view of ['tw-stock','us-stock','crypto']){a.d.getElementById('market-tab-'+view).click();for(const other of ['tw-stock','us-stock','crypto'])assert.equal(a.d.getElementById('market-view-'+other).classList.contains('hidden'),other!==view);}});
+test('missing icon CDN does not stop initial crypto quote requests',async t=>{const a=await boot(t,{icons:false});assert.deepEqual(a.errors,[]);assert.ok(a.calls.some(([url])=>url.includes('ticker/24hr?symbol=BTCUSDT')));});
+test('narrow bull call spread has exact break-even inside strike interval',async t=>{const a=await boot(t);a.calc();a.select('#sc-select','bull-call');a.input(leg(0,'K'),100100);a.input(leg(1,'K'),100200);a.input(leg(0,'prem'),75);a.input(leg(1,'prem'),25);assert.equal(a.metric('損益兩平'),'$100,150');assert.equal(a.metric('最大獲利'),'$50');assert.equal(a.metric('最大虧損'),'-$50');});
+test('break-even is not truncated at 2.5 times spot',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),300000);a.input(leg(0,'prem'),1000);assert.equal(a.metric('損益兩平'),'$301,000');});
+test('straddle preserves two break-even prices',async t=>{const a=await boot(t);a.calc();a.select('#sc-select','straddle');a.input(leg(0,'prem'),1000);a.input(leg(1,'prem'),1000);assert.equal(a.metric('損益兩平'),'$98,000、$102,000');});
+test('invalid strikes and quantities show an error instead of stale metrics',async t=>{const a=await boot(t);a.calc();for(const [field,values] of [['K',[-1,0,'abc','1abc','']],['qty',[0,-1,1.5,'']],['prem',[-1]]]){for(const v of values){a.input(leg(0,field),v);assert.equal(a.d.querySelector(leg(0,field)).getAttribute('aria-invalid'),'true');assert.ok(a.d.querySelector('#sc-metrics [role=alert]'));assert.equal(a.d.querySelector('#sc-svg'),null);}a.input(leg(0,field),field==='K'?100000:field==='qty'?1:1000);assert.equal(a.d.querySelector('#sc-metrics [role=alert]'),null);}assert.ok(!a.d.querySelector('#sc-metrics').textContent.includes('NaN'));});
+test('invalid spot or DTE suppresses output and valid input restores it',async t=>{const a=await boot(t);a.calc();for(const selector of ['#sc-spot','#sc-dte']){a.input(selector,0);assert.ok(a.d.querySelector('[role=alert]'));a.input(selector,selector==='#sc-spot'?100000:30);assert.ok(a.metric('最大虧損'));}});
+test('manual leg edits survive refresh of live parameters',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),110000);a.input(leg(0,'prem'),1234);a.d.getElementById('sc-reload').click();assert.equal(a.d.querySelector(leg(0,'K')).value,'110000');assert.equal(a.d.querySelector(leg(0,'prem')).value,'1234');});
+test('adding and removing legs remains functional',async t=>{const a=await boot(t);a.calc();a.d.getElementById('sc-add').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,2);a.d.querySelector('.sc-rm').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,1);});
+test('pending crypto requests are shared, and settled requests may retry',async t=>{const a=await boot(t);a.w.eval('cryptoQuotePending.clear()');let resolve;let count=0;a.w.fetch=()=>{count++;return new Promise(r=>resolve=r)};const first=a.w.fetchCryptoQuote('BTCUSDT');assert.equal(first,a.w.fetchCryptoQuote('BTCUSDT'));assert.equal(count,1);resolve({ok:true,json:async()=>({lastPrice:'100'})});await first;a.w.fetchCryptoQuote('BTCUSDT');assert.equal(count,2);});
+test('Taiwan quotes leave LIVE on failure, avoid overlapping requests and recover',async t=>{const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');const q={price:100,prevClose:99,marketTime:Date.now()/1000};a.w.eval('document.querySelectorAll("[data-tw-quote]").forEach(c=>twCardPending.delete(c))');a.w.updateTwCard(card,q,true);const rejects=[];a.w.fetchYahooQuote=()=>new Promise((_,reject)=>rejects.push(reject));a.w.fetchTwQuotes();const n=rejects.length;a.w.fetchTwQuotes();assert.equal(rejects.length,n);rejects.forEach(r=>r(new Error('offline')));await flush();assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');a.w.fetchYahooQuote=async()=>q;a.w.isTwMarketOpen=()=>true;a.w.fetchTwQuotes();await flush();assert.equal(card.querySelector('[data-tw-status]').textContent,'LIVE');});
+test('stalled proxy requests remove LIVE after watchdog timeout',async t=>{const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');a.w.updateTwCard(card,{price:100,prevClose:99,marketTime:Date.now()/1000},true);for(const timer of a.timers.values())if(timer.ms===10000)timer.fn();assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');});
+for(const provider of ['groq','free'])test(`${provider} AI timeout restores controls and original message`,async t=>{const a=await boot(t);if(provider==='groq')a.w.localStorage.setItem('groq_api_key','fixture-not-a-real-key');let signal;a.w.fetch=(_,options)=>{signal=options.signal;return new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(Object.assign(new Error('aborted'),{name:'AbortError'}))))};a.input('#ha-input','test question');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,true);assert.ok(signal);for(const timer of [...a.timers.values()])if(timer.ms===30000&&!timer.interval)timer.fn();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.equal(a.d.getElementById('ha-input').value,'test question');assert.match(a.d.querySelector('#ha-msgs .err').textContent,/逾時/);});
+test('AI success renders text and restores controls',async t=>{const a=await boot(t);a.w.localStorage.setItem('groq_api_key','fixture');a.w.fetch=async()=>({ok:true,status:200,json:async()=>({choices:[{message:{content:'test reply'}}]})});a.input('#ha-input','test');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.match(a.d.getElementById('ha-msgs').textContent,/test reply/);});
