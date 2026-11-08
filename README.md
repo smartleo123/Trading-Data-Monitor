@@ -188,3 +188,40 @@ it excludes liquidity changes, actual exit costs beyond user assumptions,
 liquidations, and assignment/settlement-specific costs.
 
 No trading APIs, authentication or order placement are used.
+
+## Deribit inverse-option quote audit and historical replay (November 2026)
+
+The read-only market-data pipeline records a production Deribit quote-book
+sample every four hours using official `get_time`, `get_index_price`,
+`get_instruments`, and `get_order_book` endpoints. Source audit metadata
+resides in `assets/data/deribit/source-audit.json`; independently checked
+contract books are appended to `assets/data/deribit/quote-history.json`
+under timestamped observations. Invalid, stale, illiquid, contradictory or
+wrong-contract responses are rejected without inventing values.
+
+The BTC inverse option calculation now keeps an option's original premium
+in BTC; BTC expiration settlement uses
+`max(S-K,0)/S - premium_btc` for calls, or
+`max(K-S,0)/S - premium_btc` for puts. USD-equivalent settlement
+P&L is BTC P&L multiplied by the *exit/settlement* BTC/USD price;
+using the entry BTC/USD price forever is incorrect. The resulting
+USD-marked max loss and break-even can differ from a linear USD option.
+Official methodology: https://support.deribit.com/hc/en-us/articles/31424939096093-Inverse-Options
+
+The new strategy replay uses only genuine archived **entry ask / entry bid**
+and **exit bid / exit ask** for the *same* option contract, with depth and
+timestamp validation on both ends, explicit fee assumptions, and no overlapping
+holds. Strategies: long call, long straddle, bull-call debit spread,
+bear-put debit spread and iron condor. Available horizons: 1, 3 or 7 days.
+Missing exit books and market closures cause skipped trades, never synthesized
+fills. Exchange top-of-book may not be executable at the shown size due to
+latency and adverse selection.
+
+**No pre-collection historical order-book archive exists in this repository.**
+The history must accumulate from the first successful scheduled capture.
+Less than 20 complete trades explicitly suppresses profitability claims.
+This is forward-collected historical quote replay, not a backfilled study
+of years of verified real fills. Win rate, profit factor, average BTC P&L and
+drawdown appear only with enough eligible observations. No automatic orders
+are sent. An actual quantitative trading edge would require much more data,
+out-of-sample validation, execution simulation and robustness tests.
