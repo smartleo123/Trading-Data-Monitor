@@ -1,0 +1,73 @@
+/* 全部樣式限定在 #btc-options-weekly 之內，不影響頁面其他元素 */
+        #btc-options-weekly{--wr-card2:#1b1b1f;--wr-ink:#f4f4f5;--wr-ink2:#a1a1aa;--wr-muted:#8b8b93;--wr-grid:#27272a;--wr-border:rgba(255,255,255,.08);--wr-cyan:#06b6d4;--wr-green:#10b981;--wr-red:#ef4444;--wr-mark-s:#0da271;--wr-mark-r:#ef4444;--wr-mark-a:#0e9cb8}
+        #btc-options-weekly .wr-maintabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--wr-grid);padding-bottom:12px}
+        #btc-options-weekly .wr-maintab{font-size:13px;font-weight:700;padding:7px 16px;border-radius:10px;cursor:pointer;background:none;border:1px solid transparent;color:#a1a1aa;font-family:inherit;transition:all .15s}
+        #btc-options-weekly .wr-maintab:hover{color:#e4e4e7}
+        #btc-options-weekly .wr-maintab.active{background:rgba(6,182,212,.12);color:var(--wr-cyan);border-color:rgba(6,182,212,.25)}
+        #btc-options-weekly .wr-glink{margin-left:auto;align-self:center;font-size:12px;font-weight:700;color:#a855f7;text-decoration:none;padding:6px 14px;border-radius:10px;background:#1b1b1f;border:1px solid rgba(255,255,255,.08);transition:color .15s,border-color .15s}
+        #btc-options-weekly .wr-glink:hover{color:#fff;border-color:rgba(168,85,247,.4)}
+        #btc-options-weekly .wr-status{color:var(--wr-ink2);font-size:13px;display:flex;align-items:center;gap:10px;padding:14px 2px}
+        #btc-options-weekly .wr-spin{width:16px;height:16px;border:2px solid var(--wr-grid);border-top-color:var(--wr-cyan);border-radius:50%;animation:wr-rot 1s linear infinite}
+        @keyframes wr-rot{to{transform:rotate(360deg)}}
+        #btc-options-weekly .wr-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--wr-muted);margin-bottom:12px}
+        #btc-options-weekly .wr-bar button{color:var(--wr-cyan);background:none;border:1px solid var(--wr-border);border-radius:999px;padding:2px 12px;cursor:pointer;font-size:11.5px}
+        #btc-options-weekly .wr-bar button:hover{border-color:var(--wr-cyan)}
+        #btc-options-weekly .wr-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+        #btc-options-weekly .wr-tile{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:11px 13px}
+        #btc-options-weekly .wr-tile .k{font-size:11px;color:var(--wr-muted)}
+        #btc-options-weekly .wr-tile .v{font-size:19px;font-weight:700;color:var(--wr-ink);margin-top:1px}
+        #btc-options-weekly .wr-tile .d{font-size:11px;color:var(--wr-ink2);margin-top:1px;line-height:1.5}
+        #btc-options-weekly .wr-h{font-size:14.5px;font-weight:700;color:var(--wr-ink);margin:22px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--wr-grid)}
+        #btc-options-weekly .wr-h .no{color:var(--wr-cyan);font-weight:600;margin-right:7px;font-size:12.5px}
+        #btc-options-weekly .wr-lead{color:var(--wr-ink2);font-size:13px;line-height:1.8;margin-bottom:10px}
+        #btc-options-weekly .wr-ladder{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:14px 16px}
+        #btc-options-weekly .wr-lrow{display:flex;align-items:center;gap:11px;padding:6px 0;border-bottom:1px dashed var(--wr-grid)}
+        #btc-options-weekly .wr-lrow:last-child{border-bottom:none}
+        #btc-options-weekly .wr-lp{flex:0 0 122px;font-variant-numeric:tabular-nums;font-weight:700;font-size:13.5px;text-align:right}
+        #btc-options-weekly .wr-lb{height:9px;border-radius:4px;flex:0 0 auto}
+        #btc-options-weekly .wr-ln{font-size:12px;color:var(--wr-ink2)}
+        #btc-options-weekly .wr-r{color:var(--wr-red)}#btc-options-weekly .wr-s{color:var(--wr-green)}
+        #btc-options-weekly .wr-br{background:var(--wr-mark-r)}#btc-options-weekly .wr-bs{background:var(--wr-mark-s)}
+        #btc-options-weekly .wr-bspot{background:var(--wr-ink);height:2px!important;border-radius:0}
+        #btc-options-weekly .wr-lp.spot{color:var(--wr-ink)}
+        #btc-options-weekly table.wr-t{width:100%;border-collapse:collapse;background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;overflow:hidden;font-size:12.5px;margin-top:10px}
+        #btc-options-weekly table.wr-t th,#btc-options-weekly table.wr-t td{padding:9px 12px;text-align:left;vertical-align:top;color:var(--wr-ink2)}
+        #btc-options-weekly table.wr-t thead th{font-size:11.5px;color:var(--wr-muted);font-weight:600;border-bottom:1px solid var(--wr-grid)}
+        #btc-options-weekly table.wr-t tbody tr+tr td{border-top:1px solid var(--wr-grid)}
+        #btc-options-weekly table.wr-t td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;color:var(--wr-ink)}
+        #btc-options-weekly .wr-dl{color:var(--wr-green);font-weight:700}#btc-options-weekly .wr-ds{color:var(--wr-red);font-weight:700}
+        #btc-options-weekly .wr-cards{display:grid;grid-template-columns:1fr;gap:11px}
+        @media(min-width:900px){#btc-options-weekly .wr-cards{grid-template-columns:1fr 1fr}}
+        #btc-options-weekly .wr-card{background:var(--wr-card2);border:1px solid var(--wr-border);border-radius:11px;padding:14px 16px}
+        #btc-options-weekly .wr-card h4{font-size:13.5px;font-weight:700;color:var(--wr-ink);margin:0 0 3px}
+        #btc-options-weekly .wr-badge{display:inline-block;font-size:10.5px;font-weight:600;border-radius:999px;padding:1px 9px;margin-bottom:7px;background:rgba(6,182,212,.12);color:var(--wr-cyan)}
+        #btc-options-weekly .wr-badge.warn{background:rgba(239,68,68,.12);color:var(--wr-red)}
+        #btc-options-weekly .wr-card p{font-size:12px;color:var(--wr-ink2);margin:0}
+        #btc-options-weekly .wr-how{margin:7px 0;padding:9px 11px;background:rgba(0,0,0,.35);border-radius:8px;font-size:12px;color:var(--wr-ink)}
+        #btc-options-weekly .wr-risk{font-size:11px;color:var(--wr-muted);margin-top:7px!important}
+        #btc-options-weekly ul.wr-tips{list-style:none;margin:8px 0 0;padding:0}
+        #btc-options-weekly ul.wr-tips li{padding:6px 0 6px 16px;position:relative;font-size:12.5px;color:var(--wr-ink2);border-bottom:1px dashed var(--wr-grid)}
+        #btc-options-weekly ul.wr-tips li:last-child{border-bottom:none}
+        #btc-options-weekly ul.wr-tips li::before{content:"";position:absolute;left:1px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--wr-cyan)}
+        #btc-options-weekly .wr-callout{border-left:3px solid var(--wr-red);background:var(--wr-card2);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px;font-size:12px;color:var(--wr-ink2)}
+        #btc-options-weekly .wr-cards3{display:grid;grid-template-columns:1fr;gap:11px;margin-top:6px}
+        @media(min-width:1100px){#btc-options-weekly .wr-cards3{grid-template-columns:1fr 1fr 1fr}}
+        #btc-options-weekly .wr-badge.buy{background:rgba(16,185,129,.12);color:var(--wr-green)}
+        #btc-options-weekly .wr-badge.sell{background:rgba(245,158,11,.12);color:#f59e0b}
+        #btc-options-weekly .wr-advice li{padding:7px 0 7px 15px;position:relative;font-size:12.5px;color:var(--wr-ink2);border-bottom:1px dashed var(--wr-grid);list-style:none}
+        #btc-options-weekly .wr-advice li:last-child{border-bottom:none}
+        #btc-options-weekly .wr-advice li::before{content:"";position:absolute;left:1px;top:14px;width:5px;height:5px;border-radius:50%;background:var(--wr-muted)}
+        #btc-options-weekly .wr-advice li strong{color:var(--wr-ink)}
+        #btc-options-weekly .wr-stance{font-size:12px;font-weight:700;border-radius:8px;padding:2px 10px;margin-left:6px}
+        #btc-options-weekly .wr-stance.good{background:rgba(16,185,129,.15);color:var(--wr-green)}
+        #btc-options-weekly .wr-stance.bad{background:rgba(239,68,68,.15);color:var(--wr-red)}
+        #btc-options-weekly .wr-stance.mid{background:rgba(139,139,147,.15);color:var(--wr-ink2)}
+        #btc-options-weekly .wr-foot{margin-top:18px;padding-top:12px;border-top:1px solid var(--wr-grid);font-size:11px;color:var(--wr-muted);line-height:1.7}
+        #btc-options-weekly .wr-subh{font-size:12.5px;font-weight:700;color:#a1a1aa;margin:10px 0 6px}
+        #btc-options-weekly .wr-subh.mt{margin-top:18px}
+        #btc-options-weekly .wr-chart{border:1px solid var(--wr-grid);border-radius:12px;background:rgba(0,0,0,.25);padding:8px}
+        #btc-options-weekly .wr-lgd{display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--wr-ink2);padding:6px 4px 2px}
+        #btc-options-weekly .wr-lgd i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+        #btc-options-weekly .wr-blk{font-size:10px;font-weight:700;color:#c98500;background:rgba(201,133,0,.14);border-radius:5px;padding:1px 5px}
+        #btc-options-weekly .wr-err{color:var(--wr-red);font-size:13px;padding:12px 2px}
+        #btc-options-weekly .wr-err button{margin-left:10px;color:var(--wr-cyan);background:none;border:1px solid var(--wr-border);border-radius:999px;padding:2px 12px;cursor:pointer;font-size:12px}
