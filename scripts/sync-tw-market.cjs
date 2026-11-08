@@ -109,8 +109,10 @@ async function sync(){
  }
  try {
   const latestPrices=parsePrices(await getJson('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL'));
-  const newest= [...inst.keys(),...margin.keys()].sort().at(-1);
-  if(newest&&(!priceDate||newest>=priceDate)){prices=latestPrices;priceDate=newest;}
+  // STOCK_DAY_ALL omits a per-symbol trade date. Label the collection date,
+  // rather than incorrectly presenting the newest institutional day as quote as-of.
+  const checkedAt=taipeiToday();
+  if(!priceDate||checkedAt>=priceDate){prices=latestPrices;priceDate=checkedAt;}
  }catch(e){console.log('STOCK_DAY_ALL skipped:',e.message);}
  const institutional=[...inst.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
  const margins=[...margin.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
