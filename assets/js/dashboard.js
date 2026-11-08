@@ -625,7 +625,57 @@
                 if(btn&&!auto){btn.disabled=false;btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();}
             });
         }
+        // 0050 TDCC official weekly ownership distribution snapshot, with explicit freshness status.
+        let tdcc0050Loaded=false;
+        function renderTdcc0050(snapshot){
+            if(!snapshot || snapshot.symbol!=='0050' || !/^20\d{2}-\d{2}-\d{2}$/.test(snapshot.date||'') ||
+               !Array.isArray(snapshot.rows) || snapshot.rows.length!==17)throw Error('Invalid TDCC snapshot');
+            const rows=snapshot.rows;
+            const total=rows[16];
+            if(!total || !Number.isSafeInteger(total.holders) || total.holders<=0 || total.grade!==17)throw Error('Invalid TDCC total');
+            let cumulative=0;
+            rows.forEach((row,i)=>{
+                if(!row||row.grade!==i+1||typeof row.range!=='string'||!Number.isSafeInteger(row.shares)||!Number.isFinite(row.proportion))throw Error('Invalid TDCC row');
+                if(i<15){if(!Number.isSafeInteger(row.holders)||row.holders<0)throw Error('Invalid TDCC holders');cumulative+=row.holders;}
+            });
+            if(cumulative!==total.holders)throw Error('TDCC cumulative mismatch');
+            const fmt=n=>Number(n).toLocaleString('en-US');
+            const tb=document.getElementById('tdcc-0050-tbody');
+            const cell=(value,cls='text-right')=>{
+                const td=document.createElement('td');td.className='px-3 py-2.5 '+cls;td.textContent=value;return td;
+            };
+            if(!tb)return;tb.replaceChildren();
+            rows.forEach((row,i)=>{
+                const tr=document.createElement('tr');
+                tr.className='hover:bg-zinc-800/40 '+(i===16?'bg-zinc-900 font-bold text-accentCyan':i===15?'text-zinc-500':'text-zinc-200');
+                const count=i===15?'—':fmt(row.holders);
+                const acc=i===15?'—':fmt(i===16?total.holders:row.cumulativeHolders);
+                const percentage=i===15?'—':((i===16?100:row.cumulativeHolders/total.holders*100).toFixed(2)+'%');
+                tr.append(cell(i+1,'text-center'),cell(row.range,'text-left'),cell(count),cell(acc),cell(percentage),cell(fmt(row.shares)),cell(row.proportion.toFixed(2)+'%'));
+                tb.appendChild(tr);
+            });
+            const status=document.getElementById('tdcc-0050-status');
+            if(status){
+                const dateText='集保資料基準日：'+snapshot.date;
+                const fetched=snapshot.fetched_at?' · 取得時間 '+String(snapshot.fetched_at).slice(0,16).replace('T',' ')+' UTC':'';
+                status.textContent=dateText+fetched+' · 來源：臺灣集中保管結算所';
+                status.className='text-xs text-emerald-400 mb-3';
+            }
+        }
+        function loadTdcc0050(){
+            if(tdcc0050Loaded)return;
+            tdcc0050Loaded=true;
+            fetch('assets/data/0050-distribution.json',{cache:'no-store'}).then(r=>{
+                if(!r.ok)throw Error('TDCC snapshot unavailable');return r.json();
+            }).then(renderTdcc0050).catch(()=>{
+                const status=document.getElementById('tdcc-0050-status');
+                if(status){status.textContent='⚠ 尚未取得有效的集保 0050 每週資料。請至官方網站查詢，表格不會顯示未經驗證的數字。';status.className='text-xs text-amber-400 mb-3';}
+                const tb=document.getElementById('tdcc-0050-tbody');
+                if(tb)tb.innerHTML='<tr><td colspan="7" class="px-4 py-8 text-center text-zinc-400">暫無可用資料</td></tr>';
+            });
+        }
         function initTwStockView(){
+            loadTdcc0050();
             if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');refreshFinancialsTabVisibility('tw');twStockState.extrasLoaded=true;}
             if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();loadScheduledTwTop50();}
         }
@@ -649,5 +699,6 @@
             startUsStockCards(); // MSTR/STRC 幣安永續報價
             renderTwSingleQuotes();
             twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();loadScheduledTwTop50();
+            loadTdcc0050();
             renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;
         })();

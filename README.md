@@ -99,3 +99,21 @@ available and does not claim a missing timestamp means a live quote. TWSE's
 public post-close API is not a substitute for licensed real-time intraday data.
 For consistently live quotes in a public dashboard, use a vendor feed with the
 appropriate redistribution license and keep credentials on a backend.
+
+## TDCC 0050 holder distribution
+
+The Taiwan stock page includes the official TDCC ownership distribution for 0050,
+with 15 holding ranges, an adjustment row, and a total row. Two calculated columns
+show the **cumulative holder count** and **cumulative percentage of all holders**
+from smallest to largest holding range. The adjustment row is not counted as a
+person; the total row displays the complete cumulative count without counting it
+twice. The cumulative percentage is **not** a cumulative percentage of shares.
+
+A separate GitHub Actions workflow (`.github/workflows/update-tdcc.yml`) is
+scheduled for Saturdays 10:00 Asia/Taipei. It reads the TDCC open-data dataset
+`1-5`, extracts 0050 for the latest date, validates all 17 levels and their
+holder/share totals, commits `assets/data/0050-distribution.json` only on change,
+and triggers a GitHub Pages rebuild. If the official endpoint is unavailable,
+the dashboard displays a clear unavailable-data message and a direct link to
+the official lookup rather than inventing numbers. TDCC statistics are weekly,
+not intraday/real-time. Source: https://www.tdcc.com.tw/portal/zh/smWeb/qryStock

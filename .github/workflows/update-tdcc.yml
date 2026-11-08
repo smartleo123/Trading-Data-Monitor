@@ -1,0 +1,44 @@
+name: Update TDCC 0050 ownership distribution
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/update-tdcc.yml']
+  schedule:
+    # Saturday 10:00 Taiwan time (02:00 UTC), after the Friday reference date.
+    - cron: '0 2 * * 6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: tdcc-0050-snapshot
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch official weekly TDCC distribution and validate 0050
+        run: node scripts/sync-tdcc.cjs
+      - name: Commit validated snapshot and redeploy pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- assets/data/0050-distribution.json)" ]; then
+            echo "No new TDCC data"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/0050-distribution.json
+          git commit -m "data: update TDCC 0050 holder distribution"
+          git push
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
