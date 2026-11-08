@@ -195,24 +195,24 @@
         body.querySelectorAll('input').forEach(function (inp) {
           inp.addEventListener('input', function () {
             var i = +inp.getAttribute('data-leg'), f = inp.getAttribute('data-f'), v = parseNum(inp.value);
-            var valid = Number.isFinite(v) && (f === 'qty' ? Number.isInteger(v) && v >= 1 : f === 'K' ? v > 0 : v >= 0);
-            validateInput(inp, valid, f === 'qty' ? '口數請輸入至少 1 的整數' : f === 'K' ? '履約價請輸入大於 0 的數字' : '權利金請輸入不小於 0 的數字');
+            var valid = Number.isFinite(v) && (f === 'qty' ? v > 0 && v <= 100 : f === 'K' ? v > 0 : v >= 0);
+            validateInput(inp, valid, f === 'qty' ? 'BTC 數量請輸入 0–100 間正數' : f === 'K' ? '履約價請輸入大於 0 的數字' : '權利金請輸入不小於 0 的數字');
             if (!valid) { renderOutputs(); return; }
             markCustom();
-            if (f === 'K') {
+            if (f === 'K') { invalidateQuotes('履約價改變，報價需重新核對');
               state.legs[i].K = v;
               refreshTheo(i);
               if (state.legs[i].premAuto) { state.legs[i].prem = autoPrem(state.legs[i]);
                 var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = state.legs[i].prem; }
-            } else if (f === 'qty') { state.legs[i].qty = v; }
-            else { state.legs[i].prem = v; state.legs[i].premAuto = false; }
+            } else if (f === 'qty') { state.legs[i].qty = v; invalidateQuotes('數量改變，掛單深度需重新核對'); }
+            else { state.legs[i].prem = v; state.legs[i].premAuto = false; invalidateQuotes('手動輸入權利金，市場報價驗證失效'); }
             renderOutputs();
           });
         });
         /* 點「理論：$…」套用該理論價 */
         body.querySelectorAll('.theo').forEach(function (sp) {
           sp.addEventListener('click', function () {
-            var i = +sp.getAttribute('data-leg'); state.legs[i].prem = autoPrem(state.legs[i]); state.legs[i].premAuto = true;
+            var i = +sp.getAttribute('data-leg'); state.legs[i].prem = autoPrem(state.legs[i]); state.legs[i].premAuto = true; invalidateQuotes('已改用理論價');
             var pin = premInput(i); if (pin) { pin.value = state.legs[i].prem; validateInput(pin, true, ''); }
             renderOutputs();
           });
@@ -226,7 +226,7 @@
               if (state.legs[i].t === 'U') state.legs[i].entry = state.spot;
               else if (state.legs[i].t === 'F') { state.legs[i].K = Math.round(state.spot); state.legs[i].prem = 0; }
               else if (state.legs[i].premAuto) state.legs[i].prem = autoPrem(state.legs[i]); }
-            markCustom(); renderLegs(); renderOutputs();
+            invalidateQuotes('部位設定已變更'); markCustom(); renderLegs(); renderOutputs();
           });
         });
         /* 刪除部位 */
@@ -267,7 +267,7 @@
       function tile(k, v, cls, sub) { return '<div class="sc-tile"><div class="k">' + k + '</div><div class="v ' + cls + '">' + v + '</div><div class="s">' + sub + '</div></div>'; }
 
       /* 改現價/IV/DTE：保留使用者設定的履約價，只更新「理論」權利金與現貨成本基準（不重建輸入框） */
-      function recomputeAuto() {
+      function recomputeAuto() { invalidateQuotes('現價或 IV 改變，需刷新市場報價');
         state.legs.forEach(function (l, i) {
           if (l.t === 'U') { l.entry = state.spot; return; }
           refreshTheo(i); /* 理論價提示隨現價/IV/DTE 即時更新 */
@@ -277,7 +277,7 @@
         renderOutputs();
       }
 
-      function rebuildLegs() { state.legs = buildLegs(state.strat, state.spot); renderLegs(); renderOutputs(); }
+      function rebuildLegs() { invalidateQuotes('策略／到期日變更'); state.legs = buildLegs(state.strat, state.spot); renderLegs(); renderOutputs(); }
 
       function build() {
         var d = defaults();
@@ -286,7 +286,7 @@
         state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), useSmile: true, legs: [] };
         box.innerHTML =
           '<div class="sc-wrap">'
-          + '<div><div class="sc-hd">參數（現價即時帶入；IV 由波動率微笑逐檔自動套用、基差即時帶入，皆無需手動輸入；口數改由每個部位各自設定；1 口＝1 BTC、美元計價）</div>'
+          + '<div><div class="sc-hd">參數（現價即時帶入；IV 由波動率微笑逐檔自動套用、基差即時帶入，皆無需手動輸入；部位數量由各腿設定，單位 BTC；損益以 USD 估算）</div>'
           + '<div class="sc-inputs">'
           + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="text" inputmode="decimal" autocomplete="off" value="' + state.spot + '"></div>'
           + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" inputmode="decimal" autocomplete="off" value="' + state.dte + '"></div>'
@@ -295,14 +295,14 @@
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
           + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
           + '<div class="sc-help"><b>理論價已用「波動率微笑」逐檔定價。</b> 不同履約價在市場上的隱含波動率（IV）其實各不相同——通常價外選擇權的 IV 比價平的高，畫成曲線像微笑（波動率微笑／偏斜）。本試算<b>每個部位都用它自己履約價的市場 IV</b> 估權利金，比所有部位套同一個 IV 更貼近交易所實際報價。資料取自「即時分析」的進階盤面；若尚未載入、或某履約價超出微笑範圍，會自動退回用上方的 IV 估算。</div>'
-          + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-Scholes 理論價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
+          + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-76 模型價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
           + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約/進場價</th><th style="text-align:right">權利金 (USD)</th><th style="text-align:right">口數</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
           + '<button class="sc-add" id="sc-add">＋ 新增部位</button></div>'
           + '<div><div class="sc-hd">損益指標</div><div class="sc-metrics" id="sc-metrics"></div></div>'
           + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
-          + '<div class="sc-note">損益＝到期內在價值，未計手續費與提前平倉的時間價值。期貨部位為線性損益＝方向×口數×(到期價−進場價)，在「履約/進場價」欄填你的進場價，無權利金、無時間價值，常用來與選擇權搭配（如避險、合成部位）。理論價（選擇權）用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價，並由波動率微笑逐檔套用各履約價的市場 IV；若微笑尚未載入或超出範圍會退回單一 IV，與交易所各檔報價仍可能有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
+          + '<div class="sc-note">到期損益按已輸入的建倉權利金估算；不同價格及 IV 情境採理論模型估值（並非平倉 Bid/Ask）；費用僅以指定假設計入，未含滑價。期貨部位為線性損益＝方向×口數×(到期價−進場價)，在「履約/進場價」欄填你的進場價，無權利金、無時間價值，常用來與選擇權搭配（如避險、合成部位）。理論價（選擇權）用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價，並由波動率微笑逐檔套用各履約價的市場 IV；若微笑尚未載入或超出範圍會退回單一 IV，與交易所各檔報價仍可能有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
           + '</div>';
         var sel = box.querySelector('#sc-select');
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
