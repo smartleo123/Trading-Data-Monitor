@@ -142,3 +142,35 @@ test('0050 TDCC holder distribution renders 17 grades and cumulative holders', a
   await expect(page.locator('#tdcc-0050-tbody tr').last().locator('td').nth(4)).toHaveText('100.00%');
   await expect(page.locator('#tdcc-0050-status')).toContainText('2026-11-06');
 });
+
+test('TDCC symbol search shows 0050 by default, then switches to stocks and ETFs', async ({page})=>{
+ const holders=[10,20,...Array(13).fill(1)],total=holders.reduce((a,b)=>a+b,0);
+ const rows=holders.map((count,i)=>({grade:i+1,range:String(i+1),holders:count,shares:count*1000,proportion:0,cumulativeHolders:holders.slice(0,i+1).reduce((a,b)=>a+b,0)}));
+ rows.push({grade:16,range:'差異數調整',holders:null,shares:0,proportion:0,cumulativeHolders:null});
+ rows.push({grade:17,range:'合計',holders:total,shares:holders.reduce((a,b)=>a+b,0)*1000,proportion:100,cumulativeHolders:total});
+ const snapshot=symbol=>({symbol,date:'2026-11-06',rows});
+ await page.route('**/assets/data/tdcc/index.json',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify({date:'2026-11-06',count:3,symbols:['0050','00878','2330']})
+ }));
+ await page.route('**/assets/data/tdcc/00.json',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify({'0050':snapshot('0050'),'00878':snapshot('00878')})
+ }));
+ await page.route('**/assets/data/tdcc/23.json',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify({'2330':snapshot('2330')})
+ }));
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.locator('#market-tab-tw-stock').click();
+ await expect(page.locator('#tdcc-0050-status')).toContainText('0050');
+ await page.locator('#tdcc-symbol-input').fill('2330');
+ await page.locator('#tdcc-symbol-search').click();
+ await expect(page.locator('#tdcc-0050-status')).toContainText('2330');
+ await expect(page.locator('#tdcc-0050-tbody tr')).toHaveCount(17);
+ await expect(page.locator('#tdcc-0050-tbody tr').nth(1).locator('td').nth(3)).toHaveText('30');
+ await page.locator('#tdcc-symbol-input').fill('00878');
+ await page.locator('#tdcc-symbol-search').click();
+ await expect(page.locator('#tdcc-0050-status')).toContainText('00878');
+ await page.locator('#tdcc-symbol-input').fill('9999');
+ await page.locator('#tdcc-symbol-search').click();
+ await expect(page.locator('#tdcc-0050-status')).toContainText('尚無可用');
+ await expect(page.locator('#tdcc-0050-tbody tr')).toHaveCount(1);
+});
