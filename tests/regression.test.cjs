@@ -97,10 +97,10 @@ test('perpetual cards display trading status and recover from provider failure',
 });
 
 test('dashboard keeps local assets modular and never embeds Coinglass pages directly',()=>{
-  assert.match(sourceHtml, /assets\/js\/dashboard\\.js/);
-  assert.match(sourceHtml, /assets\/css\/layout\\.css/);
-  assert.doesNotMatch(sourceHtml, /<iframe[^>]+coinglass\\.com/i);
-  assert.match(html, /embed-widget-advanced-chart\\.js/);
+  assert.match(sourceHtml, /assets\/js\/dashboard\.js/);
+  assert.match(sourceHtml, /assets\/css\/layout\.css/);
+  assert.doesNotMatch(sourceHtml, /<iframe[^>]+coinglass\.com/i);
+  assert.match(html, /embed-widget-advanced-chart\.js/);
   assert.match(sourceHtml, /在 CoinGlass 查看 ETF 淨流向/);
 });
 test('market overview mounts a TradingView widget instead of an iframe to CoinGlass',async t=>{
@@ -110,7 +110,7 @@ test('market overview mounts a TradingView widget instead of an iframe to CoinGl
   assert.equal(el.querySelector('iframe[src*="coinglass.com"]'),null);
   a.w.toggleChartSource('local');
   assert.equal(a.d.getElementById('local-chart-container').style.display,'block');
-  assert.match(a.d.getElementById('coinglass-source-link').href,/coinglass\\.com/);
+  assert.match(a.d.getElementById('coinglass-source-link').href,/coinglass\.com/);
   a.w.toggleChartSource('coinglass');
-  assert.match(a.d.getElementById('coinglass-source-link').href,/tradingview\\.com/);
+  assert.match(a.d.getElementById('coinglass-source-link').href,/tradingview\.com/);
 });
