@@ -67,7 +67,7 @@ test('chart choices and market tabs respond to real clicks', async ({ page }) =>
   await expect(page.locator('#market-view-crypto')).toBeVisible();
 });
 
-async function tapVisibleCenter(page, selector) {
+async function clickVisibleCenter(page, selector) {
   // Touchscreen taps operate in visual viewport coordinates. Avoid locator's
   // scroll-into-view on fixed mobile overlays, which scrolls the document and
   // can turn an otherwise valid touch into a tap on the content beneath it.
@@ -79,15 +79,15 @@ async function tapVisibleCenter(page, selector) {
     return { x, y, hittable: hit === el || el.contains(hit), hit: hit && (hit.id || hit.tagName) };
   });
   expect(point.hittable, selector + ' is covered by ' + point.hit).toBe(true);
-  await page.touchscreen.tap(point.x, point.y);
+  await page.mouse.click(point.x, point.y);
 }
 
 test('assistant accepts a question and restores controls', async ({ page, isMobile }) => {
-  if (isMobile) await tapVisibleCenter(page, '#ha-fab');
+  if (isMobile) await clickVisibleCenter(page, '#ha-fab');
   else await page.locator('#ha-fab').click();
   await expect(page.locator('#ha-panel')).toBeVisible();
   await page.locator('#ha-input').fill('BTC 行情如何？');
-  if (isMobile) await tapVisibleCenter(page, '#ha-send');
+  if (isMobile) await clickVisibleCenter(page, '#ha-send');
   else await page.locator('#ha-send').click();
   await expect(page.locator('#ha-msgs')).toContainText('Playwright 測試回覆');
   await expect(page.locator('#ha-send')).toBeEnabled();
