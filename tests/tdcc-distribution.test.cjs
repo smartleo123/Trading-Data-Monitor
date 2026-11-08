@@ -60,3 +60,12 @@ test('full-market builder groups codes and builds validated latest-date snapshot
  assert.equal(out.snapshots.get('00878').symbol,'00878');
  assert.throws(()=>buildSnapshots(all,4),/incomplete/);
 });
+
+test('parser accepts missing adjustment only when total shares are consistent',()=>{
+ const all=fixture().filter(row=>row['持股分級']!=='16');
+ const bandShares=all.filter(row=>Number(row['持股分級'])<=15).reduce((a,row)=>a+Number(row['股數']),0);
+ all.find(row=>row['持股分級']==='17')['股數']=String(bandShares);
+ const snapshot=parseDistribution(all,'0050');
+ assert.equal(snapshot.rows.length,17);
+ assert.equal(snapshot.rows[15].shares,0);
+});
