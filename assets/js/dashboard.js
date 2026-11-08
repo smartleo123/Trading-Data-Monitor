@@ -400,11 +400,11 @@
         function quoteState(q,clockOpen){
             if(q&&q.marketTime!=null){
                 const age=Date.now()/1000-q.marketTime;
-                if(age<300)return clockOpen?'delayed':'closed';
+                if(age>=0&&age<300)return clockOpen?'live':'closed';
                 if(clockOpen&&age<21600)return 'delayed';
                 return 'closed';
             }
-            return clockOpen?'live':'closed';
+            return clockOpen?'delayed':'closed';
         }
         // 從 Yahoo Finance chart API 取報價，經多個公用代理輪替容錯，回傳 {price, prevClose, open}
         function fetchYahooQuote(symbol){
