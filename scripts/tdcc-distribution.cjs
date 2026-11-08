@@ -60,6 +60,11 @@ function parseDistribution(payload,symbol='0050'){
   if((grade!==16&&holders==null)||shares==null||proportion==null)throw Error('Malformed TDCC row '+grade);
   table.set(grade,{grade,range:RANGES[grade-1],holders,shares,proportion});
  }
+ // A few securities have no grade-16 adjustment; only synthesize a zero
+ // adjustment if all 15 holder ranges and the official total are present.
+ if(!table.has(16) && table.size===16 && Array.from({length:15},(_,i)=>i+1).every(n=>table.has(n)) && table.has(17)){
+  table.set(16,{grade:16,range:RANGES[15],holders:null,shares:0,proportion:0});
+ }
  if(table.size!==17||!Array.from({length:17},(_,i)=>i+1).every(n=>table.has(n)))throw Error('Incomplete TDCC distribution');
  const total=table.get(17);
  let cumulative=0;
