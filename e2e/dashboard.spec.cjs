@@ -215,7 +215,7 @@ test('BTC options strategy uses Deribit ask/bid snapshots and renders expiry + I
    window.WR_OPTION_EXPIRIES=[expire.getUTCDate()+months[expire.getUTCMonth()]+String(expire.getUTCFullYear()).slice(2)];
    window.WR_SNAPSHOT={spot:80000,ivRows:[{atmIV:45}],basisAnnual:0};
    window.WR_GET_OPTION_QUOTES=async names=>Object.fromEntries(names.map(name=>[name,{
-     ticker:{state:'open',timestamp:Date.now(),best_bid_price:0.04,best_ask_price:0.042,best_bid_amount:5,best_ask_amount:5,index_price:80000,instrument_name:name},
+     ticker:{state:'open',timestamp:Date.now(),best_bid_price:0.04,best_ask_price:0.042,best_bid_amount:5,best_ask_amount:5,instrument_name:name},
      instrument:{kind:'option',base_currency:'BTC',settlement_currency:'BTC',contract_size:1,instrument_name:name,strike:Number(name.match(/-(\d+)-[CP]$/)[1]),option_type:name.endsWith('-C')?'call':'put',expiration_timestamp:Date.now()+30*86400000,min_trade_amount:0.1,is_active:true}
    }]));
  });
@@ -251,7 +251,7 @@ test('Deribit backtest UI discloses real snapshot count and refuses early succes
  await expect(page.locator('#sc-backtest')).toBeVisible();
  await expect(page.locator('#sc-replay-status')).toContainText('實際可用市場快照 2 筆');
  await expect(page.locator('#sc-replay-results')).toContainText('樣本不足');
- await expect(page.locator('#sc-replay-results')).not.toContainText('勝率 ');
+ await expect(page.locator('#sc-replay-results')).not.toContainText('總淨損益');
  await page.locator('#sc-replay-strategy').selectOption('long-call');
  await page.locator('#sc-replay-hold').selectOption('1');
  await page.locator('#sc-replay-run').click();
