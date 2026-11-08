@@ -518,30 +518,29 @@
             document.querySelectorAll('[data-twi]').forEach(el=>{el.innerHTML=fmtTwInst(el.getAttribute('data-twi'));});
         };
         let twOfficialClosePromise=null;
+        let twOfficialCloseData=null;
         function loadTwPrevCloses(){
-            // Yahoo public CORS relays frequently fail; one official static file provides
-            // all TWSE closes without per-security requests or browser CORS workarounds.
+            // One same-origin bulk TWSE snapshot replaces 50 separate Yahoo proxy calls.
+            // Apply it again whenever the 0050 holdings list is refreshed.
+            const apply=(data)=>{
+                const prices=data&&data.prices||{};
+                TW_TOP50.forEach(stock=>{
+                    const value=prices[stock.code],price=value==null?NaN:Number(value);
+                    TW_QUOTE_CACHE[stock.code]=Number.isFinite(price)&&price>0?price:false;
+                });
+                document.querySelectorAll('[data-twq]').forEach(el=>{
+                    el.textContent=fmtTwPrevClose(el.getAttribute('data-twq'));
+                    el.title=data&&data.priceDate?'證交所盤後收盤價（快照抓取日期：'+data.priceDate+'，個別交易日未提供）':'證交所盤後收盤價暫不可用';
+                });
+            };
+            if(twOfficialCloseData){apply(twOfficialCloseData);return Promise.resolve();}
             if(!twOfficialClosePromise){
                 twOfficialClosePromise=fetch('assets/data/tw-market-snapshot.json',{cache:'no-store'})
                     .then(r=>{if(!r.ok)throw Error('TWSE close snapshot missing');return r.json();})
-                    .then(data=>{
-                        const prices=data.prices||{};
-                        TW_TOP50.forEach(stock=>{
-                            const price=Number(prices[stock.code]);
-                            TW_QUOTE_CACHE[stock.code]=Number.isFinite(price)&&price>0?price:false;
-                        });
-                        document.querySelectorAll('[data-twq]').forEach(el=>{
-                            el.textContent=fmtTwPrevClose(el.getAttribute('data-twq'));
-                            el.title=data.priceDate?'證交所盤後收盤價（快照抓取日期：'+data.priceDate+'，個別交易日未提供）':'證交所盤後收盤價（來源未提供交易日期）';
-                        });
-                    }).catch(()=>{
-                        TW_TOP50.forEach(stock=>{TW_QUOTE_CACHE[stock.code]=false;});
-                        document.querySelectorAll('[data-twq]').forEach(el=>{
-                            el.textContent='—';el.title='證交所盤後價格資料尚未取得';
-                        });
-                    });
+                    .then(data=>{if(!data||typeof data.prices!=='object')throw Error('TWSE close list invalid');twOfficialCloseData=data;return data;})
+                    .catch(()=>{twOfficialCloseData={prices:{}};return twOfficialCloseData;});
             }
-            return twOfficialClosePromise;
+            return twOfficialClosePromise.then(apply);
         }
         function pumpTwQuotes(){
             while(twQuoteActive<4&&twQuoteQueue.length){
