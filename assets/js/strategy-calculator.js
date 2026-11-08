@@ -418,7 +418,9 @@
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
           + '<div class="sc-note">到期損益按已輸入的建倉權利金估算；不同價格及 IV 情境採理論模型估值（並非平倉 Bid/Ask）；費用僅以指定假設計入，未含滑價。期貨部位為線性損益＝方向×口數×(到期價−進場價)，在「履約/進場價」欄填你的進場價，無權利金、無時間價值，常用來與選擇權搭配（如避險、合成部位）。理論價（選擇權）用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價，並由波動率微笑逐檔套用各履約價的市場 IV；若微笑尚未載入或超出範圍會退回單一 IV，與交易所各檔報價仍可能有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
+          + '<section id="sc-backtest" class="sc-wrap" style="margin-top:20px"></section>'
           + '</div>';
+        if(typeof window.WR_initReplayUI==='function')window.WR_initReplayUI(box);
         var sel = box.querySelector('#sc-select');
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
         sel.value = state.strat;
