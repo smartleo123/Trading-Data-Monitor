@@ -101,7 +101,9 @@ test('dashboard keeps local assets modular and never embeds Coinglass pages dire
   assert.match(sourceHtml, /assets\/css\/layout\.css/);
   assert.doesNotMatch(sourceHtml, /<iframe[^>]+coinglass\.com/i);
   assert.match(html, /embed-widget-advanced-chart\.js/);
-  assert.match(sourceHtml, /在 CoinGlass 查看 ETF 淨流向/);
+  assert.match(sourceHtml, /Farside 原始 ETF 資金流表格/);
+  assert.match(sourceHtml, /bitcoin-etf-flows\/email-card/);
+  assert.match(sourceHtml, /alternative\.me\/crypto\/fear-and-greed-index\.png/);
 });
 test('market overview mounts a TradingView widget instead of an iframe to CoinGlass',async t=>{
   const a=await boot(t);
@@ -110,7 +112,11 @@ test('market overview mounts a TradingView widget instead of an iframe to CoinGl
   assert.equal(el.querySelector('iframe[src*="coinglass.com"]'),null);
   a.w.toggleChartSource('local');
   assert.equal(a.d.getElementById('local-chart-container').style.display,'block');
-  assert.match(a.d.getElementById('coinglass-source-link').href,/coinglass\.com/);
+  assert.match(a.d.getElementById('coinglass-source-link').href,/farside\.co\.uk/);
+  assert.match(a.d.getElementById('btc-etf-flow-chart').src,/tftc\.io\/bitcoin-etf-flows\/email-card/);
+  a.w.toggleChartSource('altcoin');
+  assert.match(a.d.getElementById('coinglass-source-link').href,/alternative\.me/);
+  assert.match(a.d.getElementById('crypto-fear-greed-chart').src,/fear-and-greed-index\.png/);
   a.w.toggleChartSource('coinglass');
   assert.match(a.d.getElementById('coinglass-source-link').href,/tradingview\.com/);
 });

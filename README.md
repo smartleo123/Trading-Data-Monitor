@@ -53,3 +53,17 @@ A standalone HTTP test server is started automatically. GitHub Actions runs thes
 browser tests on each PR, push to `main`, and manually through workflow dispatch.
 On failure, screenshots, traces, and an HTML report are uploaded as CI artifacts.
 The existing `npm test` jsdom suite remains unchanged and runs independently.
+
+## Crypto market analysis embeds
+
+- BTC candlesticks use an official TradingView widget.
+- ETF daily net flows embed the attributed TFTC Bitcoin ETF flows image
+  (https://www.tftc.io/bitcoin-etf-flows; licensed CC BY 4.0 on that page);
+  Farside's original flow table is linked alongside the chart at
+  https://farside.co.uk/btc/. These are *daily* ETF data, not real-time flows.
+- Fear & Greed uses Alternative.me's officially embeddable, self-updating index
+  image, with a visible attribution/source link.
+- External images can fail due to upstream availability or browser filtering:
+  in-panel source links and a fallback message remain available.
+- Browser tests mock external images to verify the integration and fallback UI
+  separately from live provider reliability.

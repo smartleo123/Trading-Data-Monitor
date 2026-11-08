@@ -84,7 +84,7 @@
             const I="text-xs px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-zinc-200 transition-all";
             bC.className=type==='coinglass'?A:I; bL.className=type==='local'?A:I; bA.className=type==='altcoin'?A:I;
             cC.style.display=type==='coinglass'?'block':'none'; cL.style.display=type==='local'?'block':'none'; cA.style.display=type==='altcoin'?'block':'none';
-            if(sL){const m={coinglass:{u:'https://www.tradingview.com/chart/?symbol=BINANCE%3ABTCUSDT',t:'前往 TradingView BTC 即時 K 線'},local:{u:'https://www.coinglass.com/zh-TW/etf/bitcoin',t:'前往 CoinGlass ETF 淨流向頁面'},altcoin:{u:'https://www.coinglass.com/zh-TW/pro/i/FearGreedIndex',t:'前往 CoinGlass 恐懼與貪婪指數頁面'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
+            if(sL){const m={coinglass:{u:'https://www.tradingview.com/chart/?symbol=BINANCE%3ABTCUSDT',t:'前往 TradingView BTC 即時 K 線'},local:{u:'https://farside.co.uk/btc/',t:'前往 Farside Bitcoin ETF 資金流原始表格'},altcoin:{u:'https://alternative.me/crypto/fear-and-greed-index/',t:'前往 Alternative.me 恐懼與貪婪指數'}};const g=m[type]||m.coinglass;sL.setAttribute('href',g.u);sL.setAttribute('title',g.t);}
         }
         // ===== 工具 =====
         function formatNumber(num) {
