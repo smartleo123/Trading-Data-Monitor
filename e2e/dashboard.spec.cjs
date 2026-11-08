@@ -67,22 +67,27 @@ test('chart choices and market tabs respond to real clicks', async ({ page }) =>
   await expect(page.locator('#market-view-crypto')).toBeVisible();
 });
 
+async function tapVisibleCenter(page, selector) {
+  // Touchscreen taps operate in visual viewport coordinates. Avoid locator's
+  // scroll-into-view on fixed mobile overlays, which scrolls the document and
+  // can turn an otherwise valid touch into a tap on the content beneath it.
+  const point = await page.locator(selector).evaluate(el => {
+    const box = el.getBoundingClientRect();
+    const x = box.left + box.width / 2;
+    const y = box.top + box.height / 2;
+    const hit = document.elementFromPoint(x, y);
+    return { x, y, hittable: hit === el || el.contains(hit), hit: hit && (hit.id || hit.tagName) };
+  });
+  expect(point.hittable, selector + ' is covered by ' + point.hit).toBe(true);
+  await page.touchscreen.tap(point.x, point.y);
+}
+
 test('assistant accepts a question and restores controls', async ({ page, isMobile }) => {
-  if (isMobile) {
-    const debug = await page.evaluate(() => {
-      const el = document.getElementById('ha-fab');
-      const b = el.getBoundingClientRect();
-      const x = b.left + b.width / 2, y = b.top + b.height / 2;
-      const hit = document.elementFromPoint(x, y);
-      return { viewport: [innerWidth,innerHeight], visual: visualViewport && [visualViewport.width,visualViewport.height,visualViewport.offsetTop], scroll:[scrollX,scrollY], parent:el.parentElement.tagName, pos:getComputedStyle(el).position, z:getComputedStyle(el).zIndex, rect:[b.x,b.y,b.width,b.height], hit:hit && (hit.id || hit.tagName), hitClass:hit && hit.className };
-    });
-    console.log('MOBILE ASSISTANT HIT TEST:', JSON.stringify(debug));
-    await page.locator('#ha-fab').tap();
-  }
+  if (isMobile) await tapVisibleCenter(page, '#ha-fab');
   else await page.locator('#ha-fab').click();
   await expect(page.locator('#ha-panel')).toBeVisible();
   await page.locator('#ha-input').fill('BTC 行情如何？');
-  if (isMobile) await page.locator('#ha-send').tap();
+  if (isMobile) await tapVisibleCenter(page, '#ha-send');
   else await page.locator('#ha-send').click();
   await expect(page.locator('#ha-msgs')).toContainText('Playwright 測試回覆');
   await expect(page.locator('#ha-send')).toBeEnabled();
