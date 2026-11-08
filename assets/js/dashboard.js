@@ -378,7 +378,7 @@
         function renderEconomicCalendar(cid,cf){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-events.js',{width:'100%',height:'100%',colorTheme:'dark',isTransparent:true,locale:'zh_TW',importanceFilter:'0,1',countryFilter:cf});}
         function renderStockHeatmap(cid,ds){renderTvWidget(cid,'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',{dataSource:ds,blockSize:'market_cap_basic',blockColor:'change',grouping:'sector',locale:'zh_TW',symbolUrl:'',colorTheme:'dark',hasTopBar:true,isDataSetEnabled:false,isZoomEnabled:true,hasSymbolTooltip:true,isMonoSize:false,width:'100%',height:'100%'});}
         // ============================================================
-        // 台股即時報價小卡 (Yahoo Finance 經公用代理自繪；綠漲紅跌)
+        // 台股盤中報價卡（Yahoo Finance 經公用代理；可能延遲，不保證交易所即時行情）
         // ============================================================
         let twQuotesTimer=null;
         function isTwMarketOpen(){try{const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const d=t.getDay();if(d===0||d===6)return false;const m=t.getHours()*60+t.getMinutes();return m>=540&&m<=810;}catch(e){return false;}}
@@ -392,7 +392,7 @@
             pe.innerText=last.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
             pe.className=`text-4xl font-black font-mono tracking-tight transition-colors ${change>0?'text-emerald-400':(change<0?'text-rose-500':'text-white')}`;
             ce.innerText=`${sign}${change.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;ce.className=`text-sm font-bold font-mono ${twColorClass(change)}`;
-            if(se){if(qst==='live'){se.innerText='LIVE';se.title='';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else if(qst==='delayed'){se.innerText='延遲';se.title='Yahoo 報價延遲約 '+Math.round((Date.now()/1000-q.marketTime)/60)+' 分鐘，價格仍會持續更新';se.className='text-[9px] font-bold bg-amber-950/80 border border-amber-800 text-amber-400 px-1.5 py-0.5 rounded';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.title='';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
+            if(se){if(qst==='live'){se.innerText='LIVE';se.title='';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else if(qst==='delayed'){se.innerText='延遲';se.title=q.marketTime==null?'Yahoo 報價缺少交易時間戳，無法確認即時性':'Yahoo 報價延遲約 '+Math.max(0,Math.round((Date.now()/1000-q.marketTime)/60))+' 分鐘，價格可能持續更新';se.className='text-[9px] font-bold bg-amber-950/80 border border-amber-800 text-amber-400 px-1.5 py-0.5 rounded';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.title='';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
         }
         // 公用代理 fetch 加 9 秒逾時，避免某代理 hang 住拖垮整條輪替
         function pxFetch(u){const c=new AbortController();const t=setTimeout(()=>{try{c.abort();}catch(e){}},9000);return fetch(u,{cache:'no-store',signal:c.signal}).then(r=>{clearTimeout(t);return r;},e=>{clearTimeout(t);throw e;});}
@@ -400,11 +400,11 @@
         function quoteState(q,clockOpen){
             if(q&&q.marketTime!=null){
                 const age=Date.now()/1000-q.marketTime;
-                if(age<300)return clockOpen?'live':'closed';
+                if(age>=0&&age<300)return clockOpen?'live':'closed';
                 if(clockOpen&&age<21600)return 'delayed';
                 return 'closed';
             }
-            return clockOpen?'live':'closed';
+            return clockOpen?'delayed':'closed';
         }
         // 從 Yahoo Finance chart API 取報價，經多個公用代理輪替容錯，回傳 {price, prevClose, open}
         function fetchYahooQuote(symbol){
@@ -489,7 +489,7 @@
             const rows=TW_TOP50.filter(it=>(twWeightFilter==='全部'||it.cat===twWeightFilter)&&(it.code.toLowerCase().includes(kw)||it.name.toLowerCase().includes(kw)));
             if(!rows.length){tb.innerHTML='<tr><td colspan="9" class="py-8 text-center text-zinc-500">查無相符的成分股</td></tr>';return;}
             tb.innerHTML=rows.map(it=>{const tvUrl=`https://tw.tradingview.com/chart/?symbol=TWSE%3A${it.code}`;const yUrl=`https://tw.stock.yahoo.com/quote/${it.code}.TW`;const newsUrl=`https://tw.tradingview.com/symbols/TWSE-${it.code}/news/`;
-                return `<tr class="hover:bg-zinc-800/30 transition-colors group"><td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${it.r}</td><td class="py-3 px-4 font-mono font-bold text-zinc-200">${it.code}</td><td class="py-3 px-4"><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${it.name}</div><div class="text-[10px] text-zinc-500">${it.cat}</div></td><td class="py-3 px-4 text-right"><span class="font-mono text-zinc-300" data-twq="${it.code}">${fmtTwPrevClose(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono" data-twi="${it.code}">${fmtTwInst(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono font-bold text-zinc-100">${it.w.toFixed(4)}%</span></td><td class="py-3 px-4 text-center"><a href="${tvUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 圖表"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${yUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="Yahoo 股市"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${newsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 新聞"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i></a></td></tr>`;
+                return `<tr class="hover:bg-zinc-800/30 transition-colors group"><td class="py-3 px-4 text-center font-mono font-bold text-zinc-500">${it.r}</td><td class="py-3 px-4 font-mono font-bold text-zinc-200">${it.code}</td><td class="py-3 px-4"><div class="font-bold text-white group-hover:text-accentCyan transition-colors">${escapeCryptoText(it.name)}</div><div class="text-[10px] text-zinc-500">${escapeCryptoText(it.cat)}</div></td><td class="py-3 px-4 text-right"><span class="font-mono text-zinc-300" data-twq="${it.code}">${fmtTwPrevClose(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono" data-twi="${it.code}">${fmtTwInst(it.code)}</span></td><td class="py-3 px-4 text-right"><span class="font-mono font-bold text-zinc-100">${it.w.toFixed(4)}%</span></td><td class="py-3 px-4 text-center"><a href="${tvUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 圖表"><i data-lucide="line-chart" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${yUrl}" target="_blank" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-amber-400 hover:text-amber-300 transition-colors" title="Yahoo 股市"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a></td><td class="py-3 px-4 text-center"><a href="${newsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-850 text-accentCyan hover:text-white transition-colors" title="TradingView 新聞"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i></a></td></tr>`;
             }).join('');
             if(window.lucide)lucide.createIcons();
             loadTwPrevCloses(); // 背景補抓尚未快取的昨收價
@@ -543,7 +543,38 @@
                 });
             }
         }
-        // 一鍵：透過公用代理即時抓取元大 0050 官網最新持股權重 (JSON API)，成功則覆寫 TW_TOP50 並重繪
+        // CI 每交易日盤後同步官方 0050 持股快照，瀏覽器優先載入本地 JSON。
+        function applyTw0050Snapshot(snapshot){
+            if(!snapshot || snapshot.fund!=='0050' || !Array.isArray(snapshot.holdings))throw new Error('invalid snapshot');
+            const rows=snapshot.holdings;
+            const seen=new Set();
+            const valid=rows.length>=40 && rows.length<=50 && rows.every(s=>{
+                if(!s || !/^\d{4}$/.test(String(s.code)) || typeof s.name!=='string' || !s.name.trim() ||
+                    !Number.isFinite(s.w) || s.w<=0 || s.w>80 || seen.has(s.code))return false;
+                seen.add(s.code);return true;
+            });
+            const total=rows.reduce((acc,v)=>acc+Number(v.w||0),0);
+            if(!valid||total<85||total>105)throw new Error('invalid holdings content');
+            TW_TOP50=rows.map((s,i)=>({r:i+1,code:String(s.code),name:s.name,w:s.w,cat:TW_SECTOR_MAP[s.code]||'其他'}));
+            twWeightFilter='全部';
+            renderTwWeightFilters();renderTwWeightTable();
+            const note=document.getElementById('tw-weight-note');
+            if(note){
+                const date=snapshot.source_trade_date ? '官方資料交易日 '+snapshot.source_trade_date :
+                    '官方來源未提供交易日（抓取時間 '+String(snapshot.fetched_at||'未註明').slice(0,16)+' UTC）';
+                note.textContent='✓ 已載入 GitHub 排程更新的元大 0050 持股權重。'+date+'；本資訊為基金持股權重，非臺股大盤市值權重。';
+            }
+        }
+        function loadScheduledTwTop50(){
+            return fetch('assets/data/0050-holdings.json',{cache:'no-store'}).then(r=>{
+                if(!r.ok)throw new Error('snapshot unavailable');
+                return r.json();
+            }).then(applyTw0050Snapshot).catch(()=>{
+                const note=document.getElementById('tw-weight-note');
+                if(note)note.textContent='⚠ 排程快照尚未建立或暫時無法取得。目前顯示內嵌舊清單（2026/06/30），非最新持股。可手動更新，或前往元大 0050 官方網站確認。';
+            });
+        }
+        // 手動備援：由瀏覽器透過公用代理抓取元大 0050 持股（不保證代理可靠性）
         function refreshTwTop50FromYuanta(auto){
             const btn=document.getElementById('tw-weight-refresh-btn');
             const note=document.getElementById('tw-weight-note');
@@ -584,7 +615,7 @@
             tryProxy(0).then(()=>{
                 twWeightFilter='全部';
                 renderTwWeightFilters();renderTwWeightTable();
-                if(note){const d=new Date();note.innerHTML=`<span class="text-emerald-500">✓</span> 已於 ${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ${auto?'自動':''}從<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>同步最新持股權重，排名為即時資料。`;}
+                if(note){const d=new Date();note.innerHTML=`<span class="text-emerald-500">✓</span> 已於 ${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ${auto?'自動':''}從<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>同步最新持股權重，已下載最新可取得的資料（來源交易日期未核實，請至官網確認）。`;}
                 if(btn&&!auto){btn.disabled=false;btn.innerHTML='<i data-lucide="check" class="w-3.5 h-3.5"></i> 已更新';if(window.lucide)lucide.createIcons();setTimeout(()=>{btn.innerHTML=origHtml;if(window.lucide)lucide.createIcons();},2500);}
             }).catch(()=>{
                 if(note){note.innerHTML='<span class="text-rose-500">✗</span> '+(auto?'自動同步失敗':'抓取失敗')+'：0050 官網或公用代理暫時無法連線（政府/金融網站限制較嚴）。目前顯示為內嵌清單（資料日期 2026/06/30），可點上方「更新前50大清單」重試，或直接前往<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" class="text-accentCyan hover:underline">元大 0050 官網</a>查看。';}
@@ -593,7 +624,7 @@
         }
         function initTwStockView(){
             if(!twStockState.extrasLoaded){renderTwSingleQuotes();renderTechnicalGauge('tw-technical-container','TWSE:0050','1D');refreshFinancialsTabVisibility('tw');twStockState.extrasLoaded=true;}
-            if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();refreshTwTop50FromYuanta(true);}
+            if(!twStockState.weightLoaded){twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();loadScheduledTwTop50();}
         }
         function initUsStockView(){
             if(!usStockState.cardsLoaded){renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;}
@@ -614,6 +645,6 @@
             initMarketOverviewChart(); // 以官方 TradingView widget 顯示 BTC K 線
             startUsStockCards(); // MSTR/STRC 幣安永續報價
             renderTwSingleQuotes();
-            twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();refreshTwTop50FromYuanta(true);
+            twStockState.weightLoaded=true;renderTwWeightFilters();renderTwWeightTable();loadScheduledTwTop50();
             renderMiniSymbolCards(document.getElementById('market-view-us-stock'));usStockState.cardsLoaded=true;
         })();

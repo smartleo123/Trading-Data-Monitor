@@ -113,3 +113,15 @@ test('main panel stays within viewport on desktop and mobile', async ({ page }) 
   expect(chartBox).not.toBeNull();
   expect(chartBox.x + chartBox.width).toBeLessThanOrEqual(width + 2);
 });
+
+test('Taiwan holdings panel reads a scheduled snapshot and shows the source date',async ({page})=>{
+  const holdings=Array.from({length:50},(_,i)=>({r:i+1,code:String(1000+i),name:'測試成分股'+i,w:2}));
+  await page.route('**/assets/data/0050-holdings.json',route=>route.fulfill({
+    status:200,contentType:'application/json',
+    body:JSON.stringify({fund:'0050',source_trade_date:'2026-11-06',fetched_at:'2026-11-06T12:00:00Z',holdings})
+  }));
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.locator('#market-tab-tw-stock').click();
+  await expect(page.locator('#tw-weight-tbody tr').first().locator('td').nth(1)).toHaveText('1000');
+  await expect(page.locator('#tw-weight-note')).toContainText('2026-11-06');
+});

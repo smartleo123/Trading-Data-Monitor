@@ -120,3 +120,22 @@ test('market overview mounts a TradingView widget instead of an iframe to CoinGl
   a.w.toggleChartSource('coinglass');
   assert.match(a.d.getElementById('coinglass-source-link').href,/tradingview\.com/);
 });
+
+test('0050 scheduled snapshot replaces stale built-in holdings and displays official date',async t=>{
+  const a=await boot(t);
+  const list=Array.from({length:50},(_,i)=>({r:i+1,code:String(1000+i),name:'上市股'+i,w:2}));
+  a.w.applyTw0050Snapshot({fund:'0050',source_trade_date:'2026-11-06',fetched_at:'2026-11-06T12:00:00Z',holdings:list});
+  assert.equal(a.d.querySelector('#tw-weight-tbody tr td:nth-child(2)').textContent.trim(),'1000');
+  assert.match(a.d.getElementById('tw-weight-note').textContent,/2026-11-06/);
+  const bad=list.slice(0,3);
+  assert.throws(()=>a.w.applyTw0050Snapshot({fund:'0050',holdings:bad}),/invalid/);
+  assert.equal(a.d.querySelector('#tw-weight-tbody tr td:nth-child(2)').textContent.trim(),'1000');
+});
+
+test('0050 holding names from snapshots are escaped before rendering',async t=>{
+  const a=await boot(t);
+  const list=Array.from({length:50},(_,i)=>({r:i+1,code:String(1000+i),name:i===0?'<img src=x onerror=alert(1)>':'上市股'+i,w:2}));
+  a.w.applyTw0050Snapshot({fund:'0050',holdings:list});
+  assert.match(a.d.getElementById('tw-weight-tbody').textContent,/<img src=x onerror=alert\(1\)>/);
+  assert.equal(a.d.querySelector('#tw-weight-tbody img'),null);
+});

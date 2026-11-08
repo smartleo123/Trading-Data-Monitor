@@ -67,3 +67,36 @@ The existing `npm test` jsdom suite remains unchanged and runs independently.
   in-panel source links and a fallback message remain available.
 - Browser tests mock external images to verify the integration and fallback UI
   separately from live provider reliability.
+
+## Scheduled 0050 holding weights
+
+An independent GitHub Actions workflow (`.github/workflows/update-0050.yml`) is
+scheduled at **19:30 Asia/Taipei on weekdays** (11:30 UTC; GitHub cron may be
+delayed). It fetches the Yuanta 0050 holdings JSON from the issuer, validates
+40–60 unique four-digit symbols and a plausible total portfolio weight, and
+writes `assets/data/0050-holdings.json` **only if the validated data changed**.
+If the API returns invalid data, the workflow fails and keeps the last valid
+snapshot intact. After a successful commit, the workflow explicitly requests a
+GitHub Pages rebuild (bot pushes alone do not trigger branch Pages builds).
+
+The dashboard first loads that static snapshot when Taiwan-market holdings are
+needed. It displays the issuer's **trade date only when the source actually
+supplies one**; otherwise it shows the retrieval timestamp as a distinct item.
+If no published snapshot exists, it clearly identifies the old bundled holdings
+as stale. The manual browser-proxy refresh button remains as a best-effort
+fallback, not the default mechanism.
+
+**Important:** The issuer's API is not a documented, guaranteed public data
+feed and may restrict GitHub-hosted requests. Run the workflow manually from the
+Actions tab after deployment to validate actual source access. No automated
+daily update can be guaranteed until a live run succeeds. Weights are holdings
+of **0050**, not the stock's share of total Taiwan-market capitalization.
+
+## Taiwan stock quotes
+
+The current Taiwan quote cards use Yahoo chart quotes via public web proxies.
+They can be delayed or unavailable. The UI uses the provider timestamp where
+available and does not claim a missing timestamp means a live quote. TWSE's
+public post-close API is not a substitute for licensed real-time intraday data.
+For consistently live quotes in a public dashboard, use a vendor feed with the
+appropriate redistribution license and keep credentials on a backend.
