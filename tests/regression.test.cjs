@@ -139,3 +139,25 @@ test('0050 holding names from snapshots are escaped before rendering',async t=>{
   assert.match(a.d.getElementById('tw-weight-tbody').textContent,/<img src=x onerror=alert\(1\)>/);
   assert.equal(a.d.querySelector('#tw-weight-tbody img'),null);
 });
+
+test('TDCC panel belongs exclusively to Taiwan market and is registered in section navigation',async t=>{
+ const a=await boot(t);
+ const tdcc=a.d.getElementById('panel-tdcc-0050');
+ assert.ok(tdcc);
+ assert.equal(tdcc.closest('[id^="market-view-"]')?.id,'market-view-tw-stock');
+ assert.equal(a.d.querySelector('#market-view-crypto #panel-tdcc-0050'),null);
+ assert.equal(a.d.querySelector('#market-view-us-stock #panel-tdcc-0050'),null);
+ assert.equal(tdcc.getAttribute('data-nav'),'集保戶股權分散表');
+ a.w.switchMarketView('us-stock');
+ assert.equal(tdcc.getBoundingClientRect instanceof Function,true);
+ assert.equal(a.d.getElementById('market-view-tw-stock').classList.contains('hidden'),true);
+ a.w.switchMarketView('crypto');
+ assert.equal(a.d.getElementById('market-view-tw-stock').classList.contains('hidden'),true);
+ a.w.switchMarketView('tw-stock');
+ assert.equal(a.d.getElementById('market-view-tw-stock').classList.contains('hidden'),false);
+ assert.ok(a.d.getElementById('section-nav').textContent.includes('集保戶股權分散表'));
+});
+test('BTC option decision analysis module loads before Deribit renderer',()=>{
+ assert.ok(sourceHtml.indexOf('assets/js/options-decision.js')<sourceHtml.indexOf('assets/js/deribit-options.js'));
+ assert.match(sourceHtml,/BTC 選擇權分析/);
+});

@@ -459,6 +459,26 @@
               + flow.map(function (t) { return '<tr><td>' + esc(t.exp) + ' ' + fmt$(t.K) + ' ' + (t.type === 'C' ? 'Call' : 'Put') + (t.block ? ' <span class="wr-blk">區塊</span>' : '') + '</td><td>' + (t.dir === 'buy' ? '<span class="wr-dl">買</span>' : '<span class="wr-ds">賣</span>') + '</td><td class="num">' + (Math.round(t.size * 10) / 10) + '</td><td class="num">' + (t.price != null ? t.price : '—') + '</td><td class="num">' + (t.iv != null ? t.iv.toFixed(0) + '%' : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
           }
 
+          /* Risk-gated decision support: model assumptions are explicit,
+             and missing core fields always produce a wait/no-trade state. */
+          function decisionPanel(d) {
+            if(!window.BTCOptionsDecision)return '';
+            var assessment=window.BTCOptionsDecision.evaluate(d);
+            var display=function(list){return '<ul class="wr-advice">'+list.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';};
+            var status=assessment.sufficient?'條件式交易情境':'數據不足・先觀望';
+            var info='<div class="wr-h"><span class="no">00</span>選擇權決策儀表・先判斷是否值得交易</div>'
+              +'<div class="wr-card" id="wr-decision-panel" role="region" aria-label="BTC 選擇權決策儀表">'
+              +'<span class="wr-badge">'+esc(status)+'</span><h4>'+esc(assessment.regime)+'｜'+esc(assessment.bias)+'</h4>'
+              +'<p><strong>參考情境：</strong>'+esc(assessment.setup)+'</p>'
+              +'<p><strong>啟動條件：</strong>'+esc(assessment.trigger)+'</p>';
+            if(assessment.missing.length)info+='<p class="wr-risk">缺少：'+esc(assessment.missing.join('、'))+'</p>';
+            info+='<div class="wr-subh">觀察到的數據（非買賣指令）</div>'+display(assessment.clues)
+              +'<div class="wr-subh mt">風險與模型限制</div>'+display(assessment.warnings)
+              +'<p class="wr-foot">結論是條件式情境，不代表已證實統計優勢。任何指定履約價或價差需再核對同到期日買賣盤、合約乘數、最大可能虧損與手續費；不提供自動下單。</p>'
+              +'</div>';
+            return info;
+          }
+
           /* ---------- 渲染 ---------- */
           function render(d, a) {
             /* 匯出即時快照給右下角 AI 助理當回答上下文 */
@@ -526,7 +546,9 @@
               + '<div class="wr-foot">綠＝正 gamma（造市商傾向壓抑波動、利於區間收租）、紅＝負 gamma（助漲助跌、波動放大）。' + (d.gex && d.gex.flip ? 'gamma 翻轉價約 <strong>' + fmt$(d.gex.flip) + '</strong>，現價在其' + (d.spot >= d.gex.flip ? '上方（相對穩定區）' : '下方（波動易放大區）') + '。' : '') + '造市商持倉方向為業界常見假設，非確定值，僅供參考。</div>'
               + '<div class="wr-subh mt">近期大單／區塊成交流（依口數排序前 8）</div>'
               + flowHTML(d.flow);
+            var decisionH=decisionPanel(d);
             $('<div class="wr-bar"><span>數據時間：' + stamp + '（台北）・即時計算・僅供參考，非投資建議</span><button type="button" id="wr-refresh">重新整理</button></div>'
+              + decisionH
               + '<div class="wr-tiles">'
               + '<div class="wr-tile"><div class="k">BTC 指數</div><div class="v">' + fmt$(d.spot) + '</div><div class="d">永續 ' + fmt$(d.perp.mark) + '・24h ' + fmt$(d.perp.low24) + '–' + fmt$(d.perp.high24) + '</div></div>'
               + '<div class="wr-tile"><div class="k">DVOL</div><div class="v">' + d.dvol.latest.toFixed(1) + '</div><div class="d">90日分位 ' + Math.round(d.dvol.pct) + '%（' + d.dvol.min.toFixed(0) + '–' + d.dvol.max.toFixed(0) + '）</div></div>'

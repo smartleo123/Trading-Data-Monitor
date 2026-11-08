@@ -186,3 +186,25 @@ test('TWSE market snapshot renders institutional and margin panels and 0050 clos
  await expect(page.locator('[data-twq="2330"]')).toContainText('1,450.50');
  await expect(page.locator('[data-twi="2330"]')).toContainText('14');
 });
+
+test('TDCC is scoped to Taiwan only and has a working sidebar entry',async ({page})=>{
+ await page.locator('#market-tab-tw-stock').click();
+ const tdcc=page.locator('#panel-tdcc-0050');
+ await expect(tdcc).toBeVisible();
+ await expect(page.locator('#section-nav .sn-item').filter({hasText:'集保戶股權分散表'})).toHaveCount(1);
+ await page.locator('#market-tab-us-stock').click();
+ await expect(tdcc).toBeHidden();
+ await expect(page.locator('#section-nav')).not.toContainText('集保戶股權分散表');
+ await page.locator('#market-tab-crypto').click();
+ await expect(tdcc).toBeHidden();
+ await expect(page.locator('#section-nav')).not.toContainText('集保戶股權分散表');
+ await page.locator('#market-tab-tw-stock').click();
+ if((page.viewportSize()?.width||0)>=1024){
+  await page.locator('#section-nav .sn-item').filter({hasText:'集保戶股權分散表'}).click();
+  await expect(tdcc).toBeInViewport({ratio:0.1});
+ }else{
+  // The sidebar is intentionally hidden on mobile; the TDCC panel remains accessible by scrolling.
+  await tdcc.scrollIntoViewIfNeeded();
+  await expect(tdcc).toBeInViewport({ratio:0.1});
+ }
+});
