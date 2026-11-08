@@ -176,6 +176,7 @@
       function invalidateQuotes(reason){
         if(!state)return;
         state.quoteReady=false;state.quoteRequest=(state.quoteRequest||0)+1;state.quoteStatus=reason||'市場報價已過期';
+        box.querySelectorAll('.sc-live-quote').forEach(function(el){el.remove();});
         state.legs.forEach(function(l){
           if(l.quote&&l.premAuto===false&&(l.t==='C'||l.t==='P')){
             l.prem=autoPrem(l);l.premAuto=true;
@@ -290,7 +291,7 @@
           var tSel = '<select data-leg="' + i + '" data-f="t">' + opt('C', '買權 Call', l.t) + opt('P', '賣權 Put', l.t) + opt('F', '期貨 Futures', l.t) + opt('U', '現貨 BTC', l.t) + '</select>';
           var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="K" value="' + l.K + '">';
           var pCell = (l.t === 'U' || l.t === 'F') ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="theo" id="sc-theo-' + i + '" data-leg="' + i + '" title="Black-Scholes 理論價・點此套用">' + theoTxt(l) + '</span>';
-          if(l.quote)pCell+='<span class="theo">'+l.quote.side+' '+l.quote.quoteBtc.toFixed(5)+' BTC｜價差 '+l.quote.spreadPct.toFixed(1)+'%｜'+l.quote.ageSeconds.toFixed(0)+'秒前</span>';
+          if(l.quote)pCell+='<span class="theo sc-live-quote">'+l.quote.side+' '+l.quote.quoteBtc.toFixed(5)+' BTC｜價差 '+l.quote.spreadPct.toFixed(1)+'%｜'+l.quote.ageSeconds.toFixed(0)+'秒前</span>';
           var qCell = '<input type="text" inputmode="numeric" autocomplete="off" data-leg="' + i + '" data-f="qty" value="' + (l.qty || 1) + '" style="width:56px">';
           return '<tr><td>' + dSel + '</td><td>' + tSel + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td><td class="r">' + qCell + '</td><td class="r"><button class="sc-rm" data-leg="' + i + '" title="刪除此部位">✕</button></td></tr>';
         }).join('');
