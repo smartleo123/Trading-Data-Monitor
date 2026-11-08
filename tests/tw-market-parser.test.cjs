@@ -13,7 +13,7 @@ test('T86 uses dynamic field names and preserves net share units',()=>{
 });
 test('MI_MARGN summary selects balances by headers',()=>{
  const j={stat:'OK',tables:[{title:'信用交易統計',fields:['項目','前日餘額','買進','賣出','現金償還','今日餘額'],data:[
-  ['融資','1,000','0','0','0','1,200'],['融券','100','0','0','0','80'],['融資金額','100,000,000','0','0','0','105,000,000']
+  ['融資(交易單位)','1,000','0','0','0','1,200'],['融券','100','0','0','0','80'],['融資金額','100,000,000','0','0','0','105,000,000']
  ]}]};
  const m=parseMargin(j);
  assert.equal(m.finNow,1050);assert.equal(m.finPrev,1000);assert.equal(m.shortNow,80);
