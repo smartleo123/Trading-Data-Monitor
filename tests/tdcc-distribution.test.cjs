@@ -41,3 +41,22 @@ test('TDCC ROC dates and ISO timestamps normalize to calendar date',()=>{
  f.forEach(r=>{r['資料日期']='2026-11-06T00:00:00';});
  assert.equal(parseDistribution(f).date,'2026-11-06');
 });
+
+test('TDCC parser supports stocks and ETFs beyond default 0050',()=>{
+ const raw=fixture();
+ const stock=raw.map(row=>({...row,'證券代號':'2330'}));
+ const etf=raw.map(row=>({...row,'證券代號':'00878'}));
+ assert.equal(parseDistribution(stock,'2330').symbol,'2330');
+ assert.equal(parseDistribution(etf,'00878').symbol,'00878');
+ assert.throws(()=>parseDistribution(stock,'0050'),/no 0050/);
+ assert.throws(()=>parseDistribution(stock,'../../'),/Invalid TDCC symbol/);
+});
+test('full-market builder groups codes and builds validated latest-date snapshots',()=>{
+ const {buildSnapshots}=require('../scripts/sync-tdcc.cjs');
+ const all=['0050','2330','00878'].flatMap(symbol=>fixture().map(row=>({...row,'證券代號':symbol})));
+ const out=buildSnapshots(all,3);
+ assert.equal(out.snapshots.size,3);
+ assert.equal(out.snapshots.get('2330').rows[16].cumulativePct,100);
+ assert.equal(out.snapshots.get('00878').symbol,'00878');
+ assert.throws(()=>buildSnapshots(all,4),/incomplete/);
+});
