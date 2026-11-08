@@ -122,3 +122,26 @@ a backwards-compatible default fallback.
 GitHub Actions schedules a weekly refresh on Saturday 10:00 Asia/Taipei.
 TDCC data are weekly snapshots, not real-time brokerage shareholder registers.
 Data source: https://www.tdcc.com.tw/portal/zh/smWeb/qryStock
+
+## TWSE institutional, margin and 0050 closing prices
+
+The "三大法人籌碼動向" and "融資融券" panels used to trigger dozens of
+cross-origin TWSE requests through unreliable public CORS proxies on each
+visitor's browser. They now load a small same-origin, GitHub-published
+`assets/data/tw-market-snapshot.json` instead. The daily GitHub Actions
+workflow (`.github/workflows/update-tw-market.yml`) runs at 19:50 Taipei
+time on weekdays and downloads the official TWSE BFI82U (institutional
+daily net flows), T86 (per-stock institutional net buying), MI_MARGN
+(margin balances), and STOCK_DAY_ALL (closing prices) reports.
+
+- The charts use the latest *validated* official daily rows. Date labels
+  are included; gaps due to holidays or source errors are possible.
+- The 0050 component table uses the bulk TWSE latest closing prices for
+  listed stocks and T86 net institutional trading shares (displayed as lots).
+  Price retrieval date is distinct from trading date when the official API
+  does not expose an as-of date per stock.
+- The weekly 0050 component holdings snapshot remains a separate data source.
+- Failed source requests do not replace existing validated data. The UI
+  shows a clear unavailable state rather than an indefinite loading spinner.
+- The daily market snapshot is after-hours data, **not live intraday quotes**.
+  This data covers TWSE (listed securities) and is not a full TPEx market feed.
