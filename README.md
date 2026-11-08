@@ -163,3 +163,28 @@ flagged as uncertain inferences, **not deterministic support/resistance**.
 Any modeled IV–realized spread may use mismatched tenors, and the module does
 not claim backtested profitability, quote-executable option premium, or
 brokerage account suitability. It never places orders.
+
+## Deribit executable quote-based BTC options calculator
+
+The strategy calculator now selects a real Deribit expiry, rather than using
+only an arbitrary DTE, and downloads live public `ticker` and
+`get_instrument` records for the exact option contract for each leg.
+It builds option entries from **best ask for buys** and **best bid for sells**.
+BTC option premiums are native BTC amounts: USD indicative cost per
+underlying-BTC contract is `premium_btc * BTC_USD * contract_size`.
+The amount multiplier is verified from instrument metadata. Invalid, stale
+(older than 120 seconds), unusually wide spread (>25%), insufficient top
+level size, non-open, or absent quotes do **not** qualify as executable
+reference pricing. Exchange top-of-book quotes are not guaranteed fills.
+
+The calculator preserves theoretical/manual fallback with an explicit warning
+when any option leg cannot be validated. It also lets users set an illustrative
+round-trip fee per BTC amount (default zero), derives expiration payoff,
+maximum loss, maximum profit, break-even prices, and a Black-76
+mark-to-model P&L grid for BTC spot -10% to +10% and IV +/-10
+volatility points at a hypothetical horizon seven days before expiry.
+This grid is **not** future executable bid/ask or a projected realized return;
+it excludes liquidity changes, actual exit costs beyond user assumptions,
+liquidations, and assignment/settlement-specific costs.
+
+No trading APIs, authentication or order placement are used.

@@ -208,3 +208,28 @@ test('TDCC is scoped to Taiwan only and has a working sidebar entry',async ({pag
   await expect(tdcc).toBeInViewport({ratio:0.1});
  }
 });
+
+test('BTC options strategy uses Deribit ask/bid snapshots and renders expiry + IV PnL scenarios',async({page})=>{
+ await page.evaluate(()=>{
+   const expire=new Date(Date.now()+30*86400000),months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+   window.WR_OPTION_EXPIRIES=[expire.getUTCDate()+months[expire.getUTCMonth()]+String(expire.getUTCFullYear()).slice(2)];
+   window.WR_SNAPSHOT={spot:80000,ivRows:[{atmIV:45}],basisAnnual:0};
+   window.WR_GET_OPTION_QUOTES=async names=>Object.fromEntries(names.map(name=>[name,{
+     ticker:{state:'open',timestamp:Date.now(),best_bid_price:0.04,best_ask_price:0.042,best_bid_amount:5,best_ask_amount:5},
+     instrument:{kind:'option',base_currency:'BTC',settlement_currency:'BTC',contract_size:1}
+   }]));
+ });
+ await page.locator('#wr-tab-calc').click();
+ await expect(page.locator('#sc-expiry')).toHaveValue(/^[0-9]{1,2}[A-Z]{3}[0-9]{2}$/);
+ await expect(page.locator('#sc-quote-status')).toContainText('✓');
+ await expect(page.locator('#sc-scenarios table tbody tr')).toHaveCount(5);
+ const spot=Number(await page.locator('#sc-spot').inputValue());
+ const expectedPremium=Math.round(spot*0.042).toLocaleString('en-US');
+ await expect(page.locator('#sc-metrics')).toContainText(expectedPremium);
+ await expect(page.locator('#sc-legs-body')).toContainText('Ask');
+ await page.locator('#sc-legs-body input[data-f="qty"]').first().fill('10');
+ await expect(page.locator('#sc-quote-status')).toContainText('重新核對');
+ await page.locator('#sc-apply-quotes').click();
+ await expect(page.locator('#sc-quote-status')).toContainText('掛單量不足');
+ await expect(page.locator('#sc-scenarios')).not.toContainText('IV -10pt');
+});

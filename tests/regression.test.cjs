@@ -39,8 +39,24 @@ test('missing icon CDN does not stop initial crypto quote requests',async t=>{co
 test('narrow bull call spread has exact break-even inside strike interval',async t=>{const a=await boot(t);a.calc();a.select('#sc-select','bull-call');a.input(leg(0,'K'),100100);a.input(leg(1,'K'),100200);a.input(leg(0,'prem'),75);a.input(leg(1,'prem'),25);assert.equal(a.metric('損益兩平'),'$100,150');assert.equal(a.metric('最大獲利'),'$50');assert.equal(a.metric('最大虧損'),'-$50');});
 test('break-even is not truncated at 2.5 times spot',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),300000);a.input(leg(0,'prem'),1000);assert.equal(a.metric('損益兩平'),'$301,000');});
 test('straddle preserves two break-even prices',async t=>{const a=await boot(t);a.calc();a.select('#sc-select','straddle');a.input(leg(0,'prem'),1000);a.input(leg(1,'prem'),1000);assert.equal(a.metric('損益兩平'),'$98,000、$102,000');});
-test('invalid strikes and quantities show an error instead of stale metrics',async t=>{const a=await boot(t);a.calc();for(const [field,values] of [['K',[-1,0,'abc','1abc','']],['qty',[0,-1,1.5,'']],['prem',[-1]]]){for(const v of values){a.input(leg(0,field),v);assert.equal(a.d.querySelector(leg(0,field)).getAttribute('aria-invalid'),'true');assert.ok(a.d.querySelector('#sc-metrics [role=alert]'));assert.equal(a.d.querySelector('#sc-svg'),null);}a.input(leg(0,field),field==='K'?100000:field==='qty'?1:1000);assert.equal(a.d.querySelector('#sc-metrics [role=alert]'),null);}assert.ok(!a.d.querySelector('#sc-metrics').textContent.includes('NaN'));});
-test('invalid spot or DTE suppresses output and valid input restores it',async t=>{const a=await boot(t);a.calc();for(const selector of ['#sc-spot','#sc-dte']){a.input(selector,0);assert.ok(a.d.querySelector('[role=alert]'));a.input(selector,selector==='#sc-spot'?100000:30);assert.ok(a.metric('最大虧損'));}});
+test('invalid strikes and quantities show an error instead of stale metrics',async t=>{const a=await boot(t);a.calc();for(const [field,values] of [['K',[-1,0,'abc','1abc','']],['qty',[0,-1,101,'']],['prem',[-1]]]){for(const v of values){a.input(leg(0,field),v);assert.equal(a.d.querySelector(leg(0,field)).getAttribute('aria-invalid'),'true');assert.ok(a.d.querySelector('#sc-metrics [role=alert]'));assert.equal(a.d.querySelector('#sc-svg'),null);}a.input(leg(0,field),field==='K'?100000:field==='qty'?1:1000);assert.equal(a.d.querySelector('#sc-metrics [role=alert]'),null);}assert.ok(!a.d.querySelector('#sc-metrics').textContent.includes('NaN'));});
+test('invalid spot suppresses output; DTE uses an exchange expiry',async t=>{
+ const a=await boot(t);a.calc();
+ a.input('#sc-spot',0);
+ assert.ok(a.d.querySelector('#sc-metrics [role=alert]'));
+ a.input('#sc-spot',100000);
+ assert.ok(a.metric('最大虧損'));
+ assert.equal(a.d.querySelector('#sc-dte').readOnly,true);
+ assert.ok(a.d.querySelector('#sc-expiry'));
+});
+test('fractional BTC option quantity is accepted and invalidated quotes are visibly marked',async t=>{
+ const a=await boot(t);a.calc();
+ a.input(leg(0,'qty'),0.5);
+ assert.equal(a.d.querySelector(leg(0,'qty')).getAttribute('aria-invalid'),'false');
+ assert.ok(a.metric('最大虧損'));
+ assert.match(a.d.querySelector('#sc-quote-status').textContent,/核對|報價|無效/);
+});
+
 test('manual leg edits survive refresh of live parameters',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),110000);a.input(leg(0,'prem'),1234);a.d.getElementById('sc-reload').click();assert.equal(a.d.querySelector(leg(0,'K')).value,'110000');assert.equal(a.d.querySelector(leg(0,'prem')).value,'1234');});
 test('adding and removing legs remains functional',async t=>{const a=await boot(t);a.calc();a.d.getElementById('sc-add').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,2);a.d.querySelector('.sc-rm').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,1);});
 test('pending crypto requests are shared, and settled requests may retry',async t=>{const a=await boot(t);a.w.eval('cryptoQuotePending.clear()');let resolve;let count=0;a.w.fetch=()=>{count++;return new Promise(r=>resolve=r)};const first=a.w.fetchCryptoQuote('BTCUSDT');assert.equal(first,a.w.fetchCryptoQuote('BTCUSDT'));assert.equal(count,1);resolve({ok:true,json:async()=>({lastPrice:'100'})});await first;a.w.fetchCryptoQuote('BTCUSDT');assert.equal(count,2);});
