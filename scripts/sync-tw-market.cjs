@@ -87,7 +87,7 @@ function tradingDates(limit=27){
 async function sync(){
  let previous={};
  try{previous=JSON.parse(fs.readFileSync(OUT,'utf8'));}catch{}
- const inst=new Map((previous.institutional||[]).map(r=>[r.date,r]));
+ const inst=new Map((previous.schemaVersion===3&&Array.isArray(previous.institutional)?previous.institutional:[]).map(r=>[r.date,r]));
  const margin=new Map((previous.margin||[]).map(r=>[r.date,r]));
  let leaders=previous.leaders||[],leaderDate=previous.leaderDate||null;
  let prices=previous.prices||{},priceDate=previous.priceDate||null;
@@ -112,12 +112,19 @@ async function sync(){
   // STOCK_DAY_ALL omits a per-symbol trade date. Label the collection date,
   // rather than incorrectly presenting the newest institutional day as quote as-of.
   const checkedAt=taipeiToday();
-  if(!priceDate||checkedAt>=priceDate){prices=latestPrices;priceDate=checkedAt;}
- }catch(e){console.log('STOCK_DAY_ALL skipped:',e.message);}
- const institutional=[...inst.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
- const margins=[...margin.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
+  if(!priceDate||checkedAt>=priceDate){prices=latestPrices;priceDate=checkedAtconst margins=[...margin.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
+  const lastTradingDate=leaderDate||margins.at(-1)?.date||'';
+  const signatures=new Set();
+  const institutional=[...inst.values()].filter(r=>!lastTradingDate||r.date<=lastTradingDate)
+    .sort((a,b)=>b.date.localeCompare(a.date)).filter(r=>{
+      const signature=[r.f,r.t,r.d].join('|');
+      if(signatures.has(signature)){console.warn('Suppressing duplicate BFI82U result for',r.date);return false;}
+      signatures.add(signature);return true;
+    }).slice(0,20).reverse();
+  if(institutional.length<3)console.warn('BFI82U historical coverage limited to',institutional.length,'distinct observations');
+  values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
  if(!institutional.length&&!margins.length&&!leaders.length&&!Object.keys(prices).length)throw Error('No TWSE data retrieved; retaining previous valid snapshot');
- const data={schemaVersion:2,source:'臺灣證券交易所 TWSE',source_url:'https://www.twse.com.tw/',institutional,margin:margins,leaderDate,leaders,priceDate,prices};
+ const data={schemaVersion:3,source:'臺灣證券交易所 TWSE',source_url:'https://www.twse.com.tw/',institutional,margin:margins,leaderDate,leaders,priceDate,prices};
  if(previous&&Object.keys(data).every(k=>JSON.stringify(previous[k])===JSON.stringify(data[k]))){console.log('TWSE market snapshot unchanged');return;}
  data.fetchedAt=new Date().toISOString();
  fs.mkdirSync(path.dirname(OUT),{recursive:true});fs.writeFileSync(OUT,JSON.stringify(data,null,2)+'\n');
