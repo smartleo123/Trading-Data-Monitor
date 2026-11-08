@@ -20,18 +20,18 @@
    '<p id="sc-replay-status" class="sc-help" role="status">尚未載入已驗證的 Deribit 歷史快照。</p>'+
    '<div id="sc-replay-results"></div>';
   const status=mount.querySelector('#sc-replay-status'),out=mount.querySelector('#sc-replay-results');
-  let history=null;
+  let requestSeq=0;
   const dt=t=>new Date(t).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false});
   function show(message){status.textContent=message;}
   async function run(){
+   const request=++requestSeq;
    out.replaceChildren();show('檢查快照來源、日期與可成交條件…');
    try{
-    if(!history){
-     const res=await fetch('assets/data/deribit/quote-history.json',{cache:'no-store'});
-     if(!res.ok)throw Error('尚無官方可核實的歷史快照（首次 GitHub Actions 執行前正常）');
-     history=await res.json();
-     if(history?.schemaVersion!==1||!Array.isArray(history.snapshots))throw Error('快照版本或格式不正確');
-    }
+    const res=await fetch('assets/data/deribit/quote-history.json',{cache:'no-store'});
+    if(!res.ok)throw Error('尚無官方可核實的歷史快照（首次 GitHub Actions 執行前正常）');
+    const history=await res.json();
+    if(request!==requestSeq)return;
+    if(history?.schemaVersion!==1||!Array.isArray(history.snapshots))throw Error('快照版本或格式不正確');
     const strategy=mount.querySelector('#sc-replay-strategy').value;
     const holdDays=Number(mount.querySelector('#sc-replay-hold').value);
     const feeBtc=Number(mount.querySelector('#sc-replay-fee').value);
@@ -61,7 +61,7 @@
     });
     grid.appendChild(tbody);const scroll=document.createElement('div');scroll.style.overflowX='auto';scroll.appendChild(grid);out.appendChild(scroll);
     out.appendChild(make('p','每筆皆核對相同合約到期日與進出場時點的兩側掛單及量。樣本採非重疊交易。實際成交可能與最優價不同，美元損益以出場 BTC 現價換算。'));
-   }catch(error){show('⚠ 無法執行可信的歷史重播：'+String(error.message||error));}
+   }catch(error){if(request===requestSeq)show('⚠ 無法執行可信的歷史重播：'+String(error.message||error));}
   }
   mount.querySelector('#sc-replay-run').addEventListener('click',run);
   run();
