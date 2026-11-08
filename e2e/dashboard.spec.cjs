@@ -38,7 +38,7 @@ test.beforeEach(async ({ page }) => {
   }));
   // Images are documented, embeddable external assets. Mock them to verify
   // browser image decoding and in-panel presentation without provider uptime.
-  const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Z+3rdAAAAAASUVORK5CYII=', 'base64');
+  const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFElEQVR4nGMUCaj4z8DAwMDEAAUAG4QB37TLi2wAAAAASUVORK5CYII=', 'base64');
   await page.route('**/www.tftc.io/bitcoin-etf-flows/email-card', route =>
     route.fulfill({ status: 200, contentType: 'image/png', body: pixel }));
   await page.route('**/alternative.me/crypto/fear-and-greed-index.png', route =>
