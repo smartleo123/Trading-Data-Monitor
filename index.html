@@ -724,7 +724,7 @@
                                 <th class="py-3 px-4 w-16 text-center">排行</th>
                                 <th class="py-3 px-4">證券代號</th>
                                 <th class="py-3 px-4">證券名稱</th>
-                                <th class="py-3 px-4 text-right">收盤價</th>
+                                <th class="py-3 px-4 text-right">最近收盤價</th>
                                 <th class="py-3 px-4 text-right">法人買賣超(張)</th>
                                 <th class="py-3 px-4 text-right">0050 持股權重</th>
                                 <th class="py-3 px-4 text-center w-16">TradingView</th>
@@ -736,7 +736,7 @@
                     </table>
                 </div>
                 <div id="tw-weight-note" class="text-[11px] text-zinc-600 px-1 mt-3">
-                    <span class="text-zinc-500">*</span> GitHub Actions 預定台灣時間週一至週五 19:30 同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" rel="noopener noreferrer" class="text-accentCyan hover:underline">元大 0050 官方持股權重</a>；來源異常時不覆蓋舊清單。初次快照成功前仍可能顯示內嵌清單（2026/06/30）。Yahoo Finance 報價可能延遲，欄位「收盤價」在盤中為前一交易日收盤，盤後為最近收盤。
+                    <span class="text-zinc-500">*</span> GitHub Actions 預定台灣時間週一至週五 19:30 同步<a href="https://www.yuantaetfs.com/product/detail/0050/ratio" target="_blank" rel="noopener noreferrer" class="text-accentCyan hover:underline">元大 0050 官方持股權重</a>；來源異常時不覆蓋舊清單。初次快照成功前仍可能顯示內嵌清單（2026/06/30）。「最近收盤價」由 GitHub 排程彙整證交所盤後整批資料（非盤中即時價格），滑鼠停留可查看資料日期。法人買賣超欄位同樣讀取每日盤後快照。
                 </div>
             </div>
             <!-- ═══════════════════════════════════════════════════════════════
@@ -749,7 +749,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="users" class="w-5 h-5 text-accentCyan"></i></div>
-                        <div><h2 class="text-md font-extrabold text-white">三大法人籌碼動向</h2><p class="text-xs text-zinc-500 mt-0.5">證交所官方數據（T+1 盤後公布）・買賣超金額與個股排行，切到台股頁籤時載入</p></div>
+                        <div><h2 class="text-md font-extrabold text-white">三大法人籌碼動向</h2><p class="text-xs text-zinc-500 mt-0.5">證交所盤後數據；GitHub 每交易日更新，有資料日期的最新快照，非盤中即時行情</p></div>
                     </div>
                     <button onclick="loadTwChips(true)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 transition-colors text-accentCyan hover:text-white flex items-center gap-1.5">重新整理</button>
                 </div>
@@ -766,7 +766,7 @@
             <div id="sec-tw-margin" data-nav="融資融券" class="bg-darkCard border border-zinc-850 rounded-2xl p-6 relative">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="scale" class="w-5 h-5 text-accentPurple"></i></div>
-                    <div><h2 class="text-md font-extrabold text-white">融資融券</h2><p class="text-xs text-zinc-500 mt-0.5">散戶槓桿溫度計（證交所官方數據）</p></div>
+                    <div><h2 class="text-md font-extrabold text-white">融資融券</h2><p class="text-xs text-zinc-500 mt-0.5">散戶槓桿溫度計（證交所官方盤後數據；每日排程同步）</p></div>
                 </div>
                 <div id="twc-margin-tiles" class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5"></div>
                 <div><div class="twc-h">近 20 個交易日融資餘額（億元）</div><div id="twc-margin-chart" class="w-full rounded-xl border border-zinc-900 bg-black/30 p-3"></div></div>

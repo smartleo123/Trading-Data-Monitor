@@ -174,3 +174,15 @@ test('TDCC symbol search shows 0050 by default, then switches to stocks and ETFs
  await expect(page.locator('#tdcc-0050-status')).toContainText('尚無可用');
  await expect(page.locator('#tdcc-0050-tbody tr')).toHaveCount(1);
 });
+
+test('TWSE market snapshot renders institutional and margin panels and 0050 close without public proxies',async({page})=>{
+ const data={institutional:[{date:'20261106',f:20,t:-3,d:1}],margin:[{date:'20261106',finNow:1200,finPrev:1190,shortNow:150000,shortPrev:140000,finUnitNow:200000}],leaders:[{code:'2330',name:'台積電',foreign:10000,trust:3000,net:14000},{code:'2454',name:'聯發科',foreign:-3000,trust:1000,net:-2000}],leaderDate:'20261106',prices:{'2330':1450.5,'2454':1000},priceDate:'20261106'};
+ await page.route('**/assets/data/tw-market-snapshot.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)}));
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.locator('#market-tab-tw-stock').click();
+ await expect(page.locator('#twc-inst-tiles')).toContainText('20.0');
+ await expect(page.locator('#twc-margin-tiles')).toContainText('1200 億');
+ await expect(page.locator('#twc-rank-buy')).toContainText('台積電');
+ await expect(page.locator('[data-twq="2330"]')).toContainText('1,450.50');
+ await expect(page.locator('[data-twi="2330"]')).toContainText('14');
+});

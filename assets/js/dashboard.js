@@ -517,11 +517,30 @@
         window.fillTwInstColumn=function(){
             document.querySelectorAll('[data-twi]').forEach(el=>{el.innerHTML=fmtTwInst(el.getAttribute('data-twi'));});
         };
+        let twOfficialClosePromise=null;
+        let twOfficialCloseData=null;
         function loadTwPrevCloses(){
-            TW_TOP50.forEach(s=>{
-                if(TW_QUOTE_CACHE[s.code]===undefined&&twQuoteQueue.indexOf(s.code)<0)twQuoteQueue.push(s.code);
-            });
-            pumpTwQuotes();
+            // One same-origin bulk TWSE snapshot replaces 50 separate Yahoo proxy calls.
+            // Apply it again whenever the 0050 holdings list is refreshed.
+            const apply=(data)=>{
+                const prices=data&&data.prices||{};
+                TW_TOP50.forEach(stock=>{
+                    const value=prices[stock.code],price=value==null?NaN:Number(value);
+                    TW_QUOTE_CACHE[stock.code]=Number.isFinite(price)&&price>0?price:false;
+                });
+                document.querySelectorAll('[data-twq]').forEach(el=>{
+                    el.textContent=fmtTwPrevClose(el.getAttribute('data-twq'));
+                    el.title=data&&data.priceDate?'證交所盤後收盤價（快照抓取日期：'+data.priceDate+'，個別交易日未提供）':'證交所盤後收盤價暫不可用';
+                });
+            };
+            if(twOfficialCloseData){apply(twOfficialCloseData);return Promise.resolve();}
+            if(!twOfficialClosePromise){
+                twOfficialClosePromise=fetch('assets/data/tw-market-snapshot.json',{cache:'no-store'})
+                    .then(r=>{if(!r.ok)throw Error('TWSE close snapshot missing');return r.json();})
+                    .then(data=>{if(!data||typeof data.prices!=='object')throw Error('TWSE close list invalid');twOfficialCloseData=data;return data;})
+                    .catch(()=>{twOfficialCloseData={prices:{}};return twOfficialCloseData;});
+            }
+            return twOfficialClosePromise.then(apply);
         }
         function pumpTwQuotes(){
             while(twQuoteActive<4&&twQuoteQueue.length){

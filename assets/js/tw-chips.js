@@ -214,88 +214,81 @@
         Object.assign(window.TW_CHIPS_SNAPSHOT, patch, { updatedAt: new Date().toISOString() });
         try { document.dispatchEvent(new CustomEvent('tw-chips-snapshot')); } catch (e) {}
       }
+      // Official TWSE closing data is fetched once on a scheduled GitHub runner.
+      // Visitors never depend on unreliable public CORS proxies for these charts.
       window.loadTwChips = function (force) {
         if (twcLoading || (twcLoaded && !force)) return;
         twcLoading = true;
-        var spinner = '<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
-        document.getElementById('twc-inst-tiles').innerHTML = '<div class="twc-tile"><div class="k">三大法人數據</div><div class="v">' + spinner + '</div></div>';
-        document.getElementById('twc-inst-chart').innerHTML = spinner;
-        document.getElementById('twc-margin-tiles').innerHTML = '<div class="twc-tile"><div class="k">融資融券數據</div><div class="v">' + spinner + '</div></div>';
-        document.getElementById('twc-margin-chart').innerHTML = spinner;
-        document.getElementById('twc-rank-buy').innerHTML = spinner;
-        document.getElementById('twc-rank-sell').innerHTML = spinner;
-        var days = dateList(26); /* 抓 26 個平日，扣掉假日後湊 20 個交易日 */
-
-        /* 三大法人 */
-        loadInst(days).then(function (res) {
-          var dts = Object.keys(res).sort();
-          var series = dts.slice(-20).map(function (dt) {
-            var r = res[dt];
-            return { date: dt.slice(4, 6) + '/' + dt.slice(6, 8), f: r.f, t: r.t, d: r.d };
-          });
-          barChart(document.getElementById('twc-inst-chart'), series);
-          if (series.length) {
-            var last = series[series.length - 1], total = last.f + last.t + last.d;
-            twSnap({ inst: { date: last.date, foreign: +last.f.toFixed(1), trust: +last.t.toFixed(1), dealer: +last.d.toFixed(1), total: +total.toFixed(1) } });
-            document.getElementById('twc-inst-tiles').innerHTML =
-              '<div class="twc-tile"><div class="k">外資（' + last.date + '）</div><div class="v ' + cls(last.f) + '">' + fmtE(last.f) + ' 億</div></div>'
-              + '<div class="twc-tile"><div class="k">投信</div><div class="v ' + cls(last.t) + '">' + fmtE(last.t) + ' 億</div></div>'
-              + '<div class="twc-tile"><div class="k">自營商</div><div class="v ' + cls(last.d) + '">' + fmtE(last.d) + ' 億</div></div>'
-              + '<div class="twc-tile"><div class="k">三大法人合計</div><div class="v ' + cls(total) + '">' + fmtE(total) + ' 億</div><div class="d">' + (total >= 0 ? '法人偏買方' : '法人偏賣方') + '</div></div>';
-          } else {
-            document.getElementById('twc-inst-tiles').innerHTML = '<div class="twc-tile"><div class="k">三大法人</div><div class="v twc-err" style="font-size:13px">暫時無法取得</div></div>';
-          }
+        var spinner='<span class="q-loading-sm"><span class="q-spin"></span>獲取中</span>';
+        ['twc-inst-tiles','twc-inst-chart','twc-margin-tiles','twc-margin-chart','twc-rank-buy','twc-rank-sell'].forEach(function(id){
+          var el=document.getElementById(id);if(el)el.innerHTML=spinner;
         });
-
-        /* T86 個股排行＋前50大法人欄 */
-        loadT86(days).then(function (t86) {
-          if (!t86) {
-            document.getElementById('twc-rank-buy').innerHTML = '<span class="twc-err">暫時無法取得。</span>';
-            document.getElementById('twc-rank-sell').innerHTML = '';
-            return;
-          }
-          var rows = t86.rows.map(function (r) {
-            return { code: String(r[0]).trim(), name: String(r[1]).trim(), foreign: num(r[4]), trust: num(r[10]), net: num(r[r.length - 1]) };
-          });
-          window.TW_INST_MAP = {};
-          rows.forEach(function (r) { window.TW_INST_MAP[r.code] = r.net; });
-          if (typeof window.fillTwInstColumn === 'function') window.fillTwInstColumn();
-          var sorted = rows.slice().sort(function (a, b) { return b.net - a.net; });
-          var brief = function (r) { return { code: r.code, name: r.name, netLots: Math.round(r.net / 1000) }; };
-          twSnap({ stockLeaders: { topBuy: sorted.slice(0, 5).map(brief), topSell: sorted.slice(-5).reverse().map(brief) } });
-          function tbl(list) {
-            return '<table class="twc-t"><thead><tr><th>代號</th><th>名稱</th><th style="text-align:right">外資(張)</th><th style="text-align:right">投信(張)</th><th style="text-align:right">合計(張)</th></tr></thead><tbody>'
-              + list.map(function (r) {
-                  return '<tr><td class="num" style="text-align:left;color:#e4e4e7">' + r.code + '</td><td>' + r.name + '</td>'
-                    + '<td class="num ' + cls(r.foreign) + '">' + Math.round(r.foreign / 1000).toLocaleString() + '</td>'
-                    + '<td class="num ' + cls(r.trust) + '">' + Math.round(r.trust / 1000).toLocaleString() + '</td>'
-                    + '<td class="num ' + cls(r.net) + '">' + Math.round(r.net / 1000).toLocaleString() + '</td></tr>';
-                }).join('') + '</tbody></table>';
-          }
-          document.getElementById('twc-rank-buy').innerHTML = tbl(sorted.slice(0, 10));
-          document.getElementById('twc-rank-sell').innerHTML = tbl(sorted.slice(-10).reverse());
-        });
-
-        /* 融資融券 */
-        loadMargin(days).then(function (res) {
-          var dts = Object.keys(res).sort();
-          var series = dts.slice(-20).map(function (dt) { return { date: dt.slice(4, 6) + '/' + dt.slice(6, 8), v: res[dt].finNow }; });
-          lineChart(document.getElementById('twc-margin-chart'), series);
-          if (dts.length) {
-            var m = res[dts[dts.length - 1]];
-            var chg = m.finNow - m.finPrev, sChg = m.shortNow - m.shortPrev;
-            var ratio = m.finUnitNow ? (m.shortNow / m.finUnitNow * 100) : null;
-            twSnap({ margin: { finBalance: +m.finNow.toFixed(1), finChg: +chg.toFixed(1), shortBalance: m.shortNow, shortChg: sChg, shortMarginRatio: ratio != null ? +ratio.toFixed(2) : null } });
-            document.getElementById('twc-margin-tiles').innerHTML =
-              '<div class="twc-tile"><div class="k">融資餘額</div><div class="v">' + m.finNow.toFixed(0) + ' 億</div><div class="d ' + cls(chg) + '">今日 ' + fmtE(chg) + ' 億</div></div>'
-              + '<div class="twc-tile"><div class="k">融券餘額</div><div class="v">' + m.shortNow.toLocaleString() + ' 張</div><div class="d ' + cls(-sChg) + '">今日 ' + (sChg >= 0 ? '+' : '') + sChg.toLocaleString() + ' 張</div></div>'
-              + '<div class="twc-tile"><div class="k">券資比</div><div class="v">' + (ratio != null ? ratio.toFixed(2) + '%' : '—') + '</div><div class="d">融券張數／融資張數</div></div>'
-              + '<div class="twc-tile"><div class="k">解讀</div><div class="v" style="font-size:13px;line-height:1.6;font-weight:600;color:#a1a1aa">' + (chg > 5 ? '融資快速增加，散戶槓桿升溫' : chg < -5 ? '融資退潮，槓桿降溫（籌碼沉澱）' : '融資變化平穩') + '</div></div>';
-          } else {
-            document.getElementById('twc-margin-tiles').innerHTML = '<div class="twc-tile"><div class="k">融資融券</div><div class="v twc-err" style="font-size:13px">暫時無法取得</div></div>';
-          }
-          twcLoaded = true; twcLoading = false;
-        });
+        return fetch('assets/data/tw-market-snapshot.json',{cache:'no-store'})
+          .then(function(r){if(!r.ok)throw Error('TWSE 快照尚未建立');return r.json();})
+          .then(function(data){
+            if(!data||!Array.isArray(data.institutional)||!Array.isArray(data.margin)||!Array.isArray(data.leaders))
+              throw Error('TWSE 快照格式不完整');
+            var institutional=data.institutional.filter(function(r){
+              return r&&/^20\d{6}$/.test(r.date)&&[r.f,r.t,r.d].every(Number.isFinite);
+            }).sort(function(a,b){return a.date.localeCompare(b.date);}).slice(-20);
+            var margins=data.margin.filter(function(r){
+              return r&&/^20\d{6}$/.test(r.date)&&[r.finNow,r.finPrev,r.shortNow,r.shortPrev,r.finUnitNow].every(Number.isFinite);
+            }).sort(function(a,b){return a.date.localeCompare(b.date);}).slice(-20);
+            var disp=function(d){return d.slice(4,6)+'/'+d.slice(6,8);};
+            var instEl=document.getElementById('twc-inst-tiles');
+            var instChart=document.getElementById('twc-inst-chart');
+            var marginEl=document.getElementById('twc-margin-tiles');
+            var marginChart=document.getElementById('twc-margin-chart');
+            if(institutional.length){
+              var last=institutional[institutional.length-1],dt=disp(last.date),total=last.f+last.t+last.d;
+              barChart(instChart,institutional.map(function(r){return {date:disp(r.date),f:r.f,t:r.t,d:r.d};}));
+              twSnap({inst:{date:dt,foreign:+last.f.toFixed(1),trust:+last.t.toFixed(1),dealer:+last.d.toFixed(1),total:+total.toFixed(1)}});
+              instEl.innerHTML='<div class="twc-tile"><div class="k">外資（'+dt+'）</div><div class="v '+cls(last.f)+'">'+fmtE(last.f)+' 億</div></div>'
+                +'<div class="twc-tile"><div class="k">投信</div><div class="v '+cls(last.t)+'">'+fmtE(last.t)+' 億</div></div>'
+                +'<div class="twc-tile"><div class="k">自營商</div><div class="v '+cls(last.d)+'">'+fmtE(last.d)+' 億</div></div>'
+                +'<div class="twc-tile"><div class="k">三大法人合計</div><div class="v '+cls(total)+'">'+fmtE(total)+' 億</div><div class="d">盤後官方統計</div></div>';
+            }else{instEl.textContent='三大法人盤後資料尚未取得';instChart.textContent='暫無有效資料';}
+            var validLeaders=data.leaders.filter(function(r){
+              return r&&/^\d{4}[0-9A-Z]{0,2}$/.test(r.code)&&[r.foreign,r.trust,r.net].every(Number.isFinite);
+            });
+            window.TW_INST_MAP={};
+            validLeaders.forEach(function(r){window.TW_INST_MAP[r.code]=r.net;});
+            if(typeof window.fillTwInstColumn==='function')window.fillTwInstColumn();
+            var sorted=validLeaders.slice().sort(function(a,b){return b.net-a.net;});
+            var brief=function(r){return {code:r.code,name:r.name,netLots:Math.round(r.net/1000)};};
+            twSnap({stockLeaders:{topBuy:sorted.slice(0,5).map(brief),topSell:sorted.slice(-5).reverse().map(brief)}});
+            function escape(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+            function table(list){
+              return '<table class="twc-t"><thead><tr><th>代號</th><th>名稱</th><th style="text-align:right">外資(張)</th><th style="text-align:right">投信(張)</th><th style="text-align:right">合計(張)</th></tr></thead><tbody>'
+                +list.map(function(r){return '<tr><td class="num">'+escape(r.code)+'</td><td>'+escape(r.name)+'</td>'
+                +'<td class="num '+cls(r.foreign)+'">'+Math.round(r.foreign/1000).toLocaleString()+'</td>'
+                +'<td class="num '+cls(r.trust)+'">'+Math.round(r.trust/1000).toLocaleString()+'</td>'
+                +'<td class="num '+cls(r.net)+'">'+Math.round(r.net/1000).toLocaleString()+'</td></tr>';}).join('')+'</tbody></table>';
+            }
+            document.getElementById('twc-rank-buy').innerHTML=sorted.length?table(sorted.slice(0,10)):'目前沒有可用的個股法人排行';
+            document.getElementById('twc-rank-sell').innerHTML=sorted.length?table(sorted.slice(-10).reverse()):'目前沒有可用的個股法人排行';
+            if(margins.length){
+              lineChart(marginChart,margins.map(function(r){return {date:disp(r.date),v:r.finNow};}));
+              var m=margins[margins.length-1],chg=m.finNow-m.finPrev,sChg=m.shortNow-m.shortPrev;
+              var ratio=m.finUnitNow?m.shortNow/m.finUnitNow*100:null;
+              twSnap({margin:{finBalance:+m.finNow.toFixed(1),finChg:+chg.toFixed(1),shortBalance:m.shortNow,shortChg:sChg,shortMarginRatio:ratio==null?null:+ratio.toFixed(2)}});
+              marginEl.innerHTML='<div class="twc-tile"><div class="k">融資餘額（'+disp(m.date)+'）</div><div class="v">'+m.finNow.toFixed(0)+' 億</div><div class="d '+cls(chg)+'">'+fmtE(chg)+' 億</div></div>'
+                +'<div class="twc-tile"><div class="k">融券餘額</div><div class="v">'+m.shortNow.toLocaleString()+' 張</div><div class="d '+cls(-sChg)+'">'+(sChg>=0?'+':'')+sChg.toLocaleString()+' 張</div></div>'
+                +'<div class="twc-tile"><div class="k">券資比</div><div class="v">'+(ratio===null?'—':ratio.toFixed(2)+'%')+'</div></div>'
+                +'<div class="twc-tile"><div class="k">資料基準日</div><div class="v" style="font-size:14px">'+m.date.slice(0,4)+'/'+disp(m.date)+'</div><div class="d">TWSE 盤後資料</div></div>';
+            }else{marginEl.textContent='融資融券盤後資料尚未取得';marginChart.textContent='暫無有效資料';}
+            if(!institutional.length&&!margins.length&&!validLeaders.length)throw Error('目前沒有有效的台股籌碼快照');
+            twcLoaded=true;
+            return data;
+          }).catch(function(e){
+            twcLoaded=false;
+            ['twc-inst-tiles','twc-margin-tiles'].forEach(function(id){
+              document.getElementById(id).textContent='官方資料暫時無法取得：'+e.message;
+            });
+            ['twc-inst-chart','twc-margin-chart','twc-rank-buy','twc-rank-sell'].forEach(function(id){
+              document.getElementById(id).textContent='請稍後重新整理，或前往證交所查詢盤後資訊。';
+            });
+          }).finally(function(){twcLoading=false;});
       };
 
       /* 台股頁籤首次開啟時載入籌碼數據（重量級分析，不隨頁面預載） */
