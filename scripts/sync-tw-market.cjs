@@ -49,7 +49,7 @@ function parseMargin(j){
   if(now===null||earlier===null)continue;
   if(label.includes('融資金額')){rec.finNow=now/1e5;rec.finPrev=earlier/1e5;}
   else if(label.includes('融券')&&!label.includes('融券金額')){rec.shortNow=now;rec.shortPrev=earlier;}
-  else if(label==='融資'){rec.finUnitNow=now;}
+  else if(label==='融資'||label.startsWith('融資(')){rec.finUnitNow=now;}
  }
  if(![rec.finNow,rec.finPrev,rec.shortNow,rec.shortPrev,rec.finUnitNow].every(Number.isFinite))
   throw Error('MI_MARGN balance rows missing: '+table.data.map(r=>r[0]).join('|'));
