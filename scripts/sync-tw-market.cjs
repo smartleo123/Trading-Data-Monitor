@@ -66,7 +66,7 @@ function parsePrices(j){
  if(Object.keys(prices).length<100)throw Error('STOCK_DAY_ALL too few prices');
  return prices;
 }
-async function getJson(url,timeout=15000){
+async function getJson(url,timeout=8000){
  const c=new AbortController(),timer=setTimeout(()=>c.abort(),timeout);
  try{const r=await fetch(url,{signal:c.signal,headers:{Accept:'application/json','User-Agent':'Mozilla/5.0 (compatible; HakuTrade-DataCollector/1.0)'}});
   if(!r.ok)throw Error('HTTP '+r.status);
@@ -91,7 +91,7 @@ async function sync(){
  const margin=new Map((previous.margin||[]).map(r=>[r.date,r]));
  let leaders=previous.leaders||[],leaderDate=previous.leaderDate||null;
  let prices=previous.prices||{},priceDate=previous.priceDate||null;
- const dates=tradingDates();
+ const dates=tradingDates(12);
  for(const date of dates){
   for(const [kind,map,api,parser] of [
    ['institutional',inst,'fund/BFI82U?date='+date+'&response=json',parseInstitution],
