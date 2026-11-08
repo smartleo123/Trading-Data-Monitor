@@ -3,7 +3,7 @@ name: Update TDCC 0050 ownership distribution
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/update-tdcc.yml']
+    paths: ['.github/workflows/update-tdcc.yml', 'scripts/tdcc-distribution.cjs', 'scripts/sync-tdcc.cjs']
   schedule:
     # Saturday 10:00 Taiwan time (02:00 UTC), after the Friday reference date.
     - cron: '0 2 * * 6'
