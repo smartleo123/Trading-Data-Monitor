@@ -19,7 +19,7 @@ module.exports = defineConfig({
   },
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
-    { name: 'mobile-chromium', use: { ...devices['iPhone 13'], browserName: 'chromium' } }
+    { name: 'mobile-chromium', use: { ...devices['Pixel 7'], browserName: 'chromium' } }
   ],
   webServer: {
     command: 'node e2e/server.cjs',
