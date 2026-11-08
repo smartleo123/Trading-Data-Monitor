@@ -36,6 +36,13 @@ test.beforeEach(async ({ page }) => {
       target.appendChild(frame);
     })();`
   }));
+  // Images are documented, embeddable external assets. Mock them to verify
+  // browser image decoding and in-panel presentation without provider uptime.
+  const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Z+3rdAAAAAASUVORK5CYII=', 'base64');
+  await page.route('**/www.tftc.io/bitcoin-etf-flows/email-card', route =>
+    route.fulfill({ status: 200, contentType: 'image/png', body: pixel }));
+  await page.route('**/alternative.me/crypto/fear-and-greed-index.png', route =>
+    route.fulfill({ status: 200, contentType: 'image/png', body: pixel }));
   // Other external chart and API providers can be flaky in CI; do not let them
   // dictate the success of our own interaction and layout checks.
   await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -53,9 +60,14 @@ test('loads market quote and mounts the chart widget', async ({ page }) => {
 test('chart choices and market tabs respond to real clicks', async ({ page }) => {
   await page.locator('#btn-src-local').click();
   await expect(page.locator('#local-chart-container')).toBeVisible();
-  await expect(page.locator('#coinglass-source-link')).toHaveAttribute('href', /coinglass\.com/);
+  await expect(page.locator('#coinglass-source-link')).toHaveAttribute('href', /farside\.co\.uk/);
+  await expect(page.locator('#btc-etf-flow-chart')).toBeVisible();
+  await expect.poll(() => page.locator('#btc-etf-flow-chart').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await page.locator('#btn-src-altcoin').click();
   await expect(page.locator('#altcoin-iframe-container')).toBeVisible();
+  await expect(page.locator('#coinglass-source-link')).toHaveAttribute('href', /alternative\.me/);
+  await expect(page.locator('#crypto-fear-greed-chart')).toBeVisible();
+  await expect.poll(() => page.locator('#crypto-fear-greed-chart').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await page.locator('#btn-src-coinglass').click();
   await expect(page.locator('#coinglass-iframe-container')).toBeVisible();
   await page.locator('#market-tab-tw-stock').click();
