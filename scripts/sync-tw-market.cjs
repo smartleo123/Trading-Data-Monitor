@@ -94,11 +94,11 @@ async function sync(){
  const dates=tradingDates(12);
  for(const date of dates){
   for(const [kind,map,api,parser] of [
-   ['institutional',inst,'fund/BFI82U?date='+date+'&response=json',parseInstitution],
+   ['institutional',inst,'fund/BFI82U?date='+date+'&dayDate='+date+'&type=day&response=json',parseInstitution],
    ['margin',margin,'marginTrading/MI_MARGN?date='+date+'&selectType=MS&response=json',parseMargin]
   ]){
    if(map.has(date))continue;
-   try{const record=parser(await getJson(ROOT+api));map.set(date,{date,...record});}
+   try{const raw=await getJson(ROOT+api);if(kind==='institutional'&&String(raw.date||'')!==date)throw Error('TWSE returned '+raw.date+' instead of '+date);const record=parser(raw);map.set(date,{date,...record});}
    catch(e){console.log(kind,date,'skipped:',e.message);}
   }
   if(!leaderDate||date>leaderDate){
@@ -117,7 +117,7 @@ async function sync(){
  const institutional=[...inst.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
  const margins=[...margin.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20);
  if(!institutional.length&&!margins.length&&!leaders.length&&!Object.keys(prices).length)throw Error('No TWSE data retrieved; retaining previous valid snapshot');
- const data={source:'臺灣證券交易所 TWSE',source_url:'https://www.twse.com.tw/',institutional,margin:margins,leaderDate,leaders,priceDate,prices};
+ const data={schemaVersion:2,source:'臺灣證券交易所 TWSE',source_url:'https://www.twse.com.tw/',institutional,margin:margins,leaderDate,leaders,priceDate,prices};
  if(previous&&Object.keys(data).every(k=>JSON.stringify(previous[k])===JSON.stringify(data[k]))){console.log('TWSE market snapshot unchanged');return;}
  data.fetchedAt=new Date().toISOString();
  fs.mkdirSync(path.dirname(OUT),{recursive:true});fs.writeFileSync(OUT,JSON.stringify(data,null,2)+'\n');
