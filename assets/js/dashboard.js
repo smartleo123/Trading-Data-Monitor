@@ -517,11 +517,31 @@
         window.fillTwInstColumn=function(){
             document.querySelectorAll('[data-twi]').forEach(el=>{el.innerHTML=fmtTwInst(el.getAttribute('data-twi'));});
         };
+        let twOfficialClosePromise=null;
         function loadTwPrevCloses(){
-            TW_TOP50.forEach(s=>{
-                if(TW_QUOTE_CACHE[s.code]===undefined&&twQuoteQueue.indexOf(s.code)<0)twQuoteQueue.push(s.code);
-            });
-            pumpTwQuotes();
+            // Yahoo public CORS relays frequently fail; one official static file provides
+            // all TWSE closes without per-security requests or browser CORS workarounds.
+            if(!twOfficialClosePromise){
+                twOfficialClosePromise=fetch('assets/data/tw-market-snapshot.json',{cache:'no-store'})
+                    .then(r=>{if(!r.ok)throw Error('TWSE close snapshot missing');return r.json();})
+                    .then(data=>{
+                        const prices=data.prices||{};
+                        TW_TOP50.forEach(stock=>{
+                            const price=Number(prices[stock.code]);
+                            TW_QUOTE_CACHE[stock.code]=Number.isFinite(price)&&price>0?price:false;
+                        });
+                        document.querySelectorAll('[data-twq]').forEach(el=>{
+                            el.textContent=fmtTwPrevClose(el.getAttribute('data-twq'));
+                            el.title=data.priceDate?'證交所最近收盤資料（'+data.priceDate+'）':'證交所最近收盤，資料日期未核實';
+                        });
+                    }).catch(()=>{
+                        TW_TOP50.forEach(stock=>{TW_QUOTE_CACHE[stock.code]=false;});
+                        document.querySelectorAll('[data-twq]').forEach(el=>{
+                            el.textContent='—';el.title='證交所盤後價格資料尚未取得';
+                        });
+                    });
+            }
+            return twOfficialClosePromise;
         }
         function pumpTwQuotes(){
             while(twQuoteActive<4&&twQuoteQueue.length){
