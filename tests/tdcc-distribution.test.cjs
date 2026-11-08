@@ -26,3 +26,18 @@ test('TDCC CSV supports quoted fields and commas',()=>{
  const csv='資料日期,證券代號,持股分級,人數,股數,占集保庫存數比例%\n20261106,0050,1,"1,612,623","485,315,659",2.02\n';
  const rows=parseCsv(csv);assert.equal(rows[0].人數,'1,612,623');
 });
+
+test('TDCC adjusts unsigned discrepancy based on source total',()=>{
+ const f=fixture();
+ f[15]['股數']=String(Math.abs(Number(f[15]['股數'])));
+ const result=parseDistribution(f);
+ assert.ok(result.rows[15].shares<0);
+ assert.equal(result.rows[15].shares,-20247198);
+});
+test('TDCC ROC dates and ISO timestamps normalize to calendar date',()=>{
+ const f=fixture();
+ f.forEach(r=>{r['資料日期']='1151106';});
+ assert.equal(parseDistribution(f).date,'2026-11-06');
+ f.forEach(r=>{r['資料日期']='2026-11-06T00:00:00';});
+ assert.equal(parseDistribution(f).date,'2026-11-06');
+});
