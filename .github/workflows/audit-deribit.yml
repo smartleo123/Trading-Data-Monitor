@@ -1,5 +1,7 @@
 name: Audit and archive Deribit BTC options quotes
 on:
+  pull_request:
+    paths: ['scripts/record-deribit.cjs', '.github/workflows/audit-deribit.yml', 'assets/js/options-execution.js']
   push:
     branches: [main]
     paths: ['scripts/record-deribit.cjs', '.github/workflows/audit-deribit.yml']
@@ -24,6 +26,7 @@ jobs:
       - name: Audit real Deribit production order books
         run: node scripts/record-deribit.cjs
       - name: Publish validated quote history
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
