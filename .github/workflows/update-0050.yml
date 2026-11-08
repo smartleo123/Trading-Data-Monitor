@@ -1,6 +1,10 @@
 name: Update 0050 fund holdings
 
 on:
+  # Also bootstrap a snapshot when the workflow itself first lands on main.
+  push:
+    branches: [main]
+    paths: ['.github/workflows/update-0050.yml']
   # 19:30 in Taipei (UTC+8), Monday to Friday. GitHub schedule is best effort.
   schedule:
     - cron: '30 11 * * 1-5'
