@@ -131,6 +131,24 @@
             return apiWs(path, params).catch(function () { return apiHttp(path, params); });
           }
 
+          // Shared read-only public ticker/specification access for the strategy calculator.
+          // A synchronized quote includes the exchange timestamp and actual top-of-book size.
+          window.WR_GET_OPTION_QUOTES = async function(names) {
+            const output={};
+            const unique=[...new Set(names)];
+            for(let i=0;i<unique.length;i+=4){
+              await Promise.all(unique.slice(i,i+4).map(async function(name){
+                try{
+                  const pair=await Promise.all([
+                    api('ticker',{instrument_name:name}),
+                    api('get_instrument',{instrument_name:name})
+                  ]);
+                  output[name]={ticker:pair[0],instrument:pair[1]};
+                }catch(e){output[name]={error:String(e&&e.message||e)};}
+              }));
+            }
+            return output;
+          };
           /* ---------- 數據 ---------- */
           function fetchAll(onStep) {
             var now = Date.now(), D = {};
@@ -169,6 +187,7 @@
                 opts.push({ expiry: p[1], ed: ed, K: +p[2], type: p[3], oi: o.open_interest || 0, iv: (o.mark_iv != null ? o.mark_iv : null), vol: o.volume || 0 });
               });
               D.opts = opts;
+              window.WR_OPTION_EXPIRIES=[...new Set(opts.map(function(o){return o.expiry;}))].sort(function(a,b){return parseExpiry(a)-parseExpiry(b);}).filter(function(e){return daysTo(parseExpiry(e))>1;});
               var near = opts.filter(function (o) { return daysTo(o.ed) <= 60; });
               var pOI = 0, cOI = 0;
               near.forEach(function (o) { if (o.type === 'P') pOI += o.oi; else cOI += o.oi; });
