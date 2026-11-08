@@ -223,7 +223,9 @@ test('BTC options strategy uses Deribit ask/bid snapshots and renders expiry + I
  await expect(page.locator('#sc-expiry')).toHaveValue(/^[0-9]{1,2}[A-Z]{3}[0-9]{2}$/);
  await expect(page.locator('#sc-quote-status')).toContainText('✓');
  await expect(page.locator('#sc-scenarios table tbody tr')).toHaveCount(5);
- await expect(page.locator('#sc-metrics')).toContainText('3,360');
+ const spot=Number(await page.locator('#sc-spot').inputValue());
+ const expectedPremium=Math.round(spot*0.042).toLocaleString('en-US');
+ await expect(page.locator('#sc-metrics')).toContainText(expectedPremium);
  await expect(page.locator('#sc-legs-body')).toContainText('Ask');
  await page.locator('#sc-legs-body input[data-f="qty"]').first().fill('10');
  await expect(page.locator('#sc-quote-status')).toContainText('重新核對');
