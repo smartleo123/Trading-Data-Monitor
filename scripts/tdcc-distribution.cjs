@@ -34,10 +34,11 @@ const val=(r,keys)=>{for(const k of keys)if(r[k]!=null)return r[k];return undefi
 const integer=(n)=>{const x=Number(String(n??'').replace(/,/g,'').trim());return Number.isSafeInteger(x)&&x>=0?x:null;};
 const signedInteger=(n)=>{const x=Number(String(n??'').replace(/,/g,'').trim());return Number.isSafeInteger(x)?x:null;};
 const pct=(n)=>{const x=Number(String(n??'').replace(/[,%％]/g,'').trim());return Number.isFinite(x)?x:null;};
-function parseDistribution(payload){
+function parseDistribution(payload,symbol='0050'){
+ if(!/^\d{4}[0-9A-Z]{0,2}$/.test(symbol))throw Error('Invalid TDCC symbol');
  const all=normalizedRows(payload);
- const matching=all.filter(r=>String(val(r,['證券代號','證券代碼','Securities Code','stockNo','StockNo','code'])??'').trim()==='0050');
- if(!matching.length)throw Error('TDCC contains no 0050 data');
+ const matching=all.filter(r=>String(val(r,['證券代號','證券代碼','Securities Code','stockNo','StockNo','code'])??'').trim()===symbol);
+ if(!matching.length)throw Error('TDCC contains no '+symbol+' data');
  const normalizeDate=(value)=>{
   const raw=String(value??'').trim();
   const digits=raw.replace(/\D/g,'');
@@ -46,7 +47,7 @@ function parseDistribution(payload){
   return null;
  };
  const dated=matching.map(r=>({r,date:normalizeDate(val(r,['資料日期','Date','date','scaDate','dateStr']))})).filter(x=>x.date);
- if(!dated.length)throw Error('TDCC 0050 has no valid data date');
+ if(!dated.length)throw Error('TDCC '+symbol+' has no valid data date');
  const latest=dated.map(x=>x.date).sort().at(-1),rows=dated.filter(x=>x.date===latest).map(x=>x.r);
  const table=new Map();
  for(const r of rows){
@@ -58,6 +59,11 @@ function parseDistribution(payload){
   const proportion=pct(val(r,['占集保庫存數比例%','佔集保庫存數比例(%)','佔集保庫存數比例%','Percentage of Centrally Deposited Securities','proportion']));
   if((grade!==16&&holders==null)||shares==null||proportion==null)throw Error('Malformed TDCC row '+grade);
   table.set(grade,{grade,range:RANGES[grade-1],holders,shares,proportion});
+ }
+ // A few securities have no grade-16 adjustment; only synthesize a zero
+ // adjustment if all 15 holder ranges and the official total are present.
+ if(!table.has(16) && table.size===16 && Array.from({length:15},(_,i)=>i+1).every(n=>table.has(n)) && table.has(17)){
+  table.set(16,{grade:16,range:RANGES[15],holders:null,shares:0,proportion:0});
  }
  if(table.size!==17||!Array.from({length:17},(_,i)=>i+1).every(n=>table.has(n)))throw Error('Incomplete TDCC distribution');
  const total=table.get(17);
@@ -85,6 +91,6 @@ function parseDistribution(payload){
  if(Math.abs(total.proportion-100)>0.2)throw Error('TDCC total proportion not 100%');
  const iso=latest.slice(0,4)+'-'+latest.slice(4,6)+'-'+latest.slice(6,8);
  if(new Date(iso+'T00:00:00Z').toISOString().slice(0,10)!==iso)throw Error('Invalid TDCC calendar date');
- return {symbol:'0050',date:iso,rows:result,source:'臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)',source_url:'https://www.tdcc.com.tw/portal/zh/smWeb/qryStock'};
+ return {symbol,date:iso,rows:result,source:'臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)',source_url:'https://www.tdcc.com.tw/portal/zh/smWeb/qryStock'};
 }
-module.exports={parseCsv,parseDistribution,RANGES};
+module.exports={parseCsv,normalizedRows,parseDistribution,RANGES};
