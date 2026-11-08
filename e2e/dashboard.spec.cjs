@@ -67,11 +67,13 @@ test('chart choices and market tabs respond to real clicks', async ({ page }) =>
   await expect(page.locator('#market-view-crypto')).toBeVisible();
 });
 
-test('assistant accepts a question and restores controls', async ({ page }) => {
-  await page.locator('#ha-fab').click();
+test('assistant accepts a question and restores controls', async ({ page, isMobile }) => {
+  if (isMobile) await page.locator('#ha-fab').tap();
+  else await page.locator('#ha-fab').click();
   await expect(page.locator('#ha-panel')).toBeVisible();
   await page.locator('#ha-input').fill('BTC 行情如何？');
-  await page.locator('#ha-send').click();
+  if (isMobile) await page.locator('#ha-send').tap();
+  else await page.locator('#ha-send').click();
   await expect(page.locator('#ha-msgs')).toContainText('Playwright 測試回覆');
   await expect(page.locator('#ha-send')).toBeEnabled();
 });
