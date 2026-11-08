@@ -364,22 +364,28 @@
         var d = defaults();
         if (d.spot == null) { box.innerHTML = '<div class="wr-status" style="padding:24px 2px;color:#a1a1aa">等「即時分析」頁籤載入 BTC 現價後，這裡會自動帶入現價與 ATM IV。可先切到即時分析等它載入，再回來試算。</div>'; return; }
         built = true;
-        state = { strat: 'long-call', spot: Math.round(d.spot), iv: +d.iv.toFixed(1), dte: d.dte, basis: +d.basis.toFixed(1), useSmile: true, legs: [] };
+        var expiries=(window.WR_OPTION_EXPIRIES||[]).filter(function(e){return /^\d{1,2}[A-Z]{3}\d{2}$/.test(e);});
+        var expiry=expiries.length?expiries.reduce(function(a,b){return Math.abs(expiryDays(a)-30)<=Math.abs(expiryDays(b)-30)?a:b;}):null;
+        state={strat:'long-call',spot:Math.round(d.spot),iv:+d.iv.toFixed(1),dte:expiry?expiryDays(expiry):d.dte,basis:+d.basis.toFixed(1),useSmile:true,expiry:expiry,legs:[],quoteReady:false,quoteStatus:'尚未取得有效市場報價',quoteRequest:0,feePerBtc:0};
         box.innerHTML =
           '<div class="sc-wrap">'
           + '<div><div class="sc-hd">參數（現價即時帶入；IV 由波動率微笑逐檔自動套用、基差即時帶入，皆無需手動輸入；部位數量由各腿設定，單位 BTC；損益以 USD 估算）</div>'
           + '<div class="sc-inputs">'
           + '<div class="sc-field"><label>標的現價 (USD)</label><input id="sc-spot" type="text" inputmode="decimal" autocomplete="off" value="' + state.spot + '"></div>'
-          + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" inputmode="decimal" autocomplete="off" value="' + state.dte + '"></div>'
+          + '<div class="sc-field"><label>Deribit 到期日</label><select id="sc-expiry">' + (expiries.length?expiries.map(function(e){return '<option value="'+e+'"'+(e===expiry?' selected':'')+'>'+e+'（'+expiryDays(e).toFixed(1)+' 天）</option>';}).join(''):'<option value="">尚無可用合約</option>')+'</select></div>'
+          + '<div class="sc-field"><label>到期天數 DTE</label><input id="sc-dte" type="text" readonly value="'+state.dte.toFixed(1)+'"></div>'
           + '<div class="sc-field"><label>年化基差（即時帶入）</label><input id="sc-basis-view" type="text" value="' + (state.basis >= 0 ? '+' : '') + state.basis + '%" readonly tabindex="-1" title="由面板即時期貨基差自動帶入，用於理論價的遠期定價，無需手動輸入"></div>'
           + '</div></div>'
           + '<div class="sc-strat"><div class="sc-field"><label>策略</label><select id="sc-select"></select></div>'
-          + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button></div>'
-          + '<div class="sc-help"><b>理論價已用「波動率微笑」逐檔定價。</b> 不同履約價在市場上的隱含波動率（IV）其實各不相同——通常價外選擇權的 IV 比價平的高，畫成曲線像微笑（波動率微笑／偏斜）。本試算<b>每個部位都用它自己履約價的市場 IV</b> 估權利金，比所有部位套同一個 IV 更貼近交易所實際報價。資料取自「即時分析」的進階盤面；若尚未載入、或某履約價超出微笑範圍，會自動退回用上方的 IV 估算。</div>'
+          + '<button class="sc-btn" id="sc-reload">↺ 以即時數據重設</button><button class="sc-btn" id="sc-apply-quotes" type="button">更新 Deribit Bid／Ask</button></div>'
+          + '<div class="sc-help"><b>交易所報價優先：</b>買方以 Ask 建倉，賣方以 Bid 建倉；Deribit BTC 選擇權權利金原生單位 BTC，按現時 BTC/USD 指數換算美元。須核對到期日、合約乘數、掛單量、報價時間及價差；任何一腿不可驗證，僅顯示理論/手動模擬，不能視為可成交。</div>'
+          + '<div class="sc-field"><label>假設往返費用（USD／BTC）</label><input id="sc-fee" type="number" min="0" step="0.01" value="0"><span class="theo">預設 $0；按實際費率調整</span></div>'
+          + '<div id="sc-quote-status" class="sc-help" role="status">尚未取得有效市場報價。</div>'
           + '<div><div class="sc-hd">部位（方向／類型可下拉切換；權利金旁的「理論：$…」是 Black-76 模型價，你可直接在框內輸入自己的實際報價，點理論價可套用回去。可自由增減部位自組策略）</div>'
           + '<table class="sc-legs"><thead><tr><th>方向</th><th>類型</th><th style="text-align:right">履約/進場價</th><th style="text-align:right">權利金 (USD)</th><th style="text-align:right">口數</th><th></th></tr></thead><tbody id="sc-legs-body"></tbody></table>'
           + '<button class="sc-add" id="sc-add">＋ 新增部位</button></div>'
-          + '<div><div class="sc-hd">損益指標</div><div class="sc-metrics" id="sc-metrics"></div></div>'
+          + '<div><div class="sc-hd">到期損益指標（來源狀態於上方顯示）</div><div class="sc-metrics" id="sc-metrics"></div></div>'
+          + '<div><div class="sc-hd">到期前價格 × IV 情境（模型估值，非平倉掛單）</div><div class="sc-chart" id="sc-scenarios" style="overflow-x:auto"></div></div>'
           + '<div><div class="sc-hd">到期損益圖（橫軸＝到期標的價、縱軸＝損益；滑鼠移動看任一價位損益）</div>'
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
@@ -391,7 +397,16 @@
         sel.addEventListener('change', function () { state.strat = sel.value; rebuildLegs(); });
         /* 現價/DTE 改變只重算理論權利金與圖，保留使用者微調過的履約價，不重建腿位列 */
         box.querySelector('#sc-spot').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (validateInput(e.target, Number.isFinite(v) && v > 0, '請輸入大於 0 的數字')) { state.spot = v; recomputeAuto(); } else renderOutputs(); });
-        box.querySelector('#sc-dte').addEventListener('input', function (e) { var v = parseNum(e.target.value); if (validateInput(e.target, Number.isFinite(v) && v > 0, '請輸入大於 0 的數字')) { state.dte = v; recomputeAuto(); } else renderOutputs(); });
+        box.querySelector('#sc-expiry').addEventListener('change',function(event){
+          state.expiry=event.target.value||null;
+          if(state.expiry){state.dte=expiryDays(state.expiry);box.querySelector('#sc-dte').value=state.dte.toFixed(1);}
+          rebuildLegs();fetchMarketQuotes();
+        });
+        box.querySelector('#sc-fee').addEventListener('input',function(event){
+          var v=Number(event.target.value);
+          if(!Number.isFinite(v)||v<0){validateInput(event.target,false,'請輸入非負費用');return;}
+          validateInput(event.target,true,'');state.feePerBtc=v;renderOutputs();
+        });
         box.querySelector('#sc-reload').addEventListener('click', function () {
           var d2 = defaults(); if (d2.spot == null) return;
           state.spot = Math.round(d2.spot); state.iv = +d2.iv.toFixed(1); state.basis = +d2.basis.toFixed(1);
@@ -400,7 +415,9 @@
           if (state.strat === 'custom') recomputeAuto(); else rebuildLegs();
         });
         box.querySelector('#sc-add').addEventListener('click', addLeg);
+        box.querySelector('#sc-apply-quotes').addEventListener('click',fetchMarketQuotes);
         rebuildLegs();
+        fetchMarketQuotes();
       }
 
       /* 首次開啟策略試算頁籤時建置；資料未就緒則等 wr-snapshot 事件 */
