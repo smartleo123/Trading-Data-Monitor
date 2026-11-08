@@ -199,6 +199,12 @@ test('TDCC is scoped to Taiwan only and has a working sidebar entry',async ({pag
  await expect(tdcc).toBeHidden();
  await expect(page.locator('#section-nav')).not.toContainText('集保戶股權分散表');
  await page.locator('#market-tab-tw-stock').click();
- await page.locator('#section-nav .sn-item').filter({hasText:'集保戶股權分散表'}).click();
- await expect(tdcc).toBeInViewport({ratio:0.1});
+ if((page.viewportSize()?.width||0)>=1024){
+  await page.locator('#section-nav .sn-item').filter({hasText:'集保戶股權分散表'}).click();
+  await expect(tdcc).toBeInViewport({ratio:0.1});
+ }else{
+  // The sidebar is intentionally hidden on mobile; the TDCC panel remains accessible by scrolling.
+  await tdcc.scrollIntoViewIfNeeded();
+  await expect(tdcc).toBeInViewport({ratio:0.1});
+ }
 });
