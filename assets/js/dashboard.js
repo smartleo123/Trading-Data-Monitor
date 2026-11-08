@@ -549,7 +549,7 @@
             const rows=snapshot.holdings;
             const seen=new Set();
             const valid=rows.length>=40 && rows.length<=50 && rows.every(s=>{
-                if(!s || !/^\\d{4}$/.test(String(s.code)) || typeof s.name!=='string' || !s.name.trim() ||
+                if(!s || !/^\d{4}$/.test(String(s.code)) || typeof s.name!=='string' || !s.name.trim() ||
                     !Number.isFinite(s.w) || s.w<=0 || s.w>80 || seen.has(s.code))return false;
                 seen.add(s.code);return true;
             });
