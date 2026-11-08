@@ -140,10 +140,10 @@
               await Promise.all(unique.slice(i,i+4).map(async function(name){
                 try{
                   const pair=await Promise.all([
-                    api('ticker',{instrument_name:name}),
+                    api('get_order_book',{instrument_name:name,depth:1}),
                     api('get_instrument',{instrument_name:name})
                   ]);
-                  output[name]={ticker:pair[0],instrument:pair[1]};
+                  output[name]={ticker:pair[0],instrument:pair[1],source:'Deribit public/get_order_book + public/get_instrument'};
                 }catch(e){output[name]={error:String(e&&e.message||e)};}
               }));
             }
