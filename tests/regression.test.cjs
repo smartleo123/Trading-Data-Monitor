@@ -3,7 +3,14 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const {JSDOM,VirtualConsole}=require('jsdom');
-const html=fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8');
+const path=require('node:path');
+const sourceHtml=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+// jsdom does not execute relative external scripts without enabling network resource loading.
+// Inline only our own checked-in assets in the test fixture, preserving their script order.
+const html=sourceHtml.replace(/<script src="(assets\/js\/[^"]+)"><\/script>/g,(_,asset)=>{
+  const contents=fs.readFileSync(path.join(__dirname,'..',asset),'utf8');
+  return '<script>'+contents+'</script>';
+});
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 async function boot(t,{icons=true}={}) {
   const calls=[],timers=new Map(),errors=[];let next=1;
@@ -87,4 +94,23 @@ test('perpetual cards display trading status and recover from provider failure',
   a.w.updatePerpStockCard('mstr-price','mstr-change','mstr-status','MSTRUSDT');
   await flush();
   assert.equal(a.d.getElementById('mstr-status').textContent,'離線');
+});
+
+test('dashboard keeps local assets modular and never embeds Coinglass pages directly',()=>{
+  assert.match(sourceHtml, /assets\/js\/dashboard\.js/);
+  assert.match(sourceHtml, /assets\/css\/layout\.css/);
+  assert.doesNotMatch(sourceHtml, /<iframe[^>]+coinglass\.com/i);
+  assert.match(html, /embed-widget-advanced-chart\.js/);
+  assert.match(sourceHtml, /在 CoinGlass 查看 ETF 淨流向/);
+});
+test('market overview mounts a TradingView widget instead of an iframe to CoinGlass',async t=>{
+  const a=await boot(t);
+  const el=a.d.getElementById('coinglass-iframe-container');
+  assert.ok(el.querySelector('script[src*="embed-widget-advanced-chart.js"]'));
+  assert.equal(el.querySelector('iframe[src*="coinglass.com"]'),null);
+  a.w.toggleChartSource('local');
+  assert.equal(a.d.getElementById('local-chart-container').style.display,'block');
+  assert.match(a.d.getElementById('coinglass-source-link').href,/coinglass\.com/);
+  a.w.toggleChartSource('coinglass');
+  assert.match(a.d.getElementById('coinglass-source-link').href,/tradingview\.com/);
 });

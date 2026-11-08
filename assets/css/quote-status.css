@@ -1,0 +1,5 @@
+.q-loading{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#71717a;letter-spacing:.5px;line-height:2.5rem}
+    .q-spin{width:14px;height:14px;border:2px solid #27272a;border-top-color:#06b6d4;border-radius:50%;animation:q-rot .9s linear infinite;flex-shrink:0}
+    @keyframes q-rot{to{transform:rotate(360deg)}}
+    .q-loading-sm{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#71717a}
+    .q-loading-sm .q-spin{width:10px;height:10px;border-width:1.5px}

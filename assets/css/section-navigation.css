@@ -1,0 +1,13 @@
+/* 純文字導覽：無面板背景，靠文字陰影維持可讀性 */
+    #section-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:2px}
+    @media(max-width:1023px){#section-nav{display:none}}
+    #section-nav .sn-item{display:flex;align-items:center;justify-content:flex-end;gap:9px;padding:6px 2px;cursor:pointer;background:none;border:none;font-family:inherit;transform-origin:right center;transition:transform .16s cubic-bezier(.34,1.3,.64,1);will-change:transform}
+    #section-nav .sn-label{font-size:13.5px;font-weight:700;color:#8b8b93;white-space:nowrap;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.6)}
+    #section-nav .sn-dot{width:8px;height:8px;border-radius:50%;background:#3f3f46;flex-shrink:0}
+    #section-nav .sn-item:hover .sn-dot{background:#e4e4e7}
+    #section-nav .sn-item:hover .sn-label{color:#fff}
+    #section-nav .sn-item.sn-active .sn-dot{background:#06b6d4;box-shadow:0 0 8px rgba(6,182,212,.55)}
+    #section-nav .sn-item.sn-active .sn-label{color:#06b6d4}
+    /* 窄螢幕（右側留白不足）自動切為圓點模式，hover 顯示標籤膠囊 */
+    #section-nav.sn-compact .sn-label{display:none}
+    #section-nav.sn-compact .sn-item:hover .sn-label,#section-nav.sn-compact .sn-item.sn-active .sn-label{display:inline-block;background:rgba(9,9,11,.92);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:3px 10px}

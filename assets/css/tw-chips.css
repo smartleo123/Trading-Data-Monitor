@@ -1,0 +1,18 @@
+.twc-h{font-size:12.5px;font-weight:700;color:#a1a1aa;margin-bottom:8px}
+    .twc-sub{font-size:12px;font-weight:700;margin-bottom:6px}
+    .twc-buy{color:#10b981}.twc-sell{color:#ef4444}
+    .twc-tile{background:#1b1b1f;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:11px 13px}
+    .twc-tile .k{font-size:11px;color:#8b8b93}.twc-tile .v{font-size:19px;font-weight:700;margin-top:1px}
+    .twc-tile .d{font-size:11px;color:#a1a1aa;margin-top:1px}
+    .twc-pos{color:#10b981}.twc-neg{color:#ef4444}
+    table.twc-t{width:100%;border-collapse:collapse;font-size:12.5px}
+    table.twc-t th{font-size:11px;color:#8b8b93;font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid #27272a}
+    table.twc-t td{padding:6px 8px;border-bottom:1px dashed #27272a;color:#a1a1aa}
+    table.twc-t td.num{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+    table.twc-t tr:last-child td{border-bottom:none}
+    .twc-legend{display:flex;gap:14px;font-size:11px;color:#a1a1aa;margin-bottom:6px}
+    .twc-legend span{display:inline-flex;align-items:center;gap:5px}
+    .twc-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+    .twc-err{color:#ef4444;font-size:12.5px}
+    .twc-tip{position:absolute;pointer-events:none;z-index:20;background:#0b0b0d;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:6px 9px;font-size:11.5px;line-height:1.5;color:#e4e4e7;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:0;transition:opacity .1s;transform:translate(-50%,-115%)}
+    .twc-tip .d{color:#8b8b93}.twc-tip .v{font-weight:700;font-variant-numeric:tabular-nums}
