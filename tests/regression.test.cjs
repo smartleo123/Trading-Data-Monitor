@@ -7,7 +7,7 @@ const path=require('node:path');
 const sourceHtml=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 // jsdom does not execute relative external scripts without enabling network resource loading.
 // Inline only our own checked-in assets in the test fixture, preserving their script order.
-const html=sourceHtml.replace(/<script src="(assets\\/js\\/[^"]+)"><\\/script>/g,(_,asset)=>{
+const html=sourceHtml.replace(/<script src="(assets\/js\/[^"]+)"><\/script>/g,(_,asset)=>{
   const contents=fs.readFileSync(path.join(__dirname,'..',asset),'utf8');
   return '<script>'+contents+'</script>';
 });
@@ -97,8 +97,8 @@ test('perpetual cards display trading status and recover from provider failure',
 });
 
 test('dashboard keeps local assets modular and never embeds Coinglass pages directly',()=>{
-  assert.match(sourceHtml, /assets\\/js\\/dashboard\\.js/);
-  assert.match(sourceHtml, /assets\\/css\\/layout\\.css/);
+  assert.match(sourceHtml, /assets\/js\/dashboard\\.js/);
+  assert.match(sourceHtml, /assets\/css\/layout\\.css/);
   assert.doesNotMatch(sourceHtml, /<iframe[^>]+coinglass\\.com/i);
   assert.match(html, /embed-widget-advanced-chart\\.js/);
   assert.match(sourceHtml, /在 CoinGlass 查看 ETF 淨流向/);
