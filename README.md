@@ -34,7 +34,7 @@ requests are needed. The jsdom suite does not verify browser layout or live prov
 
 ## Browser tests (Playwright)
 
-The browser suite uses **Chromium** at desktop (1440 × 900) and iPhone-sized mobile
+The browser suite uses **Chromium** at desktop (1440 × 900) and Pixel-sized Android mobile
 viewports. It exercises real mouse/touch click handling, market and chart tabs,
 quote rendering, the AI panel, responsive container bounds, and the TradingView
 widget mount point. Third-party market responses and widget scripts are mocked for
