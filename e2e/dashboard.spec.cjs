@@ -125,3 +125,20 @@ test('Taiwan holdings panel reads a scheduled snapshot and shows the source date
   await expect(page.locator('#tw-weight-tbody tr').first().locator('td').nth(1)).toHaveText('1000');
   await expect(page.locator('#tw-weight-note')).toContainText('2026-11-06');
 });
+
+test('0050 TDCC holder distribution renders 17 grades and cumulative holders', async ({page})=>{
+  const shares=[485315659,3366434775,2735946272,1883030066,1460668868,1912533935,1282659962,916084520,2281881174,1429649735,731160250,237196051,103415219,58066094,5118704618,-20247198];
+  const holders=[1612623,1471595,372614,152082,82692,77667,36738,20295,33325,10654,2731,491,150,64,288];
+  const total=holders.reduce((a,b)=>a+b,0);
+  let cumulative=0;
+  const rows=shares.map((n,i)=>{if(i<15)cumulative+=holders[i];return {grade:i+1,range:i===15?'差異數調整':String(i+1),holders:i===15?null:holders[i]||total,shares:n,proportion:i===16?100:0,cumulativeHolders:i===15?null:i===16?total:cumulative};});
+  rows.push({grade:17,range:'合計',holders:total,shares:shares.reduce((a,b)=>a+b,0),proportion:100,cumulativeHolders:total});
+  await page.route('**/assets/data/0050-distribution.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({symbol:'0050',date:'2026-11-06',rows})}));
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.locator('#market-tab-tw-stock').click();
+  await expect(page.locator('#tdcc-0050-tbody tr')).toHaveCount(17);
+  await expect(page.locator('#tdcc-0050-tbody tr').nth(1).locator('td').nth(3)).toHaveText('3,084,218');
+  await expect(page.locator('#tdcc-0050-tbody tr').nth(15).locator('td').nth(3)).toHaveText('—');
+  await expect(page.locator('#tdcc-0050-tbody tr').last().locator('td').nth(4)).toHaveText('100.00%');
+  await expect(page.locator('#tdcc-0050-status')).toContainText('2026-11-06');
+});
