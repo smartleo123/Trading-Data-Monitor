@@ -233,3 +233,27 @@ test('BTC options strategy uses Deribit ask/bid snapshots and renders expiry + I
  await expect(page.locator('#sc-quote-status')).toContainText('掛單量不足');
  await expect(page.locator('#sc-scenarios')).not.toContainText('IV -10pt');
 });
+
+test('Deribit backtest UI discloses real snapshot count and refuses early success claims',async({page})=>{
+ const now=Date.now(),expiry=now+30*86400000;
+ const snapshots=[now-86400000,now].map((at,i)=>({
+  at,spot:80000,contracts:{
+   'BTC-9DEC26-80000-C':{bid:0.04+i*.0001,ask:0.042+i*.0001,bidAmount:5,askAmount:5,bookAt:at,strike:80000,type:'C',expiryAt:expiry,contractSize:1}
+  }
+ }));
+ await page.route('**/assets/data/deribit/quote-history.json',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify({schemaVersion:1,snapshots})
+ }));
+ await page.evaluate(()=>{
+  window.WR_SNAPSHOT={spot:80000,ivRows:[{atmIV:45}],basisAnnual:0};
+ });
+ await page.locator('#wr-tab-calc').click();
+ await expect(page.locator('#sc-backtest')).toBeVisible();
+ await expect(page.locator('#sc-replay-status')).toContainText('實際可用市場快照 2 筆');
+ await expect(page.locator('#sc-replay-results')).toContainText('樣本不足');
+ await expect(page.locator('#sc-replay-results')).not.toContainText('勝率 ');
+ await page.locator('#sc-replay-strategy').selectOption('long-call');
+ await page.locator('#sc-replay-hold').selectOption('1');
+ await page.locator('#sc-replay-run').click();
+ await expect(page.locator('#sc-replay-status')).toContainText('進出場');
+});
