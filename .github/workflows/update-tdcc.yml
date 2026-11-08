@@ -1,4 +1,4 @@
-name: Update TDCC 0050 ownership distribution
+name: Update TDCC Taiwan ownership distributions
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
   pages: write
 
 concurrency:
-  group: tdcc-0050-snapshot
+  group: tdcc-all-symbols-snapshot
   cancel-in-progress: false
 
 jobs:
@@ -26,19 +26,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Fetch official weekly TDCC distribution and validate 0050
+      - name: Fetch official weekly TDCC data and build security shards
         run: node scripts/sync-tdcc.cjs
       - name: Commit validated snapshot and redeploy pages
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ -z "$(git status --porcelain -- assets/data/0050-distribution.json)" ]; then
+          if [ -z "$(git status --porcelain -- assets/data/tdcc assets/data/0050-distribution.json)" ]; then
             echo "No new TDCC data"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/data/0050-distribution.json
-          git commit -m "data: update TDCC 0050 holder distribution"
+          git add -A assets/data/tdcc assets/data/0050-distribution.json
+          git commit -m "data: update TDCC stock and ETF ownership distributions"
           git push
           gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
