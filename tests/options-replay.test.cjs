@@ -28,7 +28,7 @@ test('replay requires actual matching top-of-book snapshots, no future leakage',
  assert.equal(r.trades[0].entryAt,now);
  assert.equal(r.trades[0].exitAt,now+3*DAY);
  assert.ok(r.trades.every((t,i)=>i===0||t.entryAt>=r.trades[i-1].exitAt));
- assert.ok(r.trades.every(t=>t.pnlBtc>0));
+ assert.ok(r.trades.every(t=>t.pnlBtc<0)); // Crossing entry ask and exit bid correctly loses premium when market barely moves.
 });
 test('replay refuses to create performance claims without 20 complete trades',()=>{
  const r=R.replay(fixture(6),{strategy:'long-call',holdDays:3});
