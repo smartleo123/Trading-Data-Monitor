@@ -181,7 +181,7 @@ test('TWSE market snapshot renders institutional and margin panels and 0050 clos
  await page.reload({waitUntil:'domcontentloaded'});
  await page.locator('#market-tab-tw-stock').click();
  await expect(page.locator('#twc-inst-tiles')).toContainText('20.0');
- await expect(page.locator('#twc-margin-tiles')).toContainText('1,200');
+ await expect(page.locator('#twc-margin-tiles')).toContainText('1200 億');
  await expect(page.locator('#twc-rank-buy')).toContainText('台積電');
  await expect(page.locator('[data-twq="2330"]')).toContainText('1,450.50');
  await expect(page.locator('[data-twi="2330"]')).toContainText('14');
