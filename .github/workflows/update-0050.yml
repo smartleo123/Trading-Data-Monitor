@@ -1,0 +1,39 @@
+name: Update 0050 fund holdings
+
+on:
+  # 19:30 in Taipei (UTC+8), Monday to Friday. GitHub schedule is best effort.
+  schedule:
+    - cron: '30 11 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scheduled-0050-holdings
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch and validate official holdings
+        run: node scripts/sync-0050.cjs
+      - name: Commit changed snapshot only
+        run: |
+          if [ -z "$(git status --porcelain -- assets/data/0050-holdings.json)" ]; then
+            echo "No changes in official data"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/0050-holdings.json
+          git commit -m "data: refresh official 0050 holdings"
+          git push
