@@ -41,3 +41,15 @@ test('Taiwan quotes leave LIVE on failure, avoid overlapping requests and recove
 test('stalled proxy requests remove LIVE after watchdog timeout',async t=>{const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');a.w.updateTwCard(card,{price:100,prevClose:99,marketTime:Date.now()/1000},true);for(const timer of a.timers.values())if(timer.ms===10000)timer.fn();assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');});
 for(const provider of ['groq','free'])test(`${provider} AI timeout restores controls and original message`,async t=>{const a=await boot(t);if(provider==='groq')a.w.localStorage.setItem('groq_api_key','fixture-not-a-real-key');let signal;a.w.fetch=(_,options)=>{signal=options.signal;return new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(Object.assign(new Error('aborted'),{name:'AbortError'}))))};a.input('#ha-input','test question');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,true);assert.ok(signal);for(const timer of [...a.timers.values()])if(timer.ms===30000&&!timer.interval)timer.fn();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.equal(a.d.getElementById('ha-input').value,'test question');assert.match(a.d.querySelector('#ha-msgs .err').textContent,/逾時/);});
 test('AI success renders text and restores controls',async t=>{const a=await boot(t);a.w.localStorage.setItem('groq_api_key','fixture');a.w.fetch=async()=>({ok:true,status:200,json:async()=>({choices:[{message:{content:'test reply'}}]})});a.input('#ha-input','test');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.match(a.d.getElementById('ha-msgs').textContent,/test reply/);});
+
+test('crypto table escapes untrusted metadata and rejects unsafe image protocols',async t=>{
+  const a=await boot(t);
+  a.w.eval(`cryptoDataList=[{id:'unsafe',name:'<img src=x onerror=alert(1)>',symbol:'<svg onload=alert(1)>',image:'javascript:alert(1)',current_price:1,price_change_percentage_24h:0,total_volume:1,market_cap:1,sparkline_in_7d:{price:[]}}];renderCryptoTable()`);
+  const row=a.d.querySelector('#crypto-table-body tr');
+  assert.ok(row);
+  assert.match(row.textContent,/<img src=x onerror=alert\\(1\\)>/);
+  assert.equal(row.querySelectorAll('img').length,1);
+  assert.equal(row.querySelector('svg'),null);
+  assert.match(row.querySelector('img').src,/^https:\\/\\/placehold\\.co\\//);
+  assert.equal(a.errors.length,0);
+});
