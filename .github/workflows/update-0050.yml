@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: scheduled-0050-holdings
@@ -27,6 +28,8 @@ jobs:
       - name: Fetch and validate official holdings
         run: node scripts/sync-0050.cjs
       - name: Commit changed snapshot only
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -z "$(git status --porcelain -- assets/data/0050-holdings.json)" ]; then
             echo "No changes in official data"
@@ -37,3 +40,6 @@ jobs:
           git add assets/data/0050-holdings.json
           git commit -m "data: refresh official 0050 holdings"
           git push
+          # A GITHUB_TOKEN commit does not automatically trigger a Pages branch build.
+          # Explicitly request a rebuild so the published JSON gets refreshed.
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
