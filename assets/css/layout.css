@@ -1,0 +1,36 @@
+#wr-calc input[aria-invalid="true"] { outline: 2px solid #f43f5e; outline-offset: 1px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #141416; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+        .panel-transition { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* SOP 表格：短標籤欄(階段/指標/維度)不換行撐開，長文欄(心法/邏輯)可換行 */
+        .sop-panel table { table-layout: auto; }
+        .sop-panel th.sop-nowrap, .sop-panel td.sop-nowrap { white-space: nowrap; width: 1%; }
+        .sop-panel td.sop-wrap { white-space: normal; min-width: 220px; }
+        @media (max-width: 640px){ .sop-panel td.sop-wrap { min-width: 180px; } }
+        .is-maximized {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important; z-index: 9999 !important;
+            border-radius: 0 !important; margin: 0 !important;
+            background-color: #0c0c0e !important; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9) !important;
+        }
+        .is-maximized #local-chart-container,
+        .is-maximized #coinglass-iframe-container,
+        .is-maximized #altcoin-iframe-container,
+        .is-maximized #strategy-iframe-container,
+        .is-maximized #us-chart-container,
+        .is-maximized #us-heatmap-container {
+            height: calc(100vh - 85px) !important; min-height: 0 !important;
+        }
+        .is-maximized #tw-weight-container { max-height: calc(100vh - 130px) !important; }
+        .is-maximized #coinglass-iframe-container iframe,
+        .is-maximized #local-chart-container iframe,
+        .is-maximized #altcoin-iframe-container iframe,
+        .is-maximized #strategy-iframe-container iframe,
+        .is-maximized #us-chart-container iframe,
+        .is-maximized #us-heatmap-container iframe {
+            height: 100% !important; width: 100% !important; border: none !important;
+        }
+        .tradingview-widget-container,
+        .tradingview-widget-container__widget { height: 100% !important; width: 100% !important; }
