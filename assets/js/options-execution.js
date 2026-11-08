@@ -27,7 +27,7 @@
   if(meta.kind!=='option'||meta.base_currency!=='BTC'||meta.settlement_currency!=='BTC')return fail('並非 BTC 計價/交割反向選擇權');
   if(meta.is_active===false)return fail('合約已停止交易');
   if(!good(meta.expiration_timestamp)||meta.expiration_timestamp<=now)return fail('合約已到期或到期日無效');
-  const parseName=/^BTC-(\\d{1,2}[A-Z]{3}\\d{2})-(\\d+)-(C|P)$/;
+  const parseName=/^BTC-(\d{1,2}[A-Z]{3}\d{2})-(\d+)-(C|P)$/;
   const identity=parseName.exec(name||meta.instrument_name||'');
   if(!identity)return fail('無法確認 BTC 合約代號');
   if(good(meta.strike)&&Math.abs(meta.strike-Number(identity[2]))>0.01)return fail('履約價不一致');
