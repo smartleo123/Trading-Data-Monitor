@@ -181,12 +181,15 @@
             l.prem=autoPrem(l);l.premAuto=true;
           }
           delete l.quote;delete l.entryBtc;delete l.contractSize;
+          const i=state.legs.indexOf(l),pin=box.querySelector('#sc-legs-body input[data-leg="'+i+'"][data-f="prem"]');
+          if(pin&&document.activeElement!==pin)pin.value=l.prem;
         });
         const out=box.querySelector('#sc-quote-status');
         if(out)out.textContent='⚠ '+state.quoteStatus+'。目前僅供理論／手動模擬。';
       }
       async function fetchMarketQuotes(){
         if(!state||!EXEC)return;
+        if(state.legs.some(l=>l.quote))invalidateQuotes('正在重新核對 Deribit 訂單簿');
         const request=++state.quoteRequest;
         state.quoteReady=false;
         const status=box.querySelector('#sc-quote-status');
@@ -211,7 +214,7 @@
           const errors=validated.flatMap((v,i)=>v.valid?[]:[names[i]+': '+v.reason]);
           if(errors.length){
             state.quoteStatus='未能取得全部腿的有效可成交價格：'+errors.join('；');
-            if(status)status.textContent='⚠ '+state.quoteStatus+'。已保留理論價格，不代表可成交。';
+            if(status)status.textContent='⚠ '+state.quoteStatus+'。已退回理論／手動價，不代表可成交。';
             renderOutputs();return;
           }
           optionLegs.forEach((l,i)=>{
@@ -305,7 +308,7 @@
               if (state.legs[i].premAuto) { state.legs[i].prem = autoPrem(state.legs[i]);
                 var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = state.legs[i].prem; }
             } else if (f === 'qty') { state.legs[i].qty = v; invalidateQuotes('數量改變，掛單深度需重新核對'); }
-            else { state.legs[i].prem = v; state.legs[i].premAuto = false; invalidateQuotes('手動輸入權利金，市場報價驗證失效'); }
+            else { state.legs[i].prem = v; state.legs[i].premAuto = false; delete state.legs[i].quote; invalidateQuotes('手動輸入權利金，市場報價驗證失效'); }
             renderOutputs();
           });
         });
