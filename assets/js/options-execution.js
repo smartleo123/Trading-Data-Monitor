@@ -15,26 +15,41 @@
  }
  function validateTicker(result,spec,now=Date.now()){
   const r=result&&result.ticker||result,meta=result&&result.instrument||{};
-  if(!r||!meta||r.state!=='open')return {valid:false,reason:'合約非開盤可交易狀態'};
+  const fail=reason=>({valid:false,reason});
+  if(!r||!meta||r.state!=='open')return fail('訂單簿不是 open 可交易狀態');
+  const name=spec.instrument_name||result&&result.requestedName;
+  if(name&&((r.instrument_name&&r.instrument_name!==name)||(meta.instrument_name&&meta.instrument_name!==name)))
+   return fail('回傳合約代號不一致');
   const ts=r.timestamp;
-  if(!good(ts)||Math.abs(now-ts)>120000)return {valid:false,reason:'市場報價超過 2 分鐘或時間戳無效'};
+  if(!good(ts)||now-ts< -10000||now-ts>90000)return fail('訂單簿時間戳已過期、超前或缺失（須在 90 秒內）');
   const size=meta.contract_size;
-  if(!good(size)||size<=0)return {valid:false,reason:'無法核實合約乘數'};
-  if(meta.kind!=='option'||meta.base_currency!=='BTC'||(meta.settlement_currency&&meta.settlement_currency!=='BTC'))return {valid:false,reason:'非 BTC 交割的選擇權合約'};
+  if(!good(size)||size<=0)return fail('合約乘數未核實');
+  if(meta.kind!=='option'||meta.base_currency!=='BTC'||meta.settlement_currency!=='BTC')return fail('並非 BTC 計價/交割反向選擇權');
+  if(meta.is_active===false)return fail('合約已停止交易');
+  if(!good(meta.expiration_timestamp)||meta.expiration_timestamp<=now)return fail('合約已到期或到期日無效');
+  const parseName=/^BTC-(\d{1,2}[A-Z]{3}\d{2})-(\d+)-(C|P)$/;
+  const identity=parseName.exec(name||meta.instrument_name||'');
+  if(!identity)return fail('無法確認 BTC 合約代號');
+  if(good(meta.strike)&&Math.abs(meta.strike-Number(identity[2]))>0.01)return fail('履約價不一致');
+  if(meta.option_type&&meta.option_type!==(identity[3]==='C'?'call':'put'))return fail('買權／賣權類型不一致');
   const bid=r.best_bid_price,ask=r.best_ask_price;
-  if(!good(bid)||!good(ask)||bid<=0||ask<=bid)return {valid:false,reason:'缺少有效且有序的 Bid / Ask'};
+  if(!good(bid)||!good(ask)||bid<=0||ask<=bid)return fail('雙邊報價不存在或無效');
   const bidQty=r.best_bid_amount,askQty=r.best_ask_amount;
-  if(!good(bidQty)||!good(askQty)||bidQty<=0||askQty<=0)return {valid:false,reason:'最優價位無有效掛單量'};
+  if(!good(bidQty)||!good(askQty)||bidQty<=0||askQty<=0)return fail('最優檔掛單量不存在');
   const spread=(ask-bid)/((ask+bid)/2)*100;
-  if(spread>25)return {valid:false,reason:'買賣價差過大（'+spread.toFixed(1)+'%）'};
-  if(!good(spec.qty)||spec.qty<=0)return {valid:false,reason:'無效部位數量'};
-  // Quantity is Deribit option amount in BTC units, not a generic count of contracts.
-  const amount=spec.qty*size;
+  if(spread>20)return fail('買賣價差超過 20%：'+spread.toFixed(2)+'%');
+  if(!good(spec.qty)||spec.qty<=0)return fail('部位數量無效');
+  if(good(meta.min_trade_amount)&&spec.qty<meta.min_trade_amount-1e-8)return fail('小於最低交易量');
+  const amount=spec.qty;
   const available=spec.direction>0?askQty:bidQty;
-  if(available+1e-8<amount)return {valid:false,reason:'最優價位掛單量不足（需 '+amount+' BTC，僅 '+available+' BTC）'};
-  if(!good(spec.spot)||spec.spot<=0)return {valid:false,reason:'缺少有效 BTC/USD 參考價'};
+  if(available+1e-8<amount)return fail('最佳檔掛單量不足：需 '+amount+'，僅 '+available);
+  const spot=good(r.index_price)&&r.index_price>0?r.index_price:spec.spot;
+  if(!good(spot)||spot<=0)return fail('無有效 Deribit BTC 指數價');
+  if(good(spec.spot)&&spec.spot>0&&Math.abs(spot/spec.spot-1)>0.03)return fail('交易所與頁面指數價差逾 3%');
   const quoteBtc=spec.direction>0?ask:bid;
-  return {valid:true,quoteBtc:quoteBtc,entryUsd:quoteBtc*spec.spot*size,contractSize:size,availableAmount:available,spreadPct:spread,ageSeconds:Math.max(0,(now-ts)/1000),timestamp:ts,side:spec.direction>0?'Ask':'Bid'};
+  return {valid:true,quoteBtc,entryUsd:quoteBtc*spot*size,contractSize:size,
+   amount,availableAmount:available,spreadPct:spread,ageSeconds:Math.max(0,(now-ts)/1000),
+   timestamp:ts,side:spec.direction>0?'Ask':'Bid',spot,source:'Deribit order book'};
  }
  function normCdf(x){
   const t=1/(1+0.2316419*Math.abs(x));
@@ -83,5 +98,57 @@
    return sum+l.d*(l.qty||1)*(value-l.prem);
   },0);
  }
- return {instrument,validateTicker,black76,terminalPnl,extrema,scenarioPnl};
+ // Deribit inverse BTC options: premium paid/received in BTC at entry,
+ // intrinsic settled in BTC as intrinsic_USD / delivery_BTC_USD.
+ // USD-equivalent is marked at *scenario/exit spot*, not entry spot.
+ function inversePnlBtc(legs,exitSpot){
+  if(!good(exitSpot)||exitSpot<=0)return NaN;
+  return legs.reduce((sum,l)=>{
+   if(l.t!=='C'&&l.t!=='P')return NaN;
+   const multiplier=l.contractSize||1,qty=l.qty||1;
+   const intrinsic=l.t==='C'?Math.max(exitSpot-l.K,0):Math.max(l.K-exitSpot,0);
+   const premiumBtc=good(l.entryBtc)?l.entryBtc:l.quote&&l.quote.quoteBtc;
+   if(!good(premiumBtc))return NaN;
+   return sum+l.d*qty*multiplier*(intrinsic/exitSpot-premiumBtc)-(l.feeBtc||0)*qty;
+  },0);
+ }
+ function inversePnlUsd(legs,exitSpot){return inversePnlBtc(legs,exitSpot)*exitSpot;}
+ function inverseMetrics(legs,entrySpot){
+  if(!legs.length||legs.some(l=>!['C','P'].includes(l.t)||!good(l.entryBtc??(l.quote&&l.quote.quoteBtc))))return null;
+  const strikes=[...new Set([0,...legs.map(l=>l.K)])].sort((a,b)=>a-b);
+  const values=strikes.map(s=>legs.reduce((sum,l)=>{
+   const p=l.entryBtc??l.quote.quoteBtc,m=l.contractSize||1,q=l.qty||1;
+   const intrinsic=l.t==='C'?Math.max(s-l.K,0):Math.max(l.K-s,0);
+   return sum+l.d*q*m*(intrinsic-p*s)-(l.feeBtc||0)*q*s;
+  },0));
+  const highSlope=legs.reduce((sum,l)=>sum+l.d*(l.qty||1)*(l.contractSize||1)*((l.t==='C'?1:0)-(l.entryBtc??l.quote.quoteBtc))-(l.feeBtc||0)*(l.qty||1),0);
+  const breakevens=[];
+  const put=x=>{if(good(x)&&x>0&&!breakevens.some(y=>Math.abs(x-y)<1e-5))breakevens.push(x);};
+  strikes.forEach((x,i)=>{
+    const v=values[i];if(Math.abs(v)<1e-7&&x>0)put(x);
+    if(i+1<strikes.length){
+      const y=strikes[i+1],w=values[i+1];
+      if(v*w<0)put(x-v*(y-x)/(w-v));
+    }else if(Math.abs(highSlope)>1e-10){const z=x-v/highSlope;if(z>x)put(z);}
+  });
+  const maxProfit=highSlope>0?Infinity:Math.max(...values);
+  const maxLoss=highSlope<0?-Infinity:Math.min(...values);
+  return {maxProfit,maxLoss,breakevens:breakevens.sort((a,b)=>a-b),
+    entryNetBtc:legs.reduce((v,l)=>v+l.d*(l.qty||1)*(l.contractSize||1)*(l.entryBtc??l.quote.quoteBtc),0),
+    entryNetUsd:legs.reduce((v,l)=>v+l.d*(l.qty||1)*(l.contractSize||1)*(l.entryBtc??l.quote.quoteBtc)*entrySpot,0),
+    atSpot:inversePnlUsd(legs,entrySpot)};
+ }
+ function inverseScenarioUsd(legs,spot,daysLeft,ivShift,baseIv,basisPct=0){
+  if(!good(spot)||spot<=0||!good(daysLeft)||daysLeft<0)return NaN;
+  const T=daysLeft/365,F=spot*(1+basisPct*T/100);
+  return legs.reduce((sum,l)=>{
+    if(!['C','P'].includes(l.t))return NaN;
+    const vol=Math.max(0.01,((good(l.iv)?l.iv:baseIv)+ivShift)/100);
+    const exitUsd=black76(l.t,F,l.K,T,vol);
+    const premiumBtc=l.entryBtc??(l.quote&&l.quote.quoteBtc);
+    return sum+l.d*(l.qty||1)*(l.contractSize||1)*(exitUsd-premiumBtc*spot)-(l.feeBtc||0)*(l.qty||1)*spot;
+  },0);
+ }
+ return {instrument,validateTicker,black76,terminalPnl,extrema,scenarioPnl,
+   inversePnlBtc,inversePnlUsd,inverseMetrics,inverseScenarioUsd};
 });

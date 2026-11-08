@@ -117,15 +117,9 @@
                 return res.text().then(parse);
               });
             };
-            var viaProxy = function (make) {
-              return fetch(make(url), { cache: 'no-store' }).then(function (res) {
-                if (!res.ok) throw new Error('proxy HTTP ' + res.status);
-                return res.text().then(parse);
-              });
-            };
-            return direct()
-              .catch(function () { return viaProxy(function (u) { return 'https://corsproxy.io/?url=' + encodeURIComponent(u); }); })
-              .catch(function () { return viaProxy(function (u) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }); });
+            // Fail closed: never treat data returned by untrusted CORS relays as
+            // verified Deribit quotes. WebSocket or direct official HTTP only.
+            return direct();
           }
           function api(path, params) {
             return apiWs(path, params).catch(function () { return apiHttp(path, params); });
@@ -140,10 +134,10 @@
               await Promise.all(unique.slice(i,i+4).map(async function(name){
                 try{
                   const pair=await Promise.all([
-                    api('ticker',{instrument_name:name}),
+                    api('get_order_book',{instrument_name:name,depth:1}),
                     api('get_instrument',{instrument_name:name})
                   ]);
-                  output[name]={ticker:pair[0],instrument:pair[1]};
+                  output[name]={ticker:pair[0],instrument:pair[1],source:'Deribit public/get_order_book + public/get_instrument'};
                 }catch(e){output[name]={error:String(e&&e.message||e)};}
               }));
             }

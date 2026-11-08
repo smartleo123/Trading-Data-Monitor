@@ -68,8 +68,11 @@
       function legPnl(l, S) {
         var intr = l.t === 'C' ? Math.max(S - l.K, 0)*(l.contractSize||1) : l.t === 'P' ? Math.max(l.K - S, 0)*(l.contractSize||1)
           : l.t === 'F' ? (S - l.K) : (S - l.entry);
-        var prem = (l.t === 'U' || l.t === 'F') ? 0 : l.prem;
-        return l.d * (l.qty || 1) * (intr - prem);
+        if(l.quote&&Number.isFinite(l.entryBtc)&&S>0){
+          return l.d*(l.qty||1)*(intr-l.entryBtc*S*(l.contractSize||1))-(l.feeBtc||0)*(l.qty||1)*S;
+        }
+        var prem=(l.t==='U'||l.t==='F')?0:l.prem;
+        return l.d*(l.qty||1)*(intr-prem);
       }
       function totalPnl(legs, S) { var p = 0; for (var i = 0; i < legs.length; i++) p += legPnl(legs[i], S); return p; }
 
@@ -77,7 +80,11 @@
         var strikes = legs.filter(function (l) { return l.t !== 'U'; }).map(function (l) { return l.K; });
         var kinks = [0].concat(strikes).concat([S0 * 3]);
         var vals = kinks.map(function (k) { return totalPnl(legs, k); });
-        var upSlope = legs.reduce(function (a, l) { return a + ((l.t === 'C' || l.t === 'U' || l.t === 'F') ? l.d * (l.qty || 1)*(l.t==='C'?(l.contractSize||1):1) : 0); }, 0);
+        var upSlope=legs.reduce(function(a,l){
+          var q=l.qty||1;
+          var intrinsicSlope=(l.t==='C'||l.t==='U'||l.t==='F')?l.d*q*(l.t==='C'?(l.contractSize||1):1):0;
+          return a+intrinsicSlope-(l.quote?l.d*q*(l.entryBtc||0)*(l.contractSize||1)+q*(l.feeBtc||0):0);
+        },0);
         var maxP = upSlope > 0 ? Infinity : Math.max.apply(null, vals);
         var maxL = upSlope < 0 ? -Infinity : Math.min.apply(null, vals);
         /* 到期損益在履約價之間為直線；逐段求根，最後一段無價格上限。 */
@@ -169,12 +176,21 @@
       function invalidateQuotes(reason){
         if(!state)return;
         state.quoteReady=false;state.quoteRequest=(state.quoteRequest||0)+1;state.quoteStatus=reason||'市場報價已過期';
-        state.legs.forEach(function(l){delete l.quote;});
+        box.querySelectorAll('.sc-live-quote').forEach(function(el){el.remove();});
+        state.legs.forEach(function(l){
+          if(l.quote&&l.premAuto===false&&(l.t==='C'||l.t==='P')){
+            l.prem=autoPrem(l);l.premAuto=true;
+          }
+          delete l.quote;delete l.entryBtc;delete l.contractSize;
+          const i=state.legs.indexOf(l),pin=box.querySelector('#sc-legs-body input[data-leg="'+i+'"][data-f="prem"]');
+          if(pin&&document.activeElement!==pin)pin.value=l.prem;
+        });
         const out=box.querySelector('#sc-quote-status');
         if(out)out.textContent='⚠ '+state.quoteStatus+'。目前僅供理論／手動模擬。';
       }
       async function fetchMarketQuotes(){
         if(!state||!EXEC)return;
+        if(state.legs.some(l=>l.quote))invalidateQuotes('正在重新核對 Deribit 訂單簿');
         const request=++state.quoteRequest;
         state.quoteReady=false;
         const status=box.querySelector('#sc-quote-status');
@@ -194,17 +210,17 @@
           const validated=optionLegs.map((l,i)=>{
             const item=quotes[names[i]];
             if(!item||item.error)return {valid:false,reason:item?.error||'來源無回應'};
-            return EXEC.validateTicker(item,{spot:state.spot,qty:l.qty,direction:l.d},Date.now());
+            return EXEC.validateTicker(item,{spot:state.spot,qty:l.qty,direction:l.d,instrument_name:names[i]},Date.now());
           });
           const errors=validated.flatMap((v,i)=>v.valid?[]:[names[i]+': '+v.reason]);
           if(errors.length){
             state.quoteStatus='未能取得全部腿的有效可成交價格：'+errors.join('；');
-            if(status)status.textContent='⚠ '+state.quoteStatus+'。已保留理論價格，不代表可成交。';
+            if(status)status.textContent='⚠ '+state.quoteStatus+'。已退回理論／手動價，不代表可成交。';
             renderOutputs();return;
           }
           optionLegs.forEach((l,i)=>{
             const v=validated[i];
-            l.prem=v.entryUsd;l.premAuto=false;l.contractSize=v.contractSize;
+            l.prem=v.entryUsd;l.premAuto=false;l.contractSize=v.contractSize;l.entryBtc=v.quoteBtc;
             l.quote={name:names[i],...v};l.iv=ivFor(l.K);
           });
           state.quoteReady=true;
@@ -224,7 +240,10 @@
         const fee=state.feePerBtc||0;
         return state.legs.map(function(l){
           var x={...l};
-          if(l.t==='C'||l.t==='P')x.prem=l.prem+l.d*fee*(l.contractSize||1);
+          if(l.t==='C'||l.t==='P'){
+            if(l.quote)x.feeBtc=fee/state.spot;
+            else x.prem=l.prem+l.d*fee*(l.contractSize||1);
+          }
           return x;
         });
       }
@@ -235,7 +254,9 @@
         const cells=pts.map(function(p){
           var spot=state.spot*(1+p/100);
           return '<tr><td>'+p+'%（'+usd(spot)+'）</td>'+shifts.map(function(shift){
-            const value=EXEC.scenarioPnl(legs,spot,days,shift,state.iv,state.basis);
+            const inverse=legs.every(l=>(l.t==='C'||l.t==='P')&&l.quote);
+            const value=inverse?EXEC.inverseScenarioUsd(legs,spot,days,shift,state.iv,state.basis)
+              :EXEC.scenarioPnl(legs,spot,days,shift,state.iv,state.basis);
             return '<td style="text-align:right;color:'+(value>=0?'#34d399':'#fb7185')+'">'+(value>=0?'+':'')+usd(value)+'</td>';
           }).join('')+'</tr>';
         }).join('');
@@ -270,7 +291,7 @@
           var tSel = '<select data-leg="' + i + '" data-f="t">' + opt('C', '買權 Call', l.t) + opt('P', '賣權 Put', l.t) + opt('F', '期貨 Futures', l.t) + opt('U', '現貨 BTC', l.t) + '</select>';
           var kCell = l.t === 'U' ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="K" value="' + l.K + '">';
           var pCell = (l.t === 'U' || l.t === 'F') ? '<span style="color:#8b8b93">—</span>' : '<input type="text" inputmode="decimal" autocomplete="off" data-leg="' + i + '" data-f="prem" value="' + l.prem + '"><span class="theo" id="sc-theo-' + i + '" data-leg="' + i + '" title="Black-Scholes 理論價・點此套用">' + theoTxt(l) + '</span>';
-          if(l.quote)pCell+='<span class="theo">'+l.quote.side+' '+l.quote.quoteBtc.toFixed(5)+' BTC｜價差 '+l.quote.spreadPct.toFixed(1)+'%｜'+l.quote.ageSeconds.toFixed(0)+'秒前</span>';
+          if(l.quote)pCell+='<span class="theo sc-live-quote">'+l.quote.side+' '+l.quote.quoteBtc.toFixed(5)+' BTC｜價差 '+l.quote.spreadPct.toFixed(1)+'%｜'+l.quote.ageSeconds.toFixed(0)+'秒前</span>';
           var qCell = '<input type="text" inputmode="numeric" autocomplete="off" data-leg="' + i + '" data-f="qty" value="' + (l.qty || 1) + '" style="width:56px">';
           return '<tr><td>' + dSel + '</td><td>' + tSel + '</td><td class="r">' + kCell + '</td><td class="r">' + pCell + '</td><td class="r">' + qCell + '</td><td class="r"><button class="sc-rm" data-leg="' + i + '" title="刪除此部位">✕</button></td></tr>';
         }).join('');
@@ -288,7 +309,7 @@
               if (state.legs[i].premAuto) { state.legs[i].prem = autoPrem(state.legs[i]);
                 var pin = premInput(i); if (pin && document.activeElement !== pin) pin.value = state.legs[i].prem; }
             } else if (f === 'qty') { state.legs[i].qty = v; invalidateQuotes('數量改變，掛單深度需重新核對'); }
-            else { state.legs[i].prem = v; state.legs[i].premAuto = false; invalidateQuotes('手動輸入權利金，市場報價驗證失效'); }
+            else { state.legs[i].prem = v; state.legs[i].premAuto = false; delete state.legs[i].quote; invalidateQuotes('手動輸入權利金，市場報價驗證失效'); }
             renderOutputs();
           });
         });
@@ -338,9 +359,13 @@
         var quoted=!!state.quoteReady && Date.now()-state.quoteAt<120000;
         if(!quoted&&state.quoteReady){state.quoteReady=false;state.quoteStatus='市場 Bid／Ask 已過期';}
         var legs=adjustedLegs();
-        var m=metrics(legs,S0);
+        var inverseReady=quoted&&legs.every(l=>(l.t==='C'||l.t==='P')&&l.quote);
+        var exact=inverseReady?EXEC.inverseMetrics(legs,S0):null;
+        var m=exact?{maxP:exact.maxProfit,maxL:exact.maxLoss,be:exact.breakevens,
+          netDebit:exact.entryNetUsd,rr:Number.isFinite(exact.maxProfit)&&Number.isFinite(exact.maxLoss)&&exact.maxLoss<0&&exact.maxProfit>0?exact.maxProfit/(-exact.maxLoss):null,atSpot:exact.atSpot}:metrics(legs,S0);
         var rrTxt = m.rr != null ? ('1 : ' + m.rr.toFixed(2)) : '—';
-        var netTxt = m.netDebit > 0 ? ('淨支出 ' + usd(m.netDebit)) : m.netDebit < 0 ? ('淨收入 ' + usd(-m.netDebit)) : '$0';
+        var netTxt=m.netDebit>0?('淨支出 '+usd(m.netDebit)):m.netDebit<0?('淨收入 '+usd(-m.netDebit)):'$0';
+        if(exact)netTxt+=(exact.entryNetBtc>0?'（付 ':'（收 ')+Math.abs(exact.entryNetBtc).toFixed(5)+' BTC）';
         box.querySelector('#sc-metrics').innerHTML =
           (quoted?'<div class="sc-help" style="grid-column:1/-1;color:#34d399">✓ 使用 Deribit Bid／Ask 作為建倉參考，費用依設定扣除。頂層掛單不代表保證成交。</div>':'<div class="sc-help" style="grid-column:1/-1;color:#fbbf24">⚠ 目前為理論／手動價格模擬，並非經確認的可成交價格。</div>')+
           tile('最大獲利', usd(m.maxP), m.maxP > 0 ? 'pos' : 'neu', '到期最佳情況') +
@@ -397,7 +422,9 @@
           + '<div class="sc-chart" id="sc-chart"></div>'
           + '<div class="sc-legend"><span><i style="background:#0da271"></i>獲利區</span><span><i style="background:#ef4444"></i>虧損區</span><span><i style="background:#06b6d4"></i>現價</span><span><i style="background:#e4e4e7"></i>損益兩平</span></div></div>'
           + '<div class="sc-note">到期損益按已輸入的建倉權利金估算；不同價格及 IV 情境採理論模型估值（並非平倉 Bid/Ask）；費用僅以指定假設計入，未含滑價。期貨部位為線性損益＝方向×口數×(到期價−進場價)，在「履約/進場價」欄填你的進場價，無權利金、無時間價值，常用來與選擇權搭配（如避險、合成部位）。理論價（選擇權）用 Black-76、以「遠期價＝現價×(1＋年化基差×T)」定價，並由波動率微笑逐檔套用各履約價的市場 IV；若微笑尚未載入或超出範圍會退回單一 IV，與交易所各檔報價仍可能有落差——實際下單請以你在框內輸入的市場報價為準。僅供教育試算，非投資建議。</div>'
+          + '<section id="sc-backtest" class="sc-wrap" style="margin-top:20px"></section>'
           + '</div>';
+        if(typeof window.WR_initReplayUI==='function')window.WR_initReplayUI(box);
         var sel = box.querySelector('#sc-select');
         sel.innerHTML = STRATS.map(function (s) { return '<option value="' + s.k + '">' + s.n + '</option>'; }).join('');
         sel.value = state.strat;
