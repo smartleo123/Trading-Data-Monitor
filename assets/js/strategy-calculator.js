@@ -160,6 +160,87 @@
         svg.addEventListener('touchmove', move, { passive: true }); svg.addEventListener('touchend', leave);
       }
 
+      const EXEC=window.DeribitExecution;
+      function expiryDays(code){
+        var month={JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
+        var m=/^(\d{1,2})([A-Z]{3})(\d{2})$/.exec(code||'');
+        return m?Math.max(0,(Date.UTC(2000+Number(m[3]),month[m[2]],Number(m[1]),8)-Date.now())/86400000):0;
+      }
+      function invalidateQuotes(reason){
+        if(!state)return;
+        state.quoteReady=false;state.quoteRequest=(state.quoteRequest||0)+1;state.quoteStatus=reason||'市場報價已過期';
+        state.legs.forEach(function(l){delete l.quote;});
+        const out=box.querySelector('#sc-quote-status');
+        if(out)out.textContent='⚠ '+state.quoteStatus+'。目前僅供理論／手動模擬。';
+      }
+      async function fetchMarketQuotes(){
+        if(!state||!EXEC)return;
+        const request=++state.quoteRequest;
+        state.quoteReady=false;
+        const status=box.querySelector('#sc-quote-status');
+        const button=box.querySelector('#sc-apply-quotes');
+        const optionLegs=state.legs.filter(l=>l.t==='C'||l.t==='P');
+        if(!state.expiry||!optionLegs.length||typeof window.WR_GET_OPTION_QUOTES!=='function'){
+          state.quoteStatus='無有效到期日、選擇權腿或 Deribit 報價服務';
+          if(status)status.textContent='⚠ '+state.quoteStatus+'；僅使用理論／手動模擬。';
+          renderOutputs();return;
+        }
+        const names=optionLegs.map(l=>EXEC.instrument(state.expiry,l.K,l.t));
+        if(status)status.textContent='正在同步 Deribit 真實 Bid／Ask、掛單量與合約規格…';
+        if(button)button.disabled=true;
+        try{
+          const quotes=await window.WR_GET_OPTION_QUOTES(names);
+          if(request!==state.quoteRequest)return;
+          const validated=optionLegs.map((l,i)=>{
+            const item=quotes[names[i]];
+            if(!item||item.error)return {valid:false,reason:item?.error||'來源無回應'};
+            return EXEC.validateTicker(item,{spot:state.spot,qty:l.qty,direction:l.d},Date.now());
+          });
+          const errors=validated.flatMap((v,i)=>v.valid?[]:[names[i]+': '+v.reason]);
+          if(errors.length){
+            state.quoteStatus='未能取得全部腿的有效可成交價格：'+errors.join('；');
+            if(status)status.textContent='⚠ '+state.quoteStatus+'。已保留理論價格，不代表可成交。';
+            renderOutputs();return;
+          }
+          optionLegs.forEach((l,i)=>{
+            const v=validated[i];
+            l.prem=v.entryUsd;l.premAuto=false;l.contractSize=v.contractSize;
+            l.quote={name:names[i],...v};
+          });
+          state.quoteReady=true;
+          state.quoteAt=Date.now();
+          state.quoteStatus='已用買方 Ask／賣方 Bid 建模（買賣盤只代表當下頂層掛單，不保證成交）。';
+          renderLegs();renderOutputs();
+          if(status)status.textContent='✓ '+state.quoteStatus+' 同步時間：'+new Date(state.quoteAt).toLocaleTimeString('zh-TW')+'；行情效期 120 秒，之後須重新抓取。';
+        }catch(e){
+          if(request!==state.quoteRequest)return;
+          state.quoteStatus='Deribit 報價失敗：'+(e?.message||String(e));
+          if(status)status.textContent='⚠ '+state.quoteStatus+'。不宣稱可成交。';
+          renderOutputs();
+        }finally{if(request===state.quoteRequest&&button)button.disabled=false;}
+      }
+      function adjustedLegs(){
+        const fee=state.feePerBtc||0;
+        return state.legs.map(function(l){
+          var x={...l};
+          if(l.t==='C'||l.t==='P')x.prem=l.prem+l.d*fee*(l.contractSize||1);
+          return x;
+        });
+      }
+      function renderScenarios(legs){
+        const el=box.querySelector('#sc-scenarios');if(!el)return;
+        if(!state.quoteReady||Date.now()-state.quoteAt>120000){el.textContent='必須取得完整有效的 Bid／Ask 才顯示以市場建倉價為基準的情境損益。';return;}
+        const days=Math.max(0,state.dte-7),pts=[-10,-5,0,5,10],shifts=[-10,0,10];
+        const cells=pts.map(function(p){
+          var spot=state.spot*(1+p/100);
+          return '<tr><td>'+p+'%（'+usd(spot)+'）</td>'+shifts.map(function(shift){
+            const value=EXEC.scenarioPnl(legs,spot,days,shift,state.iv,state.basis);
+            return '<td style="text-align:right;color:'+(value>=0?'#34d399':'#fb7185')+'">'+(value>=0?'+':'')+usd(value)+'</td>';
+          }).join('')+'</tr>';
+        }).join('');
+        el.innerHTML='<p style="font-size:12px;color:#a1a1aa">假設 7 天後平倉（距到期約 '+days.toFixed(1)+' 天）；IV 相對目前上下移動 10 vol 點。估值非未來實際 Bid／Ask，忽略交易滑價。</p>'
+          +'<table class="sc-legs" style="min-width:530px"><thead><tr><th>BTC 變動</th><th>IV -10pt</th><th>IV 不變</th><th>IV +10pt</th></tr></thead><tbody>'+cells+'</tbody></table>';
+      }
       function parseNum(v) {
         var text = String(v).trim();
         if (!/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?$/.test(text)) return NaN;
