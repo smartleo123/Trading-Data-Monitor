@@ -145,3 +145,21 @@ daily net flows), T86 (per-stock institutional net buying), MI_MARGN
   shows a clear unavailable state rather than an indefinite loading spinner.
 - The daily market snapshot is after-hours data, **not live intraday quotes**.
   This data covers TWSE (listed securities) and is not a full TPEx market feed.
+
+## BTC options conditional decision support and market scoping
+
+The TDCC holder distribution is contained exclusively inside the Taiwan stock
+view. The right-side section navigation discovers its own Taiwan-only
+`data-nav="集保戶股權分散表"` entry and removes it on US/crypto tab changes.
+
+The BTC options live panel adds a risk-gated decision-support summary, based
+on the fetched Deribit index spot, DVOL percentile, ATM IV, and optional
+skew, funding rate, PCR, trade flow and realized volatility. It distinguishes
+low, middle and high implied-volatility environments, while requiring an
+external price/market confirmation before any proposed scenario is actionable.
+When critical inputs are missing, it outputs a no-trade/observe state.
+OI walls, maximum pain and approximated dealer gamma exposure are explicitly
+flagged as uncertain inferences, **not deterministic support/resistance**.
+Any modeled IV–realized spread may use mismatched tenors, and the module does
+not claim backtested profitability, quote-executable option premium, or
+brokerage account suitability. It never places orders.
