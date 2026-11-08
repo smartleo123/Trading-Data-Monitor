@@ -47,9 +47,9 @@ test('crypto table escapes untrusted metadata and rejects unsafe image protocols
   a.w.eval(`cryptoDataList=[{id:'unsafe',name:'<img src=x onerror=alert(1)>',symbol:'<svg onload=alert(1)>',image:'javascript:alert(1)',current_price:1,price_change_percentage_24h:0,total_volume:1,market_cap:1,sparkline_in_7d:{price:[]}}];renderCryptoTable()`);
   const row=a.d.querySelector('#crypto-table-body tr');
   assert.ok(row);
-  assert.match(row.textContent,/<img src=x onerror=alert\\(1\\)>/);
+  assert.ok(row.textContent.includes('<img src=x onerror=alert(1)>'));
   assert.equal(row.querySelectorAll('img').length,1);
   assert.equal(row.querySelector('svg'),null);
-  assert.match(row.querySelector('img').src,/^https:\\/\\/placehold\\.co\\//);
+  assert.ok(row.querySelector('img').src.startsWith('https://placehold.co/'));
   assert.equal(a.errors.length,0);
 });
