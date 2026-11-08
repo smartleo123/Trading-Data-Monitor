@@ -53,3 +53,38 @@ test('crypto table escapes untrusted metadata and rejects unsafe image protocols
   assert.ok(row.querySelector('img').src.startsWith('https://placehold.co/'));
   assert.equal(a.errors.length,0);
 });
+
+test('funding requests share pending work, validate data, and allow retry',async t=>{
+  const a=await boot(t);a.w.eval('fundingPending.clear()');
+  let resolve;let count=0;
+  a.w.fetch=()=>{count++;return new Promise(r=>{resolve=r})};
+  const first=a.w.fetchFundingRate('BTCUSDT');
+  assert.equal(first,a.w.fetchFundingRate('BTCUSDT'));
+  assert.equal(count,1);
+  resolve({ok:true,json:async()=>({lastFundingRate:'0.0001'})});
+  assert.equal(await first,0.0001);
+  a.w.fetchFundingRate('BTCUSDT');
+  assert.equal(count,2);
+});
+
+test('invalid funding data is rejected and does not display NaN',async t=>{
+  const a=await boot(t);a.w.eval('fundingPending.clear()');
+  a.w.fetch=async()=>({ok:true,json:async()=>({lastFundingRate:'not-a-number'})});
+  await assert.rejects(a.w.fetchFundingRate('BTCUSDT'),/invalid funding/);
+  a.w.updateFundingRates();
+  await flush();
+  assert.ok(!a.d.getElementById('btc-funding').textContent.includes('NaN'));
+});
+
+test('perpetual cards display trading status and recover from provider failure',async t=>{
+  const a=await boot(t);let ok=true;
+  a.w.fetchCryptoQuote=async()=>{if(!ok)throw new Error('offline');return {lastPrice:'123',priceChangePercent:'1.5'}};
+  a.w.updatePerpStockCard('mstr-price','mstr-change','mstr-status','MSTRUSDT');
+  await flush();
+  assert.equal(a.d.getElementById('mstr-status').textContent,'LIVE');
+  assert.match(a.d.getElementById('mstr-status').title,/永續合約/);
+  ok=false;
+  a.w.updatePerpStockCard('mstr-price','mstr-change','mstr-status','MSTRUSDT');
+  await flush();
+  assert.equal(a.d.getElementById('mstr-status').textContent,'離線');
+});
