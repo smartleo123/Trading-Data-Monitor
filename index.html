@@ -803,10 +803,21 @@
                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                     <div class="flex items-center gap-3">
                         <div class="p-2 rounded-xl border border-zinc-800 bg-zinc-900"><i data-lucide="users-round" class="w-5 h-5 text-accentCyan"></i></div>
-                        <div><h2 class="font-extrabold text-white text-md">0050 集保戶股權分散表</h2><p class="text-xs text-zinc-500 mt-1">集保結算所每週資料，依各級距持有人數由小股數向大股數累加</p></div>
+                        <div><h2 class="font-extrabold text-white text-md">集保戶股權分散表</h2><p class="text-xs text-zinc-500 mt-1">輸入股票或 ETF 代號查詢；預設 0050。每週資料依持股級距由小到大累加。</p></div>
                     </div>
                     <a href="https://www.tdcc.com.tw/portal/zh/smWeb/qryStock" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-accentCyan border border-zinc-700 rounded-xl px-3 py-2 hover:bg-zinc-800 shrink-0">集保結算所官方查詢 ↗</a>
                 </div>
+                <form id="tdcc-symbol-form" onsubmit="return submitTdccSymbol(event)" class="flex flex-col sm:flex-row gap-2 sm:items-center mb-3">
+                    <label for="tdcc-symbol-input" class="text-sm text-zinc-300 font-bold shrink-0">證券代號</label>
+                    <input id="tdcc-symbol-input" name="symbol" value="0050" maxlength="6" required spellcheck="false" autocomplete="off" inputmode="text" pattern="[0-9]{4}[0-9A-Za-z]{0,2}" title="請輸入 4 至 6 碼的股票或 ETF 代號" placeholder="例如 0050、2330、00878" class="w-full sm:w-44 bg-zinc-950 rounded-lg border border-zinc-700 px-3 py-2 text-white font-mono focus:border-cyan-400 outline-none">
+                    <button id="tdcc-symbol-search" type="submit" class="rounded-lg px-4 py-2 font-bold text-sm bg-cyan-800 hover:bg-cyan-700 text-white shrink-0">查詢集保資料</button>
+                    <div class="flex flex-wrap gap-2 text-xs text-cyan-300">
+                        <button type="button" onclick="searchTdccSymbol('0050')" class="hover:underline">0050</button>
+                        <button type="button" onclick="searchTdccSymbol('0056')" class="hover:underline">0056</button>
+                        <button type="button" onclick="searchTdccSymbol('00878')" class="hover:underline">00878</button>
+                        <button type="button" onclick="searchTdccSymbol('2330')" class="hover:underline">2330</button>
+                    </div>
+                </form>
                 <div id="tdcc-0050-status" role="status" class="text-xs text-zinc-400 mb-3">等待載入最新每週快照…</div>
                 <div class="w-full overflow-x-auto rounded-xl border border-zinc-800 bg-black">
                     <table class="w-full min-w-[850px] text-left tabular-nums">
@@ -826,7 +837,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="text-[11px] text-zinc-500 mt-3 leading-relaxed">累積人數與累積百分比僅計入第 1–15 級；「差異數調整」不含實際持有人數，合計列不重複累加。累積人數百分比 = 累積人數 ÷ 合計人數 × 100%。資料為每週最後營業日之集保帳簿餘額，並非即時股東人數。</p>
+                <p class="text-[11px] text-zinc-500 mt-3 leading-relaxed">累積人數與累積百分比僅計入第 1–15 級；「差異數調整」不含實際持有人數，合計列不重複累加。累積人數百分比 = 累積人數 ÷ 合計人數 × 100%。可查詢集保資料涵蓋的上市、上櫃股票及 ETF。資料為每週最後營業日之集保帳簿餘額，並非即時股東人數。</p>
             </section>
         <!-- /market-view-tw-stock -->
         <!-- ============================ 美股面板 ============================ -->
