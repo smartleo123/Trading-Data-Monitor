@@ -532,7 +532,7 @@
                         });
                         document.querySelectorAll('[data-twq]').forEach(el=>{
                             el.textContent=fmtTwPrevClose(el.getAttribute('data-twq'));
-                            el.title=data.priceDate?'證交所最近收盤資料（'+data.priceDate+'）':'證交所最近收盤，資料日期未核實';
+                            el.title=data.priceDate?'證交所盤後收盤價（快照抓取日期：'+data.priceDate+'，個別交易日未提供）':'證交所盤後收盤價（來源未提供交易日期）';
                         });
                     }).catch(()=>{
                         TW_TOP50.forEach(stock=>{TW_QUOTE_CACHE[stock.code]=false;});
