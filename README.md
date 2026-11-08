@@ -100,20 +100,25 @@ public post-close API is not a substitute for licensed real-time intraday data.
 For consistently live quotes in a public dashboard, use a vendor feed with the
 appropriate redistribution license and keep credentials on a backend.
 
-## TDCC 0050 holder distribution
+## TDCC stock & ETF ownership distribution lookup
 
-The Taiwan stock page includes the official TDCC ownership distribution for 0050,
-with 15 holding ranges, an adjustment row, and a total row. Two calculated columns
-show the **cumulative holder count** and **cumulative percentage of all holders**
-from smallest to largest holding range. The adjustment row is not counted as a
-person; the total row displays the complete cumulative count without counting it
-twice. The cumulative percentage is **not** a cumulative percentage of shares.
+The Taiwan-stock section now defaults to **0050** but allows users to enter any
+TDCC-listed 4–6 character stock or ETF symbol (for example: `2330`, `0056`,
+`00878`). A weekly GitHub Actions job downloads the official complete TDCC
+open-data dataset `1-5`, validates each security separately, and publishes a
+small index plus per-symbol-prefix JSON shards at
+`assets/data/tdcc/index.json` and `assets/data/tdcc/<prefix>.json`.
+A user downloads only the index and the shard for the requested symbol;
+the source report is never downloaded wholesale to the browser.
 
-A separate GitHub Actions workflow (`.github/workflows/update-tdcc.yml`) is
-scheduled for Saturdays 10:00 Asia/Taipei. It reads the TDCC open-data dataset
-`1-5`, extracts 0050 for the latest date, validates all 17 levels and their
-holder/share totals, commits `assets/data/0050-distribution.json` only on change,
-and triggers a GitHub Pages rebuild. If the official endpoint is unavailable,
-the dashboard displays a clear unavailable-data message and a direct link to
-the official lookup rather than inventing numbers. TDCC statistics are weekly,
-not intraday/real-time. Source: https://www.tdcc.com.tw/portal/zh/smWeb/qryStock
+The table shows all 15 holding ranges, the adjustment row, and the total,
+with cumulative **number of holders** and cumulative **percentage of holders**
+calculated from the smallest to largest range. Grade 16 does not add persons.
+If the symbol is not covered by TDCC, or an entire shard is unavailable, the
+interface displays an explicit warning with an official lookup link.
+The previous `assets/data/0050-distribution.json` is still published as
+a backwards-compatible default fallback.
+
+GitHub Actions schedules a weekly refresh on Saturday 10:00 Asia/Taipei.
+TDCC data are weekly snapshots, not real-time brokerage shareholder registers.
+Data source: https://www.tdcc.com.tw/portal/zh/smWeb/qryStock
