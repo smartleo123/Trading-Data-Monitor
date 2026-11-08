@@ -1,0 +1,6603 @@
+{
+  "2501": {
+    "symbol": "2501",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 13838,
+        "shares": 4419372,
+        "proportion": 0.38,
+        "cumulativeHolders": 13838,
+        "cumulativePct": 31.383
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 21289,
+        "shares": 47667593,
+        "proportion": 4.11,
+        "cumulativeHolders": 35127,
+        "cumulativePct": 79.6639
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 4352,
+        "shares": 33952045,
+        "proportion": 2.92,
+        "cumulativeHolders": 39479,
+        "cumulativePct": 89.5337
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1357,
+        "shares": 17268158,
+        "proportion": 1.48,
+        "cumulativeHolders": 40836,
+        "cumulativePct": 92.6112
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 907,
+        "shares": 16463822,
+        "proportion": 1.41,
+        "cumulativeHolders": 41743,
+        "cumulativePct": 94.6682
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 730,
+        "shares": 18489147,
+        "proportion": 1.59,
+        "cumulativeHolders": 42473,
+        "cumulativePct": 96.3238
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 357,
+        "shares": 12799730,
+        "proportion": 1.1,
+        "cumulativeHolders": 42830,
+        "cumulativePct": 97.1334
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 252,
+        "shares": 11626720,
+        "proportion": 1,
+        "cumulativeHolders": 43082,
+        "cumulativePct": 97.7049
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 491,
+        "shares": 35289954,
+        "proportion": 3.04,
+        "cumulativeHolders": 43573,
+        "cumulativePct": 98.8184
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 227,
+        "shares": 32355792,
+        "proportion": 2.79,
+        "cumulativeHolders": 43800,
+        "cumulativePct": 99.3332
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 132,
+        "shares": 36392525,
+        "proportion": 3.13,
+        "cumulativeHolders": 43932,
+        "cumulativePct": 99.6326
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 40,
+        "shares": 19354362,
+        "proportion": 1.66,
+        "cumulativeHolders": 43972,
+        "cumulativePct": 99.7233
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 22,
+        "shares": 15391977,
+        "proportion": 1.32,
+        "cumulativeHolders": 43994,
+        "cumulativePct": 99.7732
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 21,
+        "shares": 18947961,
+        "proportion": 1.63,
+        "cumulativeHolders": 44015,
+        "cumulativePct": 99.8208
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 79,
+        "shares": 839141901,
+        "proportion": 72.36,
+        "cumulativeHolders": 44094,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 44094,
+        "shares": 1159561059,
+        "proportion": 100,
+        "cumulativeHolders": 44094,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2504": {
+    "symbol": "2504",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 60747,
+        "shares": 5260476,
+        "proportion": 0.44,
+        "cumulativeHolders": 60747,
+        "cumulativePct": 67.8222
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 19359,
+        "shares": 43365347,
+        "proportion": 3.67,
+        "cumulativeHolders": 80106,
+        "cumulativePct": 89.436
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 4277,
+        "shares": 32692872,
+        "proportion": 2.77,
+        "cumulativeHolders": 84383,
+        "cumulativePct": 94.2111
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1422,
+        "shares": 17843907,
+        "proportion": 1.51,
+        "cumulativeHolders": 85805,
+        "cumulativePct": 95.7987
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 967,
+        "shares": 17575186,
+        "proportion": 1.48,
+        "cumulativeHolders": 86772,
+        "cumulativePct": 96.8783
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 929,
+        "shares": 23659337,
+        "proportion": 2,
+        "cumulativeHolders": 87701,
+        "cumulativePct": 97.9156
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 393,
+        "shares": 13862660,
+        "proportion": 1.17,
+        "cumulativeHolders": 88094,
+        "cumulativePct": 98.3543
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 302,
+        "shares": 13910075,
+        "proportion": 1.17,
+        "cumulativeHolders": 88396,
+        "cumulativePct": 98.6915
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 556,
+        "shares": 39809071,
+        "proportion": 3.37,
+        "cumulativeHolders": 88952,
+        "cumulativePct": 99.3123
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 284,
+        "shares": 39689484,
+        "proportion": 3.36,
+        "cumulativeHolders": 89236,
+        "cumulativePct": 99.6293
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 127,
+        "shares": 35281396,
+        "proportion": 2.98,
+        "cumulativeHolders": 89363,
+        "cumulativePct": 99.7711
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 48,
+        "shares": 24217871,
+        "proportion": 2.05,
+        "cumulativeHolders": 89411,
+        "cumulativePct": 99.8247
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 30,
+        "shares": 21029112,
+        "proportion": 1.78,
+        "cumulativeHolders": 89441,
+        "cumulativePct": 99.8582
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 15,
+        "shares": 13245622,
+        "proportion": 1.12,
+        "cumulativeHolders": 89456,
+        "cumulativePct": 99.875
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 112,
+        "shares": 838582584,
+        "proportion": 71.06,
+        "cumulativeHolders": 89568,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": -25000,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 89568,
+        "shares": 1180000000,
+        "proportion": 100,
+        "cumulativeHolders": 89568,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2505": {
+    "symbol": "2505",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 15103,
+        "shares": 2321896,
+        "proportion": 0.61,
+        "cumulativeHolders": 15103,
+        "cumulativePct": 64.1017
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 5958,
+        "shares": 12645068,
+        "proportion": 3.32,
+        "cumulativeHolders": 21061,
+        "cumulativePct": 89.3892
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1162,
+        "shares": 8486549,
+        "proportion": 2.23,
+        "cumulativeHolders": 22223,
+        "cumulativePct": 94.3211
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 387,
+        "shares": 4788322,
+        "proportion": 1.26,
+        "cumulativeHolders": 22610,
+        "cumulativePct": 95.9637
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 250,
+        "shares": 4547530,
+        "proportion": 1.19,
+        "cumulativeHolders": 22860,
+        "cumulativePct": 97.0247
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 201,
+        "shares": 5141644,
+        "proportion": 1.35,
+        "cumulativeHolders": 23061,
+        "cumulativePct": 97.8778
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 104,
+        "shares": 3681871,
+        "proportion": 0.96,
+        "cumulativeHolders": 23165,
+        "cumulativePct": 98.3193
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 73,
+        "shares": 3360034,
+        "proportion": 0.88,
+        "cumulativeHolders": 23238,
+        "cumulativePct": 98.6291
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 136,
+        "shares": 9640510,
+        "proportion": 2.53,
+        "cumulativeHolders": 23374,
+        "cumulativePct": 99.2063
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 86,
+        "shares": 11876417,
+        "proportion": 3.12,
+        "cumulativeHolders": 23460,
+        "cumulativePct": 99.5713
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 37,
+        "shares": 10461285,
+        "proportion": 2.75,
+        "cumulativeHolders": 23497,
+        "cumulativePct": 99.7284
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 13,
+        "shares": 6566030,
+        "proportion": 1.72,
+        "cumulativeHolders": 23510,
+        "cumulativePct": 99.7835
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 7,
+        "shares": 4774462,
+        "proportion": 1.25,
+        "cumulativeHolders": 23517,
+        "cumulativePct": 99.8133
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 3,
+        "shares": 2533449,
+        "proportion": 0.66,
+        "cumulativeHolders": 23520,
+        "cumulativePct": 99.826
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 41,
+        "shares": 289174933,
+        "proportion": 76.09,
+        "cumulativeHolders": 23561,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 23561,
+        "shares": 380000000,
+        "proportion": 100,
+        "cumulativeHolders": 23561,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2506": {
+    "symbol": "2506",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 53789,
+        "shares": 6513877,
+        "proportion": 1.68,
+        "cumulativeHolders": 53789,
+        "cumulativePct": 82.6607
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 8691,
+        "shares": 17499479,
+        "proportion": 4.52,
+        "cumulativeHolders": 62480,
+        "cumulativePct": 96.0167
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1288,
+        "shares": 9277921,
+        "proportion": 2.39,
+        "cumulativeHolders": 63768,
+        "cumulativePct": 97.9961
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 377,
+        "shares": 4633377,
+        "proportion": 1.19,
+        "cumulativeHolders": 64145,
+        "cumulativePct": 98.5754
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 200,
+        "shares": 3591410,
+        "proportion": 0.92,
+        "cumulativeHolders": 64345,
+        "cumulativePct": 98.8828
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 202,
+        "shares": 5221272,
+        "proportion": 1.34,
+        "cumulativeHolders": 64547,
+        "cumulativePct": 99.1932
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 98,
+        "shares": 3443224,
+        "proportion": 0.88,
+        "cumulativeHolders": 64645,
+        "cumulativePct": 99.3438
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 75,
+        "shares": 3529479,
+        "proportion": 0.91,
+        "cumulativeHolders": 64720,
+        "cumulativePct": 99.4591
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 153,
+        "shares": 10785421,
+        "proportion": 2.78,
+        "cumulativeHolders": 64873,
+        "cumulativePct": 99.6942
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 76,
+        "shares": 10726623,
+        "proportion": 2.77,
+        "cumulativeHolders": 64949,
+        "cumulativePct": 99.811
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 49,
+        "shares": 13642895,
+        "proportion": 3.52,
+        "cumulativeHolders": 64998,
+        "cumulativePct": 99.8863
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 17,
+        "shares": 8774627,
+        "proportion": 2.26,
+        "cumulativeHolders": 65015,
+        "cumulativePct": 99.9124
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 7,
+        "shares": 4866566,
+        "proportion": 1.25,
+        "cumulativeHolders": 65022,
+        "cumulativePct": 99.9232
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 5,
+        "shares": 4123021,
+        "proportion": 1.06,
+        "cumulativeHolders": 65027,
+        "cumulativePct": 99.9308
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 45,
+        "shares": 280370808,
+        "proportion": 72.44,
+        "cumulativeHolders": 65072,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 65072,
+        "shares": 387000000,
+        "proportion": 100,
+        "cumulativeHolders": 65072,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2509": {
+    "symbol": "2509",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 7917,
+        "shares": 1982709,
+        "proportion": 0.88,
+        "cumulativeHolders": 7917,
+        "cumulativePct": 48.8011
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 6280,
+        "shares": 13120946,
+        "proportion": 5.84,
+        "cumulativeHolders": 14197,
+        "cumulativePct": 87.5116
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 948,
+        "shares": 7088570,
+        "proportion": 3.15,
+        "cumulativeHolders": 15145,
+        "cumulativePct": 93.3551
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 325,
+        "shares": 4178689,
+        "proportion": 1.86,
+        "cumulativeHolders": 15470,
+        "cumulativePct": 95.3584
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 183,
+        "shares": 3337394,
+        "proportion": 1.48,
+        "cumulativeHolders": 15653,
+        "cumulativePct": 96.4865
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 163,
+        "shares": 4151488,
+        "proportion": 1.84,
+        "cumulativeHolders": 15816,
+        "cumulativePct": 97.4912
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 92,
+        "shares": 3268863,
+        "proportion": 1.45,
+        "cumulativeHolders": 15908,
+        "cumulativePct": 98.0583
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 52,
+        "shares": 2333959,
+        "proportion": 1.03,
+        "cumulativeHolders": 15960,
+        "cumulativePct": 98.3788
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 116,
+        "shares": 8435468,
+        "proportion": 3.75,
+        "cumulativeHolders": 16076,
+        "cumulativePct": 99.0939
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 62,
+        "shares": 8523233,
+        "proportion": 3.79,
+        "cumulativeHolders": 16138,
+        "cumulativePct": 99.4761
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 39,
+        "shares": 10945909,
+        "proportion": 4.87,
+        "cumulativeHolders": 16177,
+        "cumulativePct": 99.7165
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 12,
+        "shares": 5763051,
+        "proportion": 2.56,
+        "cumulativeHolders": 16189,
+        "cumulativePct": 99.7904
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 5,
+        "shares": 3406352,
+        "proportion": 1.51,
+        "cumulativeHolders": 16194,
+        "cumulativePct": 99.8212
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 5,
+        "shares": 4313000,
+        "proportion": 1.92,
+        "cumulativeHolders": 16199,
+        "cumulativePct": 99.8521
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 24,
+        "shares": 143700899,
+        "proportion": 63.99,
+        "cumulativeHolders": 16223,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 16223,
+        "shares": 224550530,
+        "proportion": 100,
+        "cumulativeHolders": 16223,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2511": {
+    "symbol": "2511",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 23301,
+        "shares": 3058055,
+        "proportion": 0.18,
+        "cumulativeHolders": 23301,
+        "cumulativePct": 51.1088
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 13311,
+        "shares": 29874049,
+        "proportion": 1.84,
+        "cumulativeHolders": 36612,
+        "cumulativePct": 80.3053
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 3438,
+        "shares": 26525858,
+        "proportion": 1.63,
+        "cumulativeHolders": 40050,
+        "cumulativePct": 87.8463
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1376,
+        "shares": 17090994,
+        "proportion": 1.05,
+        "cumulativeHolders": 41426,
+        "cumulativePct": 90.8644
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 924,
+        "shares": 16923061,
+        "proportion": 1.04,
+        "cumulativeHolders": 42350,
+        "cumulativePct": 92.8911
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 870,
+        "shares": 21966431,
+        "proportion": 1.35,
+        "cumulativeHolders": 43220,
+        "cumulativePct": 94.7994
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 436,
+        "shares": 15452893,
+        "proportion": 0.95,
+        "cumulativeHolders": 43656,
+        "cumulativePct": 95.7557
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 334,
+        "shares": 15350610,
+        "proportion": 0.94,
+        "cumulativeHolders": 43990,
+        "cumulativePct": 96.4883
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 721,
+        "shares": 51955609,
+        "proportion": 3.2,
+        "cumulativeHolders": 44711,
+        "cumulativePct": 98.0698
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 364,
+        "shares": 52418827,
+        "proportion": 3.22,
+        "cumulativeHolders": 45075,
+        "cumulativePct": 98.8682
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 223,
+        "shares": 62199539,
+        "proportion": 3.83,
+        "cumulativeHolders": 45298,
+        "cumulativePct": 99.3573
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 81,
+        "shares": 39487075,
+        "proportion": 2.43,
+        "cumulativeHolders": 45379,
+        "cumulativePct": 99.535
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 38,
+        "shares": 26204534,
+        "proportion": 1.61,
+        "cumulativeHolders": 45417,
+        "cumulativePct": 99.6183
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 23,
+        "shares": 20579142,
+        "proportion": 1.26,
+        "cumulativeHolders": 45440,
+        "cumulativePct": 99.6688
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 151,
+        "shares": 1224239470,
+        "proportion": 75.41,
+        "cumulativeHolders": 45591,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 45591,
+        "shares": 1623326147,
+        "proportion": 100,
+        "cumulativeHolders": 45591,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2512": {
+    "symbol": "2512",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 21278,
+        "shares": 8361922,
+        "proportion": 1.7,
+        "cumulativeHolders": 21278,
+        "cumulativePct": 48.4969
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 12136,
+        "shares": 31004540,
+        "proportion": 6.33,
+        "cumulativeHolders": 33414,
+        "cumulativePct": 76.1573
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 4475,
+        "shares": 32804230,
+        "proportion": 6.7,
+        "cumulativeHolders": 37889,
+        "cumulativePct": 86.3567
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1930,
+        "shares": 25035623,
+        "proportion": 5.11,
+        "cumulativeHolders": 39819,
+        "cumulativePct": 90.7556
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 642,
+        "shares": 11312150,
+        "proportion": 2.31,
+        "cumulativeHolders": 40461,
+        "cumulativePct": 92.2188
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 1055,
+        "shares": 25305816,
+        "proportion": 5.17,
+        "cumulativeHolders": 41516,
+        "cumulativePct": 94.6234
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 648,
+        "shares": 22678906,
+        "proportion": 4.63,
+        "cumulativeHolders": 42164,
+        "cumulativePct": 96.1003
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 338,
+        "shares": 15374413,
+        "proportion": 3.14,
+        "cumulativeHolders": 42502,
+        "cumulativePct": 96.8707
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 755,
+        "shares": 54105740,
+        "proportion": 11.06,
+        "cumulativeHolders": 43257,
+        "cumulativePct": 98.5915
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 359,
+        "shares": 49938299,
+        "proportion": 10.21,
+        "cumulativeHolders": 43616,
+        "cumulativePct": 99.4097
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 163,
+        "shares": 45349514,
+        "proportion": 9.27,
+        "cumulativeHolders": 43779,
+        "cumulativePct": 99.7812
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 43,
+        "shares": 21617696,
+        "proportion": 4.42,
+        "cumulativeHolders": 43822,
+        "cumulativePct": 99.8792
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 23,
+        "shares": 16188320,
+        "proportion": 3.3,
+        "cumulativeHolders": 43845,
+        "cumulativePct": 99.9316
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 8,
+        "shares": 7193193,
+        "proportion": 1.47,
+        "cumulativeHolders": 43853,
+        "cumulativePct": 99.9499
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 22,
+        "shares": 122811255,
+        "proportion": 25.11,
+        "cumulativeHolders": 43875,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 43875,
+        "shares": 489081617,
+        "proportion": 100,
+        "cumulativeHolders": 43875,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2514": {
+    "symbol": "2514",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 12307,
+        "shares": 2335025,
+        "proportion": 0.59,
+        "cumulativeHolders": 12307,
+        "cumulativePct": 70.0455
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 3996,
+        "shares": 8332453,
+        "proportion": 2.11,
+        "cumulativeHolders": 16303,
+        "cumulativePct": 92.7888
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 584,
+        "shares": 4306368,
+        "proportion": 1.09,
+        "cumulativeHolders": 16887,
+        "cumulativePct": 96.1127
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 174,
+        "shares": 2117877,
+        "proportion": 0.53,
+        "cumulativeHolders": 17061,
+        "cumulativePct": 97.103
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 114,
+        "shares": 2066891,
+        "proportion": 0.52,
+        "cumulativeHolders": 17175,
+        "cumulativePct": 97.7518
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 97,
+        "shares": 2469964,
+        "proportion": 0.62,
+        "cumulativeHolders": 17272,
+        "cumulativePct": 98.3039
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 54,
+        "shares": 1929304,
+        "proportion": 0.48,
+        "cumulativeHolders": 17326,
+        "cumulativePct": 98.6113
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 26,
+        "shares": 1207289,
+        "proportion": 0.3,
+        "cumulativeHolders": 17352,
+        "cumulativePct": 98.7592
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 82,
+        "shares": 5942880,
+        "proportion": 1.5,
+        "cumulativeHolders": 17434,
+        "cumulativePct": 99.226
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 56,
+        "shares": 8044134,
+        "proportion": 2.03,
+        "cumulativeHolders": 17490,
+        "cumulativePct": 99.5447
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 31,
+        "shares": 8751081,
+        "proportion": 2.21,
+        "cumulativeHolders": 17521,
+        "cumulativePct": 99.7211
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 8,
+        "shares": 3799782,
+        "proportion": 0.96,
+        "cumulativeHolders": 17529,
+        "cumulativePct": 99.7666
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 10,
+        "shares": 6883700,
+        "proportion": 1.74,
+        "cumulativeHolders": 17539,
+        "cumulativePct": 99.8236
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 2,
+        "shares": 1749846,
+        "proportion": 0.44,
+        "cumulativeHolders": 17541,
+        "cumulativePct": 99.8349
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 29,
+        "shares": 334792684,
+        "proportion": 84.81,
+        "cumulativeHolders": 17570,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 17570,
+        "shares": 394729278,
+        "proportion": 100,
+        "cumulativeHolders": 17570,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2515": {
+    "symbol": "2515",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 77082,
+        "shares": 7816431,
+        "proportion": 0.46,
+        "cumulativeHolders": 77082,
+        "cumulativePct": 54.8978
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 38349,
+        "shares": 81432045,
+        "proportion": 4.82,
+        "cumulativeHolders": 115431,
+        "cumulativePct": 82.21
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 10236,
+        "shares": 69050892,
+        "proportion": 4.08,
+        "cumulativeHolders": 125667,
+        "cumulativePct": 89.5
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 5723,
+        "shares": 66821369,
+        "proportion": 3.95,
+        "cumulativeHolders": 131390,
+        "cumulativePct": 93.576
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 1916,
+        "shares": 33223189,
+        "proportion": 1.96,
+        "cumulativeHolders": 133306,
+        "cumulativePct": 94.9405
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 2566,
+        "shares": 60570541,
+        "proportion": 3.58,
+        "cumulativeHolders": 135872,
+        "cumulativePct": 96.768
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 1237,
+        "shares": 42311047,
+        "proportion": 2.5,
+        "cumulativeHolders": 137109,
+        "cumulativePct": 97.649
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 599,
+        "shares": 26834872,
+        "proportion": 1.58,
+        "cumulativeHolders": 137708,
+        "cumulativePct": 98.0756
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 1272,
+        "shares": 86013744,
+        "proportion": 5.09,
+        "cumulativeHolders": 138980,
+        "cumulativePct": 98.9816
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 746,
+        "shares": 99493475,
+        "proportion": 5.89,
+        "cumulativeHolders": 139726,
+        "cumulativePct": 99.5129
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 342,
+        "shares": 94171009,
+        "proportion": 5.57,
+        "cumulativeHolders": 140068,
+        "cumulativePct": 99.7564
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 120,
+        "shares": 58541122,
+        "proportion": 3.46,
+        "cumulativeHolders": 140188,
+        "cumulativePct": 99.8419
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 58,
+        "shares": 39641709,
+        "proportion": 2.34,
+        "cumulativeHolders": 140246,
+        "cumulativePct": 99.8832
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 34,
+        "shares": 30909037,
+        "proportion": 1.83,
+        "cumulativeHolders": 140280,
+        "cumulativePct": 99.9074
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 130,
+        "shares": 891629597,
+        "proportion": 52.8,
+        "cumulativeHolders": 140410,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 140410,
+        "shares": 1688460079,
+        "proportion": 100,
+        "cumulativeHolders": 140410,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2516": {
+    "symbol": "2516",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 43123,
+        "shares": 1276333,
+        "proportion": 0.56,
+        "cumulativeHolders": 43123,
+        "cumulativePct": 88.5865
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 3795,
+        "shares": 8019787,
+        "proportion": 3.54,
+        "cumulativeHolders": 46918,
+        "cumulativePct": 96.3824
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 727,
+        "shares": 5502077,
+        "proportion": 2.43,
+        "cumulativeHolders": 47645,
+        "cumulativePct": 97.8759
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 263,
+        "shares": 3280011,
+        "proportion": 1.44,
+        "cumulativeHolders": 47908,
+        "cumulativePct": 98.4162
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 156,
+        "shares": 2884449,
+        "proportion": 1.27,
+        "cumulativeHolders": 48064,
+        "cumulativePct": 98.7366
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 197,
+        "shares": 4896843,
+        "proportion": 2.16,
+        "cumulativeHolders": 48261,
+        "cumulativePct": 99.1413
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 91,
+        "shares": 3231721,
+        "proportion": 1.42,
+        "cumulativeHolders": 48352,
+        "cumulativePct": 99.3283
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 59,
+        "shares": 2708251,
+        "proportion": 1.19,
+        "cumulativeHolders": 48411,
+        "cumulativePct": 99.4495
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 102,
+        "shares": 7251914,
+        "proportion": 3.2,
+        "cumulativeHolders": 48513,
+        "cumulativePct": 99.659
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 67,
+        "shares": 9218311,
+        "proportion": 4.07,
+        "cumulativeHolders": 48580,
+        "cumulativePct": 99.7966
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 37,
+        "shares": 10414901,
+        "proportion": 4.6,
+        "cumulativeHolders": 48617,
+        "cumulativePct": 99.8726
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 10,
+        "shares": 4714235,
+        "proportion": 2.08,
+        "cumulativeHolders": 48627,
+        "cumulativePct": 99.8932
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 5,
+        "shares": 3281798,
+        "proportion": 1.45,
+        "cumulativeHolders": 48632,
+        "cumulativePct": 99.9034
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 10,
+        "shares": 9103986,
+        "proportion": 4.02,
+        "cumulativeHolders": 48642,
+        "cumulativePct": 99.924
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 37,
+        "shares": 150493840,
+        "proportion": 66.5,
+        "cumulativeHolders": 48679,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 48679,
+        "shares": 226278457,
+        "proportion": 100,
+        "cumulativeHolders": 48679,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2520": {
+    "symbol": "2520",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 55953,
+        "shares": 1588560,
+        "proportion": 0.26,
+        "cumulativeHolders": 55953,
+        "cumulativePct": 73.7252
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 14455,
+        "shares": 29815931,
+        "proportion": 4.89,
+        "cumulativeHolders": 70408,
+        "cumulativePct": 92.7715
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 2633,
+        "shares": 18697542,
+        "proportion": 3.06,
+        "cumulativeHolders": 73041,
+        "cumulativePct": 96.2408
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1091,
+        "shares": 13136113,
+        "proportion": 2.15,
+        "cumulativeHolders": 74132,
+        "cumulativePct": 97.6783
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 409,
+        "shares": 7270743,
+        "proportion": 1.19,
+        "cumulativeHolders": 74541,
+        "cumulativePct": 98.2173
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 489,
+        "shares": 11920822,
+        "proportion": 1.95,
+        "cumulativeHolders": 75030,
+        "cumulativePct": 98.8616
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 226,
+        "shares": 7887663,
+        "proportion": 1.29,
+        "cumulativeHolders": 75256,
+        "cumulativePct": 99.1594
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 120,
+        "shares": 5405312,
+        "proportion": 0.88,
+        "cumulativeHolders": 75376,
+        "cumulativePct": 99.3175
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 228,
+        "shares": 15853479,
+        "proportion": 2.6,
+        "cumulativeHolders": 75604,
+        "cumulativePct": 99.6179
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 133,
+        "shares": 18640851,
+        "proportion": 3.05,
+        "cumulativeHolders": 75737,
+        "cumulativePct": 99.7931
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 62,
+        "shares": 17120274,
+        "proportion": 2.8,
+        "cumulativeHolders": 75799,
+        "cumulativePct": 99.8748
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 22,
+        "shares": 10845749,
+        "proportion": 1.77,
+        "cumulativeHolders": 75821,
+        "cumulativePct": 99.9038
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 6527458,
+        "proportion": 1.07,
+        "cumulativeHolders": 75830,
+        "cumulativePct": 99.9157
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 4,
+        "shares": 3719157,
+        "proportion": 0.61,
+        "cumulativeHolders": 75834,
+        "cumulativePct": 99.9209
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 60,
+        "shares": 441057456,
+        "proportion": 72.36,
+        "cumulativeHolders": 75894,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 75894,
+        "shares": 609487110,
+        "proportion": 100,
+        "cumulativeHolders": 75894,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2521": {
+    "symbol": "2521",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 8165,
+        "shares": 2195309,
+        "proportion": 0.68,
+        "cumulativeHolders": 8165,
+        "cumulativePct": 32.3149
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 10037,
+        "shares": 23224546,
+        "proportion": 7.27,
+        "cumulativeHolders": 18202,
+        "cumulativePct": 72.0386
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 3183,
+        "shares": 25326329,
+        "proportion": 7.93,
+        "cumulativeHolders": 21385,
+        "cumulativePct": 84.6361
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1035,
+        "shares": 12649004,
+        "proportion": 3.96,
+        "cumulativeHolders": 22420,
+        "cumulativePct": 88.7323
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 885,
+        "shares": 16907121,
+        "proportion": 5.29,
+        "cumulativeHolders": 23305,
+        "cumulativePct": 92.2349
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 626,
+        "shares": 16392729,
+        "proportion": 5.13,
+        "cumulativeHolders": 23931,
+        "cumulativePct": 94.7125
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 294,
+        "shares": 10849614,
+        "proportion": 3.39,
+        "cumulativeHolders": 24225,
+        "cumulativePct": 95.876
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 299,
+        "shares": 14458300,
+        "proportion": 4.52,
+        "cumulativeHolders": 24524,
+        "cumulativePct": 97.0594
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 422,
+        "shares": 33324343,
+        "proportion": 10.43,
+        "cumulativeHolders": 24946,
+        "cumulativePct": 98.7296
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 182,
+        "shares": 27190717,
+        "proportion": 8.51,
+        "cumulativeHolders": 25128,
+        "cumulativePct": 99.4499
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 82,
+        "shares": 23985612,
+        "proportion": 7.51,
+        "cumulativeHolders": 25210,
+        "cumulativePct": 99.7744
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 21,
+        "shares": 10832000,
+        "proportion": 3.39,
+        "cumulativeHolders": 25231,
+        "cumulativePct": 99.8575
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 16,
+        "shares": 11272821,
+        "proportion": 3.53,
+        "cumulativeHolders": 25247,
+        "cumulativePct": 99.9208
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 9,
+        "shares": 8046788,
+        "proportion": 2.52,
+        "cumulativeHolders": 25256,
+        "cumulativePct": 99.9565
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 11,
+        "shares": 82614900,
+        "proportion": 25.87,
+        "cumulativeHolders": 25267,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 25267,
+        "shares": 319270133,
+        "proportion": 100,
+        "cumulativeHolders": 25267,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2523": {
+    "symbol": "2523",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 4410,
+        "shares": 1196300,
+        "proportion": 0.52,
+        "cumulativeHolders": 4410,
+        "cumulativePct": 31.4663
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 5936,
+        "shares": 13978127,
+        "proportion": 6.14,
+        "cumulativeHolders": 10346,
+        "cumulativePct": 73.8209
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1537,
+        "shares": 12712246,
+        "proportion": 5.58,
+        "cumulativeHolders": 11883,
+        "cumulativePct": 84.7877
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 467,
+        "shares": 6074457,
+        "proportion": 2.66,
+        "cumulativeHolders": 12350,
+        "cumulativePct": 88.1199
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 467,
+        "shares": 8988010,
+        "proportion": 3.95,
+        "cumulativeHolders": 12817,
+        "cumulativePct": 91.452
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 347,
+        "shares": 9211935,
+        "proportion": 4.04,
+        "cumulativeHolders": 13164,
+        "cumulativePct": 93.9279
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 156,
+        "shares": 5793231,
+        "proportion": 2.54,
+        "cumulativeHolders": 13320,
+        "cumulativePct": 95.041
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 151,
+        "shares": 7277042,
+        "proportion": 3.19,
+        "cumulativeHolders": 13471,
+        "cumulativePct": 96.1184
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 288,
+        "shares": 21753732,
+        "proportion": 9.56,
+        "cumulativeHolders": 13759,
+        "cumulativePct": 98.1734
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 124,
+        "shares": 17639180,
+        "proportion": 7.75,
+        "cumulativeHolders": 13883,
+        "cumulativePct": 99.0582
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 74,
+        "shares": 20869057,
+        "proportion": 9.17,
+        "cumulativeHolders": 13957,
+        "cumulativePct": 99.5862
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 20,
+        "shares": 9660125,
+        "proportion": 4.24,
+        "cumulativeHolders": 13977,
+        "cumulativePct": 99.7289
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 6,
+        "shares": 4019048,
+        "proportion": 1.76,
+        "cumulativeHolders": 13983,
+        "cumulativePct": 99.7717
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 7,
+        "shares": 6266492,
+        "proportion": 2.75,
+        "cumulativeHolders": 13990,
+        "cumulativePct": 99.8216
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 25,
+        "shares": 82081170,
+        "proportion": 36.07,
+        "cumulativeHolders": 14015,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 14015,
+        "shares": 227520152,
+        "proportion": 100,
+        "cumulativeHolders": 14015,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2524": {
+    "symbol": "2524",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 4107,
+        "shares": 775589,
+        "proportion": 0.21,
+        "cumulativeHolders": 4107,
+        "cumulativePct": 54.5563
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 2642,
+        "shares": 5143738,
+        "proportion": 1.4,
+        "cumulativeHolders": 6749,
+        "cumulativePct": 89.652
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 365,
+        "shares": 2728982,
+        "proportion": 0.74,
+        "cumulativeHolders": 7114,
+        "cumulativePct": 94.5005
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 117,
+        "shares": 1443739,
+        "proportion": 0.39,
+        "cumulativeHolders": 7231,
+        "cumulativePct": 96.0547
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 65,
+        "shares": 1156225,
+        "proportion": 0.31,
+        "cumulativeHolders": 7296,
+        "cumulativePct": 96.9182
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 56,
+        "shares": 1410418,
+        "proportion": 0.38,
+        "cumulativeHolders": 7352,
+        "cumulativePct": 97.6621
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 32,
+        "shares": 1122567,
+        "proportion": 0.3,
+        "cumulativeHolders": 7384,
+        "cumulativePct": 98.0871
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 23,
+        "shares": 1048022,
+        "proportion": 0.28,
+        "cumulativeHolders": 7407,
+        "cumulativePct": 98.3927
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 52,
+        "shares": 3655490,
+        "proportion": 0.99,
+        "cumulativeHolders": 7459,
+        "cumulativePct": 99.0834
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 20,
+        "shares": 2850710,
+        "proportion": 0.77,
+        "cumulativeHolders": 7479,
+        "cumulativePct": 99.3491
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 13,
+        "shares": 3573516,
+        "proportion": 0.97,
+        "cumulativeHolders": 7492,
+        "cumulativePct": 99.5218
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 6,
+        "shares": 3025129,
+        "proportion": 0.82,
+        "cumulativeHolders": 7498,
+        "cumulativePct": 99.6015
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 2,
+        "shares": 1518053,
+        "proportion": 0.41,
+        "cumulativeHolders": 7500,
+        "cumulativePct": 99.6281
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 1,
+        "shares": 913777,
+        "proportion": 0.24,
+        "cumulativeHolders": 7501,
+        "cumulativePct": 99.6413
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 27,
+        "shares": 335818641,
+        "proportion": 91.7,
+        "cumulativeHolders": 7528,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 7528,
+        "shares": 366184596,
+        "proportion": 100,
+        "cumulativeHolders": 7528,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2525": {
+    "symbol": "2525",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 19142,
+        "shares": 7298512,
+        "proportion": 1.12,
+        "cumulativeHolders": 19142,
+        "cumulativePct": 36.4811
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 18432,
+        "shares": 43806890,
+        "proportion": 6.73,
+        "cumulativeHolders": 37574,
+        "cumulativePct": 71.6091
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 6332,
+        "shares": 47041705,
+        "proportion": 7.23,
+        "cumulativeHolders": 43906,
+        "cumulativePct": 83.6767
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 2563,
+        "shares": 31262712,
+        "proportion": 4.8,
+        "cumulativeHolders": 46469,
+        "cumulativePct": 88.5613
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 1519,
+        "shares": 28058491,
+        "proportion": 4.31,
+        "cumulativeHolders": 47988,
+        "cumulativePct": 91.4562
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 1501,
+        "shares": 37833180,
+        "proportion": 5.81,
+        "cumulativeHolders": 49489,
+        "cumulativePct": 94.3169
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 687,
+        "shares": 24424998,
+        "proportion": 3.75,
+        "cumulativeHolders": 50176,
+        "cumulativePct": 95.6262
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 567,
+        "shares": 26810729,
+        "proportion": 4.12,
+        "cumulativeHolders": 50743,
+        "cumulativePct": 96.7068
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 884,
+        "shares": 66138184,
+        "proportion": 10.17,
+        "cumulativeHolders": 51627,
+        "cumulativePct": 98.3915
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 457,
+        "shares": 68263176,
+        "proportion": 10.49,
+        "cumulativeHolders": 52084,
+        "cumulativePct": 99.2624
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 215,
+        "shares": 62000974,
+        "proportion": 9.53,
+        "cumulativeHolders": 52299,
+        "cumulativePct": 99.6722
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 81,
+        "shares": 40232144,
+        "proportion": 6.18,
+        "cumulativeHolders": 52380,
+        "cumulativePct": 99.8266
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 19,
+        "shares": 13473090,
+        "proportion": 2.07,
+        "cumulativeHolders": 52399,
+        "cumulativePct": 99.8628
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 22,
+        "shares": 20809000,
+        "proportion": 3.2,
+        "cumulativeHolders": 52421,
+        "cumulativePct": 99.9047
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 50,
+        "shares": 132775762,
+        "proportion": 20.41,
+        "cumulativeHolders": 52471,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 52471,
+        "shares": 650229547,
+        "proportion": 100,
+        "cumulativeHolders": 52471,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2527": {
+    "symbol": "2527",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 2194,
+        "shares": 360448,
+        "proportion": 0.13,
+        "cumulativeHolders": 2194,
+        "cumulativePct": 32.0198
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 3326,
+        "shares": 6731785,
+        "proportion": 2.49,
+        "cumulativeHolders": 5520,
+        "cumulativePct": 80.5604
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 525,
+        "shares": 4214600,
+        "proportion": 1.55,
+        "cumulativeHolders": 6045,
+        "cumulativePct": 88.2224
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 208,
+        "shares": 2694399,
+        "proportion": 0.99,
+        "cumulativeHolders": 6253,
+        "cumulativePct": 91.258
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 115,
+        "shares": 2155145,
+        "proportion": 0.79,
+        "cumulativeHolders": 6368,
+        "cumulativePct": 92.9364
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 123,
+        "shares": 3172358,
+        "proportion": 1.17,
+        "cumulativeHolders": 6491,
+        "cumulativePct": 94.7315
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 68,
+        "shares": 2441136,
+        "proportion": 0.9,
+        "cumulativeHolders": 6559,
+        "cumulativePct": 95.7239
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 63,
+        "shares": 2925056,
+        "proportion": 1.08,
+        "cumulativeHolders": 6622,
+        "cumulativePct": 96.6433
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 100,
+        "shares": 7461631,
+        "proportion": 2.76,
+        "cumulativeHolders": 6722,
+        "cumulativePct": 98.1027
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 58,
+        "shares": 8193904,
+        "proportion": 3.03,
+        "cumulativeHolders": 6780,
+        "cumulativePct": 98.9492
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 35,
+        "shares": 9660533,
+        "proportion": 3.57,
+        "cumulativeHolders": 6815,
+        "cumulativePct": 99.46
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 13,
+        "shares": 6526041,
+        "proportion": 2.41,
+        "cumulativeHolders": 6828,
+        "cumulativePct": 99.6497
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 6206450,
+        "proportion": 2.29,
+        "cumulativeHolders": 6837,
+        "cumulativePct": 99.7811
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 6837,
+        "cumulativePct": 99.7811
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 15,
+        "shares": 207562514,
+        "proportion": 76.78,
+        "cumulativeHolders": 6852,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 6852,
+        "shares": 270306000,
+        "proportion": 100,
+        "cumulativeHolders": 6852,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2528": {
+    "symbol": "2528",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 3491,
+        "shares": 656932,
+        "proportion": 0.13,
+        "cumulativeHolders": 3491,
+        "cumulativePct": 39.8971
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 2961,
+        "shares": 6372226,
+        "proportion": 1.26,
+        "cumulativeHolders": 6452,
+        "cumulativePct": 73.7371
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 787,
+        "shares": 5567398,
+        "proportion": 1.1,
+        "cumulativeHolders": 7239,
+        "cumulativePct": 82.7314
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 433,
+        "shares": 5320649,
+        "proportion": 1.05,
+        "cumulativeHolders": 7672,
+        "cumulativePct": 87.68
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 189,
+        "shares": 3323992,
+        "proportion": 0.66,
+        "cumulativeHolders": 7861,
+        "cumulativePct": 89.84
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 265,
+        "shares": 6440672,
+        "proportion": 1.27,
+        "cumulativeHolders": 8126,
+        "cumulativePct": 92.8686
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 111,
+        "shares": 3863460,
+        "proportion": 0.76,
+        "cumulativeHolders": 8237,
+        "cumulativePct": 94.1371
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 90,
+        "shares": 4102530,
+        "proportion": 0.81,
+        "cumulativeHolders": 8327,
+        "cumulativePct": 95.1657
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 166,
+        "shares": 11237805,
+        "proportion": 2.23,
+        "cumulativeHolders": 8493,
+        "cumulativePct": 97.0629
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 107,
+        "shares": 14820456,
+        "proportion": 2.94,
+        "cumulativeHolders": 8600,
+        "cumulativePct": 98.2857
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 58,
+        "shares": 15427773,
+        "proportion": 3.06,
+        "cumulativeHolders": 8658,
+        "cumulativePct": 98.9486
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 23,
+        "shares": 11434168,
+        "proportion": 2.27,
+        "cumulativeHolders": 8681,
+        "cumulativePct": 99.2114
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 6041738,
+        "proportion": 1.2,
+        "cumulativeHolders": 8690,
+        "cumulativePct": 99.3143
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 8,
+        "shares": 7208094,
+        "proportion": 1.43,
+        "cumulativeHolders": 8698,
+        "cumulativePct": 99.4057
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 52,
+        "shares": 401541089,
+        "proportion": 79.77,
+        "cumulativeHolders": 8750,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 8750,
+        "shares": 503358982,
+        "proportion": 100,
+        "cumulativeHolders": 8750,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2530": {
+    "symbol": "2530",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 22987,
+        "shares": 1121387,
+        "proportion": 0.13,
+        "cumulativeHolders": 22987,
+        "cumulativePct": 75.1332
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 4702,
+        "shares": 10166113,
+        "proportion": 1.2,
+        "cumulativeHolders": 27689,
+        "cumulativePct": 90.5017
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1003,
+        "shares": 7765687,
+        "proportion": 0.92,
+        "cumulativeHolders": 28692,
+        "cumulativePct": 93.78
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 400,
+        "shares": 5074566,
+        "proportion": 0.6,
+        "cumulativeHolders": 29092,
+        "cumulativePct": 95.0874
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 274,
+        "shares": 5071302,
+        "proportion": 0.6,
+        "cumulativeHolders": 29366,
+        "cumulativePct": 95.983
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 255,
+        "shares": 6545822,
+        "proportion": 0.77,
+        "cumulativeHolders": 29621,
+        "cumulativePct": 96.8165
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 165,
+        "shares": 5951007,
+        "proportion": 0.7,
+        "cumulativeHolders": 29786,
+        "cumulativePct": 97.3558
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 138,
+        "shares": 6399766,
+        "proportion": 0.76,
+        "cumulativeHolders": 29924,
+        "cumulativePct": 97.8068
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 271,
+        "shares": 19336453,
+        "proportion": 2.29,
+        "cumulativeHolders": 30195,
+        "cumulativePct": 98.6926
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 158,
+        "shares": 22455514,
+        "proportion": 2.66,
+        "cumulativeHolders": 30353,
+        "cumulativePct": 99.209
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 100,
+        "shares": 27386372,
+        "proportion": 3.25,
+        "cumulativeHolders": 30453,
+        "cumulativePct": 99.5359
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 27,
+        "shares": 13080961,
+        "proportion": 1.55,
+        "cumulativeHolders": 30480,
+        "cumulativePct": 99.6241
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 11,
+        "shares": 7607826,
+        "proportion": 0.9,
+        "cumulativeHolders": 30491,
+        "cumulativePct": 99.6601
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 13,
+        "shares": 12350984,
+        "proportion": 1.46,
+        "cumulativeHolders": 30504,
+        "cumulativePct": 99.7026
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 91,
+        "shares": 690941971,
+        "proportion": 82.13,
+        "cumulativeHolders": 30595,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 30595,
+        "shares": 841255731,
+        "proportion": 100,
+        "cumulativeHolders": 30595,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2533": {
+    "symbol": "2533",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 5326,
+        "shares": 1110549,
+        "proportion": 0.72,
+        "cumulativeHolders": 5326,
+        "cumulativePct": 37.9696
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 5634,
+        "shares": 13190697,
+        "proportion": 8.64,
+        "cumulativeHolders": 10960,
+        "cumulativePct": 78.135
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1389,
+        "shares": 11773022,
+        "proportion": 7.71,
+        "cumulativeHolders": 12349,
+        "cumulativePct": 88.0374
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 351,
+        "shares": 4559438,
+        "proportion": 2.98,
+        "cumulativeHolders": 12700,
+        "cumulativePct": 90.5397
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 412,
+        "shares": 7955356,
+        "proportion": 5.21,
+        "cumulativeHolders": 13112,
+        "cumulativePct": 93.4769
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 310,
+        "shares": 8366737,
+        "proportion": 5.48,
+        "cumulativeHolders": 13422,
+        "cumulativePct": 95.6869
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 138,
+        "shares": 5153096,
+        "proportion": 3.37,
+        "cumulativeHolders": 13560,
+        "cumulativePct": 96.6707
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 111,
+        "shares": 5370912,
+        "proportion": 3.51,
+        "cumulativeHolders": 13671,
+        "cumulativePct": 97.462
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 197,
+        "shares": 14811346,
+        "proportion": 9.7,
+        "cumulativeHolders": 13868,
+        "cumulativePct": 98.8665
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 91,
+        "shares": 12468044,
+        "proportion": 8.17,
+        "cumulativeHolders": 13959,
+        "cumulativePct": 99.5152
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 32,
+        "shares": 9036160,
+        "proportion": 5.92,
+        "cumulativeHolders": 13991,
+        "cumulativePct": 99.7434
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 15,
+        "shares": 7593142,
+        "proportion": 4.97,
+        "cumulativeHolders": 14006,
+        "cumulativePct": 99.8503
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 11,
+        "shares": 7733862,
+        "proportion": 5.06,
+        "cumulativeHolders": 14017,
+        "cumulativePct": 99.9287
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 3,
+        "shares": 2862000,
+        "proportion": 1.87,
+        "cumulativeHolders": 14020,
+        "cumulativePct": 99.9501
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 7,
+        "shares": 40612694,
+        "proportion": 26.61,
+        "cumulativeHolders": 14027,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 14027,
+        "shares": 152597055,
+        "proportion": 100,
+        "cumulativeHolders": 14027,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2534": {
+    "symbol": "2534",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 50543,
+        "shares": 3074340,
+        "proportion": 0.64,
+        "cumulativeHolders": 50543,
+        "cumulativePct": 79.968
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 8686,
+        "shares": 19389108,
+        "proportion": 4.08,
+        "cumulativeHolders": 59229,
+        "cumulativePct": 93.7108
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1790,
+        "shares": 13617145,
+        "proportion": 2.87,
+        "cumulativeHolders": 61019,
+        "cumulativePct": 96.5429
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 583,
+        "shares": 7341016,
+        "proportion": 1.54,
+        "cumulativeHolders": 61602,
+        "cumulativePct": 97.4654
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 400,
+        "shares": 7221529,
+        "proportion": 1.52,
+        "cumulativeHolders": 62002,
+        "cumulativePct": 98.0982
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 324,
+        "shares": 8133029,
+        "proportion": 1.71,
+        "cumulativeHolders": 62326,
+        "cumulativePct": 98.6108
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 169,
+        "shares": 5986550,
+        "proportion": 1.26,
+        "cumulativeHolders": 62495,
+        "cumulativePct": 98.8782
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 128,
+        "shares": 5891187,
+        "proportion": 1.24,
+        "cumulativeHolders": 62623,
+        "cumulativePct": 99.0808
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 265,
+        "shares": 19207981,
+        "proportion": 4.05,
+        "cumulativeHolders": 62888,
+        "cumulativePct": 99.5
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 133,
+        "shares": 19187594,
+        "proportion": 4.04,
+        "cumulativeHolders": 63021,
+        "cumulativePct": 99.7105
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 67,
+        "shares": 18465204,
+        "proportion": 3.89,
+        "cumulativeHolders": 63088,
+        "cumulativePct": 99.8165
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 26,
+        "shares": 13042684,
+        "proportion": 2.75,
+        "cumulativeHolders": 63114,
+        "cumulativePct": 99.8576
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 18,
+        "shares": 12804932,
+        "proportion": 2.7,
+        "cumulativeHolders": 63132,
+        "cumulativePct": 99.8861
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 9,
+        "shares": 7940132,
+        "proportion": 1.67,
+        "cumulativeHolders": 63141,
+        "cumulativePct": 99.9003
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 63,
+        "shares": 312925539,
+        "proportion": 65.98,
+        "cumulativeHolders": 63204,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 63204,
+        "shares": 474227970,
+        "proportion": 100,
+        "cumulativeHolders": 63204,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2535": {
+    "symbol": "2535",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 48361,
+        "shares": 3052975,
+        "proportion": 1.12,
+        "cumulativeHolders": 48361,
+        "cumulativePct": 76.5775
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 11224,
+        "shares": 23271017,
+        "proportion": 8.59,
+        "cumulativeHolders": 59585,
+        "cumulativePct": 94.3502
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1865,
+        "shares": 14070077,
+        "proportion": 5.19,
+        "cumulativeHolders": 61450,
+        "cumulativePct": 97.3034
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 474,
+        "shares": 5900041,
+        "proportion": 2.17,
+        "cumulativeHolders": 61924,
+        "cumulativePct": 98.0539
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 353,
+        "shares": 6201246,
+        "proportion": 2.29,
+        "cumulativeHolders": 62277,
+        "cumulativePct": 98.6129
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 279,
+        "shares": 7056746,
+        "proportion": 2.6,
+        "cumulativeHolders": 62556,
+        "cumulativePct": 99.0547
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 151,
+        "shares": 5389425,
+        "proportion": 1.99,
+        "cumulativeHolders": 62707,
+        "cumulativePct": 99.2938
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 88,
+        "shares": 3985828,
+        "proportion": 1.47,
+        "cumulativeHolders": 62795,
+        "cumulativePct": 99.4331
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 175,
+        "shares": 12472087,
+        "proportion": 4.6,
+        "cumulativeHolders": 62970,
+        "cumulativePct": 99.7102
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 71,
+        "shares": 10072479,
+        "proportion": 3.71,
+        "cumulativeHolders": 63041,
+        "cumulativePct": 99.8227
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 50,
+        "shares": 14154008,
+        "proportion": 5.22,
+        "cumulativeHolders": 63091,
+        "cumulativePct": 99.9018
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 21,
+        "shares": 10227899,
+        "proportion": 3.77,
+        "cumulativeHolders": 63112,
+        "cumulativePct": 99.9351
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 5,
+        "shares": 3333399,
+        "proportion": 1.23,
+        "cumulativeHolders": 63117,
+        "cumulativePct": 99.943
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 63117,
+        "cumulativePct": 99.943
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 36,
+        "shares": 151606740,
+        "proportion": 55.98,
+        "cumulativeHolders": 63153,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 63153,
+        "shares": 270793967,
+        "proportion": 100,
+        "cumulativeHolders": 63153,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2536": {
+    "symbol": "2536",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 2981,
+        "shares": 470168,
+        "proportion": 0.15,
+        "cumulativeHolders": 2981,
+        "cumulativePct": 35.675
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 3544,
+        "shares": 7689980,
+        "proportion": 2.47,
+        "cumulativeHolders": 6525,
+        "cumulativePct": 78.0876
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 685,
+        "shares": 5450131,
+        "proportion": 1.75,
+        "cumulativeHolders": 7210,
+        "cumulativePct": 86.2853
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 233,
+        "shares": 2963790,
+        "proportion": 0.95,
+        "cumulativeHolders": 7443,
+        "cumulativePct": 89.0737
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 166,
+        "shares": 3062378,
+        "proportion": 0.98,
+        "cumulativeHolders": 7609,
+        "cumulativePct": 91.0603
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 173,
+        "shares": 4475786,
+        "proportion": 1.44,
+        "cumulativeHolders": 7782,
+        "cumulativePct": 93.1307
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 94,
+        "shares": 3426214,
+        "proportion": 1.1,
+        "cumulativeHolders": 7876,
+        "cumulativePct": 94.2556
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 73,
+        "shares": 3399786,
+        "proportion": 1.09,
+        "cumulativeHolders": 7949,
+        "cumulativePct": 95.1292
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 154,
+        "shares": 11604383,
+        "proportion": 3.73,
+        "cumulativeHolders": 8103,
+        "cumulativePct": 96.9722
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 114,
+        "shares": 15753884,
+        "proportion": 5.06,
+        "cumulativeHolders": 8217,
+        "cumulativePct": 98.3365
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 60,
+        "shares": 16556329,
+        "proportion": 5.32,
+        "cumulativeHolders": 8277,
+        "cumulativePct": 99.0546
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 23,
+        "shares": 11675651,
+        "proportion": 3.75,
+        "cumulativeHolders": 8300,
+        "cumulativePct": 99.3298
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 6328367,
+        "proportion": 2.03,
+        "cumulativeHolders": 8309,
+        "cumulativePct": 99.4375
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 10,
+        "shares": 9221985,
+        "proportion": 2.96,
+        "cumulativeHolders": 8319,
+        "cumulativePct": 99.5572
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 37,
+        "shares": 208729820,
+        "proportion": 67.15,
+        "cumulativeHolders": 8356,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 8356,
+        "shares": 310808652,
+        "proportion": 100,
+        "cumulativeHolders": 8356,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2537": {
+    "symbol": "2537",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 30409,
+        "shares": 847809,
+        "proportion": 0.28,
+        "cumulativeHolders": 30409,
+        "cumulativePct": 70.666
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 8961,
+        "shares": 19545946,
+        "proportion": 6.5,
+        "cumulativeHolders": 39370,
+        "cumulativePct": 91.4901
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1719,
+        "shares": 14026156,
+        "proportion": 4.66,
+        "cumulativeHolders": 41089,
+        "cumulativePct": 95.4848
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 520,
+        "shares": 6702546,
+        "proportion": 2.23,
+        "cumulativeHolders": 41609,
+        "cumulativePct": 96.6932
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 405,
+        "shares": 7593177,
+        "proportion": 2.52,
+        "cumulativeHolders": 42014,
+        "cumulativePct": 97.6343
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 310,
+        "shares": 8115761,
+        "proportion": 2.7,
+        "cumulativeHolders": 42324,
+        "cumulativePct": 98.3547
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 161,
+        "shares": 5863392,
+        "proportion": 1.95,
+        "cumulativeHolders": 42485,
+        "cumulativePct": 98.7289
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 108,
+        "shares": 5096993,
+        "proportion": 1.69,
+        "cumulativeHolders": 42593,
+        "cumulativePct": 98.9798
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 209,
+        "shares": 15663210,
+        "proportion": 5.21,
+        "cumulativeHolders": 42802,
+        "cumulativePct": 99.4655
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 102,
+        "shares": 14228822,
+        "proportion": 4.73,
+        "cumulativeHolders": 42904,
+        "cumulativePct": 99.7025
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 54,
+        "shares": 15180393,
+        "proportion": 5.05,
+        "cumulativeHolders": 42958,
+        "cumulativePct": 99.828
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 22,
+        "shares": 10920772,
+        "proportion": 3.63,
+        "cumulativeHolders": 42980,
+        "cumulativePct": 99.8792
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 13,
+        "shares": 9099321,
+        "proportion": 3.02,
+        "cumulativeHolders": 42993,
+        "cumulativePct": 99.9094
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 6,
+        "shares": 5243219,
+        "proportion": 1.74,
+        "cumulativeHolders": 42999,
+        "cumulativePct": 99.9233
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 33,
+        "shares": 162430278,
+        "proportion": 54.04,
+        "cumulativeHolders": 43032,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 43032,
+        "shares": 300557795,
+        "proportion": 100,
+        "cumulativeHolders": 43032,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2538": {
+    "symbol": "2538",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 19708,
+        "shares": 911056,
+        "proportion": 0.2,
+        "cumulativeHolders": 19708,
+        "cumulativePct": 69.0201
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 5303,
+        "shares": 10924202,
+        "proportion": 2.45,
+        "cumulativeHolders": 25011,
+        "cumulativePct": 87.5919
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1310,
+        "shares": 8857338,
+        "proportion": 1.99,
+        "cumulativeHolders": 26321,
+        "cumulativePct": 92.1797
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 639,
+        "shares": 7368470,
+        "proportion": 1.65,
+        "cumulativeHolders": 26960,
+        "cumulativePct": 94.4176
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 287,
+        "shares": 4994435,
+        "proportion": 1.12,
+        "cumulativeHolders": 27247,
+        "cumulativePct": 95.4227
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 345,
+        "shares": 8221946,
+        "proportion": 1.84,
+        "cumulativeHolders": 27592,
+        "cumulativePct": 96.6309
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 208,
+        "shares": 7026898,
+        "proportion": 1.57,
+        "cumulativeHolders": 27800,
+        "cumulativePct": 97.3594
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 121,
+        "shares": 5378193,
+        "proportion": 1.2,
+        "cumulativeHolders": 27921,
+        "cumulativePct": 97.7831
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 259,
+        "shares": 18011817,
+        "proportion": 4.04,
+        "cumulativeHolders": 28180,
+        "cumulativePct": 98.6902
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 154,
+        "shares": 20771624,
+        "proportion": 4.66,
+        "cumulativeHolders": 28334,
+        "cumulativePct": 99.2295
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 87,
+        "shares": 23196075,
+        "proportion": 5.21,
+        "cumulativeHolders": 28421,
+        "cumulativePct": 99.5342
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 33,
+        "shares": 16265520,
+        "proportion": 3.65,
+        "cumulativeHolders": 28454,
+        "cumulativePct": 99.6498
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 20,
+        "shares": 13906119,
+        "proportion": 3.12,
+        "cumulativeHolders": 28474,
+        "cumulativePct": 99.7198
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 9,
+        "shares": 7763663,
+        "proportion": 1.74,
+        "cumulativeHolders": 28483,
+        "cumulativePct": 99.7513
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 71,
+        "shares": 291428139,
+        "proportion": 65.48,
+        "cumulativeHolders": 28554,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 28554,
+        "shares": 445025495,
+        "proportion": 100,
+        "cumulativeHolders": 28554,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2539": {
+    "symbol": "2539",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 6598,
+        "shares": 1725794,
+        "proportion": 0.11,
+        "cumulativeHolders": 6598,
+        "cumulativePct": 31.455
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 8327,
+        "shares": 19294372,
+        "proportion": 1.32,
+        "cumulativeHolders": 14925,
+        "cumulativePct": 71.1527
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 2471,
+        "shares": 17648846,
+        "proportion": 1.21,
+        "cumulativeHolders": 17396,
+        "cumulativePct": 82.9329
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1123,
+        "shares": 13876749,
+        "proportion": 0.95,
+        "cumulativeHolders": 18519,
+        "cumulativePct": 88.2866
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 559,
+        "shares": 9735997,
+        "proportion": 0.66,
+        "cumulativeHolders": 19078,
+        "cumulativePct": 90.9516
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 564,
+        "shares": 13804036,
+        "proportion": 0.94,
+        "cumulativeHolders": 19642,
+        "cumulativePct": 93.6404
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 299,
+        "shares": 10391480,
+        "proportion": 0.71,
+        "cumulativeHolders": 19941,
+        "cumulativePct": 95.0658
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 164,
+        "shares": 7388352,
+        "proportion": 0.5,
+        "cumulativeHolders": 20105,
+        "cumulativePct": 95.8476
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 384,
+        "shares": 27057013,
+        "proportion": 1.85,
+        "cumulativeHolders": 20489,
+        "cumulativePct": 97.6783
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 216,
+        "shares": 29740185,
+        "proportion": 2.04,
+        "cumulativeHolders": 20705,
+        "cumulativePct": 98.708
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 119,
+        "shares": 32898803,
+        "proportion": 2.26,
+        "cumulativeHolders": 20824,
+        "cumulativePct": 99.2754
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 39,
+        "shares": 19558583,
+        "proportion": 1.34,
+        "cumulativeHolders": 20863,
+        "cumulativePct": 99.4613
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 19,
+        "shares": 13005737,
+        "proportion": 0.89,
+        "cumulativeHolders": 20882,
+        "cumulativePct": 99.5519
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 6,
+        "shares": 5430662,
+        "proportion": 0.37,
+        "cumulativeHolders": 20888,
+        "cumulativePct": 99.5805
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 88,
+        "shares": 1234028540,
+        "proportion": 84.77,
+        "cumulativeHolders": 20976,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 20976,
+        "shares": 1455585149,
+        "proportion": 100,
+        "cumulativeHolders": 20976,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2540": {
+    "symbol": "2540",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 7389,
+        "shares": 1514009,
+        "proportion": 0.16,
+        "cumulativeHolders": 7389,
+        "cumulativePct": 43.0871
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 7028,
+        "shares": 15038591,
+        "proportion": 1.59,
+        "cumulativeHolders": 14417,
+        "cumulativePct": 84.069
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1272,
+        "shares": 9227287,
+        "proportion": 0.97,
+        "cumulativeHolders": 15689,
+        "cumulativePct": 91.4864
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 442,
+        "shares": 5569245,
+        "proportion": 0.58,
+        "cumulativeHolders": 16131,
+        "cumulativePct": 94.0638
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 222,
+        "shares": 3918826,
+        "proportion": 0.41,
+        "cumulativeHolders": 16353,
+        "cumulativePct": 95.3583
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 226,
+        "shares": 5660619,
+        "proportion": 0.59,
+        "cumulativeHolders": 16579,
+        "cumulativePct": 96.6762
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 133,
+        "shares": 4704529,
+        "proportion": 0.49,
+        "cumulativeHolders": 16712,
+        "cumulativePct": 97.4517
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 76,
+        "shares": 3448340,
+        "proportion": 0.36,
+        "cumulativeHolders": 16788,
+        "cumulativePct": 97.8949
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 158,
+        "shares": 11001753,
+        "proportion": 1.16,
+        "cumulativeHolders": 16946,
+        "cumulativePct": 98.8163
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 79,
+        "shares": 11434790,
+        "proportion": 1.21,
+        "cumulativeHolders": 17025,
+        "cumulativePct": 99.2769
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 41,
+        "shares": 11851492,
+        "proportion": 1.25,
+        "cumulativeHolders": 17066,
+        "cumulativePct": 99.516
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 14,
+        "shares": 7034543,
+        "proportion": 0.74,
+        "cumulativeHolders": 17080,
+        "cumulativePct": 99.5976
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 6515667,
+        "proportion": 0.68,
+        "cumulativeHolders": 17089,
+        "cumulativePct": 99.6501
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 6,
+        "shares": 5309624,
+        "proportion": 0.56,
+        "cumulativeHolders": 17095,
+        "cumulativePct": 99.6851
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 54,
+        "shares": 842644650,
+        "proportion": 89.18,
+        "cumulativeHolders": 17149,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 17149,
+        "shares": 944873965,
+        "proportion": 100,
+        "cumulativeHolders": 17149,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2542": {
+    "symbol": "2542",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 24689,
+        "shares": 6991190,
+        "proportion": 0.32,
+        "cumulativeHolders": 24689,
+        "cumulativePct": 22.7723
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 55055,
+        "shares": 124880485,
+        "proportion": 5.8,
+        "cumulativeHolders": 79744,
+        "cumulativePct": 73.553
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 13051,
+        "shares": 95115048,
+        "proportion": 4.41,
+        "cumulativeHolders": 92795,
+        "cumulativePct": 85.5908
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 5270,
+        "shares": 65187636,
+        "proportion": 3.02,
+        "cumulativeHolders": 98065,
+        "cumulativePct": 90.4517
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 2832,
+        "shares": 49693537,
+        "proportion": 2.3,
+        "cumulativeHolders": 100897,
+        "cumulativePct": 93.0638
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 2732,
+        "shares": 67372344,
+        "proportion": 3.12,
+        "cumulativeHolders": 103629,
+        "cumulativePct": 95.5837
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 1348,
+        "shares": 46615217,
+        "proportion": 2.16,
+        "cumulativeHolders": 104977,
+        "cumulativePct": 96.8271
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 830,
+        "shares": 37298451,
+        "proportion": 1.73,
+        "cumulativeHolders": 105807,
+        "cumulativePct": 97.5926
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 1484,
+        "shares": 104218144,
+        "proportion": 4.84,
+        "cumulativeHolders": 107291,
+        "cumulativePct": 98.9614
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 684,
+        "shares": 93767647,
+        "proportion": 4.35,
+        "cumulativeHolders": 107975,
+        "cumulativePct": 99.5923
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 209,
+        "shares": 57350400,
+        "proportion": 2.66,
+        "cumulativeHolders": 108184,
+        "cumulativePct": 99.7851
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 64,
+        "shares": 31201803,
+        "proportion": 1.44,
+        "cumulativeHolders": 108248,
+        "cumulativePct": 99.8441
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 34,
+        "shares": 23501961,
+        "proportion": 1.09,
+        "cumulativeHolders": 108282,
+        "cumulativePct": 99.8755
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 23,
+        "shares": 20223734,
+        "proportion": 0.93,
+        "cumulativeHolders": 108305,
+        "cumulativePct": 99.8967
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 112,
+        "shares": 1329665942,
+        "proportion": 61.75,
+        "cumulativeHolders": 108417,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 108417,
+        "shares": 2153083539,
+        "proportion": 100,
+        "cumulativeHolders": 108417,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2543": {
+    "symbol": "2543",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 13556,
+        "shares": 1688567,
+        "proportion": 0.31,
+        "cumulativeHolders": 13556,
+        "cumulativePct": 43.0185
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 12626,
+        "shares": 27323306,
+        "proportion": 5.16,
+        "cumulativeHolders": 26182,
+        "cumulativePct": 83.0858
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 2453,
+        "shares": 18673530,
+        "proportion": 3.53,
+        "cumulativeHolders": 28635,
+        "cumulativePct": 90.8701
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 856,
+        "shares": 10731613,
+        "proportion": 2.03,
+        "cumulativeHolders": 29491,
+        "cumulativePct": 93.5866
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 565,
+        "shares": 10189960,
+        "proportion": 1.92,
+        "cumulativeHolders": 30056,
+        "cumulativePct": 95.3795
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 514,
+        "shares": 12694529,
+        "proportion": 2.4,
+        "cumulativeHolders": 30570,
+        "cumulativePct": 97.0107
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 248,
+        "shares": 8811474,
+        "proportion": 1.66,
+        "cumulativeHolders": 30818,
+        "cumulativePct": 97.7977
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 168,
+        "shares": 7648744,
+        "proportion": 1.44,
+        "cumulativeHolders": 30986,
+        "cumulativePct": 98.3308
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 272,
+        "shares": 19079835,
+        "proportion": 3.6,
+        "cumulativeHolders": 31258,
+        "cumulativePct": 99.194
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 118,
+        "shares": 15972921,
+        "proportion": 3.02,
+        "cumulativeHolders": 31376,
+        "cumulativePct": 99.5684
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 59,
+        "shares": 16802751,
+        "proportion": 3.17,
+        "cumulativeHolders": 31435,
+        "cumulativePct": 99.7556
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 19,
+        "shares": 9334096,
+        "proportion": 1.76,
+        "cumulativeHolders": 31454,
+        "cumulativePct": 99.8159
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 14,
+        "shares": 9982126,
+        "proportion": 1.88,
+        "cumulativeHolders": 31468,
+        "cumulativePct": 99.8604
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 4,
+        "shares": 3548847,
+        "proportion": 0.67,
+        "cumulativeHolders": 31472,
+        "cumulativePct": 99.8731
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 40,
+        "shares": 356059662,
+        "proportion": 67.36,
+        "cumulativeHolders": 31512,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 31512,
+        "shares": 528541961,
+        "proportion": 100,
+        "cumulativeHolders": 31512,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2545": {
+    "symbol": "2545",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 3534,
+        "shares": 659765,
+        "proportion": 0.17,
+        "cumulativeHolders": 3534,
+        "cumulativePct": 21.7732
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 9643,
+        "shares": 19719175,
+        "proportion": 5.19,
+        "cumulativeHolders": 13177,
+        "cumulativePct": 81.1842
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1498,
+        "shares": 11402653,
+        "proportion": 3,
+        "cumulativeHolders": 14675,
+        "cumulativePct": 90.4134
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 515,
+        "shares": 6441260,
+        "proportion": 1.69,
+        "cumulativeHolders": 15190,
+        "cumulativePct": 93.5863
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 268,
+        "shares": 4907241,
+        "proportion": 1.29,
+        "cumulativeHolders": 15458,
+        "cumulativePct": 95.2375
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 265,
+        "shares": 6622610,
+        "proportion": 1.74,
+        "cumulativeHolders": 15723,
+        "cumulativePct": 96.8702
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 125,
+        "shares": 4426279,
+        "proportion": 1.16,
+        "cumulativeHolders": 15848,
+        "cumulativePct": 97.6403
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 81,
+        "shares": 3716341,
+        "proportion": 0.97,
+        "cumulativeHolders": 15929,
+        "cumulativePct": 98.1394
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 144,
+        "shares": 10145564,
+        "proportion": 2.67,
+        "cumulativeHolders": 16073,
+        "cumulativePct": 99.0266
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 82,
+        "shares": 11126796,
+        "proportion": 2.93,
+        "cumulativeHolders": 16155,
+        "cumulativePct": 99.5318
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 33,
+        "shares": 9044508,
+        "proportion": 2.38,
+        "cumulativeHolders": 16188,
+        "cumulativePct": 99.7351
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 9,
+        "shares": 4334706,
+        "proportion": 1.14,
+        "cumulativeHolders": 16197,
+        "cumulativePct": 99.7905
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 5,
+        "shares": 3628290,
+        "proportion": 0.95,
+        "cumulativeHolders": 16202,
+        "cumulativePct": 99.8213
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 4,
+        "shares": 3425579,
+        "proportion": 0.9,
+        "cumulativeHolders": 16206,
+        "cumulativePct": 99.846
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 25,
+        "shares": 280134041,
+        "proportion": 73.77,
+        "cumulativeHolders": 16231,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 16231,
+        "shares": 379734808,
+        "proportion": 100,
+        "cumulativeHolders": 16231,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2546": {
+    "symbol": "2546",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 45913,
+        "shares": 959364,
+        "proportion": 0.65,
+        "cumulativeHolders": 45913,
+        "cumulativePct": 85.5915
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 5821,
+        "shares": 11921531,
+        "proportion": 8.15,
+        "cumulativeHolders": 51734,
+        "cumulativePct": 96.4431
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 954,
+        "shares": 6582316,
+        "proportion": 4.5,
+        "cumulativeHolders": 52688,
+        "cumulativePct": 98.2215
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 358,
+        "shares": 4457042,
+        "proportion": 3.04,
+        "cumulativeHolders": 53046,
+        "cumulativePct": 98.8889
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 141,
+        "shares": 2436403,
+        "proportion": 1.66,
+        "cumulativeHolders": 53187,
+        "cumulativePct": 99.1518
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 156,
+        "shares": 3811511,
+        "proportion": 2.6,
+        "cumulativeHolders": 53343,
+        "cumulativePct": 99.4426
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 66,
+        "shares": 2279382,
+        "proportion": 1.55,
+        "cumulativeHolders": 53409,
+        "cumulativePct": 99.5656
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 44,
+        "shares": 1967840,
+        "proportion": 1.34,
+        "cumulativeHolders": 53453,
+        "cumulativePct": 99.6477
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 103,
+        "shares": 7049349,
+        "proportion": 4.82,
+        "cumulativeHolders": 53556,
+        "cumulativePct": 99.8397
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 41,
+        "shares": 5431666,
+        "proportion": 3.71,
+        "cumulativeHolders": 53597,
+        "cumulativePct": 99.9161
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 22,
+        "shares": 6665360,
+        "proportion": 4.55,
+        "cumulativeHolders": 53619,
+        "cumulativePct": 99.9571
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 7,
+        "shares": 3471775,
+        "proportion": 2.37,
+        "cumulativeHolders": 53626,
+        "cumulativePct": 99.9702
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 4,
+        "shares": 2452557,
+        "proportion": 1.67,
+        "cumulativeHolders": 53630,
+        "cumulativePct": 99.9776
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 53630,
+        "cumulativePct": 99.9776
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 12,
+        "shares": 86701001,
+        "proportion": 59.3,
+        "cumulativeHolders": 53642,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 53642,
+        "shares": 146187097,
+        "proportion": 100,
+        "cumulativeHolders": 53642,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2547": {
+    "symbol": "2547",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 49911,
+        "shares": 2187493,
+        "proportion": 0.21,
+        "cumulativeHolders": 49911,
+        "cumulativePct": 67.4893
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 14645,
+        "shares": 31461392,
+        "proportion": 3.03,
+        "cumulativeHolders": 64556,
+        "cumulativePct": 87.2921
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 3523,
+        "shares": 26357744,
+        "proportion": 2.54,
+        "cumulativeHolders": 68079,
+        "cumulativePct": 92.0559
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1711,
+        "shares": 20726989,
+        "proportion": 2,
+        "cumulativeHolders": 69790,
+        "cumulativePct": 94.3695
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 900,
+        "shares": 16294898,
+        "proportion": 1.57,
+        "cumulativeHolders": 70690,
+        "cumulativePct": 95.5864
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 1049,
+        "shares": 25894859,
+        "proportion": 2.5,
+        "cumulativeHolders": 71739,
+        "cumulativePct": 97.0049
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 465,
+        "shares": 16418044,
+        "proportion": 1.58,
+        "cumulativeHolders": 72204,
+        "cumulativePct": 97.6337
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 338,
+        "shares": 15426252,
+        "proportion": 1.49,
+        "cumulativeHolders": 72542,
+        "cumulativePct": 98.0907
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 682,
+        "shares": 48416085,
+        "proportion": 4.67,
+        "cumulativeHolders": 73224,
+        "cumulativePct": 99.0129
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 367,
+        "shares": 50972357,
+        "proportion": 4.92,
+        "cumulativeHolders": 73591,
+        "cumulativePct": 99.5092
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 172,
+        "shares": 48659890,
+        "proportion": 4.7,
+        "cumulativeHolders": 73763,
+        "cumulativePct": 99.7417
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 53,
+        "shares": 26219153,
+        "proportion": 2.53,
+        "cumulativeHolders": 73816,
+        "cumulativePct": 99.8134
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 37,
+        "shares": 25276626,
+        "proportion": 2.44,
+        "cumulativeHolders": 73853,
+        "cumulativePct": 99.8634
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 19,
+        "shares": 17403628,
+        "proportion": 1.68,
+        "cumulativeHolders": 73872,
+        "cumulativePct": 99.8891
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 82,
+        "shares": 663379239,
+        "proportion": 64.08,
+        "cumulativeHolders": 73954,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 73954,
+        "shares": 1035094649,
+        "proportion": 100,
+        "cumulativeHolders": 73954,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2548": {
+    "symbol": "2548",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 14014,
+        "shares": 3099560,
+        "proportion": 0.92,
+        "cumulativeHolders": 14014,
+        "cumulativePct": 34.6598
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 20256,
+        "shares": 39869927,
+        "proportion": 11.87,
+        "cumulativeHolders": 34270,
+        "cumulativePct": 84.7575
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 3070,
+        "shares": 21393865,
+        "proportion": 6.37,
+        "cumulativeHolders": 37340,
+        "cumulativePct": 92.3503
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1176,
+        "shares": 14161469,
+        "proportion": 4.21,
+        "cumulativeHolders": 38516,
+        "cumulativePct": 95.2588
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 455,
+        "shares": 7976460,
+        "proportion": 2.37,
+        "cumulativeHolders": 38971,
+        "cumulativePct": 96.3841
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 530,
+        "shares": 12777576,
+        "proportion": 3.8,
+        "cumulativeHolders": 39501,
+        "cumulativePct": 97.695
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 243,
+        "shares": 8346154,
+        "proportion": 2.48,
+        "cumulativeHolders": 39744,
+        "cumulativePct": 98.2959
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 132,
+        "shares": 5914427,
+        "proportion": 1.76,
+        "cumulativeHolders": 39876,
+        "cumulativePct": 98.6224
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 242,
+        "shares": 16679178,
+        "proportion": 4.96,
+        "cumulativeHolders": 40118,
+        "cumulativePct": 99.2209
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 137,
+        "shares": 18599349,
+        "proportion": 5.54,
+        "cumulativeHolders": 40255,
+        "cumulativePct": 99.5598
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 75,
+        "shares": 21319307,
+        "proportion": 6.35,
+        "cumulativeHolders": 40330,
+        "cumulativePct": 99.7453
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 32,
+        "shares": 15996370,
+        "proportion": 4.76,
+        "cumulativeHolders": 40362,
+        "cumulativePct": 99.8244
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 18,
+        "shares": 12526634,
+        "proportion": 3.73,
+        "cumulativeHolders": 40380,
+        "cumulativePct": 99.8689
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 12,
+        "shares": 10474364,
+        "proportion": 3.12,
+        "cumulativeHolders": 40392,
+        "cumulativePct": 99.8986
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 41,
+        "shares": 126569991,
+        "proportion": 37.7,
+        "cumulativeHolders": 40433,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 40433,
+        "shares": 335704631,
+        "proportion": 100,
+        "cumulativeHolders": 40433,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2553": {
+    "symbol": "2553",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 10157,
+        "shares": 4086465,
+        "proportion": 5,
+        "cumulativeHolders": 10157,
+        "cumulativePct": 52.7116
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 6595,
+        "shares": 15176353,
+        "proportion": 18.59,
+        "cumulativeHolders": 16752,
+        "cumulativePct": 86.9376
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 1209,
+        "shares": 8323205,
+        "proportion": 10.19,
+        "cumulativeHolders": 17961,
+        "cumulativePct": 93.2119
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 513,
+        "shares": 6100994,
+        "proportion": 7.47,
+        "cumulativeHolders": 18474,
+        "cumulativePct": 95.8742
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 242,
+        "shares": 4194126,
+        "proportion": 5.13,
+        "cumulativeHolders": 18716,
+        "cumulativePct": 97.1301
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 176,
+        "shares": 4200380,
+        "proportion": 5.14,
+        "cumulativeHolders": 18892,
+        "cumulativePct": 98.0435
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 164,
+        "shares": 5656416,
+        "proportion": 6.93,
+        "cumulativeHolders": 19056,
+        "cumulativePct": 98.8946
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 38,
+        "shares": 1696275,
+        "proportion": 2.07,
+        "cumulativeHolders": 19094,
+        "cumulativePct": 99.0918
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 107,
+        "shares": 7229292,
+        "proportion": 8.85,
+        "cumulativeHolders": 19201,
+        "cumulativePct": 99.6471
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 43,
+        "shares": 5927766,
+        "proportion": 7.26,
+        "cumulativeHolders": 19244,
+        "cumulativePct": 99.8703
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 12,
+        "shares": 3514367,
+        "proportion": 4.3,
+        "cumulativeHolders": 19256,
+        "cumulativePct": 99.9325
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 3,
+        "shares": 1607200,
+        "proportion": 1.96,
+        "cumulativeHolders": 19259,
+        "cumulativePct": 99.9481
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 2,
+        "shares": 1260752,
+        "proportion": 1.54,
+        "cumulativeHolders": 19261,
+        "cumulativePct": 99.9585
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 4,
+        "shares": 3483857,
+        "proportion": 4.26,
+        "cumulativeHolders": 19265,
+        "cumulativePct": 99.9792
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 4,
+        "shares": 9148950,
+        "proportion": 11.21,
+        "cumulativeHolders": 19269,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 19269,
+        "shares": 81606398,
+        "proportion": 100,
+        "cumulativeHolders": 19269,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2566": {
+    "symbol": "2566",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 37,
+        "shares": 15234,
+        "proportion": 0.63,
+        "cumulativeHolders": 37,
+        "cumulativePct": 11.3846
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 214,
+        "shares": 490587,
+        "proportion": 20.3,
+        "cumulativeHolders": 251,
+        "cumulativePct": 77.2308
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 32,
+        "shares": 265000,
+        "proportion": 10.96,
+        "cumulativeHolders": 283,
+        "cumulativePct": 87.0769
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 9,
+        "shares": 115000,
+        "proportion": 4.76,
+        "cumulativeHolders": 292,
+        "cumulativePct": 89.8462
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 8,
+        "shares": 150000,
+        "proportion": 6.2,
+        "cumulativeHolders": 300,
+        "cumulativePct": 92.3077
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 8,
+        "shares": 210000,
+        "proportion": 8.69,
+        "cumulativeHolders": 308,
+        "cumulativePct": 94.7692
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 2,
+        "shares": 75000,
+        "proportion": 3.1,
+        "cumulativeHolders": 310,
+        "cumulativePct": 95.3846
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 4,
+        "shares": 181000,
+        "proportion": 7.49,
+        "cumulativeHolders": 314,
+        "cumulativePct": 96.6154
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 9,
+        "shares": 630000,
+        "proportion": 26.07,
+        "cumulativeHolders": 323,
+        "cumulativePct": 99.3846
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 2,
+        "shares": 284000,
+        "proportion": 11.75,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 325,
+        "shares": 2415821,
+        "proportion": 100,
+        "cumulativeHolders": 325,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2569": {
+    "symbol": "2569",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 9,
+        "shares": 4200,
+        "proportion": 0.03,
+        "cumulativeHolders": 9,
+        "cumulativePct": 14.7541
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 10,
+        "shares": 24291,
+        "proportion": 0.21,
+        "cumulativeHolders": 19,
+        "cumulativePct": 31.1475
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 5,
+        "shares": 43250,
+        "proportion": 0.37,
+        "cumulativeHolders": 24,
+        "cumulativePct": 39.3443
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 7,
+        "shares": 81953,
+        "proportion": 0.7,
+        "cumulativeHolders": 31,
+        "cumulativePct": 50.8197
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 5,
+        "shares": 85466,
+        "proportion": 0.73,
+        "cumulativeHolders": 36,
+        "cumulativePct": 59.0164
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 8,
+        "shares": 212648,
+        "proportion": 1.84,
+        "cumulativeHolders": 44,
+        "cumulativePct": 72.1311
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 3,
+        "shares": 107651,
+        "proportion": 0.93,
+        "cumulativeHolders": 47,
+        "cumulativePct": 77.0492
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 3,
+        "shares": 135128,
+        "proportion": 1.16,
+        "cumulativeHolders": 50,
+        "cumulativePct": 81.9672
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 4,
+        "shares": 253425,
+        "proportion": 2.19,
+        "cumulativeHolders": 54,
+        "cumulativePct": 88.5246
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 3,
+        "shares": 510117,
+        "proportion": 4.41,
+        "cumulativeHolders": 57,
+        "cumulativePct": 93.4426
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 2,
+        "shares": 460345,
+        "proportion": 3.98,
+        "cumulativeHolders": 59,
+        "cumulativePct": 96.7213
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 59,
+        "cumulativePct": 96.7213
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 59,
+        "cumulativePct": 96.7213
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 1,
+        "shares": 1000000,
+        "proportion": 8.65,
+        "cumulativeHolders": 60,
+        "cumulativePct": 98.3607
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 1,
+        "shares": 8634000,
+        "proportion": 74.73,
+        "cumulativeHolders": 61,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 61,
+        "shares": 11552474,
+        "proportion": 100,
+        "cumulativeHolders": 61,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2572": {
+    "symbol": "2572",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 3,
+        "shares": 1400,
+        "proportion": 0.03,
+        "cumulativeHolders": 3,
+        "cumulativePct": 21.4286
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 2,
+        "shares": 4600,
+        "proportion": 0.12,
+        "cumulativeHolders": 5,
+        "cumulativePct": 35.7143
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 5,
+        "cumulativePct": 35.7143
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 1,
+        "shares": 12600,
+        "proportion": 0.34,
+        "cumulativeHolders": 6,
+        "cumulativePct": 42.8571
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 1,
+        "shares": 16000,
+        "proportion": 0.44,
+        "cumulativeHolders": 7,
+        "cumulativePct": 50
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 7,
+        "cumulativePct": 50
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 7,
+        "cumulativePct": 50
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 3,
+        "shares": 132200,
+        "proportion": 3.64,
+        "cumulativeHolders": 10,
+        "cumulativePct": 71.4286
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 1,
+        "shares": 56000,
+        "proportion": 1.54,
+        "cumulativeHolders": 11,
+        "cumulativePct": 78.5714
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 11,
+        "cumulativePct": 78.5714
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 1,
+        "shares": 380000,
+        "proportion": 10.46,
+        "cumulativeHolders": 12,
+        "cumulativePct": 85.7143
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 12,
+        "cumulativePct": 85.7143
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 12,
+        "cumulativePct": 85.7143
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 1,
+        "shares": 937800,
+        "proportion": 25.82,
+        "cumulativeHolders": 13,
+        "cumulativePct": 92.8571
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 1,
+        "shares": 2091000,
+        "proportion": 57.57,
+        "cumulativeHolders": 14,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 14,
+        "shares": 3631600,
+        "proportion": 100,
+        "cumulativeHolders": 14,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2591": {
+    "symbol": "2591",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 8,
+        "shares": 973,
+        "proportion": 0.11,
+        "cumulativeHolders": 8,
+        "cumulativePct": 10
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 45,
+        "shares": 92004,
+        "proportion": 11.26,
+        "cumulativeHolders": 53,
+        "cumulativePct": 66.25
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 7,
+        "shares": 56286,
+        "proportion": 6.88,
+        "cumulativeHolders": 60,
+        "cumulativePct": 75
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 7,
+        "shares": 75884,
+        "proportion": 9.28,
+        "cumulativeHolders": 67,
+        "cumulativePct": 83.75
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 3,
+        "shares": 52000,
+        "proportion": 6.36,
+        "cumulativeHolders": 70,
+        "cumulativePct": 87.5
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 2,
+        "shares": 48461,
+        "proportion": 5.93,
+        "cumulativeHolders": 72,
+        "cumulativePct": 90
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 1,
+        "shares": 32683,
+        "proportion": 4,
+        "cumulativeHolders": 73,
+        "cumulativePct": 91.25
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 4,
+        "shares": 187684,
+        "proportion": 22.97,
+        "cumulativeHolders": 77,
+        "cumulativePct": 96.25
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 2,
+        "shares": 156350,
+        "proportion": 19.13,
+        "cumulativeHolders": 79,
+        "cumulativePct": 98.75
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 1,
+        "shares": 114700,
+        "proportion": 14.03,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 80,
+        "shares": 817025,
+        "proportion": 100,
+        "cumulativeHolders": 80,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2592": {
+    "symbol": "2592",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 9,
+        "shares": 3643,
+        "proportion": 0.03,
+        "cumulativeHolders": 9,
+        "cumulativePct": 15.7895
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 20,
+        "shares": 45025,
+        "proportion": 0.42,
+        "cumulativeHolders": 29,
+        "cumulativePct": 50.8772
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 13,
+        "shares": 95105,
+        "proportion": 0.9,
+        "cumulativeHolders": 42,
+        "cumulativePct": 73.6842
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 3,
+        "shares": 40121,
+        "proportion": 0.38,
+        "cumulativeHolders": 45,
+        "cumulativePct": 78.9474
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 1,
+        "shares": 16284,
+        "proportion": 0.15,
+        "cumulativeHolders": 46,
+        "cumulativePct": 80.7018
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 1,
+        "shares": 27529,
+        "proportion": 0.26,
+        "cumulativeHolders": 47,
+        "cumulativePct": 82.4561
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 3,
+        "shares": 100569,
+        "proportion": 0.95,
+        "cumulativeHolders": 50,
+        "cumulativePct": 87.7193
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 50,
+        "cumulativePct": 87.7193
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 50,
+        "cumulativePct": 87.7193
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 2,
+        "shares": 324703,
+        "proportion": 3.09,
+        "cumulativeHolders": 52,
+        "cumulativePct": 91.2281
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 1,
+        "shares": 350405,
+        "proportion": 3.33,
+        "cumulativeHolders": 53,
+        "cumulativePct": 92.9825
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 53,
+        "cumulativePct": 92.9825
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 53,
+        "cumulativePct": 92.9825
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 1,
+        "shares": 874318,
+        "proportion": 8.33,
+        "cumulativeHolders": 54,
+        "cumulativePct": 94.7368
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 3,
+        "shares": 8615965,
+        "proportion": 82.1,
+        "cumulativeHolders": 57,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 57,
+        "shares": 10493667,
+        "proportion": 100,
+        "cumulativeHolders": 57,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2596": {
+    "symbol": "2596",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 965,
+        "shares": 123887,
+        "proportion": 0.12,
+        "cumulativeHolders": 965,
+        "cumulativePct": 30.2793
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 1429,
+        "shares": 2960685,
+        "proportion": 2.96,
+        "cumulativeHolders": 2394,
+        "cumulativePct": 75.1177
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 319,
+        "shares": 2473092,
+        "proportion": 2.47,
+        "cumulativeHolders": 2713,
+        "cumulativePct": 85.1271
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 121,
+        "shares": 1525575,
+        "proportion": 1.52,
+        "cumulativeHolders": 2834,
+        "cumulativePct": 88.9238
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 71,
+        "shares": 1288065,
+        "proportion": 1.28,
+        "cumulativeHolders": 2905,
+        "cumulativePct": 91.1516
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 64,
+        "shares": 1603100,
+        "proportion": 1.6,
+        "cumulativeHolders": 2969,
+        "cumulativePct": 93.1597
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 45,
+        "shares": 1583065,
+        "proportion": 1.58,
+        "cumulativeHolders": 3014,
+        "cumulativePct": 94.5717
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 25,
+        "shares": 1134777,
+        "proportion": 1.13,
+        "cumulativeHolders": 3039,
+        "cumulativePct": 95.3561
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 53,
+        "shares": 3692762,
+        "proportion": 3.69,
+        "cumulativeHolders": 3092,
+        "cumulativePct": 97.0191
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 46,
+        "shares": 6287466,
+        "proportion": 6.28,
+        "cumulativeHolders": 3138,
+        "cumulativePct": 98.4625
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 21,
+        "shares": 5733790,
+        "proportion": 5.73,
+        "cumulativeHolders": 3159,
+        "cumulativePct": 99.1214
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 4,
+        "shares": 1970386,
+        "proportion": 1.97,
+        "cumulativeHolders": 3163,
+        "cumulativePct": 99.2469
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 6,
+        "shares": 4334040,
+        "proportion": 4.33,
+        "cumulativeHolders": 3169,
+        "cumulativePct": 99.4352
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 5,
+        "shares": 4687988,
+        "proportion": 4.68,
+        "cumulativeHolders": 3174,
+        "cumulativePct": 99.5921
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 13,
+        "shares": 60601322,
+        "proportion": 60.6,
+        "cumulativeHolders": 3187,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 3187,
+        "shares": 100000000,
+        "proportion": 100,
+        "cumulativeHolders": 3187,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2597": {
+    "symbol": "2597",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 6362,
+        "shares": 945468,
+        "proportion": 0.3,
+        "cumulativeHolders": 6362,
+        "cumulativePct": 49.9921
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 4616,
+        "shares": 9745684,
+        "proportion": 3.13,
+        "cumulativeHolders": 10978,
+        "cumulativePct": 86.2643
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 742,
+        "shares": 5357023,
+        "proportion": 1.72,
+        "cumulativeHolders": 11720,
+        "cumulativePct": 92.0949
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 304,
+        "shares": 3719655,
+        "proportion": 1.19,
+        "cumulativeHolders": 12024,
+        "cumulativePct": 94.4837
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 164,
+        "shares": 2881120,
+        "proportion": 0.92,
+        "cumulativeHolders": 12188,
+        "cumulativePct": 95.7724
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 154,
+        "shares": 3840906,
+        "proportion": 1.23,
+        "cumulativeHolders": 12342,
+        "cumulativePct": 96.9826
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 92,
+        "shares": 3258664,
+        "proportion": 1.04,
+        "cumulativeHolders": 12434,
+        "cumulativePct": 97.7055
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 40,
+        "shares": 1808937,
+        "proportion": 0.58,
+        "cumulativeHolders": 12474,
+        "cumulativePct": 98.0198
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 116,
+        "shares": 8118444,
+        "proportion": 2.61,
+        "cumulativeHolders": 12590,
+        "cumulativePct": 98.9313
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 56,
+        "shares": 7919201,
+        "proportion": 2.54,
+        "cumulativeHolders": 12646,
+        "cumulativePct": 99.3714
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 37,
+        "shares": 9633916,
+        "proportion": 3.1,
+        "cumulativeHolders": 12683,
+        "cumulativePct": 99.6621
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 9,
+        "shares": 4485598,
+        "proportion": 1.44,
+        "cumulativeHolders": 12692,
+        "cumulativePct": 99.7328
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 6,
+        "shares": 3926730,
+        "proportion": 1.26,
+        "cumulativeHolders": 12698,
+        "cumulativePct": 99.78
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 3,
+        "shares": 2645248,
+        "proportion": 0.85,
+        "cumulativeHolders": 12701,
+        "cumulativePct": 99.8036
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 25,
+        "shares": 242429406,
+        "proportion": 78.02,
+        "cumulativeHolders": 12726,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 12726,
+        "shares": 310716000,
+        "proportion": 100,
+        "cumulativeHolders": 12726,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "2599": {
+    "symbol": "2599",
+    "date": "2026-11-06",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 292,
+        "shares": 29094,
+        "proportion": 0.02,
+        "cumulativeHolders": 292,
+        "cumulativePct": 21.3763
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 447,
+        "shares": 951677,
+        "proportion": 0.96,
+        "cumulativeHolders": 739,
+        "cumulativePct": 54.0996
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 139,
+        "shares": 1081359,
+        "proportion": 1.09,
+        "cumulativeHolders": 878,
+        "cumulativePct": 64.2753
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 88,
+        "shares": 1044616,
+        "proportion": 1.06,
+        "cumulativeHolders": 966,
+        "cumulativePct": 70.7174
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 55,
+        "shares": 978105,
+        "proportion": 0.99,
+        "cumulativeHolders": 1021,
+        "cumulativePct": 74.7438
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 56,
+        "shares": 1385291,
+        "proportion": 1.4,
+        "cumulativeHolders": 1077,
+        "cumulativePct": 78.8433
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 40,
+        "shares": 1342820,
+        "proportion": 1.36,
+        "cumulativeHolders": 1117,
+        "cumulativePct": 81.7716
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 34,
+        "shares": 1541003,
+        "proportion": 1.56,
+        "cumulativeHolders": 1151,
+        "cumulativePct": 84.2606
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 70,
+        "shares": 5005543,
+        "proportion": 5.08,
+        "cumulativeHolders": 1221,
+        "cumulativePct": 89.3851
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 63,
+        "shares": 8273431,
+        "proportion": 8.39,
+        "cumulativeHolders": 1284,
+        "cumulativePct": 93.9971
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 41,
+        "shares": 11617230,
+        "proportion": 11.79,
+        "cumulativeHolders": 1325,
+        "cumulativePct": 96.9985
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 16,
+        "shares": 8124654,
+        "proportion": 8.24,
+        "cumulativeHolders": 1341,
+        "cumulativePct": 98.1698
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 9,
+        "shares": 5933754,
+        "proportion": 6.02,
+        "cumulativeHolders": 1350,
+        "cumulativePct": 98.8287
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 1350,
+        "cumulativePct": 98.8287
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 16,
+        "shares": 51215626,
+        "proportion": 51.98,
+        "cumulativeHolders": 1366,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 1366,
+        "shares": 98524203,
+        "proportion": 100,
+        "cumulativeHolders": 1366,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  }
+}
