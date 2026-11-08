@@ -114,7 +114,7 @@
  }
  function inversePnlUsd(legs,exitSpot){return inversePnlBtc(legs,exitSpot)*exitSpot;}
  function inverseMetrics(legs,entrySpot){
-  if(!legs.length||legs.some(l=>!['C','P'].includes(l.t)||!good(l.entryBtc??l.quote&&l.quote.quoteBtc)))return null;
+  if(!legs.length||legs.some(l=>!['C','P'].includes(l.t)||!good(l.entryBtc??(l.quote&&l.quote.quoteBtc))))return null;
   const strikes=[...new Set([0,...legs.map(l=>l.K)])].sort((a,b)=>a-b);
   const values=strikes.map(s=>legs.reduce((sum,l)=>{
    const p=l.entryBtc??l.quote.quoteBtc,m=l.contractSize||1,q=l.qty||1;
@@ -145,7 +145,7 @@
     if(!['C','P'].includes(l.t))return NaN;
     const vol=Math.max(0.01,((good(l.iv)?l.iv:baseIv)+ivShift)/100);
     const exitUsd=black76(l.t,F,l.K,T,vol);
-    const premiumBtc=l.entryBtc??l.quote&&l.quote.quoteBtc;
+    const premiumBtc=l.entryBtc??(l.quote&&l.quote.quoteBtc);
     return sum+l.d*(l.qty||1)*(l.contractSize||1)*(exitUsd-premiumBtc*spot)-(l.feeBtc||0)*(l.qty||1)*spot;
   },0);
  }
