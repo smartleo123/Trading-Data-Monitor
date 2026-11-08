@@ -38,9 +38,16 @@ function parseDistribution(payload){
  const all=normalizedRows(payload);
  const matching=all.filter(r=>String(val(r,['證券代號','證券代碼','Securities Code','stockNo','StockNo','code'])??'').trim()==='0050');
  if(!matching.length)throw Error('TDCC contains no 0050 data');
- const dates=matching.map(r=>String(val(r,['資料日期','Date','date','scaDate'])??'').replace(/\D/g,'')).filter(d=>/^20\d{6}$/.test(d));
- if(!dates.length)throw Error('TDCC 0050 has no valid data date');
- const latest=dates.sort().at(-1),rows=matching.filter(r=>String(val(r,['資料日期','Date','date','scaDate'])??'').replace(/\D/g,'')===latest);
+ const normalizeDate=(value)=>{
+  const raw=String(value??'').trim();
+  const digits=raw.replace(/\D/g,'');
+  if(/^20\d{6}/.test(digits))return digits.slice(0,8);
+  if(/^1\d{6}$/.test(digits))return String(Number(digits.slice(0,3))+1911)+digits.slice(3);
+  return null;
+ };
+ const dated=matching.map(r=>({r,date:normalizeDate(val(r,['資料日期','Date','date','scaDate','dateStr']))})).filter(x=>x.date);
+ if(!dated.length)throw Error('TDCC 0050 has no valid data date');
+ const latest=dated.map(x=>x.date).sort().at(-1),rows=dated.filter(x=>x.date===latest).map(x=>x.r);
  const table=new Map();
  for(const r of rows){
   const grade=integer(val(r,['持股分級','Holding Range','grade','level']));
@@ -64,8 +71,17 @@ function parseDistribution(payload){
   result.push(row);
  }
  if(total.holders<=0||cumulative!==total.holders)throw Error('TDCC total holder count inconsistent');
- const sumShares=result.slice(0,16).reduce((a,r)=>a+r.shares,0);
- if(Math.abs(sumShares-total.shares)>1)throw Error('TDCC total share count inconsistent');
+ // Some TDCC exports print the grade-16 adjustment as an unsigned magnitude,
+ // while the total reflects its negative effect. Reconstruct the direction from
+ // the issuer-reported total, but never accept an unexplained discrepancy.
+ const bandShares=result.slice(0,15).reduce((a,r)=>a+r.shares,0);
+ const adjustmentRequired=total.shares-bandShares;
+ if(Math.abs(adjustmentRequired-result[15].shares)>1){
+  if(Math.abs(adjustmentRequired+result[15].shares)>1)throw Error('TDCC total share count inconsistent');
+  result[15].shares=adjustmentRequired;
+  result[15].proportion=-Math.abs(result[15].proportion);
+ }
+ if(Math.abs(bandShares+result[15].shares-total.shares)>1)throw Error('TDCC total share count inconsistent');
  if(Math.abs(total.proportion-100)>0.2)throw Error('TDCC total proportion not 100%');
  const iso=latest.slice(0,4)+'-'+latest.slice(4,6)+'-'+latest.slice(6,8);
  if(new Date(iso+'T00:00:00Z').toISOString().slice(0,10)!==iso)throw Error('Invalid TDCC calendar date');
