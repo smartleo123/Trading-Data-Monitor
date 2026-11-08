@@ -19,3 +19,14 @@ test('snapshot parser tolerates nested list and fields in traditional Chinese',(
   assert.equal(parseHoldings(d).length,50);
   assert.equal(parseTradeDate({tradeDate:'not a date'}),null);
 });
+
+test('MoneyDJ complete holdings HTML is normalized with its published trading date',()=>{
+  const {parseMoneyDjHtml}=require('../scripts/holdings-parser.cjs');
+  const rows=Array.from({length:50},(_,i)=>'<tr><td><a>測試股'+i+'('+String(1000+i)+'.TW)</a></td><td>2.00</td><td>100,000</td></tr>').join('');
+  const html='<html><body><div>資料日期：2026/11/06</div><table>'+rows+'</table></body></html>';
+  const {holdings,sourceTradeDate}=parseMoneyDjHtml(html);
+  assert.equal(sourceTradeDate,'2026-11-06');
+  assert.equal(holdings.length,50);
+  assert.equal(holdings[0].code,'1000');
+  assert.throws(()=>parseMoneyDjHtml('<html>blocked</html>'),/data date/);
+});

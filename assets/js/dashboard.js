@@ -562,7 +562,10 @@
             if(note){
                 const date=snapshot.source_trade_date ? '官方資料交易日 '+snapshot.source_trade_date :
                     '官方來源未提供交易日（抓取時間 '+String(snapshot.fetched_at||'未註明').slice(0,16)+' UTC）';
-                note.textContent='✓ 已載入 GitHub 排程更新的元大 0050 持股權重。'+date+'；本資訊為基金持股權重，非臺股大盤市值權重。';
+                const fromMoneyDj=String(snapshot.source||'').includes('MoneyDJ');
+                note.textContent='✓ 已載入 GitHub 排程同步的 0050 持股權重（資料來源：'+(fromMoneyDj?'MoneyDJ ETF 全部持股':'元大投信')+'）。'+date+'；本資訊為基金持股權重，非臺股大盤市值權重。 '; 
+                const href=fromMoneyDj?'https://www.moneydj.com/ETF/X/Basic/Basic0007B.xdjhtm?etfid=0050.TW':'https://www.yuantaetfs.com/product/detail/0050/ratio';
+                const link=document.createElement('a');link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.className='text-accentCyan underline';link.textContent='檢視來源';note.appendChild(link);
             }
         }
         function loadScheduledTwTop50(){

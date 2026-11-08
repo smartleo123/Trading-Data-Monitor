@@ -29,6 +29,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+      - name: Install HTML parser
+        run: npm ci
       - name: Fetch and validate official holdings
         run: node scripts/sync-0050.cjs
       - name: Commit changed snapshot only

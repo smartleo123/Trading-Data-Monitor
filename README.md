@@ -72,7 +72,7 @@ The existing `npm test` jsdom suite remains unchanged and runs independently.
 
 An independent GitHub Actions workflow (`.github/workflows/update-0050.yml`) is
 scheduled at **19:30 Asia/Taipei on weekdays** (11:30 UTC; GitHub cron may be
-delayed). It fetches the Yuanta 0050 holdings JSON from the issuer, validates
+delayed). It first tries issuer JSON and falls back to the complete MoneyDJ ETF holding table when the issuer returns HTML or invalid data. It validates
 40–60 unique four-digit symbols and a plausible total portfolio weight, and
 writes `assets/data/0050-holdings.json` **only if the validated data changed**.
 If the API returns invalid data, the workflow fails and keeps the last valid
@@ -86,8 +86,7 @@ If no published snapshot exists, it clearly identifies the old bundled holdings
 as stale. The manual browser-proxy refresh button remains as a best-effort
 fallback, not the default mechanism.
 
-**Important:** The issuer's API is not a documented, guaranteed public data
-feed and may restrict GitHub-hosted requests. Run the workflow manually from the
+**Important:** The issuer's API is not a documented, guaranteed public data feed and returned HTML in an initial GitHub runner test. MoneyDJ is a third-party summary, so the dashboard now identifies which provider supplied each successful snapshot. Both sources can restrict automated access. Run the workflow manually from the
 Actions tab after deployment to validate actual source access. No automated
 daily update can be guaranteed until a live run succeeds. Weights are holdings
 of **0050**, not the stock's share of total Taiwan-market capitalization.

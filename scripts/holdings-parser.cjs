@@ -53,4 +53,30 @@ function parseTradeDate(payload) {
   }
   return null;
 }
-module.exports = { parseHoldings, parseTradeDate };
+
+function parseMoneyDjHtml(html) {
+  const { JSDOM } = require('jsdom');
+  const document = new JSDOM(html).window.document;
+  const text = document.body.textContent.replace(/\u00a0/g,' ');
+  const dateMatch = text.match(/資料日期\s*[：:]\s*(20\d\d[\/.-]\d{1,2}[\/.-]\d{1,2})/);
+  if (!dateMatch) throw new Error('MoneyDJ holdings page has no data date');
+  const date = dateMatch[1].replace(/[\/.]/g, '-').split('-').map((part,i)=>i?part.padStart(2,'0'):part).join('-');
+  if (!/^20\d\d-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date)))
+    throw new Error('MoneyDJ holdings page date malformed');
+  const rows=[];
+  for (const row of document.querySelectorAll('tr')) {
+    const cells=Array.from(row.querySelectorAll('td')).map(c=>c.textContent.replace(/\s+/g,' ').trim());
+    const idx=cells.findIndex(c=>/\(\d{4}\.TW\)/i.test(c));
+    if(idx<0 || idx+1>=cells.length)continue;
+    const match=cells[idx].match(/(.+?)\((\d{4})\.TW\)/i);
+    if(!match)continue;
+    const raw=cells[idx+1].replace(/[,%\s]/g,'');
+    const weight=Number(raw);
+    if(!Number.isFinite(weight) || weight<=0 || weight>80)continue;
+    rows.push({stockId:match[2],stockName:match[1].trim(),weight});
+  }
+  const holdings=parseHoldings({Data:rows});
+  return {holdings,sourceTradeDate:date};
+}
+
+module.exports = { parseHoldings, parseTradeDate, parseMoneyDjHtml };
