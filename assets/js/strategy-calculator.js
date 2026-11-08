@@ -68,8 +68,11 @@
       function legPnl(l, S) {
         var intr = l.t === 'C' ? Math.max(S - l.K, 0)*(l.contractSize||1) : l.t === 'P' ? Math.max(l.K - S, 0)*(l.contractSize||1)
           : l.t === 'F' ? (S - l.K) : (S - l.entry);
-        var prem = (l.t === 'U' || l.t === 'F') ? 0 : l.prem;
-        return l.d * (l.qty || 1) * (intr - prem);
+        if(l.quote&&Number.isFinite(l.entryBtc)&&S>0){
+          return l.d*(l.qty||1)*(intr-l.entryBtc*S*(l.contractSize||1))-(l.feeBtc||0)*(l.qty||1)*S;
+        }
+        var prem=(l.t==='U'||l.t==='F')?0:l.prem;
+        return l.d*(l.qty||1)*(intr-prem);
       }
       function totalPnl(legs, S) { var p = 0; for (var i = 0; i < legs.length; i++) p += legPnl(legs[i], S); return p; }
 
@@ -77,7 +80,11 @@
         var strikes = legs.filter(function (l) { return l.t !== 'U'; }).map(function (l) { return l.K; });
         var kinks = [0].concat(strikes).concat([S0 * 3]);
         var vals = kinks.map(function (k) { return totalPnl(legs, k); });
-        var upSlope = legs.reduce(function (a, l) { return a + ((l.t === 'C' || l.t === 'U' || l.t === 'F') ? l.d * (l.qty || 1)*(l.t==='C'?(l.contractSize||1):1) : 0); }, 0);
+        var upSlope=legs.reduce(function(a,l){
+          var q=l.qty||1;
+          var intrinsicSlope=(l.t==='C'||l.t==='U'||l.t==='F')?l.d*q*(l.t==='C'?(l.contractSize||1):1):0;
+          return a+intrinsicSlope-(l.quote?l.d*q*(l.entryBtc||0)*(l.contractSize||1)+q*(l.feeBtc||0):0);
+        },0);
         var maxP = upSlope > 0 ? Infinity : Math.max.apply(null, vals);
         var maxL = upSlope < 0 ? -Infinity : Math.min.apply(null, vals);
         /* 到期損益在履約價之間為直線；逐段求根，最後一段無價格上限。 */
@@ -169,7 +176,12 @@
       function invalidateQuotes(reason){
         if(!state)return;
         state.quoteReady=false;state.quoteRequest=(state.quoteRequest||0)+1;state.quoteStatus=reason||'市場報價已過期';
-        state.legs.forEach(function(l){delete l.quote;});
+        state.legs.forEach(function(l){
+          if(l.quote&&l.premAuto===false&&(l.t==='C'||l.t==='P')){
+            l.prem=autoPrem(l);l.premAuto=true;
+          }
+          delete l.quote;delete l.entryBtc;delete l.contractSize;
+        });
         const out=box.querySelector('#sc-quote-status');
         if(out)out.textContent='⚠ '+state.quoteStatus+'。目前僅供理論／手動模擬。';
       }
@@ -194,7 +206,7 @@
           const validated=optionLegs.map((l,i)=>{
             const item=quotes[names[i]];
             if(!item||item.error)return {valid:false,reason:item?.error||'來源無回應'};
-            return EXEC.validateTicker(item,{spot:state.spot,qty:l.qty,direction:l.d},Date.now());
+            return EXEC.validateTicker(item,{spot:state.spot,qty:l.qty,direction:l.d,instrument_name:names[i]},Date.now());
           });
           const errors=validated.flatMap((v,i)=>v.valid?[]:[names[i]+': '+v.reason]);
           if(errors.length){
@@ -204,7 +216,7 @@
           }
           optionLegs.forEach((l,i)=>{
             const v=validated[i];
-            l.prem=v.entryUsd;l.premAuto=false;l.contractSize=v.contractSize;
+            l.prem=v.entryUsd;l.premAuto=false;l.contractSize=v.contractSize;l.entryBtc=v.quoteBtc;
             l.quote={name:names[i],...v};l.iv=ivFor(l.K);
           });
           state.quoteReady=true;
@@ -224,7 +236,10 @@
         const fee=state.feePerBtc||0;
         return state.legs.map(function(l){
           var x={...l};
-          if(l.t==='C'||l.t==='P')x.prem=l.prem+l.d*fee*(l.contractSize||1);
+          if(l.t==='C'||l.t==='P'){
+            if(l.quote)x.feeBtc=fee/state.spot;
+            else x.prem=l.prem+l.d*fee*(l.contractSize||1);
+          }
           return x;
         });
       }
@@ -235,7 +250,9 @@
         const cells=pts.map(function(p){
           var spot=state.spot*(1+p/100);
           return '<tr><td>'+p+'%（'+usd(spot)+'）</td>'+shifts.map(function(shift){
-            const value=EXEC.scenarioPnl(legs,spot,days,shift,state.iv,state.basis);
+            const inverse=legs.every(l=>(l.t==='C'||l.t==='P')&&l.quote);
+            const value=inverse?EXEC.inverseScenarioUsd(legs,spot,days,shift,state.iv,state.basis)
+              :EXEC.scenarioPnl(legs,spot,days,shift,state.iv,state.basis);
             return '<td style="text-align:right;color:'+(value>=0?'#34d399':'#fb7185')+'">'+(value>=0?'+':'')+usd(value)+'</td>';
           }).join('')+'</tr>';
         }).join('');
@@ -338,9 +355,13 @@
         var quoted=!!state.quoteReady && Date.now()-state.quoteAt<120000;
         if(!quoted&&state.quoteReady){state.quoteReady=false;state.quoteStatus='市場 Bid／Ask 已過期';}
         var legs=adjustedLegs();
-        var m=metrics(legs,S0);
+        var inverseReady=quoted&&legs.every(l=>(l.t==='C'||l.t==='P')&&l.quote);
+        var exact=inverseReady?EXEC.inverseMetrics(legs,S0):null;
+        var m=exact?{maxP:exact.maxProfit,maxL:exact.maxLoss,be:exact.breakevens,
+          netDebit:exact.entryNetUsd,rr:Number.isFinite(exact.maxProfit)&&Number.isFinite(exact.maxLoss)&&exact.maxLoss<0&&exact.maxProfit>0?exact.maxProfit/(-exact.maxLoss):null,atSpot:exact.atSpot}:metrics(legs,S0);
         var rrTxt = m.rr != null ? ('1 : ' + m.rr.toFixed(2)) : '—';
-        var netTxt = m.netDebit > 0 ? ('淨支出 ' + usd(m.netDebit)) : m.netDebit < 0 ? ('淨收入 ' + usd(-m.netDebit)) : '$0';
+        var netTxt=m.netDebit>0?('淨支出 '+usd(m.netDebit)):m.netDebit<0?('淨收入 '+usd(-m.netDebit)):'$0';
+        if(exact)netTxt+=(exact.entryNetBtc>0?'（付 ':'（收 ')+Math.abs(exact.entryNetBtc).toFixed(5)+' BTC）';
         box.querySelector('#sc-metrics').innerHTML =
           (quoted?'<div class="sc-help" style="grid-column:1/-1;color:#34d399">✓ 使用 Deribit Bid／Ask 作為建倉參考，費用依設定扣除。頂層掛單不代表保證成交。</div>':'<div class="sc-help" style="grid-column:1/-1;color:#fbbf24">⚠ 目前為理論／手動價格模擬，並非經確認的可成交價格。</div>')+
           tile('最大獲利', usd(m.maxP), m.maxP > 0 ? 'pos' : 'neu', '到期最佳情況') +
