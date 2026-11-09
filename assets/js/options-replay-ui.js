@@ -16,22 +16,22 @@
    '<option value="iron-condor">鐵兀鷹</option></select></div>'+
    '<div class="sc-field"><label for="sc-replay-hold">持有天數</label><select id="sc-replay-hold"><option value="1">1 天</option><option value="3" selected>3 天</option><option value="7">7 天</option></select></div>'+
    '<div class="sc-field"><label for="sc-replay-fee">單邊每 BTC 單位手續費（BTC）</label><input id="sc-replay-fee" type="number" min="0" step="0.0001" value="0.0003"></div>'+
+   '<div class="sc-field"><label for="sc-replay-months">讀取歷史月份</label><select id="sc-replay-months"><option value="3">最近 3 個月</option><option value="6" selected>最近 6 個月</option><option value="12">最近 12 個月</option><option value="120">全部已有月份</option></select></div>'+
    '</div><button type="button" id="sc-replay-run" class="sc-btn">重播已記錄交易報價</button>'+
    '<p id="sc-replay-status" class="sc-help" role="status">尚未載入已驗證的 Deribit 歷史快照。</p>'+
-   '<div id="sc-replay-results"></div>';
-  const status=mount.querySelector('#sc-replay-status'),out=mount.querySelector('#sc-replay-results');
+   '<div id="sc-replay-results"></div><section id="sc-oos-results" class="sc-help" aria-label="訓練與樣本外驗證"></section>';
+  const status=mount.querySelector('#sc-replay-status'),out=mount.querySelector('#sc-replay-results'),oos=mount.querySelector('#sc-oos-results');
   let requestSeq=0;
   const dt=t=>new Date(t).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false});
   function show(message){status.textContent=message;}
   async function run(){
    const request=++requestSeq;
-   out.replaceChildren();show('檢查快照來源、日期與可成交條件…');
+   out.replaceChildren();oos.replaceChildren();show('檢查快照來源、日期與可成交條件…');
    try{
-    const res=await fetch('assets/data/deribit/quote-history.json',{cache:'no-store'});
-    if(!res.ok)throw Error('尚無官方可核實的歷史快照（首次 GitHub Actions 執行前正常）');
-    const history=await res.json();
+    const months=Number(mount.querySelector('#sc-replay-months').value);
+    if(!window.DeribitArchive)throw Error('月度快照載入器未準備好');
+    const history=await window.DeribitArchive.load(fetch,months);
     if(request!==requestSeq)return;
-    if(history?.schemaVersion!==1||!Array.isArray(history.snapshots))throw Error('快照版本或格式不正確');
     const strategy=mount.querySelector('#sc-replay-strategy').value;
     const holdDays=Number(mount.querySelector('#sc-replay-hold').value);
     const feeBtc=Number(mount.querySelector('#sc-replay-fee').value);
@@ -42,6 +42,21 @@
       '最近快照距今約 '+ageHours.toFixed(1)+' 小時';
     show('資料期間 '+(data.from?dt(data.from):'尚未建立')+' ～ '+(data.to?dt(data.to):'無')+
       '；實際可用市場快照 '+data.snapshots+' 筆，完成進出場 '+data.tradeCount+' 筆，跳過 '+data.skipped+' 筆。'+freshness+'。');
+    if(history.truncated)show(status.textContent+' 為降低網頁流量，目前只讀取最近 '+history.months.length+' 個月。');
+    // The holdout is never used for selecting the best training strategy.
+    const checked=window.OptionsOOS.evaluate(window.DeribitReplay,history,{holdDays,feeBtc,qty:0.1});
+    const oosTitle=document.createElement('h4');oosTitle.textContent='訓練期 / 樣本外獨立驗證（只用歷史已記錄 Bid／Ask）';oos.appendChild(oosTitle);
+    const oosText=document.createElement('p');
+    oosText.textContent='時間順序 70% 訓練 / 30% 樣本外；訓練期 '+checked.trainSnapshots+' 快照、樣本外 '+checked.testSnapshots+
+      ' 快照；策略 '+(checked.selected||'尚無符合門檻的策略')+'。'+(checked.reason||'');
+    oos.appendChild(oosText);
+    if(checked.train&&checked.test){
+      const detail=document.createElement('p');
+      detail.textContent='訓練期 '+checked.train.count+' 筆、淨損益 '+checked.train.net.toFixed(5)+
+        ' BTC；樣本外 '+checked.test.count+' 筆、淨損益 '+checked.test.net.toFixed(5)+' BTC。'+
+        (checked.eligible?'已達最低樣本門檻，但不保證可實際成交。':'樣本不足，禁止推論勝率或策略優勢。');
+      oos.appendChild(detail);
+    }
     const make=(tag,content)=>{const el=document.createElement(tag);el.textContent=content;return el;};
     const info=make('p',data.verdict);info.className='sc-help';out.appendChild(info);
     if(!data.adequate){
