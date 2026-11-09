@@ -241,6 +241,7 @@ test('Deribit backtest UI discloses real snapshot count and refuses early succes
    'BTC-9DEC26-80000-C':{bid:0.04+i*.0001,ask:0.042+i*.0001,bidAmount:5,askAmount:5,bookAt:at,strike:80000,type:'C',expiryAt:expiry,contractSize:1}
   }
  }));
+ await page.route('**/assets/data/deribit/index.json',route=>route.fulfill({status:404,body:'not found'}));
  await page.route('**/assets/data/deribit/quote-history.json',route=>route.fulfill({
   status:200,contentType:'application/json',body:JSON.stringify({schemaVersion:1,snapshots})
  }));
@@ -257,4 +258,39 @@ test('Deribit backtest UI discloses real snapshot count and refuses early succes
  await page.locator('#sc-replay-hold').selectOption('1');
  await page.locator('#sc-replay-run').click();
  await expect(page.locator('#sc-replay-status')).toContainText('進出場');
+});
+
+test('month-sharded option archive and out-of-sample panel load independently of the legacy JSON',async({page})=>{
+ const a=Date.parse('2026-10-09T12:00:00Z'),b=Date.parse('2026-11-09T12:00:00Z');
+ const shard=(month,t)=>({schemaVersion:2,month,snapshots:[{at:t,spot:81000,contracts:{}}]});
+ await page.route('**/assets/data/deribit/index.json',route=>route.fulfill({status:200,contentType:'application/json',
+  body:JSON.stringify({schemaVersion:2,months:['2026-10','2026-11']})}));
+ await page.route('**/assets/data/deribit/monthly/2026-10.json',route=>route.fulfill({status:200,contentType:'application/json',
+  body:JSON.stringify(shard('2026-10',a))}));
+ await page.route('**/assets/data/deribit/monthly/2026-11.json',route=>route.fulfill({status:200,contentType:'application/json',
+  body:JSON.stringify(shard('2026-11',b))}));
+ await page.locator('#wr-tab-calc').click();
+ await expect(page.locator('#sc-replay-status')).toContainText('實際可用市場快照 2 筆');
+ await expect(page.locator('#sc-oos-results')).toContainText('樣本外');
+ await expect(page.locator('#sc-oos-results')).toContainText('不足');
+});
+test('BTC perpetual panel displays verified closed-bar indicators and refuses stale signals',async({page})=>{
+ const H=3600000,now=Date.now(),start=Math.floor(now/H)*H-120*H;
+ const bars=Array.from({length:120},(_,i)=>{
+  const c=80000+i*6+Math.sin(i*.6)*70;
+  return {t:start+i*H,o:c-15,h:c+100,l:c-100,c};
+ });
+ const data={schemaVersion:1,source:'Deribit BTC-PERPETUAL',asOf:now,
+  funding8h:0.01,bars};
+ await page.route('**/assets/data/deribit/perpetual-signal.json',route=>route.fulfill({
+  status:200,contentType:'application/json',body:JSON.stringify(data)
+ }));
+ await page.reload({waitUntil:'domcontentloaded'});
+ await expect(page.locator('#btc-perpetual-signal')).toBeVisible();
+ await expect(page.locator('#btc-perp-status')).toContainText('觀望');
+ await expect(page.locator('#btc-perp-detail')).toContainText('EMA20');
+ await expect(page.locator('#btc-perp-detail')).toContainText('資金費率');
+ data.asOf=now-180*60000;
+ await page.locator('#btc-perp-refresh').click();
+ await expect(page.locator('#btc-perp-detail')).toContainText('超過 150');
 });
