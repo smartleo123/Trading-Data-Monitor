@@ -5,8 +5,10 @@ on:
     branches: [main]
     paths: ['.github/workflows/update-tw-market.yml', 'scripts/sync-tw-market.cjs']
   schedule:
-    # 19:50 Taipei, Monday–Friday; scheduled runs are best effort.
-    - cron: '50 11 * * 1-5'
+    # GitHub scheduled events are best-effort and can be delayed or skipped.
+    # Retry through the Taiwan evening so delayed TWSE margin publication gets picked up.
+    # Times below are UTC: 18:20, 19:20, 20:20, 21:20, 22:20 Asia/Taipei.
+    - cron: '20 10-14 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -20,7 +22,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
