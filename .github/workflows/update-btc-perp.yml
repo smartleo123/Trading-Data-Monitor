@@ -1,5 +1,7 @@
 name: Refresh BTC perpetual indicator snapshot
 on:
+  pull_request:
+    paths: ['scripts/record-btc-perpetual.cjs', 'assets/js/perpetual-signals.js', '.github/workflows/update-btc-perp.yml']
   push:
     branches: [main]
     paths: ['scripts/record-btc-perpetual.cjs', 'assets/js/perpetual-signals.js', '.github/workflows/update-btc-perp.yml']
@@ -25,6 +27,7 @@ jobs:
       - name: Verify Deribit hourly candles and funding
         run: node scripts/record-btc-perpetual.cjs
       - name: Publish snapshot
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
