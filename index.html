@@ -254,6 +254,18 @@
                 </div>
             </div>
         </div>
+        <section id="btc-perpetual-signal" data-nav="BTC 永續進出場觀察" class="bg-darkCard border border-zinc-850 rounded-2xl p-5 sm:p-6 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 class="text-md font-extrabold text-white">BTC 永續合約・進出場條件觀察</h2>
+              <p class="text-xs text-zinc-500 mt-1">Deribit BTC-PERPETUAL｜已收盤 1 小時 K 線｜EMA20/50、RSI、ATR、20 根突破及 8h 資金費率</p>
+            </div>
+            <button id="btc-perp-refresh" type="button" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-cyan-300 hover:bg-zinc-800">重新讀取資料</button>
+          </div>
+          <p id="btc-perp-status" role="status" aria-live="polite" class="text-sm text-zinc-300">等待官方資料…</p>
+          <div id="btc-perp-detail" class="space-y-2"></div>
+          <p class="text-xs text-zinc-500">資料由 GitHub Actions 每小時嘗試更新，排程可能延遲。訊號僅為條件式觀察，尚未經過充分歷史及樣本外績效驗證；不會自動下單。Deribit 公開 OI 資料可能延遲，因此本訊號不採 OI 作為即時輸入。</p>
+        </section>
         <!-- ═══════════════════════════════════════════════════════════════════
              BTC 選擇權即時分析 · 可折疊面板（自包含，貼上即用）
              貼進 index.html 的 <div id="market-view-crypto" class="space-y-6"> 內
@@ -1036,6 +1048,10 @@
     <script src="assets/js/ai-assistant.js"></script>
     <!-- ═══ BTC 選擇權「策略試算」頁籤：損益計算器（讀 window.WR_SNAPSHOT 即時現價／IV，不 hardcode） ═══ -->
     <link rel="stylesheet" href="assets/css/strategy-calculator.css">
+    <script src="assets/js/perpetual-signals.js"></script>
+    <script src="assets/js/perpetual-signals-ui.js"></script>
+    <script src="assets/js/options-archive.js"></script>
+    <script src="assets/js/options-oos.js"></script>
     <script src="assets/js/options-execution.js"></script>
     <script src="assets/js/options-replay.js"></script>
     <script src="assets/js/options-replay-ui.js"></script>
