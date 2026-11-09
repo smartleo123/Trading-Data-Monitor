@@ -92,7 +92,14 @@ async function run(){
  const symbols=Object.keys(contracts);
  if(symbols.length<6||!symbols.some(x=>x.endsWith('-C'))||!symbols.some(x=>x.endsWith('-P')))throw Error('Too few live validated two-sided option books ('+symbols.length+'); '+failures.slice(0,3).map(x=>x.reason).join('; '));
  if(old.snapshots.length&&now-old.snapshots.at(-1).at<60*60*1000){
-  console.log('Existing snapshot newer than 1h; no duplicate');return;
+  // Migration cannot wait for the next hourly observation: publish the
+  // existing verified legacy history even when no new quote should be added.
+  if(!fs.existsSync(History.INDEX)){
+   const prior=old.snapshots.slice(0,-1),last=old.snapshots.at(-1);
+   History.save(History.planAppend({snapshots:prior},last));
+   console.log('Migrated existing verified Deribit history into monthly shards');
+  }else console.log('Existing snapshot newer than 1h; no duplicate');
+  return;
  }
  const item={at:now,spot,contracts};
  const planned=History.planAppend(old,item);
