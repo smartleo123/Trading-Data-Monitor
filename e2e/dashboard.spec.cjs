@@ -250,6 +250,7 @@ test('Deribit backtest UI discloses real snapshot count and refuses early succes
  await page.locator('#wr-tab-calc').click();
  await expect(page.locator('#sc-backtest')).toBeVisible();
  await expect(page.locator('#sc-replay-status')).toContainText('實際可用市場快照 2 筆');
+ await expect(page.locator('#sc-replay-status')).toContainText('最近快照距今');
  await expect(page.locator('#sc-replay-results')).toContainText('樣本不足');
  await expect(page.locator('#sc-replay-results')).not.toContainText('總淨損益');
  await page.locator('#sc-replay-strategy').selectOption('long-call');

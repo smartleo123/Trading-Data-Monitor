@@ -225,3 +225,19 @@ of years of verified real fills. Win rate, profit factor, average BTC P&L and
 drawdown appear only with enough eligible observations. No automatic orders
 are sent. An actual quantitative trading edge would require much more data,
 out-of-sample validation, execution simulation and robustness tests.
+
+## Deribit continuity, integrity and lighter CI
+
+The collector now carries forward up to 36 still-listed BTC option contracts
+from the last seven days of snapshots, in addition to new near-the-money
+contracts. This helps the replay find a genuine exit quote for positions that
+have moved away from the current ATM strikes. It does not backfill missing data
+or promise complete historical fills. Replay long straddles are only formed by
+a Call and Put with identical strike/expiry; exit metadata must still match
+the entry instrument.
+
+If the existing historical archive is unreadable, invalid JSON, out-of-order
+or structurally corrupt, ingestion **fails rather than overwriting it with a
+fresh empty history**. The browser indicates when its most recent archived
+quote is older than 12 hours. Scheduled data-only commits skip full
+browser/regression suites, while code changes and PRs continue to be tested.

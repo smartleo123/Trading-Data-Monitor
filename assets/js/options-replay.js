@@ -34,13 +34,18 @@
    }
    let selected;
    if(strategy==='long-call')selected=[[strike('C',1),1]];
-   else if(strategy==='straddle')selected=[[strike('C',1),1],[strike('P',1),1]];
+   else if(strategy==='straddle'){
+    // A genuine straddle MUST use identical call/put strikes and expiry.
+    const calls=rows.filter(r=>r.type==='C'),puts=new Map(rows.filter(r=>r.type==='P').map(r=>[r.strike,r]));
+    const pairs=calls.filter(c=>puts.has(c.strike)).sort((a,b)=>Math.abs(a.strike-spot)-Math.abs(b.strike-spot));
+    selected=pairs.length?[[pairs[0],1],[puts.get(pairs[0].strike),1]]:null;
+   }
    else if(strategy==='bull-call')selected=[[strike('C',1),1],[strike('C',1.06),-1]];
    else if(strategy==='bear-put')selected=[[strike('P',1),1],[strike('P',0.94),-1]];
    else if(strategy==='iron-condor')selected=[
     [strike('P',0.88),1],[strike('P',0.94),-1],[strike('C',1.06),-1],[strike('C',1.12),1]];
    else throw Error('Unsupported strategy');
-   if(selected.every(v=>v[0]&&Number.isFinite(v[0].strike))){
+   if(selected&&selected.every(v=>v[0]&&Number.isFinite(v[0].strike))){
     const keys=selected.map(([r])=>r.name);
     if(new Set(keys).size!==keys.length)continue;
     if(strategy==='bull-call'&&selected[0][0].strike>=selected[1][0].strike)continue;
@@ -64,7 +69,12 @@
    const target=entry.at+holdDays*DAY;
    const end=h.find(x=>x.at>=target&&x.at<=target+18*3600000&&x.at<legs[0].expiryAt);
    if(!end){skipped++;continue;}
-   const matched=legs.every(l=>valid(entry.contracts[l.name],entry.at,qty)&&valid(end.contracts?.[l.name],end.at,qty));
+   const matched=legs.every(l=>{
+    const a=entry.contracts[l.name],b=end.contracts?.[l.name];
+    return valid(a,entry.at,qty)&&valid(b,end.at,qty)&&
+      a.strike===l.strike&&b.strike===l.strike&&a.expiryAt===l.expiryAt&&b.expiryAt===l.expiryAt&&
+      a.type===l.name.slice(-1)&&b.type===l.name.slice(-1);
+   });
    if(!matched){skipped++;continue;}
    let totalBtc=0,feesBtc=0;const details=[];
    for(const leg of legs){

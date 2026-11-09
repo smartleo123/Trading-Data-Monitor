@@ -8,7 +8,7 @@
   mount.innerHTML='<div class="sc-hd">Deribit 真實報價歷史重播（可核對成交假設）</div>'+
    '<p class="sc-help">來源：GitHub 每四小時保存 Deribit 生產環境最優買賣檔。' +
    '僅重播已記錄到的有效 Bid／Ask：買進在 Ask、賣出在 Bid，出場方向相反；每筆完整持倉期間不會開另一筆。' +
-   '此資料是開始記錄後的 forward replay，並非從過去不存在的歷史報價重建。未考慮價位瞬間消失及實際市場衝擊。</p>'+
+   '此資料是開始記錄後的 forward replay，並非從過去不存在的歷史報價重建。只有同合約且具有有效進出場雙向報價的交易會列入，跨式必須同到期、同履約價。未考慮價位瞬間消失及實際市場衝擊。</p>'+
    '<div class="sc-inputs">'+
    '<div class="sc-field"><label for="sc-replay-strategy">策略</label><select id="sc-replay-strategy">'+
    '<option value="straddle">買入 ATM 跨式</option><option value="long-call">買入 ATM Call</option>'+
@@ -36,8 +36,12 @@
     const holdDays=Number(mount.querySelector('#sc-replay-hold').value);
     const feeBtc=Number(mount.querySelector('#sc-replay-fee').value);
     const data=window.DeribitReplay.replay(history,{strategy,holdDays,feeBtc,qty:0.1});
+    const ageHours=data.to?Math.max(0,(Date.now()-data.to)/3600000):Infinity;
+    const freshness=!Number.isFinite(ageHours)?'尚未取得有效時間戳':
+      ageHours>12?'⚠ 最後行情快照已超過 12 小時（約 '+ageHours.toFixed(1)+' 小時），請檢查 GitHub 排程':
+      '最近快照距今約 '+ageHours.toFixed(1)+' 小時';
     show('資料期間 '+(data.from?dt(data.from):'尚未建立')+' ～ '+(data.to?dt(data.to):'無')+
-      '；實際可用市場快照 '+data.snapshots+' 筆，完成進出場 '+data.tradeCount+' 筆，跳過 '+data.skipped+' 筆。');
+      '；實際可用市場快照 '+data.snapshots+' 筆，完成進出場 '+data.tradeCount+' 筆，跳過 '+data.skipped+' 筆。'+freshness+'。');
     const make=(tag,content)=>{const el=document.createElement(tag);el.textContent=content;return el;};
     const info=make('p',data.verdict);info.className='sc-help';out.appendChild(info);
     if(!data.adequate){
