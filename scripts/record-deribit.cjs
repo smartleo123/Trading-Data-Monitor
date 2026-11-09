@@ -1,8 +1,8 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path');
 const E=require('../assets/js/options-execution.js');
+const History=require('./deribit-history.cjs');
 const ROOT='https://www.deribit.com/api/v2/public/';
-const DEST=path.join(__dirname,'../assets/data/deribit/quote-history.json');
 const AUDIT=path.join(__dirname,'../assets/data/deribit/source-audit.json');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function fetchRpc(method,params={}){
@@ -38,20 +38,7 @@ function chooseContracts(instruments,spot,now){
  }
  return selected.slice(0,20);
 }
-function readHistory(){
- let old;
- try{old=JSON.parse(fs.readFileSync(DEST,'utf8'));}
- catch(e){
-  if(e.code==='ENOENT')return {schemaVersion:1,snapshots:[]};
-  throw Error('Refusing to overwrite unreadable Deribit history: '+e.message);
- }
- if(old.schemaVersion!==1||!Array.isArray(old.snapshots)||old.snapshots.some((snap,i)=>
-   !snap||!Number.isFinite(snap.at)||!Number.isFinite(snap.spot)||snap.spot<=0||
-   !snap.contracts||typeof snap.contracts!=='object'||
-   (i>0&&snap.at<=old.snapshots[i-1].at)))
-  throw Error('Refusing to overwrite corrupt or out-of-order Deribit history');
- return old;
-}
+function readHistory(){return History.load();}
 function followContracts(instruments,history,now,fresh){
  const byName=new Map(instruments.filter(i=>i&&typeof i.instrument_name==='string'&&i.kind==='option'&&
   i.base_currency==='BTC'&&i.settlement_currency==='BTC'&&i.expiration_timestamp>now+86400000&&i.is_active!==false)
@@ -108,15 +95,14 @@ async function run(){
   console.log('Existing snapshot newer than 1h; no duplicate');return;
  }
  const item={at:now,spot,contracts};
- old.snapshots.push(item);
- old.snapshots=old.snapshots.sort((a,b)=>a.at-b.at).filter((x,i,arr)=>i===0||x.at>arr[i-1].at).slice(-540);
+ const planned=History.planAppend(old,item);
+ History.save(planned);
  const audit={source:'Deribit production public API',checkedAt:new Date(now).toISOString(),
   serverTime:new Date(serverTime).toISOString(),clockSkewMs:serverTime-now,spot,
   listedInstruments:instruments.length,selected:selection.length,fresh: fresh.length,followed:selection.length-fresh.length,verified:symbols.length,
-  rejected:failures.length,failures:failures.slice(0,10),historyObservations:old.snapshots.length,
+  rejected:failures.length,failures:failures.slice(0,10),historyObservations:planned.snapshots.length,archiveMonths:planned.months.length,
   limitations:'Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker.'};
- fs.mkdirSync(path.dirname(DEST),{recursive:true});
- fs.writeFileSync(DEST,JSON.stringify(old)+'\n');
+ fs.mkdirSync(path.dirname(AUDIT),{recursive:true});
  fs.writeFileSync(AUDIT,JSON.stringify(audit,null,2)+'\n');
  console.log(JSON.stringify(audit));
 }
