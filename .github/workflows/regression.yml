@@ -4,6 +4,9 @@ on:
   pull_request:
   push:
     branches: [main]
+    # Data-only bot commits do not need a full browser/regression suite.
+    paths-ignore:
+      - 'assets/data/**'
   workflow_dispatch:
 
 permissions:
