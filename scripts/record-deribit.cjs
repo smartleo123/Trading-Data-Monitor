@@ -38,8 +38,42 @@ function chooseContracts(instruments,spot,now){
  }
  return selected.slice(0,20);
 }
+function readHistory(){
+ let old;
+ try{old=JSON.parse(fs.readFileSync(DEST,'utf8'));}
+ catch(e){
+  if(e.code==='ENOENT')return {schemaVersion:1,snapshots:[]};
+  throw Error('Refusing to overwrite unreadable Deribit history: '+e.message);
+ }
+ if(old.schemaVersion!==1||!Array.isArray(old.snapshots)||old.snapshots.some((snap,i)=>
+   !snap||!Number.isFinite(snap.at)||!Number.isFinite(snap.spot)||snap.spot<=0||
+   !snap.contracts||typeof snap.contracts!=='object'||
+   (i>0&&snap.at<=old.snapshots[i-1].at)))
+  throw Error('Refusing to overwrite corrupt or out-of-order Deribit history');
+ return old;
+}
+function followContracts(instruments,history,now,fresh){
+ const byName=new Map(instruments.filter(i=>i&&typeof i.instrument_name==='string'&&i.kind==='option'&&
+  i.base_currency==='BTC'&&i.settlement_currency==='BTC'&&i.expiration_timestamp>now+86400000&&i.is_active!==false)
+  .map(i=>[i.instrument_name,i]));
+ const previous=history.snapshots.slice(-42);
+ const firstSeen=new Map(),lastSeen=new Map();
+ for(const snap of previous)for(const name of Object.keys(snap.contracts||{})){
+  if(!byName.has(name))continue;
+  if(!firstSeen.has(name))firstSeen.set(name,snap.at);
+  lastSeen.set(name,snap.at);
+ }
+ const freshNames=new Set(fresh.map(i=>i.instrument_name));
+ const lastNames=new Set(Object.keys(previous.at(-1)?.contracts||{}));
+ // Keep contracts from previous observations across the full holding window.
+ // Prefer continuity at the most recent snapshot, then older first-seen contracts.
+ const tracked=[...lastSeen.keys()].filter(name=>!freshNames.has(name)).sort((a,b)=>
+  Number(lastNames.has(b))-Number(lastNames.has(a))||
+  firstSeen.get(a)-firstSeen.get(b)||a.localeCompare(b)).slice(0,36);
+ return fresh.concat(tracked.map(name=>byName.get(name)));
+}
 async function run(){
- const now=Date.now();
+ const now=Date.now(),old=readHistory();
  const [serverTime,index,instruments]=await Promise.all([
   fetchRpc('get_time'),fetchRpc('get_index_price',{index_name:'btc_usd'}),
   fetchRpc('get_instruments',{currency:'BTC',kind:'option',expired:'false'})
@@ -47,7 +81,8 @@ async function run(){
  const spot=index.index_price;
  if(typeof serverTime!=='number'||Math.abs(now-serverTime)>90000)throw Error('Server clock skew too large');
  if(!Number.isFinite(spot)||spot<=0||!Array.isArray(instruments)||instruments.length<50)throw Error('Invalid official BTC market chain');
- const selection=chooseContracts(instruments,spot,now);
+ const fresh=chooseContracts(instruments,spot,now);
+ const selection=followContracts(instruments,old,now,fresh);
  const contracts={};const failures=[];
  for(let i=0;i<selection.length;i+=3){
   await Promise.all(selection.slice(i,i+3).map(async meta=>{
@@ -69,16 +104,15 @@ async function run(){
  }
  const symbols=Object.keys(contracts);
  if(symbols.length<6||!symbols.some(x=>x.endsWith('-C'))||!symbols.some(x=>x.endsWith('-P')))throw Error('Too few live validated two-sided option books ('+symbols.length+'); '+failures.slice(0,3).map(x=>x.reason).join('; '));
- let old={schemaVersion:1,snapshots:[]};
- try{old=JSON.parse(fs.readFileSync(DEST,'utf8'));}catch{}
- if(old.schemaVersion!==1||!Array.isArray(old.snapshots))throw Error('Historical snapshot schema mismatch');
- if(old.snapshots.length&&now-old.snapshots.at(-1).at<60*60*1000){console.log('Existing snapshot newer than 1h; no duplicate');return;}
+ if(old.snapshots.length&&now-old.snapshots.at(-1).at<60*60*1000){
+  console.log('Existing snapshot newer than 1h; no duplicate');return;
+ }
  const item={at:now,spot,contracts};
  old.snapshots.push(item);
  old.snapshots=old.snapshots.sort((a,b)=>a.at-b.at).filter((x,i,arr)=>i===0||x.at>arr[i-1].at).slice(-540);
  const audit={source:'Deribit production public API',checkedAt:new Date(now).toISOString(),
   serverTime:new Date(serverTime).toISOString(),clockSkewMs:serverTime-now,spot,
-  listedInstruments:instruments.length,selected:selection.length,verified:symbols.length,
+  listedInstruments:instruments.length,selected:selection.length,fresh: fresh.length,followed:selection.length-fresh.length,verified:symbols.length,
   rejected:failures.length,failures:failures.slice(0,10),historyObservations:old.snapshots.length,
   limitations:'Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker.'};
  fs.mkdirSync(path.dirname(DEST),{recursive:true});
@@ -87,4 +121,4 @@ async function run(){
  console.log(JSON.stringify(audit));
 }
 if(require.main===module)run().catch(e=>{console.error('DERIBIT AUDIT FAILED:',e.stack);process.exitCode=1;});
-module.exports={chooseContracts,run};
+module.exports={chooseContracts,followContracts,readHistory,run};
