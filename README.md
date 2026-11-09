@@ -241,3 +241,40 @@ or structurally corrupt, ingestion **fails rather than overwriting it with a
 fresh empty history**. The browser indicates when its most recent archived
 quote is older than 12 hours. Scheduled data-only commits skip full
 browser/regression suites, while code changes and PRs continue to be tested.
+
+## Deribit monthly archives, out-of-sample research and BTC perpetual signals
+
+The historic Deribit BTC option quote archive is now organized by UTC month:
+`assets/data/deribit/index.json` lists all available months, with data in
+`assets/data/deribit/monthly/YYYY-MM.json`. The collector migrates the
+existing `quote-history.json` exactly once and never fabricates missing prior
+months. Damaged shard, duplicate timestamp or corrupt manifest aborts ingestion;
+the legacy file remains untouched as a read-only backup. Browsers can select
+3, 6, 12 or all recorded months. The data loader, replay engine,
+out-of-sample research rules and market-dashboard rendering live in separate
+modules (`options-archive.js`, `options-replay.js`, `options-oos.js`,
+`options-replay-ui.js`, `tdcc.js`).
+
+Out-of-sample evaluation divides archived observations chronologically into
+70% training / 30% untouched holdout. It selects a strategy using **only**
+training replay results across five fixed strategies, requiring at least 20
+complete, non-overlapping trades and positive average net BTC P&L. Only the
+preselected strategy is subsequently evaluated on the holdout; a further
+20 completed holdout trades are needed to display a provisional finding.
+This is a **preliminary observation rather than a proven profitable strategy**.
+Best-bid/ask snapshots are not guaranteed fills, so estimates still omit
+market impact, latency and some settlement-specific costs. Very short data
+histories explicitly display insufficient evidence.
+
+BTC perpetual entry/exit assistance uses verified, **fully closed** Deribit
+BTC-PERPETUAL hourly candles, EMA20/50, Wilder RSI14, ATR14, prior 20-candle
+breakout range and 8h funding. The dedicated GitHub workflow refreshes
+`assets/data/deribit/perpetual-signal.json` hourly (best-effort).
+Trend/breakout/momentum/funding must agree, otherwise the UI outputs
+**觀望**. Potential long/short setups show a reference entry from the
+confirmed candle close, stop using at least 2 ATR or 1.5% distance and a
+2R indicative target. All setups are rejected if source data is stale or
+unverified. These conditions are **not backtested or execution-confirmed**:
+no automatic order placement, no guaranteed stops, and no leverage advice.
+Deribit public open interest may be delayed and is deliberately not used as
+a timely input for this rule engine.

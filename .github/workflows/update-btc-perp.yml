@@ -1,0 +1,41 @@
+name: Refresh BTC perpetual indicator snapshot
+on:
+  pull_request:
+    paths: ['scripts/record-btc-perpetual.cjs', 'assets/js/perpetual-signals.js', '.github/workflows/update-btc-perp.yml']
+  push:
+    branches: [main]
+    paths: ['scripts/record-btc-perpetual.cjs', 'assets/js/perpetual-signals.js', '.github/workflows/update-btc-perp.yml']
+  schedule:
+    # UTC every hour; GitHub schedule timing is best-effort.
+    - cron: '21 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: btc-perp-data
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Deribit hourly candles and funding
+        run: node scripts/record-btc-perpetual.cjs
+      - name: Publish snapshot
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/deribit/perpetual-signal.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "data: refresh validated BTC perpetual indicators"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
