@@ -1,17 +1,22 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-12T16:46:22.006Z",
-  "serverTime": "2026-11-12T16:46:22.166Z",
-  "clockSkewMs": 160,
-  "spot": 71558.35,
-  "listedInstruments": 926,
+  "checkedAt": "2026-11-13T01:02:29.158Z",
+  "serverTime": "2026-11-13T01:02:29.450Z",
+  "clockSkewMs": 292,
+  "spot": 70954.8,
+  "listedInstruments": 938,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 56,
-  "rejected": 0,
-  "failures": [],
-  "historyObservations": 11,
+  "verified": 55,
+  "rejected": 1,
+  "failures": [
+    {
+      "name": "BTC-27NOV26-85000-C",
+      "reason": "買賣價差超過 20%：28.57%"
+    }
+  ],
+  "historyObservations": 12,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
