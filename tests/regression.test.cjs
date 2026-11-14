@@ -60,6 +60,15 @@ test('fractional BTC option quantity is accepted and invalidated quotes are visi
 test('manual leg edits survive refresh of live parameters',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),110000);a.input(leg(0,'prem'),1234);a.d.getElementById('sc-reload').click();assert.equal(a.d.querySelector(leg(0,'K')).value,'110000');assert.equal(a.d.querySelector(leg(0,'prem')).value,'1234');});
 test('adding and removing legs remains functional',async t=>{const a=await boot(t);a.calc();a.d.getElementById('sc-add').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,2);a.d.querySelector('.sc-rm').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,1);});
 test('pending crypto requests are shared, and settled requests may retry',async t=>{const a=await boot(t);a.w.eval('cryptoQuotePending.clear()');let resolve;let count=0;a.w.fetch=()=>{count++;return new Promise(r=>resolve=r)};const first=a.w.fetchCryptoQuote('BTCUSDT');assert.equal(first,a.w.fetchCryptoQuote('BTCUSDT'));assert.equal(count,1);resolve({ok:true,json:async()=>({lastPrice:'100'})});await first;a.w.fetchCryptoQuote('BTCUSDT');assert.equal(count,2);});
+test('manual 0050 holdings refresh accepts text returned by shared proxy helper',async t=>{
+ const a=await boot(t);
+ const holdings=Array.from({length:12},(_,i)=>({stockId:String(1100+i),stockName:'測試'+i,weight:8}));
+ a.w.fetch=async()=>({ok:true,text:async()=>JSON.stringify({data:holdings})});
+ a.w.eval('refreshTwTop50FromYuanta(false)');
+ await flush();await flush();
+ assert.match(a.d.querySelector('#tw-weight-note').textContent,/已於|同步/);
+ assert.equal(a.d.querySelector('#tw-weight-tbody tr:first-child td:nth-child(2)').textContent,'1100');
+});
 test('Taiwan quote scans do not overlap and previously live data marks offline on failure',async t=>{
  const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');
  a.w.eval('twQuoteScanPending=null; document.querySelectorAll("[data-tw-quote]").forEach(c=>twCardPending.delete(c))');
