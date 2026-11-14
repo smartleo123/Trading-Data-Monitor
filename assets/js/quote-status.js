@@ -19,8 +19,8 @@
       mainIds.forEach(function (id) { var el = document.getElementById(id); if (el) { mainEls.push(el); setLoading(el); } });
       setTimeout(function () { expire(mainEls); }, TIMEOUT_MS);
 
-      /* 台股卡：報價已改為頁面載入即預載，逾時計時同步起算 */
+      /* 台股卡：失敗與盤後備援由 dashboard.js 管理，避免 20 秒計時器覆蓋有效報價狀態。 */
       var twEls = Array.prototype.slice.call(document.querySelectorAll('[data-tw-price]'));
       twEls.forEach(setLoading);
-      setTimeout(function () { expire(twEls); }, TIMEOUT_MS);
+      // No generic timeout: sequential public quote proxies may need longer, and official closing-price fallback is shown independently.
     })();
