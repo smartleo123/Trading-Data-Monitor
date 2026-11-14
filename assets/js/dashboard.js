@@ -229,21 +229,37 @@
             return false;
         }
         // 主來源：CoinGecko markets API (含真實 7 日 sparkline)；後備：CoinLore
+        // Bounded requests prevent a stalled provider from blocking the alternate feed.
+        function fetchMarketJson(url,timeoutMs=8500){
+            const controller=new AbortController();
+            const timer=setTimeout(()=>controller.abort(),timeoutMs);
+            return fetch(url,{cache:'no-store',signal:controller.signal})
+                .then(r=>{if(!r.ok)throw new Error('market data HTTP '+r.status);return r.json();})
+                .finally(()=>clearTimeout(timer));
+        }
+        let cryptoMarketPending=null;
         function fetchCryptoData(silent=false){
+            if(cryptoMarketPending)return cryptoMarketPending;
+            const request=(function(){
             const tb=document.getElementById('crypto-table-body');
             if(!silent&&tb)tb.innerHTML='<tr class="animate-pulse"><td colspan="8" class="py-8 text-center text-zinc-500">正在獲取頂級主權波動資產...</td></tr>';
             const cgUrl='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=24h';
-            return fetch(cgUrl,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
+            return fetchMarketJson(cgUrl).then(data=>{
                 if(!Array.isArray(data)||!data.length)throw 0;
                 const fd=data.filter(c=>!isExcludedCoin(c.symbol,c.name));
+                if(!fd.length)throw Error('CoinGecko has no valid coins');
                 cryptoDataList=fd.slice(0,10).map(c=>({id:c.id,name:c.name,symbol:c.symbol,current_price:c.current_price,price_change_percentage_24h:c.price_change_percentage_24h||0,total_volume:c.total_volume||0,market_cap:c.market_cap||0,image:c.image||`https://assets.coincap.io/assets/icons/${(c.symbol||'').toLowerCase()}@2x.png`,sparkline_in_7d:{price:(c.sparkline_in_7d&&Array.isArray(c.sparkline_in_7d.price))?c.sparkline_in_7d.price:[]}}));
                 renderCryptoTable();upd();
             }).catch(()=>fetchCryptoDataFallback(silent));
+            })();
+            cryptoMarketPending=request.finally(()=>{cryptoMarketPending=null;});
+            return cryptoMarketPending;
         }
         // 後備來源：CoinLore (無歷史 sparkline，趨勢圖依當日漲跌方向示意)
         function fetchCryptoDataFallback(silent){
-            return fetch('https://api.coinlore.net/api/tickers/?start=0&limit=50').then(r=>r.ok?r.json():Promise.reject()).then(res=>{const data=res.data||[];
+            return fetchMarketJson('https://api.coinlore.net/api/tickers/?start=0&limit=50').then(res=>{const data=res.data||[];if(!Array.isArray(data)||!data.length)throw Error('CoinLore empty data');
                 const fd=data.filter(c=>!isExcludedCoin(c.symbol,c.name));
+                if(!fd.length)throw Error('CoinLore has no valid coins');
                 cryptoDataList=fd.slice(0,10).map(c=>({id:c.nameid,name:c.name,symbol:c.symbol,current_price:parseFloat(c.price_usd),price_change_percentage_24h:parseFloat(c.percent_change_24h||0),total_volume:parseFloat(c.volume24||0),market_cap:parseFloat(c.market_cap_usd||0),image:`https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`,sparkline_in_7d:{price:[]}}));
                 renderCryptoTable();upd();}).catch(()=>{const tb=document.getElementById('crypto-table-body');if(tb)tb.innerHTML='<tr><td colspan="8" class="py-8 text-center text-zinc-500">行情暫時無法取得，請稍後重試</td></tr>';});
         }
