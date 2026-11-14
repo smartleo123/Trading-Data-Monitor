@@ -133,6 +133,8 @@ test('0050 TDCC holder distribution renders 17 grades and cumulative holders', a
   let cumulative=0;
   const rows=shares.map((n,i)=>{if(i<15)cumulative+=holders[i];return {grade:i+1,range:i===15?'差異數調整':String(i+1),holders:i===15?null:holders[i]||total,shares:n,proportion:i===16?100:0,cumulativeHolders:i===15?null:i===16?total:cumulative};});
   rows.push({grade:17,range:'合計',holders:total,shares:shares.reduce((a,b)=>a+b,0),proportion:100,cumulativeHolders:total});
+  // Force the tested legacy fallback instead of reading production TDCC index/shards.
+  await page.route('**/assets/data/tdcc/index.json',route=>route.fulfill({status:404,body:'fixture uses legacy snapshot'}));
   await page.route('**/assets/data/0050-distribution.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({symbol:'0050',date:'2026-11-06',rows})}));
   await page.reload({waitUntil:'domcontentloaded'});
   await page.locator('#market-tab-tw-stock').click();
