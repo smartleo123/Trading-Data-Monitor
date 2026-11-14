@@ -42,5 +42,23 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/data/tw-market-snapshot.json
           git commit -m "data: refresh TWSE institutional, margin and closes"
-          git push
-          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+          # Other scheduled jobs may advance main while we fetch TWSE data.
+          # Rebuild from the latest remote tip on rejection, preserving newer data.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+              exit 0
+            fi
+            echo "main advanced during TWSE sync; retry $attempt with fresh upstream snapshot"
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/sync-tw-market.cjs
+            if [ -z "$(git status --porcelain -- assets/data/tw-market-snapshot.json)" ]; then
+              echo "Fresh main already contains latest TWSE data"
+              exit 0
+            fi
+            git add assets/data/tw-market-snapshot.json
+            git commit -m "data: refresh TWSE institutional, margin and closes"
+          done
+          echo "Failed to publish TWSE snapshot after three retries" >&2
+          exit 1
