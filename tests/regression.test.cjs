@@ -60,8 +60,37 @@ test('fractional BTC option quantity is accepted and invalidated quotes are visi
 test('manual leg edits survive refresh of live parameters',async t=>{const a=await boot(t);a.calc();a.input(leg(0,'K'),110000);a.input(leg(0,'prem'),1234);a.d.getElementById('sc-reload').click();assert.equal(a.d.querySelector(leg(0,'K')).value,'110000');assert.equal(a.d.querySelector(leg(0,'prem')).value,'1234');});
 test('adding and removing legs remains functional',async t=>{const a=await boot(t);a.calc();a.d.getElementById('sc-add').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,2);a.d.querySelector('.sc-rm').click();assert.equal(a.d.querySelectorAll('#sc-legs-body tr').length,1);});
 test('pending crypto requests are shared, and settled requests may retry',async t=>{const a=await boot(t);a.w.eval('cryptoQuotePending.clear()');let resolve;let count=0;a.w.fetch=()=>{count++;return new Promise(r=>resolve=r)};const first=a.w.fetchCryptoQuote('BTCUSDT');assert.equal(first,a.w.fetchCryptoQuote('BTCUSDT'));assert.equal(count,1);resolve({ok:true,json:async()=>({lastPrice:'100'})});await first;a.w.fetchCryptoQuote('BTCUSDT');assert.equal(count,2);});
-test('Taiwan quotes leave LIVE on failure, avoid overlapping requests and recover',async t=>{const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');const q={price:100,prevClose:99,marketTime:Date.now()/1000};a.w.eval('document.querySelectorAll("[data-tw-quote]").forEach(c=>twCardPending.delete(c))');a.w.updateTwCard(card,q,true);const rejects=[];a.w.fetchYahooQuote=()=>new Promise((_,reject)=>rejects.push(reject));a.w.fetchTwQuotes();const n=rejects.length;a.w.fetchTwQuotes();assert.equal(rejects.length,n);rejects.forEach(r=>r(new Error('offline')));await flush();assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');a.w.fetchYahooQuote=async()=>q;a.w.isTwMarketOpen=()=>true;a.w.fetchTwQuotes();await flush();assert.equal(card.querySelector('[data-tw-status]').textContent,'LIVE');});
-test('stalled proxy requests remove LIVE after watchdog timeout',async t=>{const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');a.w.updateTwCard(card,{price:100,prevClose:99,marketTime:Date.now()/1000},true);for(const timer of a.timers.values())if(timer.ms===10000)timer.fn();assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');});
+test('Taiwan quote scans do not overlap and previously live data marks offline on failure',async t=>{
+ const a=await boot(t);const card=a.d.querySelector('[data-tw-quote]');
+ a.w.eval('twQuoteScanPending=null; document.querySelectorAll("[data-tw-quote]").forEach(c=>twCardPending.delete(c))');
+ a.w.isTwMarketOpen=()=>true;
+ const quote={price:100,prevClose:99,marketTime:Date.now()/1000};
+ a.w.updateTwCard(card,quote,true);card.dataset.twHasLiveQuote='1';
+ a.w.loadTwClosingSnapshot=async()=>({prices:{},priceDate:'20261113'});
+ a.w.fetchYahooQuote=async()=>{throw Error('proxy offline')};
+ const first=a.w.fetchTwQuotes();
+ assert.equal(a.w.fetchTwQuotes(),first,'a second tick must share the scan');
+ await first;
+ assert.equal(card.querySelector('[data-tw-status]').textContent,'離線');
+ a.w.fetchYahooQuote=async()=>quote;
+ await a.w.fetchTwQuotes();
+ assert.equal(card.querySelector('[data-tw-status]').textContent,'LIVE');
+});
+test('TWSE official close fallback never masquerades as a live price',async t=>{
+ const a=await boot(t),card=a.d.querySelector('[data-tw-code="2330"]');
+ assert.equal(a.w.showTwClosingFallback(card,{prices:{'2330':1234.5},priceDate:'20261113'}),true);
+ assert.equal(card.querySelector('[data-tw-price]').textContent,'1,234.50');
+ assert.equal(card.querySelector('[data-tw-status]').textContent,'盤後參考');
+ assert.match(card.querySelector('[data-tw-status]').title,/非即時報價/);
+ assert.equal(a.w.showTwClosingFallback(a.d.querySelector('[data-tw-code="TAIEX"]'),{prices:{TAIEX:123}}),false);
+});
+test('generic 20-second loading timeout never turns TW closing prices into retry errors',async t=>{
+ const a=await boot(t),card=a.d.querySelector('[data-tw-code="2330"]');
+ a.w.showTwClosingFallback(card,{prices:{'2330':1234.5},priceDate:'20261113'});
+ for(const timer of a.timers.values())if(timer.ms===20000&&!timer.interval)timer.fn();
+ assert.equal(card.querySelector('[data-tw-status]').textContent,'盤後參考');
+ assert.ok(!card.textContent.includes('暫時無法取得'));
+});
 for(const provider of ['groq','free'])test(`${provider} AI timeout restores controls and original message`,async t=>{const a=await boot(t);if(provider==='groq')a.w.localStorage.setItem('groq_api_key','fixture-not-a-real-key');let signal;a.w.fetch=(_,options)=>{signal=options.signal;return new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(Object.assign(new Error('aborted'),{name:'AbortError'}))))};a.input('#ha-input','test question');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,true);assert.ok(signal);for(const timer of [...a.timers.values()])if(timer.ms===30000&&!timer.interval)timer.fn();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.equal(a.d.getElementById('ha-input').value,'test question');assert.match(a.d.querySelector('#ha-msgs .err').textContent,/逾時/);});
 test('AI success renders text and restores controls',async t=>{const a=await boot(t);a.w.localStorage.setItem('groq_api_key','fixture');a.w.fetch=async()=>({ok:true,status:200,json:async()=>({choices:[{message:{content:'test reply'}}]})});a.input('#ha-input','test');a.d.getElementById('ha-send').click();await flush();assert.equal(a.d.getElementById('ha-send').disabled,false);assert.match(a.d.getElementById('ha-msgs').textContent,/test reply/);});
 
