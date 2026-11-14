@@ -110,16 +110,29 @@
               if (j.error) throw new Error('API ' + path);
               return j.result !== undefined ? j.result : j;
             };
-            var direct = function () {
-              return fetch(url).then(function (res) {
-                if (res.status === 429) return sleep(1200).then(direct);
+            // Explicit timeout and bounded retries: an HTTP 429 must not block
+            // the entire options dashboard indefinitely.
+            var direct = async function (attempt) {
+              var controller = new AbortController();
+              var timer = setTimeout(function () { controller.abort(); }, 8500);
+              try {
+                var res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+                if (res.status === 429) {
+                  if (attempt >= 2) throw new Error('Deribit rate limited (429)');
+                  var seconds = Number(res.headers && res.headers.get('Retry-After'));
+                  var delay = Number.isFinite(seconds) && seconds > 0
+                    ? Math.min(seconds * 1000, 3000) : 1200 * (attempt + 1);
+                  await sleep(delay);
+                  return direct(attempt + 1);
+                }
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                return res.text().then(parse);
-              });
+                return parse(await res.text());
+              } finally {
+                clearTimeout(timer);
+              }
             };
-            // Fail closed: never treat data returned by untrusted CORS relays as
-            // verified Deribit quotes. WebSocket or direct official HTTP only.
-            return direct();
+            // Fail closed: only official Deribit WebSocket or REST responses.
+            return direct(0);
           }
           function api(path, params) {
             return apiWs(path, params).catch(function () { return apiHttp(path, params); });
