@@ -394,74 +394,111 @@
             ce.innerText=`${sign}${change.toFixed(2)} (${sign}${pct.toFixed(2)}%)`;ce.className=`text-sm font-bold font-mono ${twColorClass(change)}`;
             if(se){if(qst==='live'){se.innerText='LIVE';se.title='';se.className='text-[9px] font-bold bg-emerald-950/80 border border-emerald-800 text-emerald-400 px-1.5 py-0.5 rounded animate-pulse';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else if(qst==='delayed'){se.innerText='延遲';se.title=q.marketTime==null?'Yahoo 報價缺少交易時間戳，無法確認即時性':'Yahoo 報價延遲約 '+Math.max(0,Math.round((Date.now()/1000-q.marketTime)/60))+' 分鐘，價格可能持續更新';se.className='text-[9px] font-bold bg-amber-950/80 border border-amber-800 text-amber-400 px-1.5 py-0.5 rounded';if(prevShown>0&&Math.abs(last-prevShown)>0.001)flashTwPrice(pe,last>=prevShown);}else{se.innerText='收盤';se.title='';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}}
         }
-        // 公用代理 fetch 加 9 秒逾時，避免某代理 hang 住拖垮整條輪替
-        function pxFetch(u){const c=new AbortController();const t=setTimeout(()=>{try{c.abort();}catch(e){}},9000);return fetch(u,{cache:'no-store',signal:c.signal}).then(r=>{clearTimeout(t);return r;},e=>{clearTimeout(t);throw e;});}
-        // 市場狀態三態：live=盤中即時(時間戳5分內)、delayed=盤中但數據延遲、closed=收盤/假日(時間戳>6小時)
+        // Yahoo does not offer browser CORS; bound proxy retries and never manufacture LIVE prices.
+        function pxFetch(u){
+            const c=new AbortController(),timeout=setTimeout(()=>c.abort(),6500);
+            return fetch(u,{cache:'no-store',credentials:'omit',signal:c.signal})
+                .then(r=>{if(!r.ok)throw Error('quote HTTP '+r.status);return r.text();})
+                .finally(()=>clearTimeout(timeout));
+        }
         function quoteState(q,clockOpen){
             if(q&&q.marketTime!=null){
                 const age=Date.now()/1000-q.marketTime;
                 if(age>=0&&age<300)return clockOpen?'live':'closed';
                 if(clockOpen&&age<21600)return 'delayed';
-                return 'closed';
             }
             return clockOpen?'delayed':'closed';
         }
-        // 從 Yahoo Finance chart API 取報價，經多個公用代理輪替容錯，回傳 {price, prevClose, open}
         function fetchYahooQuote(symbol){
-            const yUrl=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d`;
+            const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?interval=1m&range=1d';
+            // Avoid five serial proxies (45s/card) and restrict simultaneous Yahoo traffic.
             const proxies=[
-                u=>({url:`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,wrap:'raw'}),
-                u=>({url:`https://corsproxy.io/?url=${encodeURIComponent(u)}`,wrap:'raw'}),
-                u=>({url:`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,wrap:'raw'}),
-                u=>({url:`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,wrap:'json'}),
-                u=>({url:`https://thingproxy.freeboard.io/fetch/${u}`,wrap:'raw'})
+                'https://proxy.cors.dev/'+url,
+                'https://api.codetabs.com/v1/proxy/?quest='+encodeURIComponent(url)
             ];
-            const parse=(txt)=>{
-                const d=JSON.parse(txt);const res=d.chart&&d.chart.result&&d.chart.result[0];if(!res)throw 0;
-                const m=res.meta;
-                const price=m.regularMarketPrice;
-                const prevClose=(m.chartPreviousClose!=null?m.chartPreviousClose:m.previousClose);
-                // 開盤價：chart API 的 meta 通常不含 regularMarketOpen，需從當日分時 open 陣列取第一筆有效值
-                let open=null;
-                const q=res.indicators&&res.indicators.quote&&res.indicators.quote[0];
-                if(q&&Array.isArray(q.open)){
-                    for(let k=0;k<q.open.length;k++){ if(typeof q.open[k]==='number'&&!isNaN(q.open[k])){ open=q.open[k]; break; } }
-                }
-                // 極少數情況分時陣列取不到，才退而用 meta 的 regularMarketOpen（若存在）
-                if(open==null&&typeof m.regularMarketOpen==='number')open=m.regularMarketOpen;
-                return {price,prevClose,open,marketTime:(typeof m.regularMarketTime==='number'?m.regularMarketTime:null)};
+            const parse=txt=>{
+                const d=JSON.parse(txt),res=d.chart&&d.chart.result&&d.chart.result[0];
+                if(!res||!res.meta)throw Error('missing Yahoo meta');
+                const m=res.meta,price=Number(m.regularMarketPrice);
+                const prevClose=Number(m.chartPreviousClose??m.previousClose);
+                if(!Number.isFinite(price)||price<=0||!Number.isFinite(prevClose)||prevClose<=0)throw Error('invalid Yahoo quote');
+                return {price,prevClose,marketTime:Number.isFinite(m.regularMarketTime)?m.regularMarketTime:null};
             };
-            const tryOne=(i)=>{
-                if(i>=proxies.length)return Promise.reject('all proxies failed');
-                const p=proxies[i](yUrl);
-                return pxFetch(p.url).then(r=>r.ok?r.text():Promise.reject()).then(txt=>{
-                    if(p.wrap==='json'){const w=JSON.parse(txt);return parse(w.contents);}
-                    return parse(txt);
-                }).catch(()=>tryOne(i+1));
-            };
-            return tryOne(0);
+            return pxFetch(proxies[0]).then(parse).catch(()=>pxFetch(proxies[1]).then(parse));
         }
-        function markTwQuoteOffline(card) {
-            const se=card.querySelector('[data-tw-status]');
-            if(se){se.innerText='離線';se.title='報價更新失敗，顯示的是最後成功取得的價格';se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';}
+        const twCardPending=new WeakSet();
+        let twClosingSnapshotPromise=null;
+        function loadTwClosingSnapshot(){
+            if(!twClosingSnapshotPromise){
+                twClosingSnapshotPromise=fetch('assets/data/tw-market-snapshot.json',{cache:'no-store'})
+                    .then(r=>{if(!r.ok)throw Error('snapshot unavailable');return r.json();})
+                    .then(data=>data&&typeof data.prices==='object'?data:Promise.reject(Error('snapshot prices unavailable')))
+                    .catch(e=>{twClosingSnapshotPromise=null;throw e;});
+            }
+            return twClosingSnapshotPromise;
         }
-        const twCardPending = new WeakSet();
-        function fetchTwQuotes(){
+        function showTwClosingFallback(card,data){
+            const symbol=card.getAttribute('data-tw-code');
+            if(symbol==='TAIEX')return false; // Daily stock-price snapshot does not contain the index.
+            const price=Number(data.prices[symbol]);
+            if(!Number.isFinite(price)||price<=0)return false;
+            const pe=card.querySelector('[data-tw-price]'),ce=card.querySelector('[data-tw-change]'),se=card.querySelector('[data-tw-status]');
+            if(!pe||!se)return false;
+            // A snapshot contains the official closing price but NOT a verified previous close.
+            pe.textContent=price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+            pe.className='text-4xl font-black text-white font-mono tracking-tight transition-colors';
+            if(ce){ce.textContent='證交所收盤價';ce.className='text-sm font-bold font-mono text-zinc-400';}
+            se.textContent='盤後參考';
+            se.title='證交所價格快照抓取日：'+(data.priceDate||'未知')+'；非即時報價，個別股票成交日未提供';
+            se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded';
+            return true;
+        }
+        function markTwQuoteOffline(card){
+            const se=card.querySelector('[data-tw-status]'),pe=card.querySelector('[data-tw-price]');
+            if(se&&se.textContent!=='盤後參考'){
+                se.innerText='離線';se.title='即時報價來源暫不可用；不表示目前價格';
+                se.className='text-[9px] font-bold bg-zinc-900 border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded';
+            }
+            // Do not retain a permanent spinner or the misleading "auto retry" message.
+            if(pe&&(!pe.textContent.trim()||pe.querySelector('.q-spin')||pe.textContent.includes('暫時無法取得')))pe.textContent='--';
+        }
+        async function fetchTwQuotes(){
+            if(document.hidden)return;
             const cards=Array.from(document.querySelectorAll('[data-tw-quote]'));
-            cards.forEach(card=>{
-                if(twCardPending.has(card))return;
-                twCardPending.add(card);
-                // A proxy fallback chain may take 45s; stop advertising LIVE after 10s.
-                const staleTimer=setTimeout(()=>markTwQuoteOffline(card),10000);
-                const sym=card.getAttribute('data-tw-quote');
-                fetchYahooQuote(sym).then(q=>{
-                    if(!Number.isFinite(q.price)||!Number.isFinite(q.prevClose))throw new Error('invalid quote');
-                    updateTwCard(card,q,isTwMarketOpen());
-                }).catch(()=>markTwQuoteOffline(card)).finally(()=>{clearTimeout(staleTimer);twCardPending.delete(card);});
+            // Display a same-origin, explicitly non-live fallback before network proxy requests.
+            loadTwClosingSnapshot().then(data=>cards.forEach(card=>{
+                if(!card.dataset.twHasLiveQuote && !card.dataset.twFallbackShown){
+                    if(showTwClosingFallback(card,data))card.dataset.twFallbackShown='1';
+                }
+            })).catch(()=>{});
+            // Concurrency of three prevents seven cards from hammering each public proxy.
+            const queue=cards.filter(card=>!twCardPending.has(card));
+            const workers=Array.from({length:Math.min(3,queue.length)},async()=>{
+                while(queue.length){
+                    const card=queue.shift();twCardPending.add(card);
+                    try{
+                        const quote=await fetchYahooQuote(card.getAttribute('data-tw-quote'));
+                        card.dataset.twHasLiveQuote='1';
+                        updateTwCard(card,quote,isTwMarketOpen());
+                    }catch(e){
+                        if(!card.dataset.twFallbackShown&&!card.dataset.twHasLiveQuote){
+                            try{if(showTwClosingFallback(card,await loadTwClosingSnapshot()))card.dataset.twFallbackShown='1';}
+                            catch(_){}
+                        }
+                        if(!card.dataset.twFallbackShown)markTwQuoteOffline(card);
+                    }finally{twCardPending.delete(card);}
+                }
             });
+            await Promise.all(workers);
         }
-        function startTwRealtimeQuotes(){fetchTwQuotes();if(twQuotesTimer)clearInterval(twQuotesTimer);const tick=()=>{fetchTwQuotes();clearInterval(twQuotesTimer);twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);};twQuotesTimer=setInterval(tick,isTwMarketOpen()?7000:60000);}
-        // 保留原啟動函式名，改為呼叫自繪報價
+        function startTwRealtimeQuotes(){
+            if(twQuotesTimer)clearInterval(twQuotesTimer);
+            fetchTwQuotes();
+            // A complete scan can take over 10s. Never start a second overlapping scan.
+            twQuotesTimer=setInterval(()=>{
+                if(!document.hidden && !Array.from(document.querySelectorAll('[data-tw-quote]')).some(card=>twCardPending.has(card)))fetchTwQuotes();
+            },isTwMarketOpen()?20000:120000);
+        }
         function renderTwSingleQuotes(){startTwRealtimeQuotes();}
         // ============================================================
         // 台股前 50 大個股 (清單內嵌打包於本檔；可一鍵抓取 0050 官網最新持股更新)
