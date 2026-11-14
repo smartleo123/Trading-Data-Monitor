@@ -113,6 +113,11 @@ async function sync() {
     try {
       const rows = await download(source);
       data = buildSnapshots(rows);
+      // A successful HTTP response can still be a week-old upstream snapshot.
+      // Require a fresh weekly date; keep existing published data if upstream lags.
+      const today = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Taipei', year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      const ageDays = Math.round((Date.parse(today + 'T00:00:00Z') - Date.parse(data.latest.slice(0,4)+'-'+data.latest.slice(4,6)+'-'+data.latest.slice(6,8)+'T00:00:00Z')) / 86400000);
+      if (ageDays > 7) throw Error('TDCC API stale: latest ' + data.latest + ' is ' + ageDays + ' days old (Taipei); refusing silent success');
       break;
     } catch (error) {
       lastError = error;
