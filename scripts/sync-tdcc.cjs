@@ -19,9 +19,12 @@ async function download(url) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 40000);
   try {
-    const response = await fetch(url, {
+    const requestUrl = new URL(url);
+    requestUrl.searchParams.set('_ts', String(Date.now()));
+    const response = await fetch(requestUrl, {
       signal: controller.signal,
-      headers: { 'Accept': 'application/json,text/csv,text/plain,*/*' }
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json,text/csv,text/plain,*/*', 'Cache-Control': 'no-cache' }
     });
     if (!response.ok) throw Error('HTTP ' + response.status);
     return normalizedRows(await response.text());
