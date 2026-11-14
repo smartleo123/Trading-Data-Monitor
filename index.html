@@ -565,11 +565,11 @@
         <!-- /market-view-crypto -->
         <!-- ============================ 台股面板 ============================ -->
         <div id="market-view-tw-stock" class="hidden space-y-6">
-            <!-- 台股即時報價小卡 (Yahoo Finance 經公用代理；綠漲紅跌自繪) -->
+            <!-- 台股報價小卡 (Yahoo Finance 優先；證交所收盤價明確標示為備援) -->
             <div id="sec-tw-quotes" data-nav="即時報價">
         <div class="flex items-center gap-3 mb-4">
             <div class="p-2 bg-gradient-to-br from-transparent to-zinc-900 border border-zinc-800 rounded-xl"><i data-lucide="zap" class="w-5 h-5 text-accentCyan"></i></div>
-            <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">加權指數與權值股 Yahoo Finance 即時行情（綠漲紅跌）</p></div>
+            <div><h2 class="text-md font-extrabold text-white">即時報價</h2><p class="text-xs text-zinc-500 mt-0.5">加權指數與權值股報價（Yahoo 行情；連線失敗顯示證交所盤後參考價）</p></div>
         </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 加權指數 -->
@@ -708,7 +708,7 @@
                 </div>
             </div>
             <div class="text-[11px] text-zinc-600 px-1 mt-4">
-                <span class="text-zinc-500">*</span> 即時報價來源：Yahoo Finance（經公用代理轉發）。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格；盤中若 Yahoo 數據延遲超過 5 分鐘，會改顯示 <span class="text-amber-400 font-bold">延遲</span> 標示（滑鼠停留可見延遲分鐘數），價格仍會持續更新。因經第三方代理轉發，偶有延遲或短暫離線屬正常現象。009826（貝萊德世界股票）可點卡片右下「淨值」查詢基金淨值。
+                <span class="text-zinc-500">*</span> 行情優先來源：Yahoo Finance（經公用代理轉發），可能不穩定；代理無法連線時，個股採用證交所盤後快照並標示「盤後參考」（不代表即時成交價），加權指數無此備援。盤中顯示 <span class="text-emerald-400 font-bold">LIVE</span> 並閃爍跳動（<span class="text-emerald-400 font-bold">綠漲</span> <span class="text-rose-500 font-bold">紅跌</span>）；非盤中顯示 <span class="text-zinc-400 font-bold">收盤</span> 靜態價格；盤中若 Yahoo 數據延遲超過 5 分鐘，會改顯示 <span class="text-amber-400 font-bold">延遲</span> 標示（滑鼠停留可見延遲分鐘數），價格仍會持續更新。代理逾時或限流時會降低請求頻率並重試，不會將盤後快照標為 LIVE。009826（貝萊德世界股票）可點卡片右下「淨值」查詢基金淨值。
             </div>
             </div>
             <!-- 台股前 50 大個股 -->
