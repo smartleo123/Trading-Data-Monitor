@@ -91,6 +91,7 @@ async function sync(){
  const margin=new Map((previous.margin||[]).map(r=>[r.date,r]));
  let leaders=previous.leaders||[],leaderDate=previous.leaderDate||null;
  let prices=previous.prices||{},priceDate=previous.priceDate||null;
+ // Always examine the newest trading dates even when historical caches already contain 20 rows.
  const dates=tradingDates(12);
  for(const date of dates){
   for(const [kind,map,api,parser] of [
