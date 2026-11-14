@@ -427,6 +427,7 @@
             return pxFetch(proxies[0]).then(parse).catch(()=>pxFetch(proxies[1]).then(parse));
         }
         const twCardPending=new WeakSet();
+        let twQuoteScanPending=null;
         let twClosingSnapshotPromise=null;
         function loadTwClosingSnapshot(){
             if(!twClosingSnapshotPromise){
@@ -462,8 +463,10 @@
             // Do not retain a permanent spinner or the misleading "auto retry" message.
             if(pe&&(!pe.textContent.trim()||pe.querySelector('.q-spin')||pe.textContent.includes('暫時無法取得')))pe.textContent='--';
         }
-        async function fetchTwQuotes(){
-            if(document.hidden)return;
+        function fetchTwQuotes(){
+            if(document.hidden)return Promise.resolve();
+            if(twQuoteScanPending)return twQuoteScanPending;
+            const scan=async()=>{
             const cards=Array.from(document.querySelectorAll('[data-tw-quote]'));
             // Display a same-origin, explicitly non-live fallback before network proxy requests.
             loadTwClosingSnapshot().then(data=>cards.forEach(card=>{
@@ -485,18 +488,21 @@
                             try{if(showTwClosingFallback(card,await loadTwClosingSnapshot()))card.dataset.twFallbackShown='1';}
                             catch(_){}
                         }
-                        if(!card.dataset.twFallbackShown)markTwQuoteOffline(card);
+                        if(card.dataset.twHasLiveQuote || !card.dataset.twFallbackShown)markTwQuoteOffline(card);
                     }finally{twCardPending.delete(card);}
                 }
             });
             await Promise.all(workers);
+            };
+            twQuoteScanPending=scan().finally(()=>{twQuoteScanPending=null;});
+            return twQuoteScanPending;
         }
         function startTwRealtimeQuotes(){
             if(twQuotesTimer)clearInterval(twQuotesTimer);
             fetchTwQuotes();
             // A complete scan can take over 10s. Never start a second overlapping scan.
             twQuotesTimer=setInterval(()=>{
-                if(!document.hidden && !Array.from(document.querySelectorAll('[data-tw-quote]')).some(card=>twCardPending.has(card)))fetchTwQuotes();
+                if(!document.hidden && !twQuoteScanPending)fetchTwQuotes();
             },isTwMarketOpen()?20000:120000);
         }
         function renderTwSingleQuotes(){startTwRealtimeQuotes();}
