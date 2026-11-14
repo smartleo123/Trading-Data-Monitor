@@ -62,6 +62,13 @@
              因此主通道改用 Deribit 官方 WebSocket JSON-RPC（不受 CORS 限制），
              失敗時依序退回：HTTP 直連 → 公用 CORS 代理。 */
           var ws = null, wsReady = null, rpcId = 0, pending = {};
+          function rejectPendingRpc(reason) {
+            var outstanding = pending;
+            pending = {};
+            Object.keys(outstanding).forEach(function (id) {
+              outstanding[id].reject(new Error(reason));
+            });
+          }
           function wsConnect() {
             if (wsReady) return wsReady;
             wsReady = new Promise(function (resolve, reject) {
@@ -72,7 +79,7 @@
               catch (e) { return done(false, e); }
               sock.onopen = function () { ws = sock; done(true, sock); };
               sock.onerror = function () { done(false, new Error('WebSocket error')); };
-              sock.onclose = function () { ws = null; wsReady = null; };
+              sock.onclose = function () { ws = null; wsReady = null; rejectPendingRpc('Deribit WebSocket closed'); done(false, new Error('Deribit WebSocket closed before opening')); };
               sock.onmessage = function (ev) {
                 try {
                   var m = JSON.parse(ev.data);
@@ -99,7 +106,7 @@
           /* 分頁切走／隱藏時主動關閉 WebSocket。
              開著的 WS 會讓瀏覽器無法把頁面放進 back-forward cache（bfcache），
              於是切回分頁時只能整頁重載。閒置時關掉→頁面可被凍結復原；下次重新整理會自動重連。 */
-          function wsClose() { try { if (ws) ws.close(); } catch (e) {} ws = null; wsReady = null; }
+          function wsClose() { rejectPendingRpc('Deribit connection paused'); try { if (ws) ws.close(); } catch (e) {} ws = null; wsReady = null; }
           window.addEventListener('pagehide', wsClose);
           document.addEventListener('visibilitychange', function () { if (document.hidden) wsClose(); });
           function apiHttp(path, params) {
