@@ -674,7 +674,7 @@
             const tryProxy=(i)=>{
                 if(i>=proxies.length)return Promise.reject('all proxies failed');
                 const purl=proxies[i](apiUrl);
-                return pxFetch(purl).then(r=>r.ok?r.text():Promise.reject()).then(txt=>{
+                return pxFetch(purl).then(txt=>{
                     let raw=txt; try{const w=JSON.parse(txt); if(w&&typeof w.contents==='string')raw=w.contents;}catch(e){}
                     const data=JSON.parse(raw);
                     // 嘗試從常見結構取出股票陣列
