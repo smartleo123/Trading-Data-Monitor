@@ -42,7 +42,7 @@ function groupLatest(rows) {
     const date = normalizeDate(row['資料日期'] ?? row.Date ?? row.date ?? row.scaDate);
     if (date && date > latest) latest = date;
   }
-  if (!latest) throw Error('TDCC returned no valid date');
+  if (!latest) throw Error('TDCC returned no valid date; rows=' + rows.length + '; first row keys=' + JSON.stringify(Object.keys(rows[0] || {})) + '; sample=' + JSON.stringify(rows[0] || {}).slice(0,500));
   const grouped = new Map();
   for (const row of rows) {
     const symbol = getSymbol(row);
