@@ -8,6 +8,8 @@ const SHARD_DIR = path.join(DATA_DIR, 'tdcc');
 const INDEX_FILE = path.join(SHARD_DIR, 'index.json');
 const LEGACY_0050 = path.join(DATA_DIR, '0050-distribution.json');
 const SOURCES = [
+  // Current official TDCC site links directly to this CSV endpoint.
+  'https://opendata.tdcc.com.tw/getOD.ashx?id=1-5',
   'https://openapi.tdcc.com.tw/v1/opendata/1-5',
   'https://smart.tdcc.com.tw/opendata/getOD.ashx?id=1-5'
 ];
