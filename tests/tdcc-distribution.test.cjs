@@ -69,3 +69,14 @@ test('parser accepts missing adjustment only when total shares are consistent',(
  assert.equal(snapshot.rows.length,17);
  assert.equal(snapshot.rows[15].shares,0);
 });
+
+test('TDCC JSON API accepts BOM-prefixed date field names',()=>{
+ const {normalizedRows}=require('../scripts/tdcc-distribution.cjs');
+ const rows=fixture().map(row=>Object.fromEntries(Object.entries(row).map(([k,v])=>[k==='資料日期'?'\uFEFF資料日期':k,v])));
+ const parsed=normalizedRows(rows);
+ assert.equal(parsed[0]['資料日期'],'20261106');
+ const {buildSnapshots}=require('../scripts/sync-tdcc.cjs');
+ const results=buildSnapshots(parsed,1);
+ assert.equal(results.latest,'20261106');
+ assert.equal(results.snapshots.get('0050').date,'2026-11-06');
+});
