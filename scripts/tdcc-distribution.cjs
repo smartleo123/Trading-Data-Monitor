@@ -16,7 +16,7 @@ function parseCsv(text){
   return rows.map(values=>Object.fromEntries(headings.map((h,i)=>[h.trim(),(values[i]||'').trim()])));
 }
 function normalizedRows(payload){
-  if(Array.isArray(payload))return payload;
+  if(Array.isArray(payload))return payload.map(row=>row&&typeof row==='object'&&!Array.isArray(row)?Object.fromEntries(Object.entries(row).map(([key,value])=>[key.replace(/^\uFEFF/,'').trim(),value])):row);
   if(typeof payload==='string'){
     const trimmed=payload.trim();
     if(trimmed.startsWith('<'))throw Error('TDCC returned HTML rather than data');
