@@ -1,17 +1,17 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-16T06:19:13.622Z",
-  "serverTime": "2026-11-16T06:19:13.858Z",
-  "clockSkewMs": 236,
-  "spot": 64344.85,
-  "listedInstruments": 1064,
+  "checkedAt": "2026-11-16T18:27:24.065Z",
+  "serverTime": "2026-11-16T18:27:24.275Z",
+  "clockSkewMs": 210,
+  "spot": 64753.9,
+  "listedInstruments": 982,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
   "verified": 56,
   "rejected": 0,
   "failures": [],
-  "historyObservations": 22,
+  "historyObservations": 23,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
