@@ -1,38 +1,46 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-19T12:56:52.788Z",
-  "serverTime": "2026-11-19T12:56:53.012Z",
-  "clockSkewMs": 224,
-  "spot": 63803.26,
-  "listedInstruments": 970,
+  "checkedAt": "2026-11-19T23:01:47.459Z",
+  "serverTime": "2026-11-19T23:01:47.691Z",
+  "clockSkewMs": 232,
+  "spot": 62128.88,
+  "listedInstruments": 978,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 51,
-  "rejected": 5,
+  "verified": 49,
+  "rejected": 7,
   "failures": [
     {
-      "name": "BTC-27NOV26-74000-P",
+      "name": "BTC-27NOV26-71000-C",
+      "reason": "買賣價差超過 20%：40.00%"
+    },
+    {
+      "name": "BTC-27NOV26-70000-C",
+      "reason": "買賣價差超過 20%：20.00%"
+    },
+    {
+      "name": "BTC-25DEC26-68000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-27NOV26-79000-P",
+      "name": "BTC-4DEC26-64000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-75000-C",
+      "name": "BTC-25DEC26-60000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-75000-P",
+      "name": "BTC-25DEC26-64000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-62000-P",
+      "name": "BTC-25DEC26-56000-C",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 30,
+  "historyObservations": 31,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
