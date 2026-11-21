@@ -1,26 +1,18 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-21T01:27:33.244Z",
-  "serverTime": "2026-11-21T01:27:33.463Z",
-  "clockSkewMs": 219,
-  "spot": 58945.6,
-  "listedInstruments": 1008,
+  "checkedAt": "2026-11-21T12:34:13.611Z",
+  "serverTime": "2026-11-21T12:34:13.779Z",
+  "clockSkewMs": 168,
+  "spot": 58451.13,
+  "listedInstruments": 1028,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 10,
-  "rejected": 46,
+  "verified": 9,
+  "rejected": 47,
   "failures": [
     {
-      "name": "BTC-11DEC26-59000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-62000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-66000-C",
+      "name": "BTC-11DEC26-58000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -28,11 +20,19 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-52000-C",
+      "name": "BTC-11DEC26-62000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-66000-P",
+      "name": "BTC-11DEC26-65000-C",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-11DEC26-65000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-52000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -40,19 +40,19 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-58000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
       "name": "BTC-25DEC26-55000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-62000-C",
+      "name": "BTC-25DEC26-58000-C",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-55000-P",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 34,
+  "historyObservations": 35,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
