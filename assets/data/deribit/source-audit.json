@@ -1,42 +1,42 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-21T21:37:32.648Z",
-  "serverTime": "2026-11-21T21:37:32.831Z",
-  "clockSkewMs": 183,
-  "spot": 60314.41,
+  "checkedAt": "2026-11-22T06:39:16.810Z",
+  "serverTime": "2026-11-22T06:39:17.200Z",
+  "clockSkewMs": 390,
+  "spot": 59083.37,
   "listedInstruments": 1036,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 8,
-  "rejected": 48,
+  "verified": 9,
+  "rejected": 47,
   "failures": [
     {
-      "name": "BTC-11DEC26-60000-P",
+      "name": "BTC-11DEC26-59000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-64000-P",
+      "name": "BTC-11DEC26-63000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-64000-C",
+      "name": "BTC-11DEC26-66000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-68000-C",
+      "name": "BTC-11DEC26-63000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-54000-C",
+      "name": "BTC-25DEC26-52000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-68000-P",
+      "name": "BTC-25DEC26-52000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-54000-P",
+      "name": "BTC-11DEC26-66000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -44,15 +44,15 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-56000-C",
+      "name": "BTC-25DEC26-60000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-60000-C",
+      "name": "BTC-25DEC26-62000-C",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 36,
+  "historyObservations": 37,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
