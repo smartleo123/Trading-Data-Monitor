@@ -1,10 +1,10 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-23T00:48:39.008Z",
-  "serverTime": "2026-11-23T00:48:39.163Z",
-  "clockSkewMs": 155,
-  "spot": 60976.95,
-  "listedInstruments": 1014,
+  "checkedAt": "2026-11-23T14:30:11.945Z",
+  "serverTime": "2026-11-23T14:30:12.108Z",
+  "clockSkewMs": 163,
+  "spot": 64166.99,
+  "listedInstruments": 970,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
@@ -12,23 +12,7 @@
   "rejected": 48,
   "failures": [
     {
-      "name": "BTC-11DEC26-61000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-65000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-65000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-68000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-25DEC26-54000-P",
+      "name": "BTC-11DEC26-64000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -36,11 +20,23 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-54000-C",
+      "name": "BTC-11DEC26-68000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-58000-C",
+      "name": "BTC-11DEC26-70000-C",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-11DEC26-70000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-56000-C",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-56000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -48,11 +44,15 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-58000-P",
+      "name": "BTC-25DEC26-60000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-64000-P",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 39,
+  "historyObservations": 40,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
