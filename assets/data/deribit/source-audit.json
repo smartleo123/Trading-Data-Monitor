@@ -1,38 +1,42 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-23T14:30:11.945Z",
-  "serverTime": "2026-11-23T14:30:12.108Z",
-  "clockSkewMs": 163,
-  "spot": 64166.99,
-  "listedInstruments": 970,
+  "checkedAt": "2026-11-24T02:53:31.570Z",
+  "serverTime": "2026-11-24T02:53:31.791Z",
+  "clockSkewMs": 221,
+  "spot": 60054.12,
+  "listedInstruments": 972,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 8,
-  "rejected": 48,
+  "verified": 9,
+  "rejected": 47,
   "failures": [
+    {
+      "name": "BTC-11DEC26-56000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-11DEC26-64000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-11DEC26-67000-C",
+      "reason": "get_order_book HTTP 429"
+    },
     {
       "name": "BTC-11DEC26-64000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-68000-P",
+      "name": "BTC-11DEC26-67000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-68000-C",
+      "name": "BTC-25DEC26-52000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-70000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-70000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-25DEC26-56000-C",
+      "name": "BTC-25DEC26-52000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -44,15 +48,11 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-60000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-25DEC26-64000-P",
+      "name": "BTC-25DEC26-64000-C",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 40,
+  "historyObservations": 41,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
