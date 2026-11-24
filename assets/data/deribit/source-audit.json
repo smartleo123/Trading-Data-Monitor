@@ -1,26 +1,22 @@
 {
   "source": "Deribit production public API",
-  "checkedAt": "2026-11-24T02:53:31.570Z",
-  "serverTime": "2026-11-24T02:53:31.791Z",
-  "clockSkewMs": 221,
-  "spot": 60054.12,
-  "listedInstruments": 972,
+  "checkedAt": "2026-11-24T14:48:19.055Z",
+  "serverTime": "2026-11-24T14:48:19.847Z",
+  "clockSkewMs": 792,
+  "spot": 60320.46,
+  "listedInstruments": 958,
   "selected": 56,
   "fresh": 20,
   "followed": 36,
-  "verified": 9,
-  "rejected": 47,
+  "verified": 8,
+  "rejected": 48,
   "failures": [
     {
-      "name": "BTC-11DEC26-56000-P",
+      "name": "BTC-11DEC26-57000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-64000-P",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-11DEC26-67000-C",
+      "name": "BTC-11DEC26-68000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -28,15 +24,23 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-11DEC26-67000-P",
+      "name": "BTC-11DEC26-64000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-52000-C",
+      "name": "BTC-11DEC26-68000-P",
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-52000-P",
+      "name": "BTC-25DEC26-54000-C",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-54000-P",
+      "reason": "get_order_book HTTP 429"
+    },
+    {
+      "name": "BTC-25DEC26-56000-C",
       "reason": "get_order_book HTTP 429"
     },
     {
@@ -44,15 +48,11 @@
       "reason": "get_order_book HTTP 429"
     },
     {
-      "name": "BTC-25DEC26-60000-C",
-      "reason": "get_order_book HTTP 429"
-    },
-    {
-      "name": "BTC-25DEC26-64000-C",
+      "name": "BTC-25DEC26-64000-P",
       "reason": "get_order_book HTTP 429"
     }
   ],
-  "historyObservations": 41,
+  "historyObservations": 42,
   "archiveMonths": 1,
   "limitations": "Best bid/ask are not guaranteed fills; 4-hour snapshot frequency. Past order books cannot be reconstructed by requesting current ticker."
 }
