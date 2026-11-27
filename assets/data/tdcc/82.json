@@ -1,106 +1,106 @@
 {
   "8201": {
     "symbol": "8201",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 8383,
-        "shares": 609326,
+        "holders": 8374,
+        "shares": 607728,
         "proportion": 0.97,
-        "cumulativeHolders": 8383,
-        "cumulativePct": 70.1037
+        "cumulativeHolders": 8374,
+        "cumulativePct": 70.234
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 2657,
-        "shares": 5577274,
-        "proportion": 8.94,
-        "cumulativeHolders": 11040,
-        "cumulativePct": 92.3231
+        "holders": 2627,
+        "shares": 5495244,
+        "proportion": 8.81,
+        "cumulativeHolders": 11001,
+        "cumulativePct": 92.267
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 465,
-        "shares": 3828736,
-        "proportion": 6.13,
-        "cumulativeHolders": 11505,
-        "cumulativePct": 96.2117
+        "holders": 467,
+        "shares": 3842497,
+        "proportion": 6.16,
+        "cumulativeHolders": 11468,
+        "cumulativePct": 96.1838
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 135,
-        "shares": 1734843,
-        "proportion": 2.78,
-        "cumulativeHolders": 11640,
-        "cumulativePct": 97.3407
+        "holders": 138,
+        "shares": 1761841,
+        "proportion": 2.82,
+        "cumulativeHolders": 11606,
+        "cumulativePct": 97.3413
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 96,
-        "shares": 1807086,
-        "proportion": 2.89,
-        "cumulativeHolders": 11736,
-        "cumulativePct": 98.1435
+        "holders": 94,
+        "shares": 1767568,
+        "proportion": 2.83,
+        "cumulativeHolders": 11700,
+        "cumulativePct": 98.1297
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 76,
-        "shares": 1944358,
-        "proportion": 3.11,
-        "cumulativeHolders": 11812,
-        "cumulativePct": 98.7791
+        "holders": 78,
+        "shares": 1997358,
+        "proportion": 3.2,
+        "cumulativeHolders": 11778,
+        "cumulativePct": 98.7839
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 32,
-        "shares": 1165158,
-        "proportion": 1.86,
-        "cumulativeHolders": 11844,
-        "cumulativePct": 99.0467
+        "holders": 33,
+        "shares": 1201167,
+        "proportion": 1.92,
+        "cumulativeHolders": 11811,
+        "cumulativePct": 99.0606
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 23,
-        "shares": 1043009,
-        "proportion": 1.67,
-        "cumulativeHolders": 11867,
-        "cumulativePct": 99.239
+        "shares": 1054830,
+        "proportion": 1.69,
+        "cumulativeHolders": 11834,
+        "cumulativePct": 99.2535
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 47,
-        "shares": 3226938,
-        "proportion": 5.17,
-        "cumulativeHolders": 11914,
-        "cumulativePct": 99.632
+        "holders": 44,
+        "shares": 3017603,
+        "proportion": 4.83,
+        "cumulativeHolders": 11878,
+        "cumulativePct": 99.6226
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 25,
-        "shares": 3588055,
-        "proportion": 5.75,
-        "cumulativeHolders": 11939,
-        "cumulativePct": 99.8411
+        "holders": 26,
+        "shares": 3727995,
+        "proportion": 5.97,
+        "cumulativeHolders": 11904,
+        "cumulativePct": 99.8406
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
         "holders": 3,
-        "shares": 763035,
-        "proportion": 1.22,
-        "cumulativeHolders": 11942,
-        "cumulativePct": 99.8662
+        "shares": 768035,
+        "proportion": 1.23,
+        "cumulativeHolders": 11907,
+        "cumulativePct": 99.8658
       },
       {
         "grade": 12,
@@ -108,17 +108,17 @@
         "holders": 5,
         "shares": 2456536,
         "proportion": 3.93,
-        "cumulativeHolders": 11947,
-        "cumulativePct": 99.908
+        "cumulativeHolders": 11912,
+        "cumulativePct": 99.9077
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
         "holders": 3,
-        "shares": 2122645,
-        "proportion": 3.4,
-        "cumulativeHolders": 11950,
-        "cumulativePct": 99.9331
+        "shares": 2164597,
+        "proportion": 3.47,
+        "cumulativeHolders": 11915,
+        "cumulativePct": 99.9329
       },
       {
         "grade": 14,
@@ -126,16 +126,16 @@
         "holders": 3,
         "shares": 2572762,
         "proportion": 4.12,
-        "cumulativeHolders": 11953,
-        "cumulativePct": 99.9582
+        "cumulativeHolders": 11918,
+        "cumulativePct": 99.9581
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 5,
-        "shares": 29926514,
-        "proportion": 47.98,
-        "cumulativeHolders": 11958,
+        "shares": 29930514,
+        "proportion": 47.99,
+        "cumulativeHolders": 11923,
         "cumulativePct": 100
       },
       {
@@ -150,10 +150,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 11958,
+        "holders": 11923,
         "shares": 62366275,
         "proportion": 100,
-        "cumulativeHolders": 11958,
+        "cumulativeHolders": 11923,
         "cumulativePct": 100
       }
     ],
@@ -162,7 +162,7 @@
   },
   "8204": {
     "symbol": "8204",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -323,141 +323,141 @@
   },
   "8210": {
     "symbol": "8210",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 41707,
-        "shares": 5890419,
-        "proportion": 4.68,
-        "cumulativeHolders": 41707,
-        "cumulativePct": 73.7655
+        "holders": 41287,
+        "shares": 5848713,
+        "proportion": 4.65,
+        "cumulativeHolders": 41287,
+        "cumulativePct": 73.5941
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 13551,
-        "shares": 23203407,
-        "proportion": 18.47,
-        "cumulativeHolders": 55258,
-        "cumulativePct": 97.7326
+        "holders": 13530,
+        "shares": 23087197,
+        "proportion": 18.37,
+        "cumulativeHolders": 54817,
+        "cumulativePct": 97.7113
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
         "holders": 784,
-        "shares": 5737083,
+        "shares": 5728271,
         "proportion": 4.56,
-        "cumulativeHolders": 56042,
-        "cumulativePct": 99.1192
+        "cumulativeHolders": 55601,
+        "cumulativePct": 99.1088
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
         "holders": 190,
-        "shares": 2404316,
-        "proportion": 1.91,
-        "cumulativeHolders": 56232,
-        "cumulativePct": 99.4553
+        "shares": 2394276,
+        "proportion": 1.9,
+        "cumulativeHolders": 55791,
+        "cumulativePct": 99.4474
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 83,
-        "shares": 1494725,
-        "proportion": 1.18,
-        "cumulativeHolders": 56315,
-        "cumulativePct": 99.6021
+        "holders": 84,
+        "shares": 1511741,
+        "proportion": 1.2,
+        "cumulativeHolders": 55875,
+        "cumulativePct": 99.5972
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 77,
-        "shares": 1899436,
-        "proportion": 1.51,
-        "cumulativeHolders": 56392,
-        "cumulativePct": 99.7382
+        "holders": 76,
+        "shares": 1888279,
+        "proportion": 1.5,
+        "cumulativeHolders": 55951,
+        "cumulativePct": 99.7326
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 25,
-        "shares": 878629,
-        "proportion": 0.69,
-        "cumulativeHolders": 56417,
-        "cumulativePct": 99.7825
+        "holders": 24,
+        "shares": 835962,
+        "proportion": 0.66,
+        "cumulativeHolders": 55975,
+        "cumulativePct": 99.7754
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 19,
-        "shares": 853926,
-        "proportion": 0.67,
-        "cumulativeHolders": 56436,
-        "cumulativePct": 99.8161
+        "holders": 16,
+        "shares": 716618,
+        "proportion": 0.57,
+        "cumulativeHolders": 55991,
+        "cumulativePct": 99.8039
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 37,
-        "shares": 2534198,
-        "proportion": 2.01,
-        "cumulativeHolders": 56473,
-        "cumulativePct": 99.8815
+        "holders": 43,
+        "shares": 2956751,
+        "proportion": 2.35,
+        "cumulativeHolders": 56034,
+        "cumulativePct": 99.8806
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 25,
-        "shares": 3673136,
-        "proportion": 2.92,
-        "cumulativeHolders": 56498,
-        "cumulativePct": 99.9257
+        "holders": 21,
+        "shares": 2866172,
+        "proportion": 2.28,
+        "cumulativeHolders": 56055,
+        "cumulativePct": 99.918
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 20,
-        "shares": 5812070,
-        "proportion": 4.62,
-        "cumulativeHolders": 56518,
-        "cumulativePct": 99.9611
+        "holders": 24,
+        "shares": 6927026,
+        "proportion": 5.51,
+        "cumulativeHolders": 56079,
+        "cumulativePct": 99.9608
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 7,
-        "shares": 3453789,
-        "proportion": 2.74,
-        "cumulativeHolders": 56525,
-        "cumulativePct": 99.9735
+        "shares": 3421904,
+        "proportion": 2.72,
+        "cumulativeHolders": 56086,
+        "cumulativePct": 99.9733
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 3,
-        "shares": 1931304,
-        "proportion": 1.53,
-        "cumulativeHolders": 56528,
-        "cumulativePct": 99.9788
+        "holders": 4,
+        "shares": 2496557,
+        "proportion": 1.98,
+        "cumulativeHolders": 56090,
+        "cumulativePct": 99.9804
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
-        "holders": 1,
-        "shares": 855029,
-        "proportion": 0.68,
-        "cumulativeHolders": 56529,
-        "cumulativePct": 99.9805
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 56090,
+        "cumulativePct": 99.9804
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 11,
-        "shares": 64997679,
-        "proportion": 51.74,
-        "cumulativeHolders": 56540,
+        "shares": 64939679,
+        "proportion": 51.69,
+        "cumulativeHolders": 56101,
         "cumulativePct": 100
       },
       {
@@ -472,10 +472,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 56540,
+        "holders": 56101,
         "shares": 125619146,
         "proportion": 100,
-        "cumulativeHolders": 56540,
+        "cumulativeHolders": 56101,
         "cumulativePct": 100
       }
     ],
@@ -484,141 +484,141 @@
   },
   "8213": {
     "symbol": "8213",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 52185,
-        "shares": 1182800,
+        "holders": 52354,
+        "shares": 1192023,
         "proportion": 0.43,
-        "cumulativeHolders": 52185,
-        "cumulativePct": 72.2924
+        "cumulativeHolders": 52354,
+        "cumulativePct": 72.1706
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 15509,
-        "shares": 32475237,
-        "proportion": 11.97,
-        "cumulativeHolders": 67694,
-        "cumulativePct": 93.7772
+        "holders": 15657,
+        "shares": 32836468,
+        "proportion": 12.1,
+        "cumulativeHolders": 68011,
+        "cumulativePct": 93.754
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 2291,
-        "shares": 18367997,
-        "proportion": 6.77,
-        "cumulativeHolders": 69985,
-        "cumulativePct": 96.9509
+        "holders": 2318,
+        "shares": 18549809,
+        "proportion": 6.83,
+        "cumulativeHolders": 70329,
+        "cumulativePct": 96.9494
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 620,
-        "shares": 7952356,
-        "proportion": 2.93,
-        "cumulativeHolders": 70605,
-        "cumulativePct": 97.8098
+        "holders": 632,
+        "shares": 8116277,
+        "proportion": 2.99,
+        "cumulativeHolders": 70961,
+        "cumulativePct": 97.8206
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 487,
-        "shares": 9119405,
-        "proportion": 3.36,
-        "cumulativeHolders": 71092,
-        "cumulativePct": 98.4845
+        "holders": 486,
+        "shares": 9107951,
+        "proportion": 3.35,
+        "cumulativeHolders": 71447,
+        "cumulativePct": 98.4905
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 381,
-        "shares": 9856992,
+        "holders": 380,
+        "shares": 9849000,
         "proportion": 3.63,
-        "cumulativeHolders": 71473,
-        "cumulativePct": 99.0123
+        "cumulativeHolders": 71827,
+        "cumulativePct": 99.0144
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 179,
-        "shares": 6370466,
-        "proportion": 2.34,
-        "cumulativeHolders": 71652,
-        "cumulativePct": 99.2602
+        "holders": 181,
+        "shares": 6466517,
+        "proportion": 2.38,
+        "cumulativeHolders": 72008,
+        "cumulativePct": 99.2639
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 115,
-        "shares": 5345253,
-        "proportion": 1.97,
-        "cumulativeHolders": 71767,
-        "cumulativePct": 99.4196
+        "holders": 117,
+        "shares": 5425863,
+        "proportion": 2,
+        "cumulativeHolders": 72125,
+        "cumulativePct": 99.4252
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 200,
-        "shares": 14610461,
-        "proportion": 5.38,
-        "cumulativeHolders": 71967,
-        "cumulativePct": 99.6966
+        "holders": 190,
+        "shares": 13799312,
+        "proportion": 5.08,
+        "cumulativeHolders": 72315,
+        "cumulativePct": 99.6871
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 86,
-        "shares": 12052835,
-        "proportion": 4.44,
-        "cumulativeHolders": 72053,
-        "cumulativePct": 99.8158
+        "holders": 96,
+        "shares": 13131055,
+        "proportion": 4.84,
+        "cumulativeHolders": 72411,
+        "cumulativePct": 99.8194
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 55,
-        "shares": 14575902,
-        "proportion": 5.37,
-        "cumulativeHolders": 72108,
-        "cumulativePct": 99.8919
+        "holders": 52,
+        "shares": 13687002,
+        "proportion": 5.04,
+        "cumulativeHolders": 72463,
+        "cumulativePct": 99.8911
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 21,
-        "shares": 10178425,
-        "proportion": 3.75,
-        "cumulativeHolders": 72129,
-        "cumulativePct": 99.921
+        "holders": 24,
+        "shares": 11698822,
+        "proportion": 4.31,
+        "cumulativeHolders": 72487,
+        "cumulativePct": 99.9242
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 12,
-        "shares": 8401435,
-        "proportion": 3.09,
-        "cumulativeHolders": 72141,
-        "cumulativePct": 99.9377
+        "holders": 11,
+        "shares": 7550882,
+        "proportion": 2.78,
+        "cumulativeHolders": 72498,
+        "cumulativePct": 99.9393
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
         "holders": 7,
-        "shares": 6374867,
-        "proportion": 2.35,
-        "cumulativeHolders": 72148,
-        "cumulativePct": 99.9474
+        "shares": 6330102,
+        "proportion": 2.33,
+        "cumulativeHolders": 72505,
+        "cumulativePct": 99.949
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
-        "holders": 38,
-        "shares": 114378057,
-        "proportion": 42.16,
-        "cumulativeHolders": 72186,
+        "holders": 37,
+        "shares": 113501405,
+        "proportion": 41.84,
+        "cumulativeHolders": 72542,
         "cumulativePct": 100
       },
       {
@@ -633,10 +633,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 72186,
+        "holders": 72542,
         "shares": 271242488,
         "proportion": 100,
-        "cumulativeHolders": 72186,
+        "cumulativeHolders": 72542,
         "cumulativePct": 100
       }
     ],
@@ -645,141 +645,141 @@
   },
   "8215": {
     "symbol": "8215",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 42285,
-        "shares": 700637,
-        "proportion": 0.21,
-        "cumulativeHolders": 42285,
-        "cumulativePct": 62.9204
+        "holders": 42344,
+        "shares": 705980,
+        "proportion": 0.22,
+        "cumulativeHolders": 42344,
+        "cumulativePct": 62.9332
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 19686,
-        "shares": 40786765,
-        "proportion": 12.71,
-        "cumulativeHolders": 61971,
-        "cumulativePct": 92.2133
+        "holders": 19666,
+        "shares": 40825284,
+        "proportion": 12.73,
+        "cumulativeHolders": 62010,
+        "cumulativePct": 92.1616
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 2771,
-        "shares": 22792865,
-        "proportion": 7.1,
-        "cumulativeHolders": 64742,
-        "cumulativePct": 96.3365
+        "holders": 2800,
+        "shares": 23038321,
+        "proportion": 7.18,
+        "cumulativeHolders": 64810,
+        "cumulativePct": 96.323
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 750,
-        "shares": 9802112,
-        "proportion": 3.05,
-        "cumulativeHolders": 65492,
-        "cumulativePct": 97.4525
+        "holders": 749,
+        "shares": 9771943,
+        "proportion": 3.04,
+        "cumulativeHolders": 65559,
+        "cumulativePct": 97.4362
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 553,
-        "shares": 10292850,
-        "proportion": 3.2,
-        "cumulativeHolders": 66045,
-        "cumulativePct": 98.2754
+        "holders": 556,
+        "shares": 10354013,
+        "proportion": 3.22,
+        "cumulativeHolders": 66115,
+        "cumulativePct": 98.2626
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 433,
-        "shares": 11156147,
-        "proportion": 3.47,
-        "cumulativeHolders": 66478,
-        "cumulativePct": 98.9197
+        "holders": 438,
+        "shares": 11276671,
+        "proportion": 3.51,
+        "cumulativeHolders": 66553,
+        "cumulativePct": 98.9136
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 207,
-        "shares": 7451111,
-        "proportion": 2.32,
-        "cumulativeHolders": 66685,
-        "cumulativePct": 99.2277
+        "holders": 208,
+        "shares": 7498111,
+        "proportion": 2.33,
+        "cumulativeHolders": 66761,
+        "cumulativePct": 99.2227
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 152,
-        "shares": 7114961,
-        "proportion": 2.21,
-        "cumulativeHolders": 66837,
-        "cumulativePct": 99.4539
+        "holders": 154,
+        "shares": 7210783,
+        "proportion": 2.24,
+        "cumulativeHolders": 66915,
+        "cumulativePct": 99.4516
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 210,
-        "shares": 14925853,
+        "shares": 14934614,
         "proportion": 4.65,
-        "cumulativeHolders": 67047,
-        "cumulativePct": 99.7664
+        "cumulativeHolders": 67125,
+        "cumulativePct": 99.7637
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 91,
-        "shares": 12547753,
-        "proportion": 3.91,
-        "cumulativeHolders": 67138,
-        "cumulativePct": 99.9018
+        "holders": 92,
+        "shares": 12751498,
+        "proportion": 3.97,
+        "cumulativeHolders": 67217,
+        "cumulativePct": 99.9004
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 34,
-        "shares": 9995162,
-        "proportion": 3.11,
-        "cumulativeHolders": 67172,
-        "cumulativePct": 99.9524
+        "holders": 39,
+        "shares": 11282675,
+        "proportion": 3.51,
+        "cumulativeHolders": 67256,
+        "cumulativePct": 99.9584
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 13,
-        "shares": 6150264,
-        "proportion": 1.91,
-        "cumulativeHolders": 67185,
-        "cumulativePct": 99.9717
+        "holders": 11,
+        "shares": 5398481,
+        "proportion": 1.68,
+        "cumulativeHolders": 67267,
+        "cumulativePct": 99.9747
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 6,
-        "shares": 4110002,
-        "proportion": 1.28,
-        "cumulativeHolders": 67191,
+        "holders": 4,
+        "shares": 2886001,
+        "proportion": 0.89,
+        "cumulativeHolders": 67271,
         "cumulativePct": 99.9807
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
-        "holders": 1,
-        "shares": 917485,
-        "proportion": 0.28,
-        "cumulativeHolders": 67192,
-        "cumulativePct": 99.9821
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 67271,
+        "cumulativePct": 99.9807
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
-        "holders": 12,
-        "shares": 161930547,
-        "proportion": 50.49,
-        "cumulativeHolders": 67204,
+        "holders": 13,
+        "shares": 162740139,
+        "proportion": 50.74,
+        "cumulativeHolders": 67284,
         "cumulativePct": 100
       },
       {
@@ -794,10 +794,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 67204,
+        "holders": 67284,
         "shares": 320674514,
         "proportion": 100,
-        "cumulativeHolders": 67204,
+        "cumulativeHolders": 67284,
         "cumulativePct": 100
       }
     ],
@@ -806,7 +806,7 @@
   },
   "8218": {
     "symbol": "8218",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -967,7 +967,7 @@
   },
   "8219": {
     "symbol": "8219",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -1128,7 +1128,7 @@
   },
   "8221": {
     "symbol": "8221",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -1289,114 +1289,114 @@
   },
   "8222": {
     "symbol": "8222",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 30122,
-        "shares": 428256,
-        "proportion": 0.62,
-        "cumulativeHolders": 30122,
-        "cumulativePct": 76.6814
+        "holders": 30137,
+        "shares": 422615,
+        "proportion": 0.61,
+        "cumulativeHolders": 30137,
+        "cumulativePct": 76.7998
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 7711,
-        "shares": 14987864,
-        "proportion": 21.85,
-        "cumulativeHolders": 37833,
-        "cumulativePct": 96.3113
+        "holders": 7653,
+        "shares": 14865726,
+        "proportion": 21.67,
+        "cumulativeHolders": 37790,
+        "cumulativePct": 96.3023
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 830,
-        "shares": 6695169,
+        "holders": 829,
+        "shares": 6697821,
         "proportion": 9.76,
-        "cumulativeHolders": 38663,
-        "cumulativePct": 98.4242
+        "cumulativeHolders": 38619,
+        "cumulativePct": 98.4149
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 197,
-        "shares": 2508732,
-        "proportion": 3.65,
-        "cumulativeHolders": 38860,
-        "cumulativePct": 98.9257
+        "holders": 200,
+        "shares": 2538732,
+        "proportion": 3.7,
+        "cumulativeHolders": 38819,
+        "cumulativePct": 98.9246
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 150,
-        "shares": 2818020,
-        "proportion": 4.1,
-        "cumulativeHolders": 39010,
-        "cumulativePct": 99.3076
+        "holders": 151,
+        "shares": 2844020,
+        "proportion": 4.14,
+        "cumulativeHolders": 38970,
+        "cumulativePct": 99.3094
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 101,
-        "shares": 2575938,
-        "proportion": 3.75,
-        "cumulativeHolders": 39111,
-        "cumulativePct": 99.5647
+        "holders": 102,
+        "shares": 2612785,
+        "proportion": 3.81,
+        "cumulativeHolders": 39072,
+        "cumulativePct": 99.5693
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
         "holders": 49,
-        "shares": 1773017,
+        "shares": 1775132,
         "proportion": 2.58,
-        "cumulativeHolders": 39160,
-        "cumulativePct": 99.6894
+        "cumulativeHolders": 39121,
+        "cumulativePct": 99.6942
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 25,
-        "shares": 1191036,
-        "proportion": 1.73,
-        "cumulativeHolders": 39185,
-        "cumulativePct": 99.7531
+        "holders": 23,
+        "shares": 1101000,
+        "proportion": 1.6,
+        "cumulativeHolders": 39144,
+        "cumulativePct": 99.7528
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 42,
-        "shares": 3080658,
-        "proportion": 4.49,
-        "cumulativeHolders": 39227,
-        "cumulativePct": 99.86
+        "shares": 3025549,
+        "proportion": 4.41,
+        "cumulativeHolders": 39186,
+        "cumulativePct": 99.8598
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 27,
-        "shares": 3887146,
-        "proportion": 5.66,
-        "cumulativeHolders": 39254,
-        "cumulativePct": 99.9287
+        "holders": 28,
+        "shares": 3946693,
+        "proportion": 5.75,
+        "cumulativeHolders": 39214,
+        "cumulativePct": 99.9312
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 16,
-        "shares": 4400399,
-        "proportion": 6.41,
-        "cumulativeHolders": 39270,
-        "cumulativePct": 99.9695
+        "holders": 14,
+        "shares": 3968000,
+        "proportion": 5.78,
+        "cumulativeHolders": 39228,
+        "cumulativePct": 99.9669
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 4,
-        "shares": 1897111,
-        "proportion": 2.76,
-        "cumulativeHolders": 39274,
+        "holders": 5,
+        "shares": 2445273,
+        "proportion": 3.56,
+        "cumulativeHolders": 39233,
         "cumulativePct": 99.9796
       },
       {
@@ -1405,7 +1405,7 @@
         "holders": 1,
         "shares": 669000,
         "proportion": 0.97,
-        "cumulativeHolders": 39275,
+        "cumulativeHolders": 39234,
         "cumulativePct": 99.9822
       },
       {
@@ -1414,7 +1414,7 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 39275,
+        "cumulativeHolders": 39234,
         "cumulativePct": 99.9822
       },
       {
@@ -1423,7 +1423,7 @@
         "holders": 7,
         "shares": 21661154,
         "proportion": 31.58,
-        "cumulativeHolders": 39282,
+        "cumulativeHolders": 39241,
         "cumulativePct": 100
       },
       {
@@ -1438,10 +1438,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 39282,
+        "holders": 39241,
         "shares": 68573500,
         "proportion": 100,
-        "cumulativeHolders": 39282,
+        "cumulativeHolders": 39241,
         "cumulativePct": 100
       }
     ],
@@ -1450,7 +1450,7 @@
   },
   "8225": {
     "symbol": "8225",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -1611,124 +1611,124 @@
   },
   "8227": {
     "symbol": "8227",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 24110,
-        "shares": 911388,
-        "proportion": 2.3,
-        "cumulativeHolders": 24110,
-        "cumulativePct": 76.6955
+        "holders": 24149,
+        "shares": 919355,
+        "proportion": 2.32,
+        "cumulativeHolders": 24149,
+        "cumulativePct": 76.5153
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 6545,
-        "shares": 11025073,
-        "proportion": 27.88,
-        "cumulativeHolders": 30655,
-        "cumulativePct": 97.5156
+        "holders": 6625,
+        "shares": 11206439,
+        "proportion": 28.33,
+        "cumulativeHolders": 30774,
+        "cumulativePct": 97.5064
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 427,
-        "shares": 3234005,
-        "proportion": 8.17,
-        "cumulativeHolders": 31082,
-        "cumulativePct": 98.8739
+        "holders": 429,
+        "shares": 3234966,
+        "proportion": 8.18,
+        "cumulativeHolders": 31203,
+        "cumulativePct": 98.8657
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 130,
-        "shares": 1605269,
-        "proportion": 4.05,
-        "cumulativeHolders": 31212,
-        "cumulativePct": 99.2874
+        "holders": 129,
+        "shares": 1589407,
+        "proportion": 4.01,
+        "cumulativeHolders": 31332,
+        "cumulativePct": 99.2744
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 73,
-        "shares": 1322829,
-        "proportion": 3.34,
-        "cumulativeHolders": 31285,
-        "cumulativePct": 99.5197
+        "holders": 75,
+        "shares": 1365987,
+        "proportion": 3.45,
+        "cumulativeHolders": 31407,
+        "cumulativePct": 99.5121
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
         "holders": 52,
-        "shares": 1305052,
-        "proportion": 3.3,
-        "cumulativeHolders": 31337,
-        "cumulativePct": 99.6851
+        "shares": 1286782,
+        "proportion": 3.25,
+        "cumulativeHolders": 31459,
+        "cumulativePct": 99.6768
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 26,
-        "shares": 932057,
-        "proportion": 2.35,
-        "cumulativeHolders": 31363,
-        "cumulativePct": 99.7678
+        "holders": 28,
+        "shares": 990972,
+        "proportion": 2.5,
+        "cumulativeHolders": 31487,
+        "cumulativePct": 99.7655
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 13,
-        "shares": 596063,
-        "proportion": 1.5,
-        "cumulativeHolders": 31376,
-        "cumulativePct": 99.8091
+        "holders": 17,
+        "shares": 784541,
+        "proportion": 1.98,
+        "cumulativeHolders": 31504,
+        "cumulativePct": 99.8194
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 26,
-        "shares": 1722211,
-        "proportion": 4.35,
-        "cumulativeHolders": 31402,
-        "cumulativePct": 99.8918
+        "holders": 25,
+        "shares": 1714319,
+        "proportion": 4.33,
+        "cumulativeHolders": 31529,
+        "cumulativePct": 99.8986
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 16,
-        "shares": 2132657,
-        "proportion": 5.39,
-        "cumulativeHolders": 31418,
-        "cumulativePct": 99.9427
+        "holders": 15,
+        "shares": 1983085,
+        "proportion": 5.01,
+        "cumulativeHolders": 31544,
+        "cumulativePct": 99.9461
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 7,
-        "shares": 2156996,
-        "proportion": 5.45,
-        "cumulativeHolders": 31425,
-        "cumulativePct": 99.965
+        "holders": 6,
+        "shares": 1663747,
+        "proportion": 4.2,
+        "cumulativeHolders": 31550,
+        "cumulativePct": 99.9651
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 4,
-        "shares": 1835842,
-        "proportion": 4.64,
-        "cumulativeHolders": 31429,
-        "cumulativePct": 99.9777
+        "holders": 3,
+        "shares": 1417928,
+        "proportion": 3.58,
+        "cumulativeHolders": 31553,
+        "cumulativePct": 99.9747
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 1,
-        "shares": 767476,
-        "proportion": 1.94,
-        "cumulativeHolders": 31430,
-        "cumulativePct": 99.9809
+        "holders": 2,
+        "shares": 1371390,
+        "proportion": 3.46,
+        "cumulativeHolders": 31555,
+        "cumulativePct": 99.981
       },
       {
         "grade": 14,
@@ -1736,16 +1736,16 @@
         "holders": 2,
         "shares": 1782377,
         "proportion": 4.5,
-        "cumulativeHolders": 31432,
+        "cumulativeHolders": 31557,
         "cumulativePct": 99.9873
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 4,
-        "shares": 8213705,
-        "proportion": 20.77,
-        "cumulativeHolders": 31436,
+        "shares": 8231705,
+        "proportion": 20.81,
+        "cumulativeHolders": 31561,
         "cumulativePct": 100
       },
       {
@@ -1760,10 +1760,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 31436,
+        "holders": 31561,
         "shares": 39543000,
         "proportion": 100,
-        "cumulativeHolders": 31436,
+        "cumulativeHolders": 31561,
         "cumulativePct": 100
       }
     ],
@@ -1772,115 +1772,115 @@
   },
   "8234": {
     "symbol": "8234",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 3784,
-        "shares": 756180,
+        "holders": 3757,
+        "shares": 749268,
         "proportion": 0.53,
-        "cumulativeHolders": 3784,
-        "cumulativePct": 23.4129
+        "cumulativeHolders": 3757,
+        "cumulativePct": 23.3804
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 10255,
-        "shares": 19743625,
-        "proportion": 13.98,
-        "cumulativeHolders": 14039,
-        "cumulativePct": 86.8642
+        "holders": 10206,
+        "shares": 19684268,
+        "proportion": 13.93,
+        "cumulativeHolders": 13963,
+        "cumulativePct": 86.894
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 1131,
-        "shares": 8976360,
-        "proportion": 6.35,
-        "cumulativeHolders": 15170,
-        "cumulativePct": 93.8621
+        "holders": 1112,
+        "shares": 8834705,
+        "proportion": 6.25,
+        "cumulativeHolders": 15075,
+        "cumulativePct": 93.8142
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 333,
-        "shares": 4278773,
-        "proportion": 3.02,
-        "cumulativeHolders": 15503,
-        "cumulativePct": 95.9225
+        "holders": 337,
+        "shares": 4327876,
+        "proportion": 3.06,
+        "cumulativeHolders": 15412,
+        "cumulativePct": 95.9114
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 214,
-        "shares": 3900041,
-        "proportion": 2.76,
-        "cumulativeHolders": 15717,
-        "cumulativePct": 97.2466
+        "holders": 215,
+        "shares": 3933041,
+        "proportion": 2.78,
+        "cumulativeHolders": 15627,
+        "cumulativePct": 97.2494
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 151,
-        "shares": 3829213,
-        "proportion": 2.71,
-        "cumulativeHolders": 15868,
-        "cumulativePct": 98.1809
+        "holders": 150,
+        "shares": 3800213,
+        "proportion": 2.69,
+        "cumulativeHolders": 15777,
+        "cumulativePct": 98.1828
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 70,
-        "shares": 2505471,
-        "proportion": 1.77,
-        "cumulativeHolders": 15938,
-        "cumulativePct": 98.614
+        "holders": 66,
+        "shares": 2370416,
+        "proportion": 1.67,
+        "cumulativeHolders": 15843,
+        "cumulativePct": 98.5936
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 33,
-        "shares": 1519502,
+        "shares": 1522502,
         "proportion": 1.07,
-        "cumulativeHolders": 15971,
-        "cumulativePct": 98.8182
+        "cumulativeHolders": 15876,
+        "cumulativePct": 98.7989
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 80,
-        "shares": 5357299,
-        "proportion": 3.79,
-        "cumulativeHolders": 16051,
-        "cumulativePct": 99.3132
+        "holders": 84,
+        "shares": 5723573,
+        "proportion": 4.05,
+        "cumulativeHolders": 15960,
+        "cumulativePct": 99.3217
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 56,
-        "shares": 8096034,
-        "proportion": 5.73,
-        "cumulativeHolders": 16107,
-        "cumulativePct": 99.6597
+        "holders": 55,
+        "shares": 7916034,
+        "proportion": 5.6,
+        "cumulativeHolders": 16015,
+        "cumulativePct": 99.6639
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 22,
-        "shares": 6135146,
-        "proportion": 4.34,
-        "cumulativeHolders": 16129,
-        "cumulativePct": 99.7958
+        "holders": 20,
+        "shares": 5535638,
+        "proportion": 3.91,
+        "cumulativeHolders": 16035,
+        "cumulativePct": 99.7884
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 6,
-        "shares": 2732368,
-        "proportion": 1.93,
-        "cumulativeHolders": 16135,
-        "cumulativePct": 99.8329
+        "holders": 7,
+        "shares": 3267368,
+        "proportion": 2.31,
+        "cumulativeHolders": 16042,
+        "cumulativePct": 99.832
       },
       {
         "grade": 13,
@@ -1888,25 +1888,25 @@
         "holders": 5,
         "shares": 3551805,
         "proportion": 2.51,
-        "cumulativeHolders": 16140,
-        "cumulativePct": 99.8639
+        "cumulativeHolders": 16047,
+        "cumulativePct": 99.8631
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
         "holders": 3,
-        "shares": 2546466,
-        "proportion": 1.8,
-        "cumulativeHolders": 16143,
-        "cumulativePct": 99.8824
+        "shares": 2485576,
+        "proportion": 1.75,
+        "cumulativeHolders": 16050,
+        "cumulativePct": 99.8818
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 19,
-        "shares": 67298189,
-        "proportion": 47.65,
-        "cumulativeHolders": 16162,
+        "shares": 67524189,
+        "proportion": 47.81,
+        "cumulativeHolders": 16069,
         "cumulativePct": 100
       },
       {
@@ -1921,10 +1921,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 16162,
+        "holders": 16069,
         "shares": 141226472,
         "proportion": 100,
-        "cumulativeHolders": 16162,
+        "cumulativeHolders": 16069,
         "cumulativePct": 100
       }
     ],
@@ -1933,115 +1933,115 @@
   },
   "8240": {
     "symbol": "8240",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 28542,
-        "shares": 540948,
-        "proportion": 0.54,
-        "cumulativeHolders": 28542,
-        "cumulativePct": 75.6881
+        "holders": 28549,
+        "shares": 537937,
+        "proportion": 0.53,
+        "cumulativeHolders": 28549,
+        "cumulativePct": 75.775
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 7727,
-        "shares": 14544294,
-        "proportion": 14.54,
-        "cumulativeHolders": 36269,
-        "cumulativePct": 96.1787
+        "holders": 7678,
+        "shares": 14500651,
+        "proportion": 14.5,
+        "cumulativeHolders": 36227,
+        "cumulativePct": 96.1541
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 786,
-        "shares": 6273988,
-        "proportion": 6.27,
-        "cumulativeHolders": 37055,
-        "cumulativePct": 98.2631
+        "holders": 784,
+        "shares": 6239396,
+        "proportion": 6.23,
+        "cumulativeHolders": 37011,
+        "cumulativePct": 98.235
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 203,
-        "shares": 2617983,
-        "proportion": 2.61,
-        "cumulativeHolders": 37258,
-        "cumulativePct": 98.8014
+        "holders": 211,
+        "shares": 2717534,
+        "proportion": 2.71,
+        "cumulativeHolders": 37222,
+        "cumulativePct": 98.795
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 135,
-        "shares": 2490038,
-        "proportion": 2.48,
-        "cumulativeHolders": 37393,
-        "cumulativePct": 99.1594
+        "holders": 139,
+        "shares": 2564038,
+        "proportion": 2.56,
+        "cumulativeHolders": 37361,
+        "cumulativePct": 99.1639
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 109,
-        "shares": 2797631,
-        "proportion": 2.79,
-        "cumulativeHolders": 37502,
-        "cumulativePct": 99.4484
+        "holders": 102,
+        "shares": 2587633,
+        "proportion": 2.58,
+        "cumulativeHolders": 37463,
+        "cumulativePct": 99.4347
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 58,
-        "shares": 2018014,
-        "proportion": 2.01,
-        "cumulativeHolders": 37560,
-        "cumulativePct": 99.6022
+        "holders": 62,
+        "shares": 2168043,
+        "proportion": 2.16,
+        "cumulativeHolders": 37525,
+        "cumulativePct": 99.5992
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 26,
-        "shares": 1210683,
-        "proportion": 1.21,
-        "cumulativeHolders": 37586,
-        "cumulativePct": 99.6712
+        "holders": 27,
+        "shares": 1262683,
+        "proportion": 1.26,
+        "cumulativeHolders": 37552,
+        "cumulativePct": 99.6709
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 48,
-        "shares": 3352707,
-        "proportion": 3.35,
-        "cumulativeHolders": 37634,
-        "cumulativePct": 99.7985
+        "holders": 52,
+        "shares": 3733801,
+        "proportion": 3.73,
+        "cumulativeHolders": 37604,
+        "cumulativePct": 99.8089
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 41,
-        "shares": 5704785,
-        "proportion": 5.7,
-        "cumulativeHolders": 37675,
-        "cumulativePct": 99.9072
+        "holders": 36,
+        "shares": 5053801,
+        "proportion": 5.05,
+        "cumulativeHolders": 37640,
+        "cumulativePct": 99.9044
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 12,
-        "shares": 3443587,
-        "proportion": 3.44,
-        "cumulativeHolders": 37687,
+        "holders": 13,
+        "shares": 3567141,
+        "proportion": 3.56,
+        "cumulativeHolders": 37653,
         "cumulativePct": 99.939
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 9,
-        "shares": 4695498,
+        "shares": 4697498,
         "proportion": 4.69,
-        "cumulativeHolders": 37696,
-        "cumulativePct": 99.9629
+        "cumulativeHolders": 37662,
+        "cumulativePct": 99.9628
       },
       {
         "grade": 13,
@@ -2049,8 +2049,8 @@
         "holders": 2,
         "shares": 1458936,
         "proportion": 1.45,
-        "cumulativeHolders": 37698,
-        "cumulativePct": 99.9682
+        "cumulativeHolders": 37664,
+        "cumulativePct": 99.9681
       },
       {
         "grade": 14,
@@ -2058,16 +2058,16 @@
         "holders": 1,
         "shares": 800155,
         "proportion": 0.8,
-        "cumulativeHolders": 37699,
+        "cumulativeHolders": 37665,
         "cumulativePct": 99.9708
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 11,
-        "shares": 48055167,
-        "proportion": 48.05,
-        "cumulativeHolders": 37710,
+        "shares": 48115167,
+        "proportion": 48.11,
+        "cumulativeHolders": 37676,
         "cumulativePct": 100
       },
       {
@@ -2082,10 +2082,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 37710,
+        "holders": 37676,
         "shares": 100004414,
         "proportion": 100,
-        "cumulativeHolders": 37710,
+        "cumulativeHolders": 37676,
         "cumulativePct": 100
       }
     ],
@@ -2094,97 +2094,97 @@
   },
   "8244": {
     "symbol": "8244",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 74,
-        "shares": 12799,
-        "proportion": 0.04,
-        "cumulativeHolders": 74,
-        "cumulativePct": 28.0303
+        "holders": 78,
+        "shares": 14399,
+        "proportion": 0.05,
+        "cumulativeHolders": 78,
+        "cumulativePct": 27.957
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 75,
-        "shares": 137860,
-        "proportion": 0.48,
-        "cumulativeHolders": 149,
-        "cumulativePct": 56.4394
+        "holders": 84,
+        "shares": 156560,
+        "proportion": 0.55,
+        "cumulativeHolders": 162,
+        "cumulativePct": 58.0645
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 21,
-        "shares": 156953,
-        "proportion": 0.55,
-        "cumulativeHolders": 170,
-        "cumulativePct": 64.3939
+        "holders": 19,
+        "shares": 140853,
+        "proportion": 0.49,
+        "cumulativeHolders": 181,
+        "cumulativePct": 64.8746
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 8,
-        "shares": 97571,
-        "proportion": 0.34,
-        "cumulativeHolders": 178,
-        "cumulativePct": 67.4242
+        "holders": 6,
+        "shares": 73571,
+        "proportion": 0.25,
+        "cumulativeHolders": 187,
+        "cumulativePct": 67.0251
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 5,
-        "shares": 91268,
-        "proportion": 0.32,
-        "cumulativeHolders": 183,
-        "cumulativePct": 69.3182
+        "holders": 6,
+        "shares": 107268,
+        "proportion": 0.37,
+        "cumulativeHolders": 193,
+        "cumulativePct": 69.1756
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 5,
-        "shares": 131200,
-        "proportion": 0.46,
-        "cumulativeHolders": 188,
-        "cumulativePct": 71.2121
+        "holders": 7,
+        "shares": 185700,
+        "proportion": 0.65,
+        "cumulativeHolders": 200,
+        "cumulativePct": 71.6846
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 4,
-        "shares": 126000,
-        "proportion": 0.44,
-        "cumulativeHolders": 192,
-        "cumulativePct": 72.7273
+        "holders": 5,
+        "shares": 161610,
+        "proportion": 0.56,
+        "cumulativeHolders": 205,
+        "cumulativePct": 73.4767
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 6,
-        "shares": 283373,
+        "shares": 282373,
         "proportion": 0.99,
-        "cumulativeHolders": 198,
-        "cumulativePct": 75
+        "cumulativeHolders": 211,
+        "cumulativePct": 75.6272
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 37,
-        "shares": 2919290,
-        "proportion": 10.29,
-        "cumulativeHolders": 235,
-        "cumulativePct": 89.0152
+        "shares": 2909697,
+        "proportion": 10.26,
+        "cumulativeHolders": 248,
+        "cumulativePct": 88.8889
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 8,
-        "shares": 1172400,
-        "proportion": 4.13,
-        "cumulativeHolders": 243,
-        "cumulativePct": 92.0455
+        "holders": 9,
+        "shares": 1372400,
+        "proportion": 4.84,
+        "cumulativeHolders": 257,
+        "cumulativePct": 92.1147
       },
       {
         "grade": 11,
@@ -2192,26 +2192,26 @@
         "holders": 7,
         "shares": 2084810,
         "proportion": 7.35,
-        "cumulativeHolders": 250,
-        "cumulativePct": 94.697
+        "cumulativeHolders": 264,
+        "cumulativePct": 94.6237
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 2,
-        "shares": 992680,
-        "proportion": 3.5,
-        "cumulativeHolders": 252,
-        "cumulativePct": 95.4545
+        "shares": 985180,
+        "proportion": 3.47,
+        "cumulativeHolders": 266,
+        "cumulativePct": 95.3405
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 7,
-        "shares": 4572024,
-        "proportion": 16.12,
-        "cumulativeHolders": 259,
-        "cumulativePct": 98.1061
+        "holders": 8,
+        "shares": 5315104,
+        "proportion": 18.74,
+        "cumulativeHolders": 274,
+        "cumulativePct": 98.2079
       },
       {
         "grade": 14,
@@ -2219,16 +2219,16 @@
         "holders": 4,
         "shares": 3949625,
         "proportion": 13.92,
-        "cumulativeHolders": 263,
-        "cumulativePct": 99.6212
+        "cumulativeHolders": 278,
+        "cumulativePct": 99.6416
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 1,
-        "shares": 11626147,
-        "proportion": 41,
-        "cumulativeHolders": 264,
+        "shares": 10614850,
+        "proportion": 37.43,
+        "cumulativeHolders": 279,
         "cumulativePct": 100
       },
       {
@@ -2243,10 +2243,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 264,
+        "holders": 279,
         "shares": 28354000,
         "proportion": 100,
-        "cumulativeHolders": 264,
+        "cumulativeHolders": 279,
         "cumulativePct": 100
       }
     ],
@@ -2255,133 +2255,133 @@
   },
   "8249": {
     "symbol": "8249",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 22822,
-        "shares": 1294681,
+        "holders": 22897,
+        "shares": 1288886,
         "proportion": 0.93,
-        "cumulativeHolders": 22822,
-        "cumulativePct": 64.5455
+        "cumulativeHolders": 22897,
+        "cumulativePct": 64.7064
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 10471,
-        "shares": 20615115,
-        "proportion": 14.95,
-        "cumulativeHolders": 33293,
-        "cumulativePct": 94.1597
+        "holders": 10433,
+        "shares": 20537289,
+        "proportion": 14.9,
+        "cumulativeHolders": 33330,
+        "cumulativePct": 94.1898
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 1228,
-        "shares": 9675469,
-        "proportion": 7.02,
-        "cumulativeHolders": 34521,
-        "cumulativePct": 97.6328
+        "holders": 1222,
+        "shares": 9624779,
+        "proportion": 6.98,
+        "cumulativeHolders": 34552,
+        "cumulativePct": 97.6431
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 305,
-        "shares": 3884754,
-        "proportion": 2.81,
-        "cumulativeHolders": 34826,
-        "cumulativePct": 98.4954
+        "holders": 303,
+        "shares": 3870766,
+        "proportion": 2.8,
+        "cumulativeHolders": 34855,
+        "cumulativePct": 98.4994
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 177,
-        "shares": 3281677,
-        "proportion": 2.38,
-        "cumulativeHolders": 35003,
-        "cumulativePct": 98.996
+        "holders": 182,
+        "shares": 3377877,
+        "proportion": 2.45,
+        "cumulativeHolders": 35037,
+        "cumulativePct": 99.0137
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 138,
-        "shares": 3560553,
-        "proportion": 2.58,
-        "cumulativeHolders": 35141,
-        "cumulativePct": 99.3863
+        "holders": 133,
+        "shares": 3431740,
+        "proportion": 2.48,
+        "cumulativeHolders": 35170,
+        "cumulativePct": 99.3896
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 50,
-        "shares": 1803456,
-        "proportion": 1.3,
-        "cumulativeHolders": 35191,
-        "cumulativePct": 99.5277
+        "holders": 47,
+        "shares": 1697924,
+        "proportion": 1.23,
+        "cumulativeHolders": 35217,
+        "cumulativePct": 99.5224
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 38,
-        "shares": 1793590,
-        "proportion": 1.3,
-        "cumulativeHolders": 35229,
-        "cumulativePct": 99.6352
+        "holders": 35,
+        "shares": 1646669,
+        "proportion": 1.19,
+        "cumulativeHolders": 35252,
+        "cumulativePct": 99.6213
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 63,
-        "shares": 4518517,
-        "proportion": 3.27,
-        "cumulativeHolders": 35292,
-        "cumulativePct": 99.8133
+        "holders": 69,
+        "shares": 4945740,
+        "proportion": 3.58,
+        "cumulativeHolders": 35321,
+        "cumulativePct": 99.8163
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 40,
-        "shares": 5607708,
-        "proportion": 4.06,
-        "cumulativeHolders": 35332,
-        "cumulativePct": 99.9265
+        "shares": 5629850,
+        "proportion": 4.08,
+        "cumulativeHolders": 35361,
+        "cumulativePct": 99.9294
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 9,
-        "shares": 2160598,
-        "proportion": 1.56,
-        "cumulativeHolders": 35341,
-        "cumulativePct": 99.9519
+        "holders": 8,
+        "shares": 2107598,
+        "proportion": 1.52,
+        "cumulativeHolders": 35369,
+        "cumulativePct": 99.952
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 1,
-        "shares": 446000,
-        "proportion": 0.32,
-        "cumulativeHolders": 35342,
-        "cumulativePct": 99.9547
+        "holders": 2,
+        "shares": 1031000,
+        "proportion": 0.74,
+        "cumulativeHolders": 35371,
+        "cumulativePct": 99.9576
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 5,
-        "shares": 3493477,
-        "proportion": 2.53,
-        "cumulativeHolders": 35347,
+        "holders": 4,
+        "shares": 2958477,
+        "proportion": 2.14,
+        "cumulativeHolders": 35375,
         "cumulativePct": 99.9689
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
         "holders": 2,
-        "shares": 1788000,
-        "proportion": 1.29,
-        "cumulativeHolders": 35349,
-        "cumulativePct": 99.9745
+        "shares": 1775000,
+        "proportion": 1.28,
+        "cumulativeHolders": 35377,
+        "cumulativePct": 99.9746
       },
       {
         "grade": 15,
@@ -2389,7 +2389,7 @@
         "holders": 9,
         "shares": 73900905,
         "proportion": 53.61,
-        "cumulativeHolders": 35358,
+        "cumulativeHolders": 35386,
         "cumulativePct": 100
       },
       {
@@ -2404,10 +2404,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 35358,
+        "holders": 35386,
         "shares": 137824500,
         "proportion": 100,
-        "cumulativeHolders": 35358,
+        "cumulativeHolders": 35386,
         "cumulativePct": 100
       }
     ],
@@ -2416,124 +2416,124 @@
   },
   "8255": {
     "symbol": "8255",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 14263,
-        "shares": 1168972,
-        "proportion": 1.14,
-        "cumulativeHolders": 14263,
-        "cumulativePct": 58.1285
+        "holders": 14219,
+        "shares": 1162103,
+        "proportion": 1.13,
+        "cumulativeHolders": 14219,
+        "cumulativePct": 58.1459
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 8756,
-        "shares": 15781803,
-        "proportion": 15.47,
-        "cumulativeHolders": 23019,
-        "cumulativePct": 93.8134
+        "holders": 8718,
+        "shares": 15735720,
+        "proportion": 15.43,
+        "cumulativeHolders": 22937,
+        "cumulativePct": 93.7965
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 757,
-        "shares": 5747895,
-        "proportion": 5.63,
-        "cumulativeHolders": 23776,
-        "cumulativePct": 96.8986
+        "holders": 755,
+        "shares": 5754854,
+        "proportion": 5.64,
+        "cumulativeHolders": 23692,
+        "cumulativePct": 96.8839
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
         "holders": 228,
-        "shares": 2873717,
+        "shares": 2868986,
         "proportion": 2.81,
-        "cumulativeHolders": 24004,
-        "cumulativePct": 97.8278
+        "cumulativeHolders": 23920,
+        "cumulativePct": 97.8163
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 141,
-        "shares": 2534526,
-        "proportion": 2.48,
-        "cumulativeHolders": 24145,
-        "cumulativePct": 98.4024
+        "holders": 135,
+        "shares": 2413270,
+        "proportion": 2.36,
+        "cumulativeHolders": 24055,
+        "cumulativePct": 98.3684
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 169,
-        "shares": 4274756,
-        "proportion": 4.19,
-        "cumulativeHolders": 24314,
-        "cumulativePct": 99.0912
+        "holders": 174,
+        "shares": 4373844,
+        "proportion": 4.28,
+        "cumulativeHolders": 24229,
+        "cumulativePct": 99.0799
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
         "holders": 60,
-        "shares": 2100096,
-        "proportion": 2.05,
-        "cumulativeHolders": 24374,
-        "cumulativePct": 99.3357
+        "shares": 2105014,
+        "proportion": 2.06,
+        "cumulativeHolders": 24289,
+        "cumulativePct": 99.3253
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 38,
-        "shares": 1740586,
-        "proportion": 1.7,
-        "cumulativeHolders": 24412,
-        "cumulativePct": 99.4906
+        "holders": 40,
+        "shares": 1837411,
+        "proportion": 1.8,
+        "cumulativeHolders": 24329,
+        "cumulativePct": 99.4888
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 62,
-        "shares": 4279458,
-        "proportion": 4.19,
-        "cumulativeHolders": 24474,
-        "cumulativePct": 99.7432
+        "shares": 4355808,
+        "proportion": 4.27,
+        "cumulativeHolders": 24391,
+        "cumulativePct": 99.7424
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 34,
-        "shares": 4650981,
-        "proportion": 4.56,
-        "cumulativeHolders": 24508,
-        "cumulativePct": 99.8818
+        "holders": 32,
+        "shares": 4371117,
+        "proportion": 4.28,
+        "cumulativeHolders": 24423,
+        "cumulativePct": 99.8732
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 12,
-        "shares": 3418126,
-        "proportion": 3.35,
-        "cumulativeHolders": 24520,
-        "cumulativePct": 99.9307
+        "holders": 14,
+        "shares": 4158990,
+        "proportion": 4.07,
+        "cumulativeHolders": 24437,
+        "cumulativePct": 99.9305
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 2,
-        "shares": 1052000,
-        "proportion": 1.03,
-        "cumulativeHolders": 24522,
-        "cumulativePct": 99.9389
+        "holders": 3,
+        "shares": 1630744,
+        "proportion": 1.59,
+        "cumulativeHolders": 24440,
+        "cumulativePct": 99.9427
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 5,
-        "shares": 3513126,
-        "proportion": 3.44,
-        "cumulativeHolders": 24527,
-        "cumulativePct": 99.9592
+        "holders": 4,
+        "shares": 2769181,
+        "proportion": 2.71,
+        "cumulativeHolders": 24444,
+        "cumulativePct": 99.9591
       },
       {
         "grade": 14,
@@ -2541,16 +2541,16 @@
         "holders": 1,
         "shares": 857902,
         "proportion": 0.84,
-        "cumulativeHolders": 24528,
-        "cumulativePct": 99.9633
+        "cumulativeHolders": 24445,
+        "cumulativePct": 99.9632
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 9,
-        "shares": 47985097,
-        "proportion": 47.05,
-        "cumulativeHolders": 24537,
+        "shares": 47584097,
+        "proportion": 46.66,
+        "cumulativeHolders": 24454,
         "cumulativePct": 100
       },
       {
@@ -2565,10 +2565,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 24537,
+        "holders": 24454,
         "shares": 101979041,
         "proportion": 100,
-        "cumulativeHolders": 24537,
+        "cumulativeHolders": 24454,
         "cumulativePct": 100
       }
     ],
@@ -2577,7 +2577,7 @@
   },
   "8259": {
     "symbol": "8259",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -2738,123 +2738,123 @@
   },
   "8261": {
     "symbol": "8261",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 51233,
-        "shares": 3532037,
-        "proportion": 2.97,
-        "cumulativeHolders": 51233,
-        "cumulativePct": 69.174
+        "holders": 51034,
+        "shares": 3487868,
+        "proportion": 2.93,
+        "cumulativeHolders": 51034,
+        "cumulativePct": 69.1564
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 21011,
-        "shares": 36022245,
-        "proportion": 30.3,
-        "cumulativeHolders": 72244,
-        "cumulativePct": 97.5427
+        "holders": 20904,
+        "shares": 35971707,
+        "proportion": 30.25,
+        "cumulativeHolders": 71938,
+        "cumulativePct": 97.4836
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 1160,
-        "shares": 9059086,
-        "proportion": 7.62,
-        "cumulativeHolders": 73404,
-        "cumulativePct": 99.1089
+        "holders": 1186,
+        "shares": 9239974,
+        "proportion": 7.77,
+        "cumulativeHolders": 73124,
+        "cumulativePct": 99.0907
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 241,
-        "shares": 3069934,
-        "proportion": 2.58,
-        "cumulativeHolders": 73645,
-        "cumulativePct": 99.4343
+        "holders": 245,
+        "shares": 3135933,
+        "proportion": 2.63,
+        "cumulativeHolders": 73369,
+        "cumulativePct": 99.4227
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 169,
-        "shares": 3120490,
-        "proportion": 2.62,
-        "cumulativeHolders": 73814,
-        "cumulativePct": 99.6625
+        "holders": 172,
+        "shares": 3179690,
+        "proportion": 2.67,
+        "cumulativeHolders": 73541,
+        "cumulativePct": 99.6558
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 104,
-        "shares": 2703027,
-        "proportion": 2.27,
-        "cumulativeHolders": 73918,
-        "cumulativePct": 99.8029
+        "holders": 105,
+        "shares": 2731277,
+        "proportion": 2.29,
+        "cumulativeHolders": 73646,
+        "cumulativePct": 99.7981
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 32,
-        "shares": 1140144,
-        "proportion": 0.95,
-        "cumulativeHolders": 73950,
-        "cumulativePct": 99.8461
+        "holders": 33,
+        "shares": 1168004,
+        "proportion": 0.98,
+        "cumulativeHolders": 73679,
+        "cumulativePct": 99.8428
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 21,
-        "shares": 978245,
+        "shares": 985245,
         "proportion": 0.82,
-        "cumulativeHolders": 73971,
-        "cumulativePct": 99.8744
+        "cumulativeHolders": 73700,
+        "cumulativePct": 99.8713
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 45,
-        "shares": 3128334,
-        "proportion": 2.63,
-        "cumulativeHolders": 74016,
-        "cumulativePct": 99.9352
+        "holders": 44,
+        "shares": 3105955,
+        "proportion": 2.61,
+        "cumulativeHolders": 73744,
+        "cumulativePct": 99.9309
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 17,
-        "shares": 2321522,
-        "proportion": 1.95,
-        "cumulativeHolders": 74033,
-        "cumulativePct": 99.9581
+        "holders": 20,
+        "shares": 2809717,
+        "proportion": 2.36,
+        "cumulativeHolders": 73764,
+        "cumulativePct": 99.958
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 17,
-        "shares": 4991353,
-        "proportion": 4.19,
-        "cumulativeHolders": 74050,
-        "cumulativePct": 99.9811
+        "holders": 15,
+        "shares": 4424941,
+        "proportion": 3.72,
+        "cumulativeHolders": 73779,
+        "cumulativePct": 99.9783
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 4,
-        "shares": 2023225,
-        "proportion": 1.7,
-        "cumulativeHolders": 74054,
-        "cumulativePct": 99.9865
+        "holders": 6,
+        "shares": 2888225,
+        "proportion": 2.42,
+        "cumulativeHolders": 73785,
+        "cumulativePct": 99.9864
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
         "holders": 4,
-        "shares": 2834158,
-        "proportion": 2.38,
-        "cumulativeHolders": 74058,
+        "shares": 2637264,
+        "proportion": 2.21,
+        "cumulativeHolders": 73789,
         "cumulativePct": 99.9919
       },
       {
@@ -2863,16 +2863,16 @@
         "holders": 1,
         "shares": 850000,
         "proportion": 0.71,
-        "cumulativeHolders": 74059,
+        "cumulativeHolders": 73790,
         "cumulativePct": 99.9932
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 5,
-        "shares": 43104593,
-        "proportion": 36.25,
-        "cumulativeHolders": 74064,
+        "shares": 42262593,
+        "proportion": 35.55,
+        "cumulativeHolders": 73795,
         "cumulativePct": 100
       },
       {
@@ -2887,10 +2887,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 74064,
+        "holders": 73795,
         "shares": 118878393,
         "proportion": 100,
-        "cumulativeHolders": 74064,
+        "cumulativeHolders": 73795,
         "cumulativePct": 100
       }
     ],
@@ -2899,7 +2899,7 @@
   },
   "8264": {
     "symbol": "8264",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -3060,124 +3060,124 @@
   },
   "8271": {
     "symbol": "8271",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 46075,
-        "shares": 2262001,
-        "proportion": 1.74,
-        "cumulativeHolders": 46075,
-        "cumulativePct": 68.7871
+        "holders": 46057,
+        "shares": 2254931,
+        "proportion": 1.73,
+        "cumulativeHolders": 46057,
+        "cumulativePct": 68.9043
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 18278,
-        "shares": 32735431,
-        "proportion": 25.25,
-        "cumulativeHolders": 64353,
-        "cumulativePct": 96.0751
+        "holders": 18135,
+        "shares": 32424409,
+        "proportion": 25.01,
+        "cumulativeHolders": 64192,
+        "cumulativePct": 96.0354
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 1569,
-        "shares": 12216129,
+        "holders": 1573,
+        "shares": 12212697,
         "proportion": 9.42,
-        "cumulativeHolders": 65922,
-        "cumulativePct": 98.4175
+        "cumulativeHolders": 65765,
+        "cumulativePct": 98.3887
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 393,
-        "shares": 5009208,
-        "proportion": 3.86,
-        "cumulativeHolders": 66315,
-        "cumulativePct": 99.0042
+        "holders": 403,
+        "shares": 5139008,
+        "proportion": 3.96,
+        "cumulativeHolders": 66168,
+        "cumulativePct": 98.9917
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
         "holders": 237,
-        "shares": 4400440,
-        "proportion": 3.39,
-        "cumulativeHolders": 66552,
-        "cumulativePct": 99.358
+        "shares": 4391293,
+        "proportion": 3.38,
+        "cumulativeHolders": 66405,
+        "cumulativePct": 99.3462
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 161,
-        "shares": 4148836,
-        "proportion": 3.2,
-        "cumulativeHolders": 66713,
-        "cumulativePct": 99.5984
+        "holders": 164,
+        "shares": 4234653,
+        "proportion": 3.26,
+        "cumulativeHolders": 66569,
+        "cumulativePct": 99.5916
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 71,
-        "shares": 2562962,
-        "proportion": 1.97,
-        "cumulativeHolders": 66784,
-        "cumulativePct": 99.7044
+        "holders": 75,
+        "shares": 2706341,
+        "proportion": 2.08,
+        "cumulativeHolders": 66644,
+        "cumulativePct": 99.7038
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 44,
-        "shares": 2015362,
-        "proportion": 1.55,
-        "cumulativeHolders": 66828,
-        "cumulativePct": 99.7701
+        "holders": 45,
+        "shares": 2070691,
+        "proportion": 1.59,
+        "cumulativeHolders": 66689,
+        "cumulativePct": 99.7711
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 77,
-        "shares": 5659800,
-        "proportion": 4.36,
-        "cumulativeHolders": 66905,
-        "cumulativePct": 99.885
+        "shares": 5674037,
+        "proportion": 4.37,
+        "cumulativeHolders": 66766,
+        "cumulativePct": 99.8863
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 42,
-        "shares": 5871483,
-        "proportion": 4.52,
-        "cumulativeHolders": 66947,
-        "cumulativePct": 99.9477
+        "holders": 39,
+        "shares": 5281188,
+        "proportion": 4.07,
+        "cumulativeHolders": 66805,
+        "cumulativePct": 99.9446
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 16,
-        "shares": 4504804,
-        "proportion": 3.47,
-        "cumulativeHolders": 66963,
-        "cumulativePct": 99.9716
+        "holders": 17,
+        "shares": 4940336,
+        "proportion": 3.81,
+        "cumulativeHolders": 66822,
+        "cumulativePct": 99.9701
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 5,
-        "shares": 2601060,
-        "proportion": 2,
-        "cumulativeHolders": 66968,
-        "cumulativePct": 99.9791
+        "shares": 2508896,
+        "proportion": 1.93,
+        "cumulativeHolders": 66827,
+        "cumulativePct": 99.9776
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
         "holders": 1,
-        "shares": 665000,
-        "proportion": 0.51,
-        "cumulativeHolders": 66969,
-        "cumulativePct": 99.9806
+        "shares": 659000,
+        "proportion": 0.5,
+        "cumulativeHolders": 66828,
+        "cumulativePct": 99.9791
       },
       {
         "grade": 14,
@@ -3185,16 +3185,16 @@
         "holders": 2,
         "shares": 1785000,
         "proportion": 1.37,
-        "cumulativeHolders": 66971,
-        "cumulativePct": 99.9836
+        "cumulativeHolders": 66830,
+        "cumulativePct": 99.982
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
-        "holders": 11,
-        "shares": 43177369,
-        "proportion": 33.31,
-        "cumulativeHolders": 66982,
+        "holders": 12,
+        "shares": 43332405,
+        "proportion": 33.43,
+        "cumulativeHolders": 66842,
         "cumulativePct": 100
       },
       {
@@ -3209,10 +3209,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 66982,
+        "holders": 66842,
         "shares": 129614885,
         "proportion": 100,
-        "cumulativeHolders": 66982,
+        "cumulativeHolders": 66842,
         "cumulativePct": 100
       }
     ],
@@ -3221,97 +3221,97 @@
   },
   "8272": {
     "symbol": "8272",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 918,
-        "shares": 96833,
-        "proportion": 0.5,
-        "cumulativeHolders": 918,
-        "cumulativePct": 35.7477
+        "holders": 896,
+        "shares": 97690,
+        "proportion": 0.51,
+        "cumulativeHolders": 896,
+        "cumulativePct": 39.1266
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 1404,
-        "shares": 2293661,
-        "proportion": 12.07,
-        "cumulativeHolders": 2322,
-        "cumulativePct": 90.4206
+        "holders": 1170,
+        "shares": 1941355,
+        "proportion": 10.21,
+        "cumulativeHolders": 2066,
+        "cumulativePct": 90.2183
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 101,
-        "shares": 780869,
-        "proportion": 4.11,
-        "cumulativeHolders": 2423,
-        "cumulativePct": 94.3536
+        "holders": 99,
+        "shares": 763656,
+        "proportion": 4.01,
+        "cumulativeHolders": 2165,
+        "cumulativePct": 94.5415
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 41,
-        "shares": 536040,
-        "proportion": 2.82,
-        "cumulativeHolders": 2464,
-        "cumulativePct": 95.9502
+        "holders": 23,
+        "shares": 296872,
+        "proportion": 1.56,
+        "cumulativeHolders": 2188,
+        "cumulativePct": 95.5459
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 15,
-        "shares": 271588,
-        "proportion": 1.42,
-        "cumulativeHolders": 2479,
-        "cumulativePct": 96.5343
+        "holders": 16,
+        "shares": 294640,
+        "proportion": 1.55,
+        "cumulativeHolders": 2204,
+        "cumulativePct": 96.2445
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 24,
-        "shares": 627922,
-        "proportion": 3.3,
-        "cumulativeHolders": 2503,
-        "cumulativePct": 97.4688
+        "holders": 16,
+        "shares": 389687,
+        "proportion": 2.05,
+        "cumulativeHolders": 2220,
+        "cumulativePct": 96.9432
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 5,
-        "shares": 172245,
-        "proportion": 0.9,
-        "cumulativeHolders": 2508,
-        "cumulativePct": 97.6636
+        "holders": 9,
+        "shares": 328245,
+        "proportion": 1.72,
+        "cumulativeHolders": 2229,
+        "cumulativePct": 97.3362
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 8,
-        "shares": 358477,
-        "proportion": 1.88,
-        "cumulativeHolders": 2516,
-        "cumulativePct": 97.9751
+        "shares": 360477,
+        "proportion": 1.89,
+        "cumulativeHolders": 2237,
+        "cumulativePct": 97.6856
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 25,
-        "shares": 1794299,
-        "proportion": 9.44,
-        "cumulativeHolders": 2541,
-        "cumulativePct": 98.9486
+        "shares": 1806412,
+        "proportion": 9.5,
+        "cumulativeHolders": 2262,
+        "cumulativePct": 98.7773
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 10,
-        "shares": 1481724,
-        "proportion": 7.79,
-        "cumulativeHolders": 2551,
-        "cumulativePct": 99.338
+        "shares": 1476724,
+        "proportion": 7.77,
+        "cumulativeHolders": 2272,
+        "cumulativePct": 99.214
       },
       {
         "grade": 11,
@@ -3319,26 +3319,26 @@
         "holders": 10,
         "shares": 2869898,
         "proportion": 15.1,
-        "cumulativeHolders": 2561,
-        "cumulativePct": 99.7274
+        "cumulativeHolders": 2282,
+        "cumulativePct": 99.6507
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 3,
-        "shares": 1415484,
-        "proportion": 7.45,
-        "cumulativeHolders": 2564,
-        "cumulativePct": 99.8442
+        "shares": 1465484,
+        "proportion": 7.71,
+        "cumulativeHolders": 2285,
+        "cumulativePct": 99.7817
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 1,
-        "shares": 680969,
-        "proportion": 3.58,
-        "cumulativeHolders": 2565,
-        "cumulativePct": 99.8832
+        "holders": 2,
+        "shares": 1288869,
+        "proportion": 6.78,
+        "cumulativeHolders": 2287,
+        "cumulativePct": 99.869
       },
       {
         "grade": 14,
@@ -3346,8 +3346,8 @@
         "holders": 1,
         "shares": 838094,
         "proportion": 4.41,
-        "cumulativeHolders": 2566,
-        "cumulativePct": 99.9221
+        "cumulativeHolders": 2288,
+        "cumulativePct": 99.9127
       },
       {
         "grade": 15,
@@ -3355,7 +3355,7 @@
         "holders": 2,
         "shares": 4779652,
         "proportion": 25.15,
-        "cumulativeHolders": 2568,
+        "cumulativeHolders": 2290,
         "cumulativePct": 100
       },
       {
@@ -3370,10 +3370,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 2568,
+        "holders": 2290,
         "shares": 18997755,
         "proportion": 100,
-        "cumulativeHolders": 2568,
+        "cumulativeHolders": 2290,
         "cumulativePct": 100
       }
     ],
@@ -3382,7 +3382,7 @@
   },
   "8276": {
     "symbol": "8276",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -3543,106 +3543,106 @@
   },
   "8277": {
     "symbol": "8277",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 9141,
-        "shares": 2877375,
-        "proportion": 7.28,
-        "cumulativeHolders": 9141,
-        "cumulativePct": 67.1195
+        "holders": 9336,
+        "shares": 2875135,
+        "proportion": 7.27,
+        "cumulativeHolders": 9336,
+        "cumulativePct": 67.7012
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 3420,
-        "shares": 8211224,
-        "proportion": 20.78,
-        "cumulativeHolders": 12561,
-        "cumulativePct": 92.2314
+        "holders": 3402,
+        "shares": 8164466,
+        "proportion": 20.66,
+        "cumulativeHolders": 12738,
+        "cumulativePct": 92.3713
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 562,
-        "shares": 4116012,
-        "proportion": 10.42,
-        "cumulativeHolders": 13123,
-        "cumulativePct": 96.358
+        "holders": 558,
+        "shares": 4083269,
+        "proportion": 10.33,
+        "cumulativeHolders": 13296,
+        "cumulativePct": 96.4177
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 164,
-        "shares": 2019573,
-        "proportion": 5.11,
-        "cumulativeHolders": 13287,
-        "cumulativePct": 97.5622
+        "holders": 163,
+        "shares": 2010799,
+        "proportion": 5.09,
+        "cumulativeHolders": 13459,
+        "cumulativePct": 97.5997
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 90,
-        "shares": 1555843,
-        "proportion": 3.93,
-        "cumulativeHolders": 13377,
-        "cumulativePct": 98.2231
+        "holders": 87,
+        "shares": 1506031,
+        "proportion": 3.81,
+        "cumulativeHolders": 13546,
+        "cumulativePct": 98.2306
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 85,
-        "shares": 2036299,
-        "proportion": 5.15,
-        "cumulativeHolders": 13462,
-        "cumulativePct": 98.8472
+        "holders": 88,
+        "shares": 2103353,
+        "proportion": 5.32,
+        "cumulativeHolders": 13634,
+        "cumulativePct": 98.8687
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 36,
-        "shares": 1226610,
-        "proportion": 3.1,
-        "cumulativeHolders": 13498,
-        "cumulativePct": 99.1115
+        "holders": 35,
+        "shares": 1196587,
+        "proportion": 3.02,
+        "cumulativeHolders": 13669,
+        "cumulativePct": 99.1226
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
         "holders": 42,
-        "shares": 1874433,
+        "shares": 1873130,
         "proportion": 4.74,
-        "cumulativeHolders": 13540,
-        "cumulativePct": 99.4199
+        "cumulativeHolders": 13711,
+        "cumulativePct": 99.4271
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 45,
-        "shares": 2982697,
-        "proportion": 7.55,
-        "cumulativeHolders": 13585,
-        "cumulativePct": 99.7503
+        "shares": 3003296,
+        "proportion": 7.6,
+        "cumulativeHolders": 13756,
+        "cumulativePct": 99.7534
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 22,
-        "shares": 3058475,
-        "proportion": 7.74,
-        "cumulativeHolders": 13607,
-        "cumulativePct": 99.9119
+        "shares": 3098475,
+        "proportion": 7.84,
+        "cumulativeHolders": 13778,
+        "cumulativePct": 99.913
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
         "holders": 9,
-        "shares": 2317800,
-        "proportion": 5.86,
-        "cumulativeHolders": 13616,
-        "cumulativePct": 99.978
+        "shares": 2323800,
+        "proportion": 5.88,
+        "cumulativeHolders": 13787,
+        "cumulativePct": 99.9782
       },
       {
         "grade": 12,
@@ -3650,8 +3650,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 13616,
-        "cumulativePct": 99.978
+        "cumulativeHolders": 13787,
+        "cumulativePct": 99.9782
       },
       {
         "grade": 13,
@@ -3659,8 +3659,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 13616,
-        "cumulativePct": 99.978
+        "cumulativeHolders": 13787,
+        "cumulativePct": 99.9782
       },
       {
         "grade": 14,
@@ -3668,16 +3668,16 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 13616,
-        "cumulativePct": 99.978
+        "cumulativeHolders": 13787,
+        "cumulativePct": 99.9782
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
         "holders": 3,
-        "shares": 7223659,
-        "proportion": 18.28,
-        "cumulativeHolders": 13619,
+        "shares": 7261659,
+        "proportion": 18.38,
+        "cumulativeHolders": 13790,
         "cumulativePct": 100
       },
       {
@@ -3692,10 +3692,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 13619,
+        "holders": 13790,
         "shares": 39500000,
         "proportion": 100,
-        "cumulativeHolders": 13619,
+        "cumulativeHolders": 13790,
         "cumulativePct": 100
       }
     ],
@@ -3704,97 +3704,97 @@
   },
   "8279": {
     "symbol": "8279",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 839,
-        "shares": 114977,
+        "holders": 833,
+        "shares": 113865,
         "proportion": 0.42,
-        "cumulativeHolders": 839,
-        "cumulativePct": 39.5568
+        "cumulativeHolders": 833,
+        "cumulativePct": 39.5724
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 1005,
-        "shares": 1877835,
-        "proportion": 6.92,
-        "cumulativeHolders": 1844,
-        "cumulativePct": 86.9401
+        "holders": 996,
+        "shares": 1865693,
+        "proportion": 6.88,
+        "cumulativeHolders": 1829,
+        "cumulativePct": 86.8884
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 130,
-        "shares": 1011226,
-        "proportion": 3.73,
-        "cumulativeHolders": 1974,
-        "cumulativePct": 93.0693
+        "holders": 129,
+        "shares": 1004226,
+        "proportion": 3.7,
+        "cumulativeHolders": 1958,
+        "cumulativePct": 93.0166
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 34,
-        "shares": 423030,
-        "proportion": 1.56,
-        "cumulativeHolders": 2008,
-        "cumulativePct": 94.6723
+        "holders": 35,
+        "shares": 438177,
+        "proportion": 1.61,
+        "cumulativeHolders": 1993,
+        "cumulativePct": 94.6793
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 26,
-        "shares": 479776,
-        "proportion": 1.77,
-        "cumulativeHolders": 2034,
-        "cumulativePct": 95.8982
+        "holders": 25,
+        "shares": 459776,
+        "proportion": 1.69,
+        "cumulativeHolders": 2018,
+        "cumulativePct": 95.867
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 19,
-        "shares": 473503,
-        "proportion": 1.74,
-        "cumulativeHolders": 2053,
-        "cumulativePct": 96.794
+        "holders": 21,
+        "shares": 530852,
+        "proportion": 1.95,
+        "cumulativeHolders": 2039,
+        "cumulativePct": 96.8646
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 7,
-        "shares": 231425,
-        "proportion": 0.85,
-        "cumulativeHolders": 2060,
-        "cumulativePct": 97.124
+        "holders": 4,
+        "shares": 135183,
+        "proportion": 0.49,
+        "cumulativeHolders": 2043,
+        "cumulativePct": 97.0546
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 9,
-        "shares": 433176,
-        "proportion": 1.59,
-        "cumulativeHolders": 2069,
-        "cumulativePct": 97.5483
+        "holders": 10,
+        "shares": 484176,
+        "proportion": 1.78,
+        "cumulativeHolders": 2053,
+        "cumulativePct": 97.5297
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 25,
-        "shares": 1784827,
-        "proportion": 6.58,
-        "cumulativeHolders": 2094,
-        "cumulativePct": 98.727
+        "shares": 1791827,
+        "proportion": 6.61,
+        "cumulativeHolders": 2078,
+        "cumulativePct": 98.7173
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 16,
-        "shares": 2277443,
-        "proportion": 8.4,
-        "cumulativeHolders": 2110,
-        "cumulativePct": 99.4814
+        "shares": 2283443,
+        "proportion": 8.42,
+        "cumulativeHolders": 2094,
+        "cumulativePct": 99.4774
       },
       {
         "grade": 11,
@@ -3802,8 +3802,8 @@
         "holders": 6,
         "shares": 1662785,
         "proportion": 6.13,
-        "cumulativeHolders": 2116,
-        "cumulativePct": 99.7643
+        "cumulativeHolders": 2100,
+        "cumulativePct": 99.7625
       },
       {
         "grade": 12,
@@ -3811,8 +3811,8 @@
         "holders": 1,
         "shares": 504000,
         "proportion": 1.85,
-        "cumulativeHolders": 2117,
-        "cumulativePct": 99.8114
+        "cumulativeHolders": 2101,
+        "cumulativePct": 99.81
       },
       {
         "grade": 13,
@@ -3820,8 +3820,8 @@
         "holders": 1,
         "shares": 701069,
         "proportion": 2.58,
-        "cumulativeHolders": 2118,
-        "cumulativePct": 99.8586
+        "cumulativeHolders": 2102,
+        "cumulativePct": 99.8575
       },
       {
         "grade": 14,
@@ -3829,8 +3829,8 @@
         "holders": 1,
         "shares": 892999,
         "proportion": 3.29,
-        "cumulativeHolders": 2119,
-        "cumulativePct": 99.9057
+        "cumulativeHolders": 2103,
+        "cumulativePct": 99.905
       },
       {
         "grade": 15,
@@ -3838,7 +3838,7 @@
         "holders": 2,
         "shares": 14232780,
         "proportion": 52.51,
-        "cumulativeHolders": 2121,
+        "cumulativeHolders": 2105,
         "cumulativePct": 100
       },
       {
@@ -3853,10 +3853,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 2121,
+        "holders": 2105,
         "shares": 27100851,
         "proportion": 100,
-        "cumulativeHolders": 2121,
+        "cumulativeHolders": 2105,
         "cumulativePct": 100
       }
     ],
@@ -3865,7 +3865,7 @@
   },
   "8281": {
     "symbol": "8281",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -4026,88 +4026,88 @@
   },
   "8284": {
     "symbol": "8284",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 768,
-        "shares": 87853,
+        "holders": 769,
+        "shares": 87497,
         "proportion": 0.18,
-        "cumulativeHolders": 768,
-        "cumulativePct": 33.8475
+        "cumulativeHolders": 769,
+        "cumulativePct": 33.8171
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 1163,
-        "shares": 2235272,
-        "proportion": 4.72,
-        "cumulativeHolders": 1931,
-        "cumulativePct": 85.1036
+        "holders": 1167,
+        "shares": 2249534,
+        "proportion": 4.75,
+        "cumulativeHolders": 1936,
+        "cumulativePct": 85.1363
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
         "holders": 117,
-        "shares": 915940,
-        "proportion": 1.93,
-        "cumulativeHolders": 2048,
-        "cumulativePct": 90.26
+        "shares": 909040,
+        "proportion": 1.92,
+        "cumulativeHolders": 2053,
+        "cumulativePct": 90.2814
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 49,
-        "shares": 635700,
-        "proportion": 1.34,
-        "cumulativeHolders": 2097,
-        "cumulativePct": 92.4196
+        "holders": 50,
+        "shares": 650700,
+        "proportion": 1.37,
+        "cumulativeHolders": 2103,
+        "cumulativePct": 92.4802
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
         "holders": 26,
-        "shares": 482737,
+        "shares": 483737,
         "proportion": 1.02,
-        "cumulativeHolders": 2123,
-        "cumulativePct": 93.5654
+        "cumulativeHolders": 2129,
+        "cumulativePct": 93.6236
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 22,
-        "shares": 565604,
-        "proportion": 1.19,
-        "cumulativeHolders": 2145,
-        "cumulativePct": 94.535
+        "holders": 21,
+        "shares": 536604,
+        "proportion": 1.13,
+        "cumulativeHolders": 2150,
+        "cumulativePct": 94.5471
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
         "holders": 24,
-        "shares": 858774,
-        "proportion": 1.81,
-        "cumulativeHolders": 2169,
-        "cumulativePct": 95.5928
+        "shares": 853774,
+        "proportion": 1.8,
+        "cumulativeHolders": 2174,
+        "cumulativePct": 95.6025
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 14,
-        "shares": 655049,
-        "proportion": 1.38,
-        "cumulativeHolders": 2183,
-        "cumulativePct": 96.2098
+        "holders": 12,
+        "shares": 557043,
+        "proportion": 1.17,
+        "cumulativeHolders": 2186,
+        "cumulativePct": 96.1302
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 26,
-        "shares": 1885254,
-        "proportion": 3.98,
-        "cumulativeHolders": 2209,
-        "cumulativePct": 97.3557
+        "holders": 28,
+        "shares": 1994254,
+        "proportion": 4.21,
+        "cumulativeHolders": 2214,
+        "cumulativePct": 97.3615
       },
       {
         "grade": 10,
@@ -4115,8 +4115,8 @@
         "holders": 21,
         "shares": 3028788,
         "proportion": 6.4,
-        "cumulativeHolders": 2230,
-        "cumulativePct": 98.2812
+        "cumulativeHolders": 2235,
+        "cumulativePct": 98.285
       },
       {
         "grade": 11,
@@ -4124,8 +4124,8 @@
         "holders": 20,
         "shares": 5478440,
         "proportion": 11.58,
-        "cumulativeHolders": 2250,
-        "cumulativePct": 99.1626
+        "cumulativeHolders": 2255,
+        "cumulativePct": 99.1645
       },
       {
         "grade": 12,
@@ -4133,8 +4133,8 @@
         "holders": 5,
         "shares": 2492673,
         "proportion": 5.26,
-        "cumulativeHolders": 2255,
-        "cumulativePct": 99.383
+        "cumulativeHolders": 2260,
+        "cumulativePct": 99.3843
       },
       {
         "grade": 13,
@@ -4142,8 +4142,8 @@
         "holders": 2,
         "shares": 1438342,
         "proportion": 3.04,
-        "cumulativeHolders": 2257,
-        "cumulativePct": 99.4711
+        "cumulativeHolders": 2262,
+        "cumulativePct": 99.4723
       },
       {
         "grade": 14,
@@ -4151,8 +4151,8 @@
         "holders": 4,
         "shares": 3775716,
         "proportion": 7.98,
-        "cumulativeHolders": 2261,
-        "cumulativePct": 99.6474
+        "cumulativeHolders": 2266,
+        "cumulativePct": 99.6482
       },
       {
         "grade": 15,
@@ -4160,7 +4160,7 @@
         "holders": 8,
         "shares": 22766858,
         "proportion": 48.12,
-        "cumulativeHolders": 2269,
+        "cumulativeHolders": 2274,
         "cumulativePct": 100
       },
       {
@@ -4175,10 +4175,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 2269,
+        "holders": 2274,
         "shares": 47303000,
         "proportion": 100,
-        "cumulativeHolders": 2269,
+        "cumulativeHolders": 2274,
         "cumulativePct": 100
       }
     ],
@@ -4187,7 +4187,7 @@
   },
   "8286": {
     "symbol": "8286",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -4348,7 +4348,7 @@
   },
   "8287": {
     "symbol": "8287",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -4509,132 +4509,132 @@
   },
   "8289": {
     "symbol": "8289",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 22640,
-        "shares": 584428,
+        "holders": 22676,
+        "shares": 580877,
         "proportion": 0.85,
-        "cumulativeHolders": 22640,
-        "cumulativePct": 74.6899
+        "cumulativeHolders": 22676,
+        "cumulativePct": 74.7791
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 6592,
-        "shares": 12328775,
-        "proportion": 18.04,
-        "cumulativeHolders": 29232,
-        "cumulativePct": 96.4371
+        "holders": 6564,
+        "shares": 12291499,
+        "proportion": 17.98,
+        "cumulativeHolders": 29240,
+        "cumulativePct": 96.4253
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 613,
-        "shares": 4857794,
-        "proportion": 7.1,
-        "cumulativeHolders": 29845,
-        "cumulativePct": 98.4594
+        "holders": 615,
+        "shares": 4865306,
+        "proportion": 7.11,
+        "cumulativeHolders": 29855,
+        "cumulativePct": 98.4534
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 130,
-        "shares": 1719398,
-        "proportion": 2.51,
-        "cumulativeHolders": 29975,
-        "cumulativePct": 98.8882
+        "holders": 128,
+        "shares": 1693078,
+        "proportion": 2.47,
+        "cumulativeHolders": 29983,
+        "cumulativePct": 98.8755
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 102,
-        "shares": 1918425,
-        "proportion": 2.8,
-        "cumulativeHolders": 30077,
-        "cumulativePct": 99.2247
+        "holders": 103,
+        "shares": 1932425,
+        "proportion": 2.82,
+        "cumulativeHolders": 30086,
+        "cumulativePct": 99.2151
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 83,
-        "shares": 2127879,
-        "proportion": 3.11,
-        "cumulativeHolders": 30160,
-        "cumulativePct": 99.4985
+        "holders": 81,
+        "shares": 2054585,
+        "proportion": 3,
+        "cumulativeHolders": 30167,
+        "cumulativePct": 99.4823
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 26,
-        "shares": 949537,
-        "proportion": 1.38,
-        "cumulativeHolders": 30186,
-        "cumulativePct": 99.5843
+        "holders": 29,
+        "shares": 1033671,
+        "proportion": 1.51,
+        "cumulativeHolders": 30196,
+        "cumulativePct": 99.5779
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 19,
-        "shares": 888034,
-        "proportion": 1.29,
-        "cumulativeHolders": 30205,
-        "cumulativePct": 99.647
+        "holders": 22,
+        "shares": 1025034,
+        "proportion": 1.5,
+        "cumulativeHolders": 30218,
+        "cumulativePct": 99.6504
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 46,
-        "shares": 3421737,
-        "proportion": 5,
-        "cumulativeHolders": 30251,
-        "cumulativePct": 99.7988
+        "holders": 47,
+        "shares": 3492130,
+        "proportion": 5.11,
+        "cumulativeHolders": 30265,
+        "cumulativePct": 99.8054
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 25,
-        "shares": 3642769,
-        "proportion": 5.33,
-        "cumulativeHolders": 30276,
-        "cumulativePct": 99.8812
+        "holders": 22,
+        "shares": 3116088,
+        "proportion": 4.56,
+        "cumulativeHolders": 30287,
+        "cumulativePct": 99.878
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 19,
-        "shares": 5292548,
-        "proportion": 7.74,
-        "cumulativeHolders": 30295,
+        "holders": 20,
+        "shares": 5599631,
+        "proportion": 8.19,
+        "cumulativeHolders": 30307,
         "cumulativePct": 99.9439
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
         "holders": 6,
-        "shares": 2746698,
-        "proportion": 4.01,
-        "cumulativeHolders": 30301,
+        "shares": 2747698,
+        "proportion": 4.02,
+        "cumulativeHolders": 30313,
         "cumulativePct": 99.9637
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
         "holders": 3,
-        "shares": 2060000,
-        "proportion": 3.01,
-        "cumulativeHolders": 30304,
+        "shares": 2122000,
+        "proportion": 3.1,
+        "cumulativeHolders": 30316,
         "cumulativePct": 99.9736
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
         "holders": 3,
-        "shares": 2580408,
-        "proportion": 3.77,
-        "cumulativeHolders": 30307,
+        "shares": 2564408,
+        "proportion": 3.75,
+        "cumulativeHolders": 30319,
         "cumulativePct": 99.9835
       },
       {
@@ -4643,7 +4643,7 @@
         "holders": 5,
         "shares": 23215335,
         "proportion": 33.97,
-        "cumulativeHolders": 30312,
+        "cumulativeHolders": 30324,
         "cumulativePct": 100
       },
       {
@@ -4658,10 +4658,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 30312,
+        "holders": 30324,
         "shares": 68333765,
         "proportion": 100,
-        "cumulativeHolders": 30312,
+        "cumulativeHolders": 30324,
         "cumulativePct": 100
       }
     ],
@@ -4670,106 +4670,106 @@
   },
   "8291": {
     "symbol": "8291",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 825,
-        "shares": 145994,
-        "proportion": 0.83,
-        "cumulativeHolders": 825,
-        "cumulativePct": 45.8333
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 821,
-        "shares": 1450289,
-        "proportion": 8.29,
-        "cumulativeHolders": 1646,
-        "cumulativePct": 91.4444
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 85,
-        "shares": 650776,
-        "proportion": 3.72,
-        "cumulativeHolders": 1731,
-        "cumulativePct": 96.1667
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 18,
-        "shares": 233775,
-        "proportion": 1.33,
-        "cumulativeHolders": 1749,
-        "cumulativePct": 97.1667
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 12,
-        "shares": 218093,
-        "proportion": 1.24,
-        "cumulativeHolders": 1761,
-        "cumulativePct": 97.8333
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 9,
-        "shares": 229700,
-        "proportion": 1.31,
-        "cumulativeHolders": 1770,
-        "cumulativePct": 98.3333
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 8,
-        "shares": 303008,
-        "proportion": 1.73,
-        "cumulativeHolders": 1778,
-        "cumulativePct": 98.7778
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 9,
-        "shares": 391880,
-        "proportion": 2.24,
-        "cumulativeHolders": 1787,
-        "cumulativePct": 99.2778
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 5,
-        "shares": 336940,
-        "proportion": 1.92,
-        "cumulativeHolders": 1792,
-        "cumulativePct": 99.5556
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
-        "holders": 3,
-        "shares": 340095,
-        "proportion": 1.94,
-        "cumulativeHolders": 1795,
-        "cumulativePct": 99.7222
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 2,
-        "shares": 612097,
-        "proportion": 3.5,
-        "cumulativeHolders": 1797,
-        "cumulativePct": 99.8333
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 12,
@@ -4777,8 +4777,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 1797,
-        "cumulativePct": 99.8333
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 13,
@@ -4786,8 +4786,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 1797,
-        "cumulativePct": 99.8333
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 14,
@@ -4795,16 +4795,16 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 1797,
-        "cumulativePct": 99.8333
+        "cumulativeHolders": 0,
+        "cumulativePct": 0
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
-        "holders": 3,
-        "shares": 12565803,
-        "proportion": 71.89,
-        "cumulativeHolders": 1800,
+        "holders": 1,
+        "shares": 8564440,
+        "proportion": 100,
+        "cumulativeHolders": 1,
         "cumulativePct": 100
       },
       {
@@ -4819,10 +4819,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 1800,
-        "shares": 17478450,
+        "holders": 1,
+        "shares": 8564440,
         "proportion": 100,
-        "cumulativeHolders": 1800,
+        "cumulativeHolders": 1,
         "cumulativePct": 100
       }
     ],
@@ -4831,7 +4831,7 @@
   },
   "8297": {
     "symbol": "8297",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
@@ -4992,43 +4992,43 @@
   },
   "8298": {
     "symbol": "8298",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 118,
-        "shares": 14614,
+        "holders": 116,
+        "shares": 14133,
         "proportion": 0.05,
-        "cumulativeHolders": 118,
-        "cumulativePct": 31.6354
+        "cumulativeHolders": 116,
+        "cumulativePct": 31.5217
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 160,
-        "shares": 337303,
-        "proportion": 1.31,
-        "cumulativeHolders": 278,
-        "cumulativePct": 74.5308
+        "holders": 157,
+        "shares": 333298,
+        "proportion": 1.3,
+        "cumulativeHolders": 273,
+        "cumulativePct": 74.1848
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 27,
-        "shares": 208256,
-        "proportion": 0.81,
-        "cumulativeHolders": 305,
-        "cumulativePct": 81.7694
+        "holders": 25,
+        "shares": 194256,
+        "proportion": 0.75,
+        "cumulativeHolders": 298,
+        "cumulativePct": 80.9783
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 14,
-        "shares": 182608,
-        "proportion": 0.71,
-        "cumulativeHolders": 319,
-        "cumulativePct": 85.5228
+        "holders": 16,
+        "shares": 206608,
+        "proportion": 0.8,
+        "cumulativeHolders": 314,
+        "cumulativePct": 85.3261
       },
       {
         "grade": 5,
@@ -5036,8 +5036,8 @@
         "holders": 11,
         "shares": 199070,
         "proportion": 0.77,
-        "cumulativeHolders": 330,
-        "cumulativePct": 88.4718
+        "cumulativeHolders": 325,
+        "cumulativePct": 88.3152
       },
       {
         "grade": 6,
@@ -5045,53 +5045,53 @@
         "holders": 7,
         "shares": 179568,
         "proportion": 0.7,
-        "cumulativeHolders": 337,
-        "cumulativePct": 90.3485
+        "cumulativeHolders": 332,
+        "cumulativePct": 90.2174
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 2,
-        "shares": 66250,
-        "proportion": 0.25,
-        "cumulativeHolders": 339,
-        "cumulativePct": 90.8847
+        "holders": 3,
+        "shares": 96500,
+        "proportion": 0.37,
+        "cumulativeHolders": 335,
+        "cumulativePct": 91.0326
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 4,
-        "shares": 184050,
-        "proportion": 0.71,
-        "cumulativeHolders": 343,
-        "cumulativePct": 91.9571
+        "holders": 3,
+        "shares": 137800,
+        "proportion": 0.53,
+        "cumulativeHolders": 338,
+        "cumulativePct": 91.8478
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
         "holders": 16,
-        "shares": 1038073,
+        "shares": 1036994,
         "proportion": 4.04,
-        "cumulativeHolders": 359,
-        "cumulativePct": 96.2466
+        "cumulativeHolders": 354,
+        "cumulativePct": 96.1957
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 5,
-        "shares": 796778,
-        "proportion": 3.1,
-        "cumulativeHolders": 364,
-        "cumulativePct": 97.5871
+        "shares": 807858,
+        "proportion": 3.15,
+        "cumulativeHolders": 359,
+        "cumulativePct": 97.5543
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
         "holders": 6,
-        "shares": 1555601,
-        "proportion": 6.06,
-        "cumulativeHolders": 370,
-        "cumulativePct": 99.1957
+        "shares": 1556086,
+        "proportion": 6.07,
+        "cumulativeHolders": 365,
+        "cumulativePct": 99.1848
       },
       {
         "grade": 12,
@@ -5099,8 +5099,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 370,
-        "cumulativePct": 99.1957
+        "cumulativeHolders": 365,
+        "cumulativePct": 99.1848
       },
       {
         "grade": 13,
@@ -5108,8 +5108,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 370,
-        "cumulativePct": 99.1957
+        "cumulativeHolders": 365,
+        "cumulativePct": 99.1848
       },
       {
         "grade": 14,
@@ -5117,8 +5117,8 @@
         "holders": 0,
         "shares": 0,
         "proportion": 0,
-        "cumulativeHolders": 370,
-        "cumulativePct": 99.1957
+        "cumulativeHolders": 365,
+        "cumulativePct": 99.1848
       },
       {
         "grade": 15,
@@ -5126,7 +5126,7 @@
         "holders": 3,
         "shares": 20869844,
         "proportion": 81.42,
-        "cumulativeHolders": 373,
+        "cumulativeHolders": 368,
         "cumulativePct": 100
       },
       {
@@ -5141,10 +5141,10 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 373,
+        "holders": 368,
         "shares": 25632015,
         "proportion": 100,
-        "cumulativeHolders": 373,
+        "cumulativeHolders": 368,
         "cumulativePct": 100
       }
     ],
@@ -5153,141 +5153,141 @@
   },
   "8299": {
     "symbol": "8299",
-    "date": "2026-11-20",
+    "date": "2026-11-27",
     "rows": [
       {
         "grade": 1,
         "range": "1–999",
-        "holders": 179615,
-        "shares": 17374973,
-        "proportion": 7.84,
-        "cumulativeHolders": 179615,
-        "cumulativePct": 86.4423
+        "holders": 177786,
+        "shares": 17199947,
+        "proportion": 7.76,
+        "cumulativeHolders": 177786,
+        "cumulativePct": 86.6543
       },
       {
         "grade": 2,
         "range": "1,000–5,000",
-        "holders": 24807,
-        "shares": 42781169,
-        "proportion": 19.31,
-        "cumulativeHolders": 204422,
-        "cumulativePct": 98.381
+        "holders": 24126,
+        "shares": 41536093,
+        "proportion": 18.75,
+        "cumulativeHolders": 201912,
+        "cumulativePct": 98.4135
       },
       {
         "grade": 3,
         "range": "5,001–10,000",
-        "holders": 1757,
-        "shares": 13100622,
-        "proportion": 5.91,
-        "cumulativeHolders": 206179,
-        "cumulativePct": 99.2266
+        "holders": 1707,
+        "shares": 12720831,
+        "proportion": 5.74,
+        "cumulativeHolders": 203619,
+        "cumulativePct": 99.2455
       },
       {
         "grade": 4,
         "range": "10,001–15,000",
-        "holders": 513,
-        "shares": 6507328,
-        "proportion": 2.93,
-        "cumulativeHolders": 206692,
-        "cumulativePct": 99.4735
+        "holders": 490,
+        "shares": 6214182,
+        "proportion": 2.8,
+        "cumulativeHolders": 204109,
+        "cumulativePct": 99.4843
       },
       {
         "grade": 5,
         "range": "15,001–20,000",
-        "holders": 272,
-        "shares": 4875983,
-        "proportion": 2.2,
-        "cumulativeHolders": 206964,
-        "cumulativePct": 99.6044
+        "holders": 259,
+        "shares": 4632842,
+        "proportion": 2.09,
+        "cumulativeHolders": 204368,
+        "cumulativePct": 99.6106
       },
       {
         "grade": 6,
         "range": "20,001–30,000",
-        "holders": 254,
-        "shares": 6361056,
-        "proportion": 2.87,
-        "cumulativeHolders": 207218,
-        "cumulativePct": 99.7266
+        "holders": 239,
+        "shares": 5958140,
+        "proportion": 2.69,
+        "cumulativeHolders": 204607,
+        "cumulativePct": 99.7271
       },
       {
         "grade": 7,
         "range": "30,001–40,000",
-        "holders": 117,
-        "shares": 4073018,
-        "proportion": 1.83,
-        "cumulativeHolders": 207335,
-        "cumulativePct": 99.7829
+        "holders": 118,
+        "shares": 4122352,
+        "proportion": 1.86,
+        "cumulativeHolders": 204725,
+        "cumulativePct": 99.7846
       },
       {
         "grade": 8,
         "range": "40,001–50,000",
-        "holders": 94,
-        "shares": 4283009,
-        "proportion": 1.93,
-        "cumulativeHolders": 207429,
-        "cumulativePct": 99.8282
+        "holders": 90,
+        "shares": 4102015,
+        "proportion": 1.85,
+        "cumulativeHolders": 204815,
+        "cumulativePct": 99.8284
       },
       {
         "grade": 9,
         "range": "50,001–100,000",
-        "holders": 158,
-        "shares": 10896721,
-        "proportion": 4.92,
-        "cumulativeHolders": 207587,
-        "cumulativePct": 99.9042
+        "holders": 153,
+        "shares": 10454647,
+        "proportion": 4.72,
+        "cumulativeHolders": 204968,
+        "cumulativePct": 99.903
       },
       {
         "grade": 10,
         "range": "100,001–200,000",
         "holders": 96,
-        "shares": 13264993,
-        "proportion": 5.99,
-        "cumulativeHolders": 207683,
-        "cumulativePct": 99.9504
+        "shares": 13086558,
+        "proportion": 5.9,
+        "cumulativeHolders": 205064,
+        "cumulativePct": 99.9498
       },
       {
         "grade": 11,
         "range": "200,001–400,000",
-        "holders": 45,
-        "shares": 12674723,
-        "proportion": 5.72,
-        "cumulativeHolders": 207728,
-        "cumulativePct": 99.9721
+        "holders": 42,
+        "shares": 11780163,
+        "proportion": 5.31,
+        "cumulativeHolders": 205106,
+        "cumulativePct": 99.9703
       },
       {
         "grade": 12,
         "range": "400,001–600,000",
-        "holders": 17,
-        "shares": 8213352,
-        "proportion": 3.7,
-        "cumulativeHolders": 207745,
-        "cumulativePct": 99.9803
+        "holders": 19,
+        "shares": 9205449,
+        "proportion": 4.15,
+        "cumulativeHolders": 205125,
+        "cumulativePct": 99.9795
       },
       {
         "grade": 13,
         "range": "600,001–800,000",
-        "holders": 9,
-        "shares": 6416218,
-        "proportion": 2.89,
-        "cumulativeHolders": 207754,
-        "cumulativePct": 99.9846
+        "holders": 10,
+        "shares": 7035810,
+        "proportion": 3.17,
+        "cumulativeHolders": 205135,
+        "cumulativePct": 99.9844
       },
       {
         "grade": 14,
         "range": "800,001–1,000,000",
-        "holders": 8,
-        "shares": 7106886,
-        "proportion": 3.2,
-        "cumulativeHolders": 207762,
-        "cumulativePct": 99.9884
+        "holders": 7,
+        "shares": 6171359,
+        "proportion": 2.78,
+        "cumulativeHolders": 205142,
+        "cumulativePct": 99.9878
       },
       {
         "grade": 15,
         "range": "1,000,001 以上",
-        "holders": 24,
-        "shares": 63509196,
-        "proportion": 28.68,
-        "cumulativeHolders": 207786,
+        "holders": 25,
+        "shares": 67218859,
+        "proportion": 30.35,
+        "cumulativeHolders": 205167,
         "cumulativePct": 100
       },
       {
@@ -5302,10 +5302,171 @@
       {
         "grade": 17,
         "range": "合計",
-        "holders": 207786,
+        "holders": 205167,
         "shares": 221439247,
         "proportion": 100,
-        "cumulativeHolders": 207786,
+        "cumulativeHolders": 205167,
+        "cumulativePct": 100
+      }
+    ],
+    "source": "臺灣集中保管結算所 集保戶股權分散表 (OpenAPI 1-5)",
+    "source_url": "https://www.tdcc.com.tw/portal/zh/smWeb/qryStock"
+  },
+  "8291O": {
+    "symbol": "8291O",
+    "date": "2026-11-27",
+    "rows": [
+      {
+        "grade": 1,
+        "range": "1–999",
+        "holders": 825,
+        "shares": 145994,
+        "proportion": 0.83,
+        "cumulativeHolders": 825,
+        "cumulativePct": 45.8333
+      },
+      {
+        "grade": 2,
+        "range": "1,000–5,000",
+        "holders": 821,
+        "shares": 1450289,
+        "proportion": 8.29,
+        "cumulativeHolders": 1646,
+        "cumulativePct": 91.4444
+      },
+      {
+        "grade": 3,
+        "range": "5,001–10,000",
+        "holders": 85,
+        "shares": 650776,
+        "proportion": 3.72,
+        "cumulativeHolders": 1731,
+        "cumulativePct": 96.1667
+      },
+      {
+        "grade": 4,
+        "range": "10,001–15,000",
+        "holders": 18,
+        "shares": 233775,
+        "proportion": 1.33,
+        "cumulativeHolders": 1749,
+        "cumulativePct": 97.1667
+      },
+      {
+        "grade": 5,
+        "range": "15,001–20,000",
+        "holders": 12,
+        "shares": 218093,
+        "proportion": 1.24,
+        "cumulativeHolders": 1761,
+        "cumulativePct": 97.8333
+      },
+      {
+        "grade": 6,
+        "range": "20,001–30,000",
+        "holders": 9,
+        "shares": 229700,
+        "proportion": 1.31,
+        "cumulativeHolders": 1770,
+        "cumulativePct": 98.3333
+      },
+      {
+        "grade": 7,
+        "range": "30,001–40,000",
+        "holders": 8,
+        "shares": 303008,
+        "proportion": 1.73,
+        "cumulativeHolders": 1778,
+        "cumulativePct": 98.7778
+      },
+      {
+        "grade": 8,
+        "range": "40,001–50,000",
+        "holders": 9,
+        "shares": 391880,
+        "proportion": 2.24,
+        "cumulativeHolders": 1787,
+        "cumulativePct": 99.2778
+      },
+      {
+        "grade": 9,
+        "range": "50,001–100,000",
+        "holders": 5,
+        "shares": 336940,
+        "proportion": 1.92,
+        "cumulativeHolders": 1792,
+        "cumulativePct": 99.5556
+      },
+      {
+        "grade": 10,
+        "range": "100,001–200,000",
+        "holders": 3,
+        "shares": 340095,
+        "proportion": 1.94,
+        "cumulativeHolders": 1795,
+        "cumulativePct": 99.7222
+      },
+      {
+        "grade": 11,
+        "range": "200,001–400,000",
+        "holders": 2,
+        "shares": 612097,
+        "proportion": 3.5,
+        "cumulativeHolders": 1797,
+        "cumulativePct": 99.8333
+      },
+      {
+        "grade": 12,
+        "range": "400,001–600,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 1797,
+        "cumulativePct": 99.8333
+      },
+      {
+        "grade": 13,
+        "range": "600,001–800,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 1797,
+        "cumulativePct": 99.8333
+      },
+      {
+        "grade": 14,
+        "range": "800,001–1,000,000",
+        "holders": 0,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": 1797,
+        "cumulativePct": 99.8333
+      },
+      {
+        "grade": 15,
+        "range": "1,000,001 以上",
+        "holders": 3,
+        "shares": 12565803,
+        "proportion": 71.89,
+        "cumulativeHolders": 1800,
+        "cumulativePct": 100
+      },
+      {
+        "grade": 16,
+        "range": "差異數調整",
+        "holders": null,
+        "shares": 0,
+        "proportion": 0,
+        "cumulativeHolders": null,
+        "cumulativePct": null
+      },
+      {
+        "grade": 17,
+        "range": "合計",
+        "holders": 1800,
+        "shares": 17478450,
+        "proportion": 100,
+        "cumulativeHolders": 1800,
         "cumulativePct": 100
       }
     ],
